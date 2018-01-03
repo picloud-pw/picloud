@@ -5,7 +5,7 @@
     HELLO_2!
 
     {% for post in posts %}
-        <h1>{{ post.title }}</h1>
+        <h1><a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a></h1>
         <p>{{ post.text }}</p>
     {% endfor %}
 
