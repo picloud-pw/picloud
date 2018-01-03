@@ -1,20 +1,12 @@
-<html>
+{% extends 'cloud/main_template.html' %}
 
-    <head>
-        <meta charset="utf-8">
-        <title>Cloud</title>
+{% block content %}
 
-    </head>
+    HELLO_2!
 
+    {% for post in posts %}
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.text }}</p>
+    {% endfor %}
 
-    <body>
-        HELLO_2!
-
-        {% for post in posts %}
-            <h1>{{ post.title }}</h1>
-            <p>{{ post.text }}</p>
-        {% endfor %}
-
-    </body>
-
-</html>
+{% endblock %}
