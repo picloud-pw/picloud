@@ -27,7 +27,7 @@
 
     <body>
 
-        <nav class="navbar navbar-default sidebar" role="navigation">
+        <nav class="navbar navbar-default navbar-position sidebar" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
@@ -40,35 +40,44 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-                  <ul class="nav navbar-nav">
-                    <img id="avatar" src="{% static 'img/default_avatar.png' %}" alt="avatar"/>
-                    {% if user.is_authenticated %}
-                            <a href="{% url 'signout' %}"><div class="btn btn-danger" style="width: 100%">Выйти</div></a>
-                    {% else %}
-                            <a href="{% url 'signup' %}"><div class="btn btn-success" style="width: 60%">Регистрация</div></a>
-                            <a href="{% url 'signin' %}"><div class="btn btn-primary" style="width: 40%">Войти</div></a>
-                    {% endif %}
-                    <li {% block cloud_active %}{% endblock %}>
-                        <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
-                    </li>
-                    <li {% block search_active %}{% endblock %}>
-                        <a href="{% url 'search' %}">Поиск<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a>
-                    </li>
-                      {% if user.is_authenticated %}
-                         <li {% block newpost_active %}{% endblock %}>
-                             <a href="{% url 'post_new' %}">Запостить<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
-                         </li>
-                      {% endif %}
-                    <li {% block memes_active %}{% endblock %}>
-                        <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
-                    </li>
-                  </ul>
+                    <ul class="nav navbar-nav">
+                        {% if user.is_authenticated %}
+                            <img id="avatar" src="{% static 'img/default_avatar.png' %}" alt="avatar"/>
+                            <h3>{{ user.username }}</h3>
+                        {% else %}
+                            <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
+                                <a href="{% url 'signup' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
+                            </li>
+                            <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
+                                <a href="{% url 'signin' %}">Войти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
+                            </li>
+                        {% endif %}
+                        <li {% block cloud_active %}{% endblock %}>
+                            <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
+                        </li>
+                        <li {% block search_active %}{% endblock %}>
+                            <a href="{% url 'search' %}">Поиск<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a>
+                        </li>
+                            {% if user.is_authenticated %}
+                                <li {% block newpost_active %}{% endblock %}>
+                                    <a href="{% url 'post_new' %}">Запостить<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
+                                </li>
+                            {% endif %}
+                        <li {% block memes_active %}{% endblock %}>
+                            <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
+                        </li>
+                            {% if user.is_authenticated %}
+                                <li style="background-color: #FFCCCC">
+                                    <a href="{% url 'signout' %}">Выйти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
+                                </li>
+                            {% endif %}
+                    </ul>
                 </div>
           </div>
         </nav>
 
 
-        <div class="content-block">
+        <div class="content-block main">
             {% block content %}
             {% endblock %}
         </div>

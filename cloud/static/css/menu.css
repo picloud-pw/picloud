@@ -20,11 +20,23 @@ body,html{
 
   #avatar{
       border-radius: 100%;
-      width: 100%;
-      padding: 20px;
+      padding: 20px 20px 0 20px;
+      width: 200px;
+  }
+
+  .navbar-position {
+      position: relative;
+  }
+
+  .navbar{
+      text-align: center;
   }
 
  @media (min-width: 765px) {
+
+    .navbar-position {
+        position: fixed;
+    }
 
     .main{
       position: absolute;
@@ -32,6 +44,7 @@ body,html{
       margin-left: 40px;
       float: right;
     }
+
 
     nav.sidebar:hover + .main{
       margin-left: 200px;
