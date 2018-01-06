@@ -5,6 +5,31 @@ body{
 .content-block{
     margin: 20px;
     padding: 20px;
-    background-color: azure;
     border-radius: 10px;
+    text-align: center;
+}
+
+.error{
+    text-align: center;
+    color: crimson;
+    font-weight: bold;
+}
+
+.sign-form{
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    text-align: center;
+    max-width: 600px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+
+.post-panel{
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    text-align: center;
 }
