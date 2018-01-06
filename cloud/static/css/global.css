@@ -32,4 +32,5 @@ body{
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 10px;
     text-align: center;
+    min-height: 150px;
 }
