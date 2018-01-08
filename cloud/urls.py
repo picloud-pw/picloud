@@ -12,4 +12,5 @@ urlpatterns = [
     path('auth/sign_out/', views.sign_out, name="sign_out"),
     path('search/', views.search, name="search"),
     path('memes/', views.memes, name="memes"),
+    path('settings/', views.settings, name="settings"),
 ]

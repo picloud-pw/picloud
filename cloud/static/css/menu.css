@@ -20,8 +20,8 @@ body,html{
 
   #avatar{
       border-radius: 100%;
-      padding: 20px 20px 0 20px;
-      width: 200px;
+      padding: 5px;
+      width: 75px;
   }
 
   .navbar-position {

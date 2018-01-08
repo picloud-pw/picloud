@@ -42,8 +42,12 @@
                 <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         {% if user.is_authenticated %}
-                            <img id="avatar" src="{% static 'img/default_avatar.png' %}" alt="avatar"/>
-                            <h3>{{ user.username }}</h3>
+                            <li {% block settings_active %}{% endblock %}>
+                                <a href="{% url 'settings' %}">
+                                    <img id="avatar" src="{% static 'img/default_avatar.png' %}" alt="avatar"/>
+                                    <h3 style="margin: 0;">{{ user.username }}</h3>
+                                </a>
+                            </li>
                         {% else %}
                             <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
                                 <a href="{% url 'sign_up' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>

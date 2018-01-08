@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.utils import timezone
 from .forms import PostForm
-from .forms import SigninForm
-from .forms import SignupForm
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+import feedparser
+from dateutil import parser
 
 
 def post_list(request):
@@ -78,7 +78,7 @@ def sign_up(request):
         username = request.POST['username']
         password = request.POST['password']
         second_password = request.POST['second_password']
-        if len(username) > 20 or len(username) < 5:
+        if len(username) > 10 or len(username) < 5:
             error = "Не коректно задан логин"
         if len(password) > 20 or len(password) < 5:
             error = "Не коректно задан пароль"
@@ -114,5 +114,26 @@ def search(request):
     return render(request, 'search.html', {})
 
 
+feeds_rss = []
+vk_urls_rss = [
+    "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
+    "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
+    "http://feed.exileed.com/vk/feed/itmoquotepad/?owner=1&only_admin=1",
+    "http://feed.exileed.com/vk/feed/wisemrduck/?owner=1&only_admin=1",
+    "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
+]
+for url in vk_urls_rss:
+    feed_1 = feedparser.parse(url)["entries"]
+    feeds_rss.extend(feed_1)
+
+
 def memes(request):
-    return render(request, 'memes.html', {})
+    feeds = []
+    for feed in feeds_rss:
+        feed["published"] = parser.parse(feed.published).strftime("%d.%m.%y %H:%M")
+        feeds.append(feed)
+    return render(request, 'memes.html', {'feeds': feeds})
+
+
+def settings(request):
+    return render(request, 'settings.html', {})

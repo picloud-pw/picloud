@@ -4,6 +4,7 @@ body{
 
 .content-block{
     text-align: center;
+    vertical-align: middle;
 }
 
 .error{
@@ -30,4 +31,9 @@ body{
     border-radius: 10px;
     text-align: center;
     min-height: 150px;
+}
+
+.post-panel img{
+    width : 100%;
+    padding: 5px;
 }

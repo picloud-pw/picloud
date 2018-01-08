@@ -5,5 +5,27 @@
 {% endblock %}
 
 {% block content %}
-    Здесь будут мемесы!
+
+        <div class="container-fluid" style="margin: 0; padding: 0;">
+            {% for feed in feeds %}
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                    <div class="post-panel">
+                        <div class="mem-title container-fluid">
+                            <a href="{{ feed.link }}"> <h3>{{ feed.author }}</h3> </a>
+                            <h5 style="color: #9e9e9e">{{ feed.published }}</h5>
+                        </div>
+
+                        <hr>
+
+                        <div class="mem-content">
+                            {{ feed.summary|safe }}
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+
+
 {% endblock %}

@@ -85,7 +85,7 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     # subject = models.ForeignKey('Subject', on_delete=models.CASCADE, null=True)
     # type = models.ForeignKey('PostType', on_delete=models.CASCADE, null=True)
-    # image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/')
+    # image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True)
     # link = models.URLField(max_length=512, null=True)
     # file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True)
     # validate_status = models.PositiveSmallIntegerField(default=0)

@@ -8,7 +8,7 @@
 
     <div class="container-fluid" style="margin: 0; padding: 0;">
         {% for post in posts %}
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                 <div class="post-panel">
                     <h1><a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a></h1>
                     <p>{{ post.text }}</p>

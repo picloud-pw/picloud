@@ -1,0 +1,19 @@
+{% extends 'main_template.html' %}
+
+{% block settings_active%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+
+        здесь будут настройки пользователя!
+
+        <br>
+
+        <a href="{% url 'sign_out' %}">
+            <div class="btn btn-warning">
+                Выйти!
+            </div>
+        </a>
+
+{% endblock %}
