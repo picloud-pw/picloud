@@ -114,7 +114,6 @@ def search(request):
     return render(request, 'search.html', {})
 
 
-feeds_rss = []
 vk_urls_rss = [
     "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
     "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
@@ -122,17 +121,24 @@ vk_urls_rss = [
     "http://feed.exileed.com/vk/feed/wisemrduck/?owner=1&only_admin=1",
     "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
 ]
+feeds_rss = []
 for url in vk_urls_rss:
-    feed_1 = feedparser.parse(url)["entries"]
-    feeds_rss.extend(feed_1)
+    feeds_rss.extend(feedparser.parse(url)["entries"])
 
 
 def memes(request):
-    feeds = []
+    feed_col_1 = []
+    feed_col_2 = []
+    counter = 0
     for feed in feeds_rss:
         feed["published"] = parser.parse(feed.published).strftime("%d.%m.%y %H:%M")
-        feeds.append(feed)
-    return render(request, 'memes.html', {'feeds': feeds})
+        if counter % 2 == 0:
+            feed_col_1.append(feed)
+        else:
+            feed_col_2.append(feed)
+        counter += 1
+    feeds = [feed_col_1, feed_col_2]
+    return render(request, 'memes.html', {'colomns_feed': feeds})
 
 
 def settings(request):
