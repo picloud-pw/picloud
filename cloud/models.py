@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 class PostType(models.Model):
-    title = models.CharField(max_length=256, null=False)
+    title = models.CharField(max_length=256, null=False, unique=True)
 
     def __str__(self):
         return self.title
@@ -38,12 +38,14 @@ class Chair(models.Model):
 
 class Lecturer(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE, null=True, blank=True)
-    first_name = models.CharField(max_length=64, null=False)
-    last_name = models.CharField(max_length=64, null=False)
+    name = models.CharField(max_length=64, null=False)
+    surname = models.CharField(max_length=64, null=False)
+    patronymic = models.CharField(max_length=64, null=True, blank=True)
     complexity = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
+    image = models.ImageField(upload_to='resources/lec_avatars/', null=True, blank=True)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.surname + " " + self.name + " " + self.patronymic
 
 
 class Subject(models.Model):
@@ -60,7 +62,7 @@ class Subject(models.Model):
 class Program(models.Model):
     chair = models.ForeignKey('Chair', on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False)
-    start_year = models.DateField(auto_now=False, auto_now_add=False, null=False)
+    code = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
         return self.title
