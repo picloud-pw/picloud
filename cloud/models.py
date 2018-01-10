@@ -11,6 +11,7 @@ class PostType(models.Model):
 
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
+    short_title = models.CharField(max_length=64, null=True, blank=True)
     logo = models.ImageField(upload_to='resources/u_logo/', null=True, blank=True)
 
     def __str__(self):
@@ -20,6 +21,7 @@ class University(models.Model):
 class Department(models.Model):
     university = models.ForeignKey('University', on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False)
+    short_title = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -28,6 +30,7 @@ class Department(models.Model):
 class Chair(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False)
+    short_title = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
         return self.title
