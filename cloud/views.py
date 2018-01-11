@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post
+from .models import *
 from django.utils import timezone
 from .forms import PostForm
+from .forms import UserInfoForm
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -78,6 +79,8 @@ def sign_up(request):
         username = request.POST['username']
         password = request.POST['password']
         second_password = request.POST['second_password']
+        user_info_form = UserInfoForm(request.POST)
+
         if len(username) > 10 or len(username) < 5:
             error = "Не коректно задан логин"
         if len(password) > 20 or len(password) < 5:
@@ -99,6 +102,11 @@ def sign_up(request):
                 user.save()
                 user = authenticate(request, username=username, password=password)
                 login(request, user)
+                if user_info_form.is_valid():
+                    user_info = user_info_form.save(commit=False)
+                    user_info.user = request.user
+                    user_info.status = UserStatus.objects.get(title="Рядовой студент")
+                    user_info.save()
                 return redirect('post_list')
             else:
                 error = "Такой пользователь уже существует!"
@@ -107,7 +115,8 @@ def sign_up(request):
             return render(request, 'auth/sign_up.html', {'error': error})
     else:
         error = ""
-        return render(request, 'auth/sign_up.html', {'error': error})
+        user_info_form = UserInfoForm()
+        return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
 
 
 def search(request):

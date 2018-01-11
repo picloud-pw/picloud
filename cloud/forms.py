@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import *
 from django.contrib.auth.models import User
 
 
@@ -22,3 +22,10 @@ class SigninForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password', )
+
+
+class UserInfoForm(forms.ModelForm):
+
+    class Meta:
+        model = UserInfo
+        fields = ('avatar', 'program', )

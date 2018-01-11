@@ -33,7 +33,7 @@ class Chair(models.Model):
     short_title = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.short_title
 
 
 class Lecturer(models.Model):
@@ -65,7 +65,7 @@ class Program(models.Model):
     code = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.title + " (" + self.chair.__str__() + ")"
 
 
 class UserStatus(models.Model):
