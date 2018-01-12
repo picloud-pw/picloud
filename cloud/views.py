@@ -64,6 +64,7 @@ def sign_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
+            request.session['user_ava_url'] = UserInfo.objects.get(pk=request.user.pk).avatar.url
             return redirect('post_list')
         else:
             error = "Не верно введены логин или пароль!"
@@ -157,18 +158,8 @@ def settings(request):
     change_password_form = PasswordChangeForm(request.user)
     user = User.objects.get(pk=request.user.pk)
     user_info = UserInfo.objects.get(user=user)
-    user_status = UserStatus.objects.get(pk=user_info.pk)
-    program = Program.objects.get(pk=user_info.program.pk)
-    chair = Chair.objects.get(pk=program.chair.pk)
-    department = Department.objects.get(pk=chair.department.pk)
-    university = University.objects.get(pk=department.university.pk)
     return render(request, 'settings.html', {'user': user,
                                              'user_info': user_info,
-                                             'user_status': user_status,
-                                             'program': program,
-                                             'chair': chair,
-                                             'department': department,
-                                             'university': university,
                                              'change_password_form': change_password_form,
                                              }
                   )

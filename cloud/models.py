@@ -12,7 +12,9 @@ class PostType(models.Model):
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
-    logo = models.ImageField(upload_to='resources/u_logo/', null=True, blank=True)
+    logo = models.ImageField(upload_to='resources/u_logo/',
+                             default='resources/default/u_logo.png',
+                             null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -42,7 +44,9 @@ class Lecturer(models.Model):
     surname = models.CharField(max_length=64, null=False)
     patronymic = models.CharField(max_length=64, null=True, blank=True)
     complexity = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
-    image = models.ImageField(upload_to='resources/lec_avatars/', null=True, blank=True)
+    image = models.ImageField(upload_to='resources/lec_avatars/',
+                              default='resources/default/lec_avatar.png',
+                              null=True, blank=True)
 
     def __str__(self):
         return self.surname + " " + self.name + " " + self.patronymic
@@ -77,11 +81,16 @@ class UserStatus(models.Model):
 
 
 class UserInfo(models.Model):
-    avatar = models.ImageField(upload_to='resources/user_avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='resources/user_avatars/',
+                               default='resources/default/user_ava.png',
+                               null=True, blank=True)
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     status = models.ForeignKey('UserStatus', on_delete=models.CASCADE)
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Post(models.Model):
