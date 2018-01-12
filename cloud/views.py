@@ -6,6 +6,9 @@ from .forms import UserInfoForm
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 import feedparser
 from dateutil import parser
 
@@ -151,4 +154,38 @@ def memes(request):
 
 
 def settings(request):
-    return render(request, 'settings.html', {})
+    change_password_form = PasswordChangeForm(request.user)
+    user = User.objects.get(pk=request.user.pk)
+    user_info = UserInfo.objects.get(user=user)
+    user_status = UserStatus.objects.get(pk=user_info.pk)
+    program = Program.objects.get(pk=user_info.program.pk)
+    chair = Chair.objects.get(pk=program.chair.pk)
+    department = Department.objects.get(pk=chair.department.pk)
+    university = University.objects.get(pk=department.university.pk)
+    return render(request, 'settings.html', {'user': user,
+                                             'user_info': user_info,
+                                             'user_status': user_status,
+                                             'program': program,
+                                             'chair': chair,
+                                             'department': department,
+                                             'university': university,
+                                             'change_password_form': change_password_form,
+                                             }
+                  )
+
+
+def change_password(request):
+    return redirect('post_list')
+'''
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('settings')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+'''
+

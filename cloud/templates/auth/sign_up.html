@@ -14,83 +14,89 @@
     <form method="post" action="{% url 'sign_up' %}">
         {% csrf_token %}
 
-        <div class="container-fluid">
+        <div class="container-fluid no-margin-padding">
 
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
-         {# TODO  разобраться с высотой гребаного блока и убрать инлайн стиль#}
-            <div class="sign-form" style="height: 370px;">
+            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-2"></div>
 
-                <div class="form-group">
-                  <label for="email" class="col-form-label">Почта<b style="color: crimson">*</b></label>
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                      <input class="form-control" type="email" value="" name="email" id="email" placeholder="Введите почту">
-                  </div>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+             {# TODO  разобраться с высотой гребаного блока и убрать инлайн стиль#}
+                <div class="sign-form" style="height: 370px;">
+
+                    <div class="form-group">
+                      <label for="email" class="col-form-label">Почта<b style="color: crimson">*</b></label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                          <input class="form-control" type="email" value="" name="email" id="email" placeholder="Введите почту">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="username" class="col-form-label">Логин<b style="color: crimson">*</b></label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                          <input class="form-control" type="text" name="username" id="username" placeholder="Придумайте логин">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="password" class="col-form-label">Пароль<b style="color: crimson">*</b></label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                          <input class="form-control" type="password" name="password" id="password" placeholder="Введите пароль">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="second_password" class="col-form-label">Повторите пароль<b style="color: crimson">*</b></label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-repeat"></i></span>
+                          <input class="form-control" type="password" name="second_password" id="second_password" placeholder="Повторите пароль">
+                      </div>
+                    </div>
+
+                    <div id="error" class="error">
+                        {% if error %} <p>{{ error }}</p> {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                         <input class="btn btn-default col-xs-12" type="submit" value="Зарегистрироваться"/>
+                    </div>
+
                 </div>
-
-                <div class="form-group">
-                  <label for="username" class="col-form-label">Логин<b style="color: crimson">*</b></label>
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                      <input class="form-control" type="text" name="username" id="username" placeholder="Придумайте логин">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="password" class="col-form-label">Пароль<b style="color: crimson">*</b></label>
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                      <input class="form-control" type="password" name="password" id="password" placeholder="Введите пароль">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="second_password" class="col-form-label">Повторите пароль<b style="color: crimson">*</b></label>
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-repeat"></i></span>
-                      <input class="form-control" type="password" name="second_password" id="second_password" placeholder="Повторите пароль">
-                  </div>
-                </div>
-
-                <div id="error" class="error">
-                    {% if error %} <p>{{ error }}</p> {% endif %}
-                </div>
-
-                <div class="form-group">
-                     <input class="btn btn-default col-xs-12" type="submit" value="Зарегистрироваться"/>
-                </div>
-
             </div>
-        </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
-            <div class="sign-form">
-                <label>
-                    Вы можете заполнить дополнительную информацию о себе,
-                    которая будет использована для персонализации контента
-                </label>
-                <hr>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+                <div class="sign-form">
+                    <label>
+                        Вы можете заполнить дополнительную информацию о себе,
+                        которая будет использована для персонализации контента
+                    </label>
+                    <hr>
 
-                <div class="form-group">
-                <label for="first-name" class="col-form-label">Имя</label>
-                <input class="form-control" type="text" name="first-name" id="first-name"
-                         placeholder="Введите имя" pattern="^[А-Яа-яЁё]{2,20}$" title="(от 3 до 20 символов, без пробелов)">
+                    <div class="form-group">
+                    <label for="first-name" class="col-form-label">Имя</label>
+                    <input class="form-control" type="text" name="first-name" id="first-name"
+                             placeholder="Введите имя" pattern="^[А-Яа-яЁё]{2,20}$" title="(от 3 до 20 символов, без пробелов)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last-name" class="col-form-label">Фамилия</label>
+                        <input class="form-control" type="text" name="last-name" id="last-name"
+                                 placeholder="Введите фамилию" pattern="^[А-Яа-яЁё]{2,20}$" title="(от 3 до 20 символов, без пробелов)">
+                    </div>
+
+                    <hr>
+
+
+                    <div class="form-group django-control">
+                        {{ user_info_form }}
+                    </div>
+
+
                 </div>
-
-                <div class="form-group">
-                    <label for="last-name" class="col-form-label">Фамилия</label>
-                    <input class="form-control" type="text" name="last-name" id="last-name"
-                             placeholder="Введите фамилию" pattern="^[А-Яа-яЁё]{2,20}$" title="(от 3 до 20 символов, без пробелов)">
-                </div>
-
-                <hr>
-
-                 <div class="form-group">
-                     {{ user_info_form.as_p }}
-                </div>
-
             </div>
-        </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-2"></div>
 
         </div>
 

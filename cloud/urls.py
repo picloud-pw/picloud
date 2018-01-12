@@ -13,4 +13,5 @@ urlpatterns = [
     path('search/', views.search, name="search"),
     path('memes/', views.memes, name="memes"),
     path('settings/', views.settings, name="settings"),
+    path('change_password/', views.change_password, name='change_password'),
 ]
