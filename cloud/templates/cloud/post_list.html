@@ -19,6 +19,15 @@
                         <a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a>
                     </h3>
                     <p>{{ post.text }}</p>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" class="post-image">
+                        {% endif %}
+                        {% if post.link %}
+                           <a href="{{ post.link }}"><div class="btn btn-default">Прикреплённая ссылка</div></a>
+                        {% endif %}
+                        {% if post.file %}
+                            <a href="{{ post.file.url }}"><div class="btn btn-info">Прикреплённый файл</div></a>
+                        {% endif %}
                     <table class="table">
                         <tr>
                             <td>{{ post.subject.program.chair.department.university.short_title}}</td>
