@@ -74,6 +74,7 @@ def sign_in(request):
 
 
 def sign_up(request):
+    user_info_form = UserInfoForm()
     if request.method == "POST":
         error = ""
         first_name = request.POST['first-name']
@@ -113,12 +114,11 @@ def sign_up(request):
                 return redirect('post_list')
             else:
                 error = "Такой пользователь уже существует!"
-                return render(request, 'auth/sign_up.html', {'error': error})
+                return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
         else:
-            return render(request, 'auth/sign_up.html', {'error': error})
+            return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
     else:
         error = ""
-        user_info_form = UserInfoForm()
         return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
 
 
