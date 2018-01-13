@@ -12,6 +12,7 @@ class PostType(models.Model):
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
+    link = models.URLField(max_length=512, null=True, blank=True)
     logo = models.ImageField(upload_to='resources/u_logo/',
                              default='resources/default/u_logo.png',
                              null=True, blank=True)
@@ -24,6 +25,7 @@ class Department(models.Model):
     university = models.ForeignKey('University', on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
+    link = models.URLField(max_length=512, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -33,6 +35,7 @@ class Chair(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
+    link = models.URLField(max_length=512, null=True, blank=True)
 
     def __str__(self):
         return self.short_title
@@ -67,6 +70,7 @@ class Program(models.Model):
     chair = models.ForeignKey('Chair', on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False)
     code = models.CharField(max_length=64, null=True, blank=True)
+    link = models.URLField(max_length=512, null=True, blank=True)
 
     def __str__(self):
         return self.title + " (" + self.chair.__str__() + ")"
