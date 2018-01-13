@@ -128,6 +128,7 @@ def search(request):
 
 
 vk_urls_rss = [
+    "https://vkrss.com/WylW3MEpMVwhtoer/pashasmeme",
     "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
     "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
     "http://feed.exileed.com/vk/feed/itmoquotepad/?owner=1&only_admin=1",
