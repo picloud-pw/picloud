@@ -25,7 +25,7 @@ def post_detail(request, pk):
 
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -40,7 +40,7 @@ def post_new(request):
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -84,7 +84,7 @@ def sign_up(request):
         username = request.POST['username']
         password = request.POST['password']
         second_password = request.POST['second_password']
-        user_info_form = UserInfoForm(request.POST)
+        user_info_form = UserInfoForm(request.POST, request.FILES)
 
         if len(username) > 10 or len(username) < 5:
             error = "Не коректно задан логин"
@@ -112,6 +112,7 @@ def sign_up(request):
                     user_info.user = request.user
                     user_info.status = UserStatus.objects.get(title="Рядовой студент")
                     user_info.save()
+                    request.session['user_ava_url'] = UserInfo.objects.get(pk=request.user.pk).avatar.url
                 return redirect('post_list')
             else:
                 error = "Такой пользователь уже существует!"
@@ -165,6 +166,11 @@ def settings(request):
                   )
 
 
+def universities(request):
+    univer_list = University.objects.all()
+    return render(request, 'universities.html', {"univer_list": univer_list})
+
+
 def change_password(request):
     return redirect('post_list')
 '''
@@ -179,4 +185,5 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
 '''
+
 

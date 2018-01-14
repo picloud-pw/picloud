@@ -48,13 +48,6 @@
                                     <h3 style="margin: 0;">{{ user.username }}</h3>
                                 </a>
                             </li>
-                        {% else %}
-                            <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
-                                <a href="{% url 'sign_up' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
-                            </li>
-                            <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
-                                <a href="{% url 'sign_in' %}">Войти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
-                            </li>
                         {% endif %}
                         <li {% block cloud_active %}{% endblock %}>
                             <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
@@ -70,9 +63,26 @@
                         <li {% block memes_active %}{% endblock %}>
                             <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
                         </li>
+                        <li {% block universities_active %}{% endblock %}>
+                            <a href="{% url 'universities' %}">Подразделения<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-education"></span></a>
+                        </li>
+
+                            {% if user.is_superuser %}
+                                <li style="background-color: #DBC6EB">
+                                    <a href="/admin">Администрирование<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-king"></span></a>
+                                </li>
+                            {% endif %}
+
                             {% if user.is_authenticated %}
                                 <li style="background-color: #FFCCCC">
                                     <a href="{% url 'sign_out' %}">Выйти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
+                                </li>
+                            {% else %}
+                                <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
+                                    <a href="{% url 'sign_in' %}">Войти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
+                                </li>
+                                <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
+                                    <a href="{% url 'sign_up' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
                                 </li>
                             {% endif %}
                     </ul>

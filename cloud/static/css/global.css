@@ -54,6 +54,11 @@ body{
     margin-bottom: 20px;
 }
 
+.post-panel img{
+    width : 100%;
+    padding: 5px;
+}
+
 .django-control input, select, textarea{
     display: block;
     width: 100%;
@@ -73,7 +78,12 @@ body{
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
-.post-panel img{
-    width : 100%;
-    padding: 5px;
+.universities{
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-panel img.univer-logo{
+    width: 100px;
 }

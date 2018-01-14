@@ -1,0 +1,25 @@
+{% extends 'main_template.html' %}
+
+{% block title %}
+    Подразделения
+{% endblock %}
+
+{% block universities_active%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+
+     <div class="container-fluid no-margin-padding">
+
+
+        {% for univer in univer_list %}
+             <div class="post-panel universities">
+                <img class="univer-logo" src="{{ univer.logo.url }}" alt="logo">
+                {{ univer.title }}
+             </div>
+        {% endfor %}
+
+     </div>
+
+{% endblock %}

@@ -2,13 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 
-class PostType(models.Model):
-    title = models.CharField(max_length=256, null=False, unique=True)
-
-    def __str__(self):
-        return self.title
-
-
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
@@ -41,6 +34,16 @@ class Chair(models.Model):
         return self.short_title
 
 
+class Program(models.Model):
+    chair = models.ForeignKey('Chair', on_delete=models.CASCADE)
+    title = models.CharField(max_length=256, null=False)
+    code = models.CharField(max_length=64, null=True, blank=True)
+    link = models.URLField(max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return self.title + " (" + self.chair.__str__() + ")"
+
+
 class Lecturer(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=64, null=False)
@@ -56,7 +59,7 @@ class Lecturer(models.Model):
 
 
 class Subject(models.Model):
-    program = models.ForeignKey('Program', on_delete=models.CASCADE)
+    program = models.ManyToManyField('Program')
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
@@ -64,16 +67,6 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.short_title + " (" + self.title + ")"
-
-
-class Program(models.Model):
-    chair = models.ForeignKey('Chair', on_delete=models.CASCADE)
-    title = models.CharField(max_length=256, null=False)
-    code = models.CharField(max_length=64, null=True, blank=True)
-    link = models.URLField(max_length=512, null=True, blank=True)
-
-    def __str__(self):
-        return self.title + " (" + self.chair.__str__() + ")"
 
 
 class UserStatus(models.Model):
@@ -95,6 +88,13 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class PostType(models.Model):
+    title = models.CharField(max_length=256, null=False, unique=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Post(models.Model):

@@ -11,7 +11,7 @@
 
 {% block content %}
 
-    <form method="post" action="{% url 'sign_up' %}">
+    <form method="post" action="{% url 'sign_up' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="container-fluid no-margin-padding">

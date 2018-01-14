@@ -22,19 +22,20 @@
                     <img src="{{ post.image.url }}" class="post-image">
                 {% endif %}
 
-                <br><br>
                 {% if post.link %}
+                    <br><br>
                     <a href="{{ post.link }}">
                         <div class="btn btn-info" style="width:100%">Прикреплённая ссылка</div>
                     </a>
                 {% endif %}
-                <br><br>
+
                 {% if post.file %}
+                    <br><br>
                     <a href="{{ post.file.url }}">
                         <div class="btn btn-success" style="width:100%">Прикреплённый файл</div>
                     </a>
+                    <br><br>
                 {% endif %}
-                <br><br>
 
                 <table class="table" style="text-align: left">
                     <tr>
@@ -71,7 +72,7 @@
                     </tr>
                     </table>
 
-                {% if user == post.author or post.author.is_staff or post.author.is_superuser %}
+                {% if user == post.author or user.is_staff or user.is_superuser %}
                     <a href="{% url 'post_edit' pk=post.pk %}">
                         <div class="btn btn-warning" style="width:100%">
                             Редактировать пост
