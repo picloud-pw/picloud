@@ -14,6 +14,7 @@ urlpatterns = [
     path('memes/', views.memes, name="memes"),
     path('settings/', views.settings, name="settings"),
     path('change_password/', views.change_password, name='change_password'),
+    path('change_avatar/', views.change_avatar, name='change_avatar'),
     path('universities/', views.universities, name='universities'),
 
 ]

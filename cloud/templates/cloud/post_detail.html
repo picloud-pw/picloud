@@ -54,23 +54,19 @@
                         <th>Дата публикации:</th>
                         <td>{{ post.created_date }}</td>
                     </tr>
-                    <tr>
-                        <th>Университет:</th>
-                        <td>{{ post.subject.program.chair.department.university.title}}</td>
-                    </tr>
-                    <tr>
-                        <th>Факультет:</th>
-                        <td>{{ post.subject.program.chair.department.title}}</td>
-                    </tr>
-                    <tr>
-                        <th>Кафедра:</th>
-                        <td>{{ post.subject.program.chair.title}}</td>
-                    </tr>
-                    <tr>
-                        <th>Программа:</th>
-                        <td>{{ post.subject.program.title }}</td>
-                    </tr>
-                    </table>
+                </table>
+                 <div class="panel panel-info">
+                     <div class="panel-heading" data-toggle="collapse" href="#programs-panel">Направления обучения</div>
+                     <div id="programs-panel" class="collapse">
+                         <div class="panel-body no-margin-padding">
+                             <div class="list-group">
+                                 {% for program in post.subject.programs.all %}
+                                     <a class="list-group-item" href="#">{{ program.title }}</a>
+                                 {% endfor %}
+                             </div>
+                         </div>
+                     </div>
+                 </div>
 
                 {% if user == post.author or user.is_staff or user.is_superuser %}
                     <a href="{% url 'post_edit' pk=post.pk %}">

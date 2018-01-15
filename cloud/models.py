@@ -59,14 +59,14 @@ class Lecturer(models.Model):
 
 
 class Subject(models.Model):
-    program = models.ManyToManyField('Program')
+    programs = models.ManyToManyField("Program")
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
-    course = models.PositiveSmallIntegerField(null=True, blank=True)
+    semestr = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.short_title + " (" + self.title + ")"
+        return self.short_title + " (" + self.semestr.__str__() + " семестр)"
 
 
 class UserStatus(models.Model):

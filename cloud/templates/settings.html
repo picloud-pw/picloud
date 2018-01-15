@@ -17,7 +17,7 @@
             <div class="post-panel panel-settings">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-                        <img class="avatar-settings" src="{{ user_info.avatar.url }}" alt="avatar" style="width: 100%">
+                        <img class="avatar-settings full-width" src="{{ user_info.avatar.url }}" alt="avatar" >
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" style="text-align: left">
                         <table class="table">
@@ -40,6 +40,21 @@
                         <tr><th scope="row">Кафедра:</th><td>{{ user_info.program.chair.title }}</td></tr>
                         <tr><th scope="row">Специальность:</th><td>{{ user_info.program.title }}</td></tr>
                     </table>
+                </div>
+
+                <hr>
+                <label>Изменить аватар</label>
+                <div class="container-fluid">
+                    <form action="{% url "change_avatar" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 django-control">
+                            {{ change_avatar_form.avatar }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <button class="btn btn-primary" type="submit" style="width: 100%">Сохранить</button>
+                        </div>
+                    </form>
+
                 </div>
 
                 <hr>
@@ -69,7 +84,7 @@
                             </tr>
                         </table>
 
-                        <button class="btn btn-primary" type="submit">Изменить пароль</button>
+                        <button class="btn btn-primary full-width" type="submit">Изменить пароль</button>
                         <label class="text-info">{{ message }}</label><br>
 
                     </form>
@@ -77,7 +92,7 @@
                 </div>
 
                 <hr>
-                <a href="{% url 'sign_out' %}"> <div class="btn btn-warning">Выйти!</div></a>
+                <a href="{% url 'sign_out' %}"> <div class="btn btn-warning" >Выйти!</div></a>
             </div>
 
 

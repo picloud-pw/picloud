@@ -18,10 +18,29 @@
                         {% csrf_token %}
 
                         <div class="django-control">
-                            {{ form.as_p }}
+                            <label>Предмет!</label>
+                            {{ form.subject }}<hr>
+
+                            <label>Заголовок!</label>
+                            {{ form.title }}<br>
+
+                            <label>Описание</label>
+                            {{ form.text }}<br>
+
+                            <label>Тип поста!</label>
+                            {{ form.type }}<hr>
+
+                            <label>Ссылка</label>
+                            {{ form.link }}<br>
+
+                            <div class="container-fluid no-margin-padding">
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><label>Картинка</label>{{ form.image }}<br></div>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><label>Файл</label>{{ form.file }}<br></div>
+                            </div>
+
                         </div>
 
-                        <div class="container-fluid">
+                        <div class="container-fluid no-margin-padding">
                             <button type="submit" class="save btn btn-default col-xs-12 col-sm-12 col-md-12 col-lg-12">Сохранить</button>
                         </div>
                     </form>

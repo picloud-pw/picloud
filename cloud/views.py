@@ -1,12 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from django.utils import timezone
-from .forms import PostForm
-from .forms import UserInfoForm
+from .forms import *
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 import feedparser
@@ -156,12 +154,14 @@ def memes(request):
 
 
 def settings(request, message=""):
+    change_avatar_form = AvatarChangeForm()
     change_password_form = PasswordChangeForm(request.user)
     user = User.objects.get(pk=request.user.pk)
     user_info = UserInfo.objects.get(user=user)
     return render(request, 'settings.html', {'user': user,
                                              'user_info': user_info,
                                              'change_password_form': change_password_form,
+                                             'change_avatar_form': change_avatar_form,
                                              'message': message,
                                              }
                   )
@@ -186,3 +186,17 @@ def change_password(request):
         return settings(request, message='Пароль должен быть длиннее 8 символов!')
 
 
+def change_avatar(request):
+    if request.method == 'POST':
+        form = AvatarChangeForm(request.POST,
+                                request.FILES,
+                                instance=UserInfo.objects.get(pk=request.user.pk))
+        if form.is_valid():
+            form.save()
+            request.session['user_ava_url'] = UserInfo.objects.get(pk=request.user.pk).avatar.url
+            return settings(request)
+        else:
+            return settings(request)
+    else:
+        # не достижимый участок кода, только если на прямую обратиться по адресу
+        return settings(request)

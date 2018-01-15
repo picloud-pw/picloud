@@ -89,9 +89,14 @@
 
 
                     <div class="form-group django-control">
-                        {{ user_info_form }}
+                        <label class="col-form-label">Программа обучения</label>
+                        {{ user_info_form.program }}
                     </div>
 
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Аватар</label>
+                        {{ user_info_form.avatar }}
+                    </div>
 
                 </div>
             </div>

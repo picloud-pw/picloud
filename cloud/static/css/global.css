@@ -7,6 +7,10 @@ body{
     padding: 0 !important;
 }
 
+.full-width{
+    width: 100%;
+}
+
 .content-block{
     text-align: center;
     vertical-align: middle;
@@ -50,7 +54,6 @@ body{
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 10px;
     text-align: center;
-    min-height: 150px;
     margin-bottom: 20px;
 }
 
@@ -80,10 +83,12 @@ body{
 
 .universities{
     max-width: 800px;
+    height: 150px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .post-panel img.univer-logo{
-    width: 100px;
+    max-width: 100%;
+    max-height: 150px;
 }

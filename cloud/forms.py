@@ -29,3 +29,10 @@ class UserInfoForm(forms.ModelForm):
     class Meta:
         model = UserInfo
         fields = ('avatar', 'program', )
+
+
+class AvatarChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = UserInfo
+        fields = ('avatar',)
