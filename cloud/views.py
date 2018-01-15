@@ -155,13 +155,14 @@ def memes(request):
     return render(request, 'memes.html', {'colomns_feed': feeds})
 
 
-def settings(request):
+def settings(request, message=""):
     change_password_form = PasswordChangeForm(request.user)
     user = User.objects.get(pk=request.user.pk)
     user_info = UserInfo.objects.get(user=user)
     return render(request, 'settings.html', {'user': user,
                                              'user_info': user_info,
                                              'change_password_form': change_password_form,
+                                             'message': message,
                                              }
                   )
 
@@ -172,18 +173,16 @@ def universities(request):
 
 
 def change_password(request):
-    return redirect('post_list')
-'''
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('settings')
+            return settings(request, message='Пароль успешно изменен!')
         else:
-            messages.error(request, 'Please correct the error below.')
+            return settings(request, message='Пароли введены с ошибкой!')
     else:
-'''
+        # не достижимый участок кода, только если на прямую обратиться по адресу
+        return settings(request, message='Пароль должен быть длиннее 8 символов!')
 
 
