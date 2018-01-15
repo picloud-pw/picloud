@@ -4,6 +4,7 @@ resources/
 
 ### Python ###
 __pycache__/
+*.py[cod]
 
 ### Django ###
 *.log
