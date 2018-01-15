@@ -1,2 +1,13 @@
 .idea/
+node_modules/
 resources/
+
+### Python ###
+__pycache__/
+
+### Django ###
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
