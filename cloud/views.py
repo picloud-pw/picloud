@@ -88,9 +88,9 @@ def sign_up(request):
 
         if len(username) > 10 or len(username) < 5:
             error = "Не коректно задан логин"
-        if len(password) > 20 or len(password) < 5:
+        if len(password) < 5:
             error = "Не коректно задан пароль"
-        if email is None or email == "" or len(email) > 20:
+        if email is None or email == "" or len(email) > 128:
             error = "Не корректно задана почта"
         if password != second_password:
             error = "Пароли не совпадают"
