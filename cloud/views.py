@@ -62,7 +62,7 @@ def sign_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
-            request.session['user_ava_url'] = UserInfo.objects.get(pk=request.user.pk).avatar.url
+            request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
             return redirect('post_list')
         else:
             error = "Не верно введены логин или пароль!"
@@ -110,7 +110,7 @@ def sign_up(request):
                     user_info.user = request.user
                     user_info.status = UserStatus.objects.get(title="Рядовой студент")
                     user_info.save()
-                    request.session['user_ava_url'] = UserInfo.objects.get(pk=request.user.pk).avatar.url
+                    request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
                 return redirect('post_list')
             else:
                 error = "Такой пользователь уже существует!"
@@ -190,10 +190,10 @@ def change_avatar(request):
     if request.method == 'POST':
         form = AvatarChangeForm(request.POST,
                                 request.FILES,
-                                instance=UserInfo.objects.get(pk=request.user.pk))
+                                instance=UserInfo.objects.get(user=request.user))
         if form.is_valid():
             form.save()
-            request.session['user_ava_url'] = UserInfo.objects.get(pk=request.user.pk).avatar.url
+            request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
             return settings(request)
         else:
             return settings(request)
