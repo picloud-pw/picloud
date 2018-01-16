@@ -28,7 +28,7 @@ class UserInfoForm(forms.ModelForm):
 
     class Meta:
         model = UserInfo
-        fields = ('avatar', 'program', )
+        fields = ('avatar', 'program', 'course')
 
 
 class AvatarChangeForm(forms.ModelForm):

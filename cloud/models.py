@@ -85,6 +85,7 @@ class UserInfo(models.Model):
     status = models.ForeignKey('UserStatus', on_delete=models.CASCADE)
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
+    course = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username
