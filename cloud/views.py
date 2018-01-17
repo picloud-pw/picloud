@@ -216,6 +216,24 @@ def change_avatar(request):
 
 
 def get_departments(request):
-    university_id = request.GET.get('university_id', None)
+    university_id = request.GET.get('id', None)
     dictionaries = [obj.as_dict() for obj in Department.objects.filter(university=university_id)]
+    return JsonResponse(dictionaries, safe=False)
+
+
+def get_chairs(request):
+    department_id = request.GET.get('id', None)
+    dictionaries = [obj.as_dict() for obj in Chair.objects.filter(department=department_id)]
+    return JsonResponse(dictionaries, safe=False)
+
+
+def get_programs(request):
+    chair_id = request.GET.get('id', None)
+    dictionaries = [obj.as_dict() for obj in Program.objects.filter(chair=chair_id)]
+    return JsonResponse(dictionaries, safe=False)
+
+
+def get_subjects(request):
+    program_id = request.GET.get('id', None)
+    dictionaries = [obj.as_dict() for obj in Subject.objects.filter(programs=program_id)]
     return JsonResponse(dictionaries, safe=False)

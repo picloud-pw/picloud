@@ -10,13 +10,16 @@
 
 {% block content %}
 
-    <div class="container-fluid">
+    <div class="container-fluid post-panel search-panel">
 
-        {{ university }}
-        {{ department }}
-        {{ chair }}
-        {{ program }}
-        {{ subject }}
+        <table class="table">
+            <tr><th>Университет</th><td>{{ university.university }}</td></tr>
+            <tr><th>Факультет</th><td>{{ department.department }}</td></tr>
+            <tr><th>Кафедра</th><td>{{ chair.chair }}</td></tr>
+            <tr><th>Специальность</th><td>{{ program.program }}</td></tr>
+            <tr><th>Предмет</th><td>{{ subject.subject }}</td></tr>
+            <tr><th>Тип</th><td>{{ subject.type }}</td></tr>
+        </table>
 
     </div>
 
@@ -29,27 +32,52 @@
 
     <script>
 
-        $("#id_university").change(function () {
-            let university_id = $(this).val();
+        function clear_options(element_id) {
+            $('#'+element_id).find('option').remove().end();
+        }
+
+        function clear_all_elements() {
+            clear_options("id_department");
+            clear_options("id_chair");
+            clear_options("id_program");
+            clear_options("id_subject");
+        }
+
+        function change_options(url, id, element_id) {
             $.ajax({
-                url: '/get_departments/',
-                data: {
-                    'university_id': university_id
-                },
+                url: url,
+                data: {'id': id },
                 dataType: 'json',
                 success: function (data) {
-                    let options = "";
-                    $('#id_department').find('option').remove().end();
+                    clear_options(element_id);
                     data.forEach(function(item, i, arr) {
-                        options += '<option value='+ item["id"] + '>' + item["short_title"] + '</option>';
-                        $('#id_department').append($('<option>', {
+                        $('#'+element_id).append($('<option>', {
                             value: item["id"],
                             text : item["title"]
                         }));
                     });
-
                 }
             });
+        }
+
+        $("#id_university").change(function () {
+            let university_id = $(this).val();
+            change_options("/get_departments/", university_id, "id_department");
+        });
+
+        $("#id_department").change(function () {
+            let university_id = $(this).val();
+            change_options("/get_chairs/", university_id, "id_chair");
+        });
+
+        $("#id_chair").change(function () {
+            let university_id = $(this).val();
+            change_options("/get_programs/", university_id, "id_program");
+        });
+
+        $("#id_program").change(function () {
+            let university_id = $(this).val();
+            change_options("/get_subjects/", university_id, "id_subject");
         });
 
 

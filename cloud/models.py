@@ -40,6 +40,13 @@ class Chair(models.Model):
     def __str__(self):
         return self.short_title
 
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title
+        }
+
 
 class Program(models.Model):
     chair = models.ForeignKey('Chair', on_delete=models.CASCADE)
@@ -49,6 +56,13 @@ class Program(models.Model):
 
     def __str__(self):
         return self.title + " (" + self.chair.__str__() + ")"
+
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "code": self.code
+        }
 
 
 class Lecturer(models.Model):
@@ -74,6 +88,14 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.short_title + " (" + self.semestr.__str__() + " семестр)"
+
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title,
+            "semestr": self.semestr
+        }
 
 
 class UserStatus(models.Model):

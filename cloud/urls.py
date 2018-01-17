@@ -18,4 +18,7 @@ urlpatterns = [
     path('universities/', views.universities, name='universities'),
 
     path('get_departments/', views.get_departments, name='get_departments'),
+    path('get_chairs/', views.get_chairs, name='get_chairs'),
+    path('get_programs/', views.get_programs, name='get_programs'),
+    path('get_subjects/', views.get_subjects, name='get_subjects'),
 ]

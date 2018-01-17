@@ -70,4 +70,4 @@ class ChooseSubjectForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('subject',)
+        fields = ('subject', 'type',)
