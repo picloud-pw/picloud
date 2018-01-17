@@ -23,6 +23,13 @@ class Department(models.Model):
     def __str__(self):
         return self.title
 
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title
+        }
+
 
 class Chair(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE)

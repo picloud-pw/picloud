@@ -9,6 +9,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 import feedparser
 from dateutil import parser
+from django.http import JsonResponse
+import json
 
 
 def post_list(request):
@@ -94,6 +96,7 @@ def sign_up(request):
             error = "Пароли не совпадают"
         if error == "":
             try:
+                # TODO User.objects.filter(username__iexact=username).exists() переделать без try
                 User.objects.get(username=username)
                 User.objects.get(email=email)
             except User.DoesNotExist:
@@ -123,7 +126,17 @@ def sign_up(request):
 
 
 def search(request):
-    return render(request, 'search.html', {})
+    university = ChooseUniversityForm()
+    department = ChooseDepartmentForm()
+    chair = ChooseChairForm()
+    program = ChooseProgramForm()
+    subject = ChooseSubjectForm()
+    return render(request, 'search.html', {'university': university,
+                                           'department': department,
+                                           'chair': chair,
+                                           'program': program,
+                                           'subject': subject,
+                                           })
 
 
 vk_urls_rss = [
@@ -200,3 +213,9 @@ def change_avatar(request):
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
         return settings(request)
+
+
+def get_departments(request):
+    university_id = request.GET.get('university_id', None)
+    dictionaries = [obj.as_dict() for obj in Department.objects.filter(university=university_id)]
+    return JsonResponse(dictionaries, safe=False)

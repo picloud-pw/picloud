@@ -9,5 +9,50 @@
 {% endblock %}
 
 {% block content %}
-    Здесь будет поиск!
+
+    <div class="container-fluid">
+
+        {{ university }}
+        {{ department }}
+        {{ chair }}
+        {{ program }}
+        {{ subject }}
+
+    </div>
+
+
+{% endblock %}
+
+
+
+{% block js %}
+
+    <script>
+
+        $("#id_university").change(function () {
+            let university_id = $(this).val();
+            $.ajax({
+                url: '/get_departments/',
+                data: {
+                    'university_id': university_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    let options = "";
+                    $('#id_department').find('option').remove().end();
+                    data.forEach(function(item, i, arr) {
+                        options += '<option value='+ item["id"] + '>' + item["short_title"] + '</option>';
+                        $('#id_department').append($('<option>', {
+                            value: item["id"],
+                            text : item["title"]
+                        }));
+                    });
+
+                }
+            });
+        });
+
+
+    </script>
+
 {% endblock %}
