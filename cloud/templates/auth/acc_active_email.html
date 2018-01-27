@@ -1,0 +1,9 @@
+
+{% autoescape off %}
+    Привет {{ user.username }},
+    Для подтверждения регистрации перейди по ссылке,
+    http://{{ domain }}{% url 'activate' uid=uid token=token %}
+
+    Всего самого лучшего!
+    PiCloud.
+{% endautoescape %}

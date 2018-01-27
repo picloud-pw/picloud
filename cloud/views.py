@@ -10,6 +10,13 @@ from django.contrib.auth.forms import PasswordChangeForm
 import feedparser
 from dateutil import parser
 from django.http import JsonResponse
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.http import HttpResponse
+from django.core.mail import EmailMessage
 import json
 
 
@@ -52,6 +59,10 @@ def post_edit(request, pk):
     return render(request, 'cloud/post_edit.html', {'form': form})
 
 
+def message(request, msg):
+    return render(request, 'message.html', {message: msg})
+
+
 def sign_out(request):
     auth.logout(request)
     return redirect("post_list")
@@ -62,9 +73,10 @@ def sign_in(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
+
         if user is not None and user.is_active:
             login(request, user)
-            request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
+            request.session['user_ava_url'] = UserInfo.objects.get(user=user).avatar.url
             return redirect('post_list')
         else:
             error = "Не верно введены логин или пароль!"
@@ -87,34 +99,48 @@ def sign_up(request):
         user_info_form = UserInfoForm(request.POST, request.FILES)
 
         if len(username) > 10 or len(username) < 5:
-            error = "Не коректно задан логин"
+            error = "Некорректно задан логин"
         if len(password) < 5:
-            error = "Не коректно задан пароль"
+            error = "Некорректно задан пароль"
         if email is None or email == "" or len(email) > 128:
-            error = "Не корректно задана почта"
+            error = "Некорректно задана почта"
         if password != second_password:
             error = "Пароли не совпадают"
         if error == "":
-            try:
-                # TODO User.objects.filter(username__iexact=username).exists() переделать без try
-                User.objects.get(username=username)
-                User.objects.get(email=email)
-            except User.DoesNotExist:
-                user = User.objects.create_user(username, email, password)
-                if first_name is not None:
-                    user.first_name = first_name
-                if last_name is not None:
-                    user.second_name = last_name
-                user.save()
-                user = authenticate(request, username=username, password=password)
-                login(request, user)
+            if not (User.objects.filter(username__iexact=username).exists() or
+                    User.objects.filter(email__iexact=email).exists()):
                 if user_info_form.is_valid():
+
+                    # заполнение основной информации
+                    user = User.objects.create_user(username, email, password)
+                    if first_name is not None:
+                        user.first_name = first_name
+                    if last_name is not None:
+                        user.second_name = last_name
+                    user.is_active = False
+                    user.save()
+                    # дополнительная информация
                     user_info = user_info_form.save(commit=False)
-                    user_info.user = request.user
+                    user_info.user = user
                     user_info.status = UserStatus.objects.get(title="Рядовой студент")
                     user_info.save()
-                    request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
-                return redirect('post_list')
+
+                    # подтверждение почты
+                    current_site = get_current_site(request)
+                    mail_subject = 'Активация PiCloud аккаунта'
+                    msg = render_to_string('auth/acc_active_email.html', {
+                        'user': user,
+                        'domain': current_site.domain,
+                        'uid': user.pk,
+                        'token': account_activation_token.make_token(user),
+                    })
+                    email = EmailMessage(mail_subject, msg, to=[email])
+                    email.send()
+                    msg = 'Пожалуйста подтвердите адрес элетронной почты для завершения регистрации'
+                    return render(request, 'message.html', {'message': msg})
+                else:
+                    error = "Не все поля формы прошли валидацию!"
+                    return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
             else:
                 error = "Такой пользователь уже существует!"
                 return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
@@ -123,6 +149,23 @@ def sign_up(request):
     else:
         error = ""
         return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
+
+
+def activate(request, uid, token):
+    try:
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        request.session['user_ava_url'] = UserInfo.objects.get(user=user).avatar.url
+        msg = 'Почта подтверждена! Теперь вы можете заходить в свой личный кабинет!'
+        return render(request, 'message.html', {'message': msg})
+    else:
+        msg = 'Ссылка не корректна! Обратитесь в службу обратной связи с этой проблемой!'
+        return render(request, 'message.html', {'message': msg})
 
 
 def search(request):

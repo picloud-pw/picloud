@@ -1,0 +1,24 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Cloud Message
+{% endblock %}
+
+
+{% block content %}
+
+    <style>
+        .main{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60%;
+        }
+    </style>
+
+    <div class="message-panel">
+        <h3>{{ message }}</h3>
+    </div>
+
+{% endblock %}
