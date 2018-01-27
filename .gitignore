@@ -1,6 +1,7 @@
 .idea/
 node_modules/
 resources/
+*.zip
 
 ### Python ###
 __pycache__/
