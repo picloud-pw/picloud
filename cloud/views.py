@@ -63,12 +63,12 @@ def message(request, msg):
     return render(request, 'message.html', {message: msg})
 
 
-def sign_out(request):
+def signout(request):
     auth.logout(request)
     return redirect("post_list")
 
 
-def sign_in(request):
+def signin(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -80,13 +80,13 @@ def sign_in(request):
             return redirect('post_list')
         else:
             error = "Не верно введены логин или пароль!"
-            return render(request, 'auth/sign_in.html', {'error': error})
+            return render(request, 'auth/signin.html', {'error': error})
     else:
         error = ""
-        return render(request, 'auth/sign_in.html', {'error': error})
+        return render(request, 'auth/signin.html', {'error': error})
 
 
-def sign_up(request):
+def signup(request):
     user_info_form = UserInfoForm()
     if request.method == "POST":
         error = ""
@@ -140,15 +140,15 @@ def sign_up(request):
                     return render(request, 'message.html', {'message': msg})
                 else:
                     error = "Не все поля формы прошли валидацию!"
-                    return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
+                    return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
             else:
                 error = "Такой пользователь уже существует!"
-                return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
+                return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
         else:
-            return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
+            return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
     else:
         error = ""
-        return render(request, 'auth/sign_up.html', {'error': error, 'user_info_form': user_info_form})
+        return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
 
 
 def activate(request, uid, token):

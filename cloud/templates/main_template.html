@@ -75,14 +75,14 @@
 
                             {% if user.is_authenticated %}
                                 <li style="background-color: #FFCCCC">
-                                    <a href="{% url 'sign_out' %}">Выйти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
+                                    <a href="{% url 'signout' %}">Выйти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
                                 </li>
                             {% else %}
                                 <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
-                                    <a href="{% url 'sign_in' %}">Войти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
+                                    <a href="{% url 'signin' %}">Войти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
                                 </li>
                                 <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
-                                    <a href="{% url 'sign_up' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
+                                    <a href="{% url 'signup' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
                                 </li>
                             {% endif %}
                     </ul>

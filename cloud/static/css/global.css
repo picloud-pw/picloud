@@ -72,6 +72,16 @@ body{
     padding: 10px;
 }
 
+.password-reset-panel{
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    width: 600px;
+    padding: 10px;
+}
+
 .django-control input, select, textarea{
     display: block;
     width: 100%;

@@ -1,9 +1,9 @@
 
 {% autoescape off %}
     Привет {{ user.username }},
-    Для подтверждения регистрации перейди по ссылке,
+    Для подтверждения регистрации на афигительном портале перейди по ссылке:
     http://{{ domain }}{% url 'activate' uid=uid token=token %}
 
     Всего самого лучшего!
-    PiCloud.
+    Команда PiCloud.
 {% endautoescape %}

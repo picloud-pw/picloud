@@ -1,14 +1,21 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
+from django.contrib.auth import views as auth_views
 from . import views
 
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
 
-    path('auth/sign_up/', views.sign_up, name="sign_up"),
-    path('auth/sign_in/', views.sign_in, name="sign_in"),
-    path('auth/sign_out/', views.sign_out, name="sign_out"),
+    path('auth/signup/', views.signup, name="signup"),
+    path('auth/signin/', views.signin, name="signin"),
+    path('auth/signout/', views.signout, name="signout"),
     path('activate/<uid>/<token>/', views.activate, name='activate'),
+
+    # auth встроенное приложение, сброс пароля, переопределяющие шаблоны в registration/*
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
     re_path(r'post/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
     path('post/new/', views.post_new, name='post_new'),
