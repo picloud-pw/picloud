@@ -71,3 +71,30 @@ class ChooseSubjectForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('subject', 'type',)
+
+
+SUBJECT_CHOICES = (
+    ('Предложение по улучшению портала', 'Предложение по улучшению портала'),
+    ('Жалоба', 'Жалоба'),
+    ('Отзыв', 'Отзыв'),
+    ('БАГ', 'БАГ'),
+    ('Проблема авторизации', 'Проблема авторизациии'),
+    ('Нарушение авторских прав', 'Нарушение авторских прав'),
+    ('Предложение сотрудничества', 'Предложение соотрудничества'),
+    ('Другое', 'Другое'),
+)
+
+
+class ContactForm(forms.Form):
+    contact_name = forms.CharField(label="Ваше имя", required=True)
+    contact_email = forms.EmailField(label="Ваш email", required=True)
+    subject = forms.ChoiceField(
+        label="Тема обращения",
+        required=True,
+        choices=SUBJECT_CHOICES,
+    )
+    content = forms.CharField(
+        label="Сообщение",
+        required=True,
+        widget=forms.Textarea(attrs={'style': 'width: 100%; height:150px; resize: none'})
+    )

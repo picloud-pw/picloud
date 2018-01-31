@@ -228,6 +228,27 @@ def universities(request):
     return render(request, 'universities.html', {"univer_list": univer_list})
 
 
+def contacts(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['contact_name']
+            email = form.cleaned_data['contact_email']
+            subject = form.cleaned_data['subject']
+            content = form.cleaned_data['content']
+            mail_msg = content + " <<< " + email + " >>>" + "(((" + name + ")))"
+            email = EmailMessage(subject, mail_msg, email, to=["itmo.cloud@gmail.com"])
+            email.send()
+            msg = "Ваш email отправлен! Спасибо за обращение! Оно будет рассмотрено в ближайшее время!"
+            return render(request, 'message.html', {'message': msg})
+        else:
+            msg = "Ваше сообщение не было отправленно! Не все поля заполнены корректно!"
+            return render(request, 'message.html', {'message': msg})
+    else:
+        form = ContactForm()
+        return render(request, 'contacts.html', {'form': form})
+
+
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
