@@ -9,10 +9,6 @@ body,html{
       transition: margin 200ms ease-out;
   }
 
-  .main{
-    padding: 10px 10px 0 10px;
-  }
-
   #menu-brand{
       padding: 0;
       margin-left: 15px;

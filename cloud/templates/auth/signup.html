@@ -1,4 +1,5 @@
 {% extends 'main_template.html' %}
+{% load static %}
 
 {% block title %}
     Cloud Регистрация
@@ -85,8 +86,29 @@
                                  placeholder="Введите фамилию" pattern="^[А-Яа-яЁё]{2,20}$" title="(от 3 до 20 символов, без пробелов)">
                     </div>
 
-                    <hr>
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Аватар</label>
+                        {{ user_info_form.avatar }}
+                    </div>
 
+                </div>
+
+                <div class="container-fluid sign-form">
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Университет</label>
+                        <select name="university" id="id_university" required></select>
+                    </div>
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Факультет</label>
+                        <select name="department" id="id_department" required></select>
+                    </div>
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Кафедра</label>
+                        <select name="chair" id="id_chair" required></select>
+                    </div>
 
                     <div class="form-group django-control">
                         <label class="col-form-label">Программа обучения</label>
@@ -97,13 +119,8 @@
                         <label class="col-form-label">Курс обучения</label>
                         {{ user_info_form.course }}
                     </div>
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Аватар</label>
-                        {{ user_info_form.avatar }}
-                    </div>
-
                 </div>
+
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-1 col-lg-2"></div>
@@ -111,5 +128,12 @@
         </div>
 
     </form>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script src="{% static "js/department_search.js" %}"></script>
 
 {% endblock %}

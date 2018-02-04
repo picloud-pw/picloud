@@ -27,6 +27,9 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    if post.views < 99999:
+        post.views += 1
+        post.save()
     return render(request, 'cloud/post_detail.html', {'post': post})
 
 
@@ -86,10 +89,36 @@ def signin(request):
         return render(request, 'auth/signin.html', {'error': error})
 
 
+def validate_signup(username, email, password, second_password):
+    error = ""
+    if len(username) > 10 or len(username) < 5:
+        error = "Некорректно задан логин"
+    if len(password) < 5:
+        error = "Некорректно задан пароль"
+    if email is None or email == "" or len(email) > 128:
+        error = "Некорректно задана почта"
+    if password != second_password:
+        error = "Пароли не совпадают"
+    return error
+
+
+def send_acc_activate_letter(request, user, email):
+    current_site = get_current_site(request)
+    mail_subject = 'Активация PiCloud аккаунта'
+    msg = render_to_string('auth/acc_active_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': user.pk,
+        'token': account_activation_token.make_token(user),
+    })
+    email = EmailMessage(mail_subject, msg, to=[email])
+    email.send()
+
+
 def signup(request):
+    error = ""
     user_info_form = UserInfoForm()
     if request.method == "POST":
-        error = ""
         first_name = request.POST['first-name']
         last_name = request.POST['last-name']
         email = request.POST['email']
@@ -98,14 +127,7 @@ def signup(request):
         second_password = request.POST['second_password']
         user_info_form = UserInfoForm(request.POST, request.FILES)
 
-        if len(username) > 10 or len(username) < 5:
-            error = "Некорректно задан логин"
-        if len(password) < 5:
-            error = "Некорректно задан пароль"
-        if email is None or email == "" or len(email) > 128:
-            error = "Некорректно задана почта"
-        if password != second_password:
-            error = "Пароли не совпадают"
+        error = validate_signup(username, email, password, second_password)
         if error == "":
             if not (User.objects.filter(username__iexact=username).exists() or
                     User.objects.filter(email__iexact=email).exists()):
@@ -125,17 +147,9 @@ def signup(request):
                     user_info.status = UserStatus.objects.get(title="Рядовой студент")
                     user_info.save()
 
-                    # подтверждение почты
-                    current_site = get_current_site(request)
-                    mail_subject = 'Активация PiCloud аккаунта'
-                    msg = render_to_string('auth/acc_active_email.html', {
-                        'user': user,
-                        'domain': current_site.domain,
-                        'uid': user.pk,
-                        'token': account_activation_token.make_token(user),
-                    })
-                    email = EmailMessage(mail_subject, msg, to=[email])
-                    email.send()
+                    # подтверждение почты (активация аккаунта)
+                    send_acc_activate_letter(request, user, email)
+
                     msg = 'Пожалуйста подтвердите адрес элетронной почты для завершения регистрации'
                     return render(request, 'message.html', {'message': msg})
                 else:
@@ -147,7 +161,6 @@ def signup(request):
         else:
             return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
     else:
-        error = ""
         return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
 
 
@@ -277,6 +290,11 @@ def change_avatar(request):
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
         return settings(request)
+
+
+def get_universities(request):
+    dictionaries = [obj.as_dict() for obj in University.objects.all()]
+    return JsonResponse(dictionaries, safe=False)
 
 
 def get_departments(request):

@@ -1,4 +1,5 @@
 {% extends 'main_template.html' %}
+{% load static %}
 
 {% block title %}
     Cloud Поиск
@@ -10,16 +11,15 @@
 
 {% block content %}
 
-    <div class="container-fluid post-panel search-panel">
 
-        <table class="table">
-            <tr><th>Университет</th><td>{{ university.university }}</td></tr>
-            <tr><th>Факультет</th><td>{{ department.department }}</td></tr>
-            <tr><th>Кафедра</th><td>{{ chair.chair }}</td></tr>
-            <tr><th>Специальность</th><td>{{ program.program }}</td></tr>
-            <tr><th>Предмет</th><td>{{ subject.subject }}</td></tr>
-            <tr><th>Тип</th><td>{{ subject.type }}</td></tr>
-        </table>
+    <div class="search-panel row">
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ university.university }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ department.department }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ chair.chair }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ program.program }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ subject.subject }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ subject.type }}</div>
 
     </div>
 
@@ -27,60 +27,8 @@
 {% endblock %}
 
 
-
 {% block js %}
 
-    <script>
-
-        function clear_options(element_id) {
-            $('#'+element_id).find('option').remove().end();
-        }
-
-        function clear_all_elements() {
-            clear_options("id_department");
-            clear_options("id_chair");
-            clear_options("id_program");
-            clear_options("id_subject");
-        }
-
-        function change_options(url, id, element_id) {
-            $.ajax({
-                url: url,
-                data: {'id': id },
-                dataType: 'json',
-                success: function (data) {
-                    clear_options(element_id);
-                    data.forEach(function(item, i, arr) {
-                        $('#'+element_id).append($('<option>', {
-                            value: item["id"],
-                            text : item["title"]
-                        }));
-                    });
-                }
-            });
-        }
-
-        $("#id_university").change(function () {
-            let university_id = $(this).val();
-            change_options("/get_departments/", university_id, "id_department");
-        });
-
-        $("#id_department").change(function () {
-            let university_id = $(this).val();
-            change_options("/get_chairs/", university_id, "id_chair");
-        });
-
-        $("#id_chair").change(function () {
-            let university_id = $(this).val();
-            change_options("/get_programs/", university_id, "id_program");
-        });
-
-        $("#id_program").change(function () {
-            let university_id = $(this).val();
-            change_options("/get_subjects/", university_id, "id_subject");
-        });
-
-
-    </script>
+    <script src="{% static "js/department_search.js" %}"></script>
 
 {% endblock %}

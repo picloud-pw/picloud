@@ -13,6 +13,13 @@ class University(models.Model):
     def __str__(self):
         return self.title
 
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title
+        }
+
 
 class Department(models.Model):
     university = models.ForeignKey('University', on_delete=models.CASCADE)
@@ -136,6 +143,7 @@ class Post(models.Model):
     type = models.ForeignKey('PostType', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    views = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
     validate_status = models.PositiveSmallIntegerField(default=0)
 

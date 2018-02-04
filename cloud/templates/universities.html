@@ -4,30 +4,35 @@
     Подразделения
 {% endblock %}
 
-{% block universities_active%}
+{% block universities_active %}
     class="active"
 {% endblock %}
 
 {% block content %}
 
-     <div class="container-fluid no-margin-padding">
+    <div class="container-fluid no-margin-padding">
 
+        <div class="post-panel universities container-fluid">
+            <h1>
+                <a href="#" style="vertical-align: sub">Добавить свой вуз!</a>
+            </h1>
+        </div>
 
         {% for univer in univer_list %}
 
-                <div class="post-panel universities container-fluid">
-                    <a href="#">
-                        <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
-                            <img class="univer-logo" src="{{ univer.logo.url }}" alt="logo">
-                        </div>
-                        <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
-                            <h3>{{ univer.title }}</h3>
-                        </div>
-                    </a>
-                </div>
+            <div class="post-panel universities container-fluid">
+                <a href="#">
+                    <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
+                        <img class="univer-logo" src="{{ univer.logo.url }}" alt="logo">
+                    </div>
+                    <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
+                        <h3>{{ univer.title }}</h3>
+                    </div>
+                </a>
+            </div>
 
         {% endfor %}
 
-     </div>
+    </div>
 
 {% endblock %}
