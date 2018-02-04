@@ -153,3 +153,18 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "author_username": self.author.username,
+            "author_id": self.author.pk,
+            "title": self.title,
+            "text": self.text,
+            "create_date": self.created_date,
+            "subject_id": self.subject.pk,
+            "subject_short_title": self.subject.short_title,
+            "type_title": self.type.title,
+            "link": self.link,
+            "views": self.views,
+        }

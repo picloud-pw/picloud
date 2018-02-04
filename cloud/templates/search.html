@@ -5,7 +5,7 @@
     Cloud Поиск
 {% endblock %}
 
-{% block search_active%}
+{% block search_active %}
     class="active"
 {% endblock %}
 
@@ -14,13 +14,32 @@
 
     <div class="search-panel row">
 
+        <div class="col-xs-12 col-sm-7 col-md-9 col-lg-9" style="padding-right: 0">
+            <input class="form-control" type="text" placeholder="Введите запрос">
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="padding-right: 0; padding-left: 0;">
+            {{ subject.type }}
+        </div>
+        <div class="col-xs-12 col-sm-2 col-md-1 col-lg-1" style="padding-left: 0">
+            <input class="form-control btn btn-primary" type="submit" value="Поиск">
+        </div>
+
+        <hr>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ university.university }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ department.department }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ chair.chair }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ program.program }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ subject.subject }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ subject.type }}</div>
 
+
+    </div>
+
+    <div class="post-list">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+        <div id="search_results" class="col-xs-12 col-sm-12 col-md-6 col-lg-6 no-margin-padding">
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
     </div>
 
 
@@ -30,5 +49,87 @@
 {% block js %}
 
     <script src="{% static "js/department_search.js" %}"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#id_type option:first").text("Любой");
+        });
+
+        function post_to_html(item) {
+            return "<div class='search-post-panel'> " +
+                "<a href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
+                "<p>" + item.text + "</p>" +
+                "<table class='table'> <tr>" +
+                    "<td>"+ item.author_username +"</td>" +
+                    "<td>"+ item.subject_short_title +"</td>" +
+                    "<td>"+ item.type_title +"</td>" +
+                    "<td>"+ item.created_date +"</td>" +
+                    "<td> <span style='font-size:12px;' class='showopacity glyphicon glyphicon-eye-open'></span>"+  item.views +"</td> " +
+                "</tr></table>" +
+                "</div>"
+        }
+
+        function update_post_list(posts) {
+            $("#search_results").empty();
+            if (posts.length !== 0) {
+                posts.forEach(function (item, i, arr) {
+                    $('#search_results').append(post_to_html(item));
+                });
+            } else {
+                $('#search_results').append("<div class='search-post-panel' style='padding: 10px;'>К сожалению по вашему запросу ничего не найдено :(</div>");
+            }
+        }
+
+        function get_current_values() {
+            let university_id;
+            let department_id;
+            let chair_id;
+            let program_id;
+            let subject_id;
+            let type_id;
+            if ($("#id_university").prop('disabled') === false)
+                university_id = $("#id_university").val();
+            if ($("#id_department").prop('disabled') === false)
+                department_id = $("#id_department").val();
+            if ($("#id_chair").prop('disabled') === false)
+                chair_id = $("#id_chair").val();
+            if ($("#id_program").prop('disabled') === false)
+                program_id = $("#id_program").val();
+            if ($("#id_subject").prop('disabled') === false)
+                subject_id = $("#id_subject").val();
+            if ($("#id_type").val() !== '')
+                type_id = $("#id_type").val();
+            return {
+                "university_id": university_id,
+                "department_id": department_id,
+                "chair_id": chair_id,
+                "program_id": program_id,
+                "subject_id": subject_id,
+                "type_id": type_id
+            };
+        }
+
+        function new_search_request(data) {
+            $.ajax({
+                url: "/get_posts/",
+                data: data,
+                dataType: 'json',
+                success: function (data) {
+                    update_post_list(data);
+                }
+            });
+        }
+
+        $("#id_type").change(function () {
+            new_search_request(get_current_values());
+        });
+
+        $("#id_subject").change(function () {
+            new_search_request(get_current_values());
+        });
+
+
+    </script>
 
 {% endblock %}

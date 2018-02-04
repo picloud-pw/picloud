@@ -21,7 +21,7 @@ import json
 
 
 def post_list(request):
-    posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('created_date')
+    posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('created_date').reverse()
     return render(request, 'cloud/post_list.html', {'posts': posts})
 
 
@@ -319,3 +319,19 @@ def get_subjects(request):
     program_id = request.GET.get('id', None)
     dictionaries = [obj.as_dict() for obj in Subject.objects.filter(programs=program_id)]
     return JsonResponse(dictionaries, safe=False)
+
+
+def get_posts(request):
+    program_id = request.GET.get('program_id', None)
+    subject_id = request.GET.get('subject_id', None)
+    type_id = request.GET.get('type_id', None)
+    print(program_id)
+    print(type_id)
+    posts = Post.objects.all()
+    if subject_id is not None:
+        posts = posts.filter(subject=subject_id)
+    if type_id is not None:
+        posts = posts.filter(type=type_id)
+    posts = posts.order_by('created_date').reverse()
+    posts = [obj.as_dict() for obj in posts]
+    return JsonResponse(posts, safe=False)
