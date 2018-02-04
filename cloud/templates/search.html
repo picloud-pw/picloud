@@ -58,7 +58,7 @@
 
         function post_to_html(item) {
             return "<div class='search-post-panel'> " +
-                "<a href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
+                "<a target='_blank' href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
                 "<p>" + item.text + "</p>" +
                 "<table class='table'> <tr>" +
                     "<td>"+ item.author_username +"</td>" +

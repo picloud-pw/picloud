@@ -155,6 +155,7 @@ class Post(models.Model):
         return self.title
 
     def as_dict(self):
+
         return {
             "id": self.pk,
             "author_username": self.author.username,
@@ -163,8 +164,8 @@ class Post(models.Model):
             "text": self.text,
             "create_date": self.created_date,
             "subject_id": self.subject.pk,
-            "subject_short_title": self.subject.short_title,
-            "type_title": self.type.title,
+            "subject_title": self.subject.title,
+            "type": self.type.title,
             "link": self.link,
             "views": self.views,
         }

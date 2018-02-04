@@ -236,9 +236,25 @@ def settings(request, message=""):
                   )
 
 
-def universities(request):
+def universities_list(request):
     univer_list = University.objects.all()
     return render(request, 'universities.html', {"univer_list": univer_list})
+
+
+def university_page(request, university_id):
+    univer = get_object_or_404(University, pk=university_id)
+    departments = Department.objects.filter(university__id=university_id)
+    chairs = Chair.objects.filter(department__university__id=university_id)
+    programs = Program.objects.filter(chair__department__university_id=university_id)
+    subjects = Subject.objects.filter(programs__chair__department__university__id=university_id)
+
+    return render(request, "university_page.html", {"univer": univer,
+                                                    "departments": departments,
+                                                    "chairs": chairs,
+                                                    "programs": programs,
+                                                    "subjects": subjects,
+                                                    }
+                  )
 
 
 def contacts(request):

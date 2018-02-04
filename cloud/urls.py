@@ -27,7 +27,8 @@ urlpatterns = [
     path('message/', views.message, name="message"),
     path('change_password/', views.change_password, name='change_password'),
     path('change_avatar/', views.change_avatar, name='change_avatar'),
-    path('universities/', views.universities, name='universities'),
+    path('universities/', views.universities_list, name='universities_list'),
+    path('universities/<university_id>/', views.university_page, name='university_page'),
     path('contacts', views.contacts, name='contacts'),
 
     path('get_universities/', views.get_universities, name='get_universities'),

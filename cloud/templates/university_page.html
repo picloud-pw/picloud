@@ -1,0 +1,77 @@
+{% extends 'main_template.html' %}
+
+{% block title %}
+    {{ univer.title }}
+{% endblock %}
+
+{% block universities_active %}
+    class="active"
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid no-margin-padding">
+
+        <div class="post-panel panel-settings">
+            <div class="row">
+                <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
+                    <img class="univer-logo" src="{{ univer.logo.url }}" alt="logo">
+                </div>
+                <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
+                    <h3>{{ univer.title }}</h3>
+                    <a href="{{ univer.link }}"> официальный сайт </a>
+                </div>
+            </div>
+            <br>
+
+            {% for department in departments %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading" data-toggle="collapse"
+                         href="#department_{{ department.pk }}">{{ department.title }}</div>
+                    <div id="department_{{ department.pk }}" class="collapse">
+                        <div class="panel-body no-margin-padding">
+
+                            {% for chair in chairs %}
+                                {% if chair.department.pk == department.pk %}
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading" data-toggle="collapse"
+                                             href="#chair_{{ chair.pk }}">{{ chair.title }}</div>
+                                        <div id="chair_{{ chair.pk }}" class="collapse">
+                                            <div class="panel-body no-margin-padding">
+
+                                                {% for program in programs %}
+                                                    {% if program.chair.pk == chair.pk %}
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading" data-toggle="collapse"
+                                                                 href="#program_{{ program.pk }}">{{ program.title }}</div>
+                                                            <div id="program_{{ program.pk }}" class="collapse">
+                                                                <div class="panel-body no-margin-padding">
+
+                                                                    {% for subject in subjects.filter %}
+                                                                        {{ subject.title }}
+                                                                    {% endfor %}
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
