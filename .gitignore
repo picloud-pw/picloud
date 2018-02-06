@@ -2,6 +2,7 @@
 node_modules/
 resources/
 *.zip
+lib/*
 
 ### Python ###
 __pycache__/
