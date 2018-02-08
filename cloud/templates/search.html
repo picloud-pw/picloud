@@ -14,14 +14,14 @@
 
     <div class="search-panel row">
 
-        <div class="col-xs-12 col-sm-7 col-md-9 col-lg-9" style="padding-right: 0">
+        <div id="search-line" class="col-xs-12 col-sm-7 col-md-9 col-lg-9">
             <input class="form-control" type="text" placeholder="Введите запрос">
         </div>
-        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="padding-right: 0; padding-left: 0;">
+        <div id="search-type" class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
             {{ subject.type }}
         </div>
-        <div class="col-xs-12 col-sm-2 col-md-1 col-lg-1" style="padding-left: 0">
-            <input class="form-control btn btn-primary" type="submit" value="Поиск">
+        <div id="search-button" class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
+            <input class="form-control btn btn-primary" type="submit" onclick="search_posts()" value="Поиск">
         </div>
 
         <hr>
@@ -37,6 +37,11 @@
     <div class="post-list">
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
         <div id="search_results" class="col-xs-12 col-sm-12 col-md-6 col-lg-6 no-margin-padding">
+
+            <div class='search-post-panel' style='padding: 10px;'>
+                Здесь будут отображаться результаты поиска! <br>
+                Введитен ваш запрос!
+            </div>
 
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
@@ -57,6 +62,8 @@
         });
 
         function post_to_html(item) {
+            date = new Date(item.created_date)
+                .toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'});
             return "<div class='search-post-panel'> " +
                 "<a target='_blank' href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
                 "<p>" + item.text + "</p>" +
@@ -64,7 +71,7 @@
                     "<td>"+ item.author_username +"</td>" +
                     "<td>"+ item.subject_short_title +"</td>" +
                     "<td>"+ item.type_title +"</td>" +
-                    "<td>"+ item.created_date +"</td>" +
+                    "<td>"+ date +"</td>" +
                     "<td> <span style='font-size:12px;' class='showopacity glyphicon glyphicon-eye-open'></span>"+  item.views +"</td> " +
                 "</tr></table>" +
                 "</div>"
@@ -128,6 +135,18 @@
         $("#id_subject").change(function () {
             new_search_request(get_current_values());
         });
+
+        function search_posts() {
+            let search_request = $("#search-line").find("input").val().toLowerCase();
+            $.ajax({
+                url: "/search_posts/",
+                data: {"search_request": search_request},
+                dataType: 'json',
+                success: function (data) {
+                    update_post_list(data);
+                }
+            });
+        }
 
 
     </script>

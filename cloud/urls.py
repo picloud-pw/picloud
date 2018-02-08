@@ -37,4 +37,5 @@ urlpatterns = [
     path('get_programs/', views.get_programs, name='get_programs'),
     path('get_subjects/', views.get_subjects, name='get_subjects'),
     path('get_posts/', views.get_posts, name='get_posts'),
+    path('search_posts/', views.search_posts, name='search_posts'),
 ]

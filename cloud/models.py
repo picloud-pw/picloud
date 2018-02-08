@@ -162,10 +162,10 @@ class Post(models.Model):
             "author_id": self.author.pk,
             "title": self.title,
             "text": self.text,
-            "create_date": self.created_date,
+            "created_date": self.created_date,
             "subject_id": self.subject.pk,
-            "subject_title": self.subject.title,
-            "type": self.type.title,
+            "subject_short_title": self.subject.short_title,
+            "type_title": self.type.title,
             "link": self.link,
             "views": self.views,
         }

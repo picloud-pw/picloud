@@ -341,13 +341,19 @@ def get_posts(request):
     program_id = request.GET.get('program_id', None)
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
-    print(program_id)
-    print(type_id)
     posts = Post.objects.all()
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
         posts = posts.filter(type=type_id)
+    posts = posts.order_by('created_date').reverse()
+    posts = [obj.as_dict() for obj in posts]
+    return JsonResponse(posts, safe=False)
+
+
+def search_posts(request):
+    words = request.GET.get('search_request', None).split(" ")
+    posts = Post.objects.all()
     posts = posts.order_by('created_date').reverse()
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)

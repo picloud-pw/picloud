@@ -133,3 +133,28 @@ body {
 .panel-heading{
     cursor: pointer;
 }
+
+#search-line{
+    padding-right: 15px;
+}
+#search-type{
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#search-button{
+    padding-left: 15px;
+}
+
+@media (min-width: 676px){
+    #search-line{
+        padding-right: 0;
+    }
+    #search-type{
+        padding-right: 0;
+        padding-left: 0;
+    }
+    #search-button{
+        padding-left: 0;
+    }
+}
+
