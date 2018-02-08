@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!doctype html>
 <html lang="ru">
 
@@ -30,13 +31,15 @@
         <nav class="navbar navbar-default navbar-position sidebar" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a id="menu-brand" class="navbar-brand" href="{% url 'post_list' %}"><img src="{% static 'img/piLogo.png' %}" alt="logo"></a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-sidebar-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a id="menu-brand" class="navbar-brand" href="{% url 'post_list' %}"><img
+                            src="{% static 'img/piLogo.png' %}" alt="logo"></a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
@@ -50,47 +53,57 @@
                             </li>
                         {% endif %}
                         <li {% block cloud_active %}{% endblock %}>
-                            <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
+                            <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;"
+                                                                        class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
                         </li>
                         <li {% block search_active %}{% endblock %}>
-                            <a href="{% url 'search' %}">Поиск<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a>
+                            <a href="{% url 'search' %}">Поиск<span style="font-size:16px;"
+                                                                    class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a>
                         </li>
-                            {% if user.is_authenticated %}
-                                <li {% block newpost_active %}{% endblock %}>
-                                    <a href="{% url 'post_new' %}">Запостить<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
-                                </li>
-                            {% endif %}
+                        {% if user.is_authenticated %}
+                            <li {% block newpost_active %}{% endblock %}>
+                                <a href="{% url 'post_new' %}">Запостить<span style="font-size:16px;"
+                                                                              class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
+                            </li>
+                        {% endif %}
                         <li {% block memes_active %}{% endblock %}>
-                            <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
+                            <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;"
+                                                                    class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
                         </li>
                         <li {% block universities_active %}{% endblock %}>
-                            <a href="{% url 'universities_list' %}">Подразделения<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-education"></span></a>
+                            <a href="{% url 'universities_list' %}">Подразделения<span style="font-size:16px;"
+                                                                                       class="pull-right hidden-xs showopacity glyphicon glyphicon-education"></span></a>
                         </li>
                         <li {% block contacts_active %}{% endblock %}>
-                            <a href="{% url 'contacts' %}">Обратная связь<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-phone-alt"></span></a>
+                            <a href="{% url 'contacts' %}">Обратная связь<span style="font-size:16px;"
+                                                                               class="pull-right hidden-xs showopacity glyphicon glyphicon-phone-alt"></span></a>
                         </li>
 
-                            {% if user.is_superuser %}
-                                <li style="background-color: #DBC6EB">
-                                    <a href="/admin">Администрирование<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-king"></span></a>
-                                </li>
-                            {% endif %}
+                        {% if user.is_superuser %}
+                            <li style="background-color: #DBC6EB">
+                                <a href="/admin">Администрирование<span style="font-size:16px;"
+                                                                        class="pull-right hidden-xs showopacity glyphicon glyphicon-king"></span></a>
+                            </li>
+                        {% endif %}
 
-                            {% if user.is_authenticated %}
-                                <li style="background-color: #FFCCCC">
-                                    <a href="{% url 'signout' %}">Выйти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
-                                </li>
-                            {% else %}
-                                <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
-                                    <a href="{% url 'signin' %}">Войти<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
-                                </li>
-                                <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
-                                    <a href="{% url 'signup' %}">Регистрация<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
-                                </li>
-                            {% endif %}
+                        {% if user.is_authenticated %}
+                            <li style="background-color: #FFCCCC">
+                                <a href="{% url 'signout' %}">Выйти<span style="font-size:16px;"
+                                                                         class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
+                            </li>
+                        {% else %}
+                            <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
+                                <a href="{% url 'signin' %}">Войти<span style="font-size:16px;"
+                                                                        class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
+                            </li>
+                            <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
+                                <a href="{% url 'signup' %}">Регистрация<span style="font-size:16px;"
+                                                                              class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
-          </div>
+            </div>
         </nav>
 
 
@@ -99,10 +112,49 @@
             {% endblock %}
         </div>
 
+        
         <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+                crossorigin="anonymous"></script>
+
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript">
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function () {
+                    try {
+                        w.yaCounter47614906 = new Ya.Metrika({
+                            id: 47614906,
+                            clickmap: true,
+                            trackLinks: true,
+                            accurateTrackBounce: true
+                        });
+                    } catch (e) {
+                    }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () {
+                        n.parentNode.insertBefore(s, n);
+                    };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else {
+                    f();
+                }
+            })(document, window, "yandex_metrika_callbacks");
+        </script>
+
+        <noscript>
+            <div><img src="https://mc.yandex.ru/watch/47614906" style="position:absolute; left:-9999px;" alt=""/></div>
+        </noscript>
+        <!-- /Yandex.Metrika counter -->
 
         {% block js %}
         {% endblock %}
