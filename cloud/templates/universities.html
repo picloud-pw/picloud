@@ -12,26 +12,36 @@
 
     <div class="container-fluid no-margin-padding">
 
-        <div class="post-panel universities container-fluid">
-            <h1>
-                <a href="#" style="vertical-align: sub">Добавить свой вуз!</a>
-            </h1>
-        </div>
 
-        {% for univer in univer_list %}
+            <a href="#">
+                <div class="universities">
+                    <div class="container-fluid">
 
-            <div class="post-panel universities container-fluid">
-                <a href="{{ univer.pk }}/">
-                    <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
-                        <img class="univer-logo" src="{{ univer.logo.url }}" alt="logo">
+                        <h1 style="vertical-align: sub">Добавить свой вуз!</h1>
+
                     </div>
-                    <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
-                        <h3>{{ univer.title }}</h3>
-                    </div>
-                </a>
-            </div>
+                </div>
+            </a>
 
-        {% endfor %}
+
+    {% for univer in univer_list %}
+
+            <a href="{{ univer.pk }}/">
+                <div class="universities">
+                    <div class="container-fluid">
+
+                        <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3 no-margin-padding">
+                            <img class="univer-logo" src="{{ univer.logo.url }}" alt="univer-logo">
+                        </div>
+                        <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
+                            <h3>{{ univer.title }}</h3>
+                        </div>
+
+                    </div>
+                </div>
+            </a>
+
+    {% endfor %}
 
     </div>
 

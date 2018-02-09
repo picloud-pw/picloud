@@ -13,41 +13,41 @@
     <div class="post-list no-margin-padding">
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 no-margin-padding">
+
             {% for post in posts %}
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-margin-padding">
-                    <div class="post-panel">
-                        <hr>
-                        <h3>
-                            <a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a>
-                        </h3>
-                        <p>{{ post.text }}</p>
-                        {% if post.image %}
-                            <img src="{{ post.image.url }}" class="post-image">
-                        {% endif %}
-                        {% if post.link %}
-                            <a href="{{ post.link }}">
-                                <div class="btn btn-primary" style="width: 100%">Прикрепленная ссылка</div>
-                            </a>
-                        {% endif %}
-                        {% if post.file %}
-                            <a href="{{ post.file.url }}">
-                                <div class="btn btn-success" style="width: 100%">Прикепленный файл</div>
-                            </a>
-                        {% endif %}
-                        <table class="table">
-                            <tr>
-                                <td>{{ post.author }}</td>
-                                <td>{{ post.subject.short_title }}</td>
-                                <td>{{ post.type.title }}</td>
-                                <td>{{ post.created_date }}</td>
-                                <td><span style="font-size:12px;"
-                                          class="showopacity glyphicon glyphicon-eye-open"></span> {{ post.views }}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="post-panel">
+                    <hr>
+                    <h3>
+                        <a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a>
+                    </h3>
+                    <p>{{ post.text }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="post-image">
+                    {% endif %}
+                    {% if post.link %}
+                        <a href="{{ post.link }}">
+                            <div class="btn btn-primary full-width">Прикрепленная ссылка</div>
+                        </a>
+                    {% endif %}
+                    {% if post.file %}
+                        <a href="{{ post.file.url }}">
+                            <div class="btn btn-success full-width">Прикепленный файл</div>
+                        </a>
+                    {% endif %}
+                    <table class="table">
+                        <tr>
+                            <td>{{ post.author }}</td>
+                            <td>{{ post.subject.short_title }}</td>
+                            <td>{{ post.type.title }}</td>
+                            <td>{{ post.created_date }}</td>
+                            <td><span style="font-size:12px;"
+                                      class="showopacity glyphicon glyphicon-eye-open"></span> {{ post.views }}
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             {% endfor %}
+
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
     </div>
