@@ -12,17 +12,22 @@
 
     <div class="container-fluid no-margin-padding">
 
-        <div class="post-panel panel-settings">
-            <div class="row">
-                <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
-                    <img class="univer-logo" src="{{ univer.logo.url }}" alt="logo">
-                </div>
-                <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
-                    <h3>{{ univer.title }}</h3>
-                    <a href="{{ univer.link }}"> официальный сайт </a>
-                </div>
-            </div>
-            <br>
+    <div class="post-panel panel-settings">
+    <div class="row">
+        <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
+            <img class="univer-logo" src="{{ univer.logo.url }}" alt="univer-logo">
+        </div>
+        <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
+            <h3>{{ univer.title }}</h3>
+            <a href="{{ univer.link }}"> официальный сайт </a>
+        </div>
+    </div>
+    <br>
+
+    <div class="panel panel-warning">
+    <div class="panel-heading" data-toggle="collapse" href="#departments">Факультеты</div>
+    <div id="departments" class="collapse">
+        <div class="panel-body no-margin-padding">
 
             {% for department in departments %}
                 <div class="panel panel-primary">
@@ -38,25 +43,13 @@
                                              href="#chair_{{ chair.pk }}">{{ chair.title }}</div>
                                         <div id="chair_{{ chair.pk }}" class="collapse">
                                             <div class="panel-body no-margin-padding">
-
-                                                {% for program in programs %}
-                                                    {% if program.chair.pk == chair.pk %}
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading" data-toggle="collapse"
-                                                                 href="#program_{{ program.pk }}">{{ program.title }}</div>
-                                                            <div id="program_{{ program.pk }}" class="collapse">
-                                                                <div class="panel-body no-margin-padding">
-
-                                                                    {% for subject in subjects.filter %}
-                                                                        {{ subject.title }}
-                                                                    {% endfor %}
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    {% endif %}
-                                                {% endfor %}
-
+                                                <div class="list-group">
+                                                    {% for program in programs %}
+                                                        {% if program.chair.pk == chair.pk %}
+                                                            <a class="list-group-item" href="#">{{ program.title }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
