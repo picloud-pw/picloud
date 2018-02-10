@@ -18,6 +18,7 @@ from .tokens import account_activation_token
 from django.http import HttpResponse
 from django.core.mail import EmailMessage
 import json
+import threading, time
 
 
 def post_list(request):
@@ -195,31 +196,49 @@ def search(request):
                                            })
 
 
-vk_urls_rss = [
-    "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
-    "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
-    "http://feed.exileed.com/vk/feed/itmoquotepad/?owner=1&only_admin=1",
-    "http://feed.exileed.com/vk/feed/wisemrduck/?owner=1&only_admin=1",
-    "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
-]
-feeds_rss = []
-for url in vk_urls_rss:
-    feeds_rss.extend(feedparser.parse(url)["entries"])
+def memes_update(sleep_interval):
+    while True:
+        feeds_rss = []
+        feed_col_1 = []
+        feed_col_2 = []
+        counter = 0
+        vk_urls_rss = [
+            "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
+            "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
+            "http://feed.exileed.com/vk/feed/itmoquotepad/?owner=1&only_admin=1",
+            "http://feed.exileed.com/vk/feed/wisemrduck/?owner=1&only_admin=1",
+            "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
+        ]
+        for url in vk_urls_rss:
+            feeds = feedparser.parse(url)["entries"]
+            feeds_rss.extend(feeds)
+        if len(feeds_rss) > 0:
+            for feed in feeds_rss:
+                feed["published"] = parser.parse(feed.published).strftime("%y.%m.%d %H:%M")
+            feeds_rss.sort(key=lambda x: x['published'], reverse=True)
+            for feed in feeds_rss:
+                if counter % 2 == 0:
+                    feed_col_1.append(feed)
+                else:
+                    feed_col_2.append(feed)
+                counter += 1
+            global feeds_mem
+            feeds_mem = [feed_col_1, feed_col_2]
+            print("Мемесы обновлены!")
+            time.sleep(sleep_interval)
+        else:
+            print("Мемесы не обовлены. Попробуем через 1 мин!")
+            time.sleep(60)
+
+
+feeds_mem = []
+t = threading.Thread(target=memes_update, args=(60*60,))
+t.daemon = True
+t.start()
 
 
 def memes(request):
-    feed_col_1 = []
-    feed_col_2 = []
-    counter = 0
-    for feed in feeds_rss:
-        feed["published"] = parser.parse(feed.published).strftime("%d.%m.%y %H:%M")
-        if counter % 2 == 0:
-            feed_col_1.append(feed)
-        else:
-            feed_col_2.append(feed)
-        counter += 1
-    feeds = [feed_col_1, feed_col_2]
-    return render(request, 'memes.html', {'colomns_feed': feeds})
+    return render(request, 'memes.html', {'colomns_feed': feeds_mem})
 
 
 def settings(request, message=""):
