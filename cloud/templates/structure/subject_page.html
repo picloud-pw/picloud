@@ -1,0 +1,61 @@
+{% extends 'main_template.html' %}
+
+{% block title %}
+    {{ subject.short_title }}
+{% endblock %}
+
+{% block universities_active %}
+    class="active"
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid no-margin-padding">
+        <div class="col-md-3 col-lg-3"></div>
+
+        <div class="col-md-6 col-lg-6">
+            <div class="post-edit-panel">
+
+
+                <h3> {{ subject.title }} </h3>
+
+                <h5>Лектор - {{ subject.lecturer }}</h5>
+                <h5>Семестр - {{ subject.semestr }}</h5>
+
+                <hr>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading" data-toggle="collapse" href="#programs-panel">Направления обучения</div>
+                    <div id="programs-panel" class="collapse">
+                        <div class="panel-body no-margin-padding">
+                            <div class="list-group">
+                                {% for program in posts.first.subject.programs.all %}
+                                    <a class="list-group-item" href="/program/{{ program.pk }}">{{ program.title }}
+                                        ({{ program.chair.short_title }})</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                {% for type in post_types %}
+                    <h4>{{ type.title }}:</h4>
+
+                    {% for post in posts %}
+                        {% if  post.type == type %}
+                            <a href="/post/{{ post.pk }}"><h4>{{ post.title }}</h4></a>
+                        {% endif %}
+                    {% endfor %}
+                    <hr>
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-lg-3"></div>
+    </div>
+
+{% endblock %}

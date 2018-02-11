@@ -1,0 +1,54 @@
+{% extends 'main_template.html' %}
+
+{% block title %}
+    {{ program.title }}
+{% endblock %}
+
+{% block universities_active %}
+    class="active"
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container-fluid no-margin-padding">
+        <div class="col-md-3 col-lg-3"></div>
+        <div class="col-md-6 col-lg-6">
+            <div class="post-edit-panel">
+
+                {% if program.link != "" %}
+                    <a href="{{ program.link }}"><h3> {{ program.title }} </h3></a>
+                {% else %}
+                    <h3> {{ program.title }} </h3>
+                {% endif %}
+
+                <h5>
+                    {{ program.chair.short_title }} --
+                    {{ program.chair.department.short_title }} --
+                    {{ program.chair.department.university.short_title }}
+                </h5>
+
+                <hr>
+
+
+                {% for semestr in semesters %}
+                    <h4> Семестр {{ semestr }}:</h4>
+
+                    {% for subject in subjects %}
+                        {% if  subject.semestr == semestr %}
+                            <a href="/subject/{{ subject.pk }}"><h4>{{ subject.title }}</h4></a>
+                            <h6>Лектор - {{ subject.lecturer }}</h6>
+                        {% endif %}
+
+                    {% endfor %}
+                    <hr>
+                {% endfor %}
+
+
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3"></div>
+    </div>
+
+
+{% endblock %}

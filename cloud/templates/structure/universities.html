@@ -13,18 +13,18 @@
     <div class="container-fluid no-margin-padding">
 
 
-            <a href="#">
-                <div class="universities">
-                    <div class="container-fluid">
+        <a href="#">
+            <div class="universities">
+                <div class="container-fluid">
 
-                        <h1 style="vertical-align: sub">Добавить свой вуз!</h1>
+                    <h1 style="vertical-align: sub">Добавить свой вуз!</h1>
 
-                    </div>
                 </div>
-            </a>
+            </div>
+        </a>
 
 
-    {% for univer in univer_list %}
+        {% for univer in univer_list %}
 
             <a href="{{ univer.pk }}/">
                 <div class="universities">
@@ -41,7 +41,7 @@
                 </div>
             </a>
 
-    {% endfor %}
+        {% endfor %}
 
     </div>
 

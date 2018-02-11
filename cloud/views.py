@@ -258,22 +258,57 @@ def settings(request, message=""):
 
 def universities_list(request):
     univer_list = University.objects.all()
-    return render(request, 'universities.html', {"univer_list": univer_list})
+    return render(request, 'structure/universities.html', {"univer_list": univer_list})
 
 
 def university_page(request, university_id):
     univer = get_object_or_404(University, pk=university_id)
-    departments = Department.objects.filter(university__id=university_id)
+    departments = Department.objects.filter(university_id=university_id)
     chairs = Chair.objects.filter(department__university__id=university_id)
     programs = Program.objects.filter(chair__department__university_id=university_id)
-    subjects = Subject.objects.filter(programs__chair__department__university__id=university_id)
 
-    return render(request, "university_page.html", {"univer": univer,
-                                                    "departments": departments,
-                                                    "chairs": chairs,
-                                                    "programs": programs,
-                                                    "subjects": subjects,
-                                                    }
+    posts_queryset = Post.objects.filter(subject__programs__in=programs).distinct()
+    posts = posts_queryset.count()
+    views = 0
+    for post in posts_queryset:
+        views += post.views
+    persons = UserInfo.objects.filter(program__in=programs).count()
+
+    return render(request, "structure/university_page.html", {"univer": univer,
+                                                              "departments": departments,
+                                                              "chairs": chairs,
+                                                              "programs": programs,
+                                                              "stats": {"posts": posts,
+                                                                        "views": views,
+                                                                        "persons": persons
+                                                                        }
+                                                              }
+                  )
+
+
+def program_page(request, program_id):
+    program = get_object_or_404(Program, pk=program_id)
+    subjects = Subject.objects.filter(programs=program)
+    semesters = set()
+    for sub in subjects:
+        semesters.add(sub.semestr)
+    return render(request, "structure/program_page.html", {"program": program,
+                                                           "subjects": subjects,
+                                                           "semesters": semesters,
+                                                           }
+                  )
+
+
+def subject_page(request, subject_id):
+    subject = get_object_or_404(Subject, pk=subject_id)
+    posts = Post.objects.filter(subject=subject)
+    post_types = set()
+    for post in posts:
+        post_types.add(post.type)
+    return render(request, "structure/subject_page.html", {"subject": subject,
+                                                           "posts": posts,
+                                                           "post_types": post_types,
+                                                           }
                   )
 
 
