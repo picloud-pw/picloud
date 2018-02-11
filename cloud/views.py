@@ -21,6 +21,7 @@ import json
 import threading, time
 
 
+
 def post_list(request):
     posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('created_date').reverse()
     return render(request, 'cloud/post_list.html', {'posts': posts})
@@ -224,15 +225,15 @@ def memes_update(sleep_interval):
                 counter += 1
             global feeds_mem
             feeds_mem = [feed_col_1, feed_col_2]
-            print("Мемесы обновлены!")
+            print("Memes updated! -- " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
             time.sleep(sleep_interval)
         else:
-            print("Мемесы не обовлены. Попробуем через 1 мин!")
-            time.sleep(60)
+            print("Error updating memes! Try again in an hour! --" + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+            time.sleep(60*60)
 
 
 feeds_mem = []
-t = threading.Thread(target=memes_update, args=(60*60,))
+t = threading.Thread(target=memes_update, args=(60*60*12,))
 t.daemon = True
 t.start()
 
