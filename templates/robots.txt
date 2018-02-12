@@ -1,2 +1,3 @@
 User-agent: *
-Allow: / # нам вроде как скрывать, пока, нечего)
+Allow: /
+# We have nothing to hide, yet)
