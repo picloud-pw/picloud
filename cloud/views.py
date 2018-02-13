@@ -1,24 +1,25 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import *
-from django.utils import timezone
-from .forms import *
+import threading
+import time
+
+import feedparser
+from dateutil import parser
 from django.contrib import auth
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-import feedparser
-from dateutil import parser
-from django.http import JsonResponse
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
-from .tokens import account_activation_token
-from django.http import HttpResponse
 from django.core.mail import EmailMessage
-import json
-import threading, time
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.template.loader import render_to_string
+
+from .forms import *
+from .tokens import account_activation_token
+
+
+def robots(request):
+    return render_to_response('robots.txt', content_type="text/plain")
 
 
 def post_list(request):
