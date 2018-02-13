@@ -4,7 +4,7 @@
     Cloud Пост
 {% endblock %}
 
-{% block cloud_active%}
+{% block cloud_active %}
     class="active"
 {% endblock %}
 
@@ -15,9 +15,27 @@
         <div class="col-md-6 col-lg-6">
             <div class="post-panel">
                 <hr>
-                <h2> {{ post.title }}</h2>
+                <h3 style="text-align: left; padding: 0 20px">
+                    {{ post.title }}
+
+                    {% if user == post.author or user.is_staff or user.is_superuser %}
+                        <a href="{% url 'post_delete' pk=post.pk %}">
+                            <div class="btn btn-danger pull-right">
+                                <span style="font-size:16px;" class="showopacity glyphicon glyphicon-remove"></span>
+                            </div>
+                        </a>
+                        <a href="{% url 'post_edit' pk=post.pk %}">
+                            <div class="btn btn-warning pull-right">
+                                <span style="font-size:16px;" class="showopacity glyphicon glyphicon-pencil"></span>
+                            </div>
+                        </a>
+                    {% endif %}
+                </h3>
+
                 <hr>
-                <p>{{ post.text }}</p>
+                <div class="post-text">
+                    <p>{{ post.text }}</p>
+                </div>
 
                 {% if post.image %}
                     <img src="{{ post.image.url }}" class="post-image">
@@ -61,13 +79,7 @@
                     </tr>
                 </table>
 
-                {% if user == post.author or user.is_staff or user.is_superuser %}
-                    <a href="{% url 'post_edit' pk=post.pk %}">
-                        <div class="btn btn-warning" style="width:100%">
-                            Редактировать пост
-                        </div>
-                    </a>
-                {% endif %}
+
             </div>
         </div>
         <div class="col-md-3 col-lg-3"></div>

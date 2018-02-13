@@ -14,6 +14,14 @@
 
     <div class="search-panel row">
 
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ university.university }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ department.department }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ chair.chair }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ program.program }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.subject }}</div>
+
+        <hr>
         <div id="search-line" class="col-xs-12 col-sm-7 col-md-9 col-lg-9">
             <input class="form-control" type="text" placeholder="Введите запрос">
         </div>
@@ -23,14 +31,6 @@
         <div id="search-button" class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
             <input class="form-control btn btn-primary" type="submit" onclick="search_posts()" value="Поиск">
         </div>
-
-        <hr>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ university.university }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ department.department }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ chair.chair }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ program.program }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">{{ subject.subject }}</div>
-
 
     </div>
 
@@ -63,16 +63,22 @@
 
         function post_to_html(item) {
             date = new Date(item.created_date)
-                .toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'});
+                .toLocaleString("ru", {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric'
+                });
             return "<div class='search-post-panel'> " +
                 "<a target='_blank' href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
                 "<p>" + item.text + "</p>" +
                 "<table class='table'> <tr>" +
-                    "<td>"+ item.author_username +"</td>" +
-                    "<td>"+ item.subject_short_title +"</td>" +
-                    "<td>"+ item.type_title +"</td>" +
-                    "<td>"+ date +"</td>" +
-                    "<td> <span style='font-size:12px;' class='showopacity glyphicon glyphicon-eye-open'></span>"+  item.views +"</td> " +
+                "<td>" + item.author_username + "</td>" +
+                "<td>" + item.subject_short_title + "</td>" +
+                "<td>" + item.type_title + "</td>" +
+                "<td>" + date + "</td>" +
+                "<td> <span style='font-size:12px;' class='showopacity glyphicon glyphicon-eye-open'></span>" + item.views + "</td> " +
                 "</tr></table>" +
                 "</div>"
         }

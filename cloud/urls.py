@@ -20,6 +20,7 @@ urlpatterns = [
     re_path(r'post/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
     path('post/new/', views.post_new, name='post_new'),
     re_path(r'post/(?P<pk>\d+)/edit/$', views.post_edit, name='post_edit'),
+    re_path(r'post/(?P<pk>\d+)/delete/$', views.post_delete, name='post_delete'),
 
     path('search/', views.search, name="search"),
     path('memes/', views.memes, name="memes"),

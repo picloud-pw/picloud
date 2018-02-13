@@ -21,7 +21,6 @@ import json
 import threading, time
 
 
-
 def post_list(request):
     posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('created_date').reverse()
     return render(request, 'cloud/post_list.html', {'posts': posts})
@@ -36,32 +35,47 @@ def post_detail(request, pk):
 
 
 def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.created_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = PostForm(request.POST, request.FILES)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.created_date = timezone.now()
+                post.save()
+                return redirect('post_detail', pk=post.pk)
+        else:
+            form = PostForm()
+        return render(request, 'cloud/post_edit.html', {'form': form})
     else:
-        form = PostForm()
-    return render(request, 'cloud/post_edit.html', {'form': form})
+        return redirect("post_list")
 
 
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, request.FILES, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
+    if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
+        if request.method == "POST":
+            form = PostForm(request.POST, request.FILES, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.published_date = timezone.now()
+                post.save()
+                return redirect('post_detail', pk=post.pk)
+        else:
+            form = PostForm(instance=post)
+        return render(request, 'cloud/post_edit.html', {'form': form})
     else:
-        form = PostForm(instance=post)
-    return render(request, 'cloud/post_edit.html', {'form': form})
+        return redirect("post_list")
+
+
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
+        post.delete()
+        return redirect("post_list")
+    else:
+        return redirect("post_list")
 
 
 def message(request, msg):

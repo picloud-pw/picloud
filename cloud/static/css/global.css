@@ -44,6 +44,11 @@ body {
     width: 100%;
 }
 
+.post-text{
+    text-align: left;
+    padding: 0 20px;
+}
+
 .post-edit-panel{
     padding: 20px;
 }
@@ -81,6 +86,10 @@ img.univer-logo{
 .search-post-panel {
     margin: 10px;
     padding-top: 10px;
+}
+
+.search-select{
+    margin-bottom: 10px;
 }
 
 .panel-settings {

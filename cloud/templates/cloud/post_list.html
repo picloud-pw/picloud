@@ -11,6 +11,9 @@
 {% block head %}
     <!-- Аутентификация в Яндекс Вебмастер -->
     <meta name="yandex-verification" content="c3f40ad459bc9654" />
+    <!-- Showdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
+            integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
@@ -25,7 +28,9 @@
                     <h3>
                         <a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a>
                     </h3>
-                    <p>{{ post.text }}</p>
+                    <div class="post-text">
+                        <p>{{ post.text }}</p>
+                    </div>
                     {% if post.image %}
                         <img src="{{ post.image.url }}" class="post-image">
                     {% endif %}
@@ -56,5 +61,23 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
     </div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script>
+
+
+        $(document).ready(function () {
+            let converter = new showdown.Converter();
+            $(".post-text").each(function () {
+                let text = $(this).text();
+                $(this).html(converter.makeHtml(text));
+            });
+        });
+
+
+    </script>
 
 {% endblock %}
