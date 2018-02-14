@@ -1,4 +1,5 @@
 {% extends 'main_template.html' %}
+{% load static %}
 
 {% block title %}
     Cloud
@@ -65,19 +66,5 @@
 {% endblock %}
 
 {% block js %}
-
-    <script>
-
-
-        $(document).ready(function () {
-            let converter = new showdown.Converter();
-            $(".post-text").each(function () {
-                let text = $(this).text();
-                $(this).html(converter.makeHtml(text));
-            });
-        });
-
-
-    </script>
-
+    <script src="{% static 'js/toMarkdown.js' %}"></script>
 {% endblock %}

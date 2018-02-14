@@ -1,4 +1,5 @@
 {% extends 'main_template.html' %}
+{% load static %}
 
 {% block title %}
     Cloud Пост
@@ -6,6 +7,12 @@
 
 {% block cloud_active %}
     class="active"
+{% endblock %}
+
+{% block head %}
+     <!-- Showdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
+            integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
@@ -86,4 +93,8 @@
     </div>
 
 
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/toMarkdown.js' %}"></script>
 {% endblock %}

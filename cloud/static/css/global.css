@@ -130,6 +130,10 @@ img.univer-logo{
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
+input[type="checkbox"] {
+    height: 20px;
+}
+
 .panel-heading{
     cursor: pointer;
 }
@@ -160,7 +164,13 @@ img.univer-logo{
 
 textarea {
     width: 100%;
-    height:150px;
+    height:250px;
     resize: none;
+}
+
+#markdownLive{
+    background-color: #c1e5cc;
+    border-radius: 10px;
+    text-align: left;
 }
 
