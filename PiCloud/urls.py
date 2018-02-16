@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', include('cloud.urls')),
     path('favicon.ico/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
+    path('favicon.png/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

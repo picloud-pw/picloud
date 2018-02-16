@@ -7,14 +7,9 @@ $(document).ready(function () {
     });
 });
 
-$("#isMarkdownLive").click(function () {
-    if (this.checked) {
+$("#markdownLive").html(converter.makeHtml($("textarea").val()));
+$("textarea").bind('input propertychange', function() {
         $("#markdownLive").html(converter.makeHtml($("textarea").val()));
-        $("#markdownLive").css({'display': 'block'});
-    }
-    else {
-        $("#markdownLive").css({'display': 'none'});
-    }
 });
 
 

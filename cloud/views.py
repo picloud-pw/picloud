@@ -1,7 +1,8 @@
 import threading
 import time
-
 import feedparser
+import json
+
 from dateutil import parser
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
@@ -13,6 +14,7 @@ from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.template.loader import render_to_string
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from .forms import *
 from .tokens import account_activation_token
@@ -219,11 +221,11 @@ def memes_update(sleep_interval):
         feed_col_2 = []
         counter = 0
         vk_urls_rss = [
+            "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
             "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
             "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
             "http://feed.exileed.com/vk/feed/itmoquotepad/?owner=1&only_admin=1",
             "http://feed.exileed.com/vk/feed/wisemrduck/?owner=1&only_admin=1",
-            "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
         ]
         for url in vk_urls_rss:
             feeds = feedparser.parse(url)["entries"]
@@ -240,9 +242,12 @@ def memes_update(sleep_interval):
                 counter += 1
             global feeds_mem
             feeds_mem = [feed_col_1, feed_col_2]
+            with open('memes.txt', 'w') as outfile:
+                json.dump(feeds_mem, outfile)
             print("Memes updated! -- " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
             time.sleep(sleep_interval)
         else:
+            feeds_mem = json.load(open(static('memes.txt')))
             print("Error updating memes! Try again in an hour! --" + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
             time.sleep(60*60)
 

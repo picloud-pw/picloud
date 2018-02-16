@@ -39,7 +39,7 @@ body {
     margin: 5px auto;
 }
 
-.post-panel img, .mem-panel img {
+.post-panel img.post-img, .mem-panel img {
     padding: 5px;
     width: 100%;
 }
@@ -50,7 +50,8 @@ body {
 }
 
 .post-edit-panel{
-    padding: 20px;
+    padding: 10px;
+    margin: 10px;
 }
 
 .sign-form {
@@ -164,12 +165,11 @@ input[type="checkbox"] {
 
 textarea {
     width: 100%;
-    height:250px;
+    height: 300px;
     resize: none;
 }
 
 #markdownLive{
-    background-color: #c1e5cc;
     border-radius: 10px;
     text-align: left;
 }

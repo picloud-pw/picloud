@@ -16,62 +16,148 @@
 {% endblock %}
 
 {% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-    <div class="container-fluid no-margin-padding">
-        <div class="col-md-3 col-lg-3"></div>
-        <div class="col-md-6 col-lg-6">
-            <div class="post-edit-panel">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3 col-lg-3"></div>
+            <div class="col-md-6 col-lg-6">
+                <div class="post-edit-panel">
 
-                    <div class="django-control">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#structure">
+                            Университет - Факультет - Кафедра - Программа обучения
+                        </div>
+                        </div>
+                        <div id="structure" class="collapse">
+                                <div class="form-group django-control">
+                                    <label class="col-form-label">Университет</label>
+                                    <select name="university" id="id_university" required></select>
+                                </div>
+
+                                <div class="form-group django-control">
+                                    <label class="col-form-label">Факультет</label>
+                                    <select name="department" id="id_department" required></select>
+                                </div>
+
+                                <div class="form-group django-control">
+                                    <label class="col-form-label">Кафедра</label>
+                                    <select name="chair" id="id_chair" required></select>
+                                </div>
+
+                                <div class="form-group django-control">
+                                    <label class="col-form-label">Программа обучения</label>
+                                    <select name="program" id="id_program" required></select>
+                                </div>
+                        </div>
+
+
+                    <div class="form-group django-control">
                         <label>Предмет</label>
                         {{ form.subject }}
-                        <hr>
+                    </div>
 
+                    <div class="form-group django-control">
                         <label>Заголовок</label>
-                        {{ form.title }}<br>
+                        {{ form.title }}
+                    </div>
 
+                </div>
+
+            </div>
+            <div class="col-md-3 col-lg-3"></div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                <div id="markdown-input" class="post-edit-panel">
+                    <div id="flexarea">
+                        {{ form.text }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                <div id="markdown-output" class="post-edit-panel">
+                    <div id="markdownLive" style="height: 300px; overflow-y: scroll;"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-lg-3"></div>
+            <div class="col-md-6 col-lg-6">
+                <div class="post-edit-panel">
+
+                    <div class="form-group django-control">
                         <label>Тип поста</label>
                         {{ form.type }}
-                        <hr>
+                    </div>
 
-                        <label>Ссылка</label>
-                        {{ form.link }}<br>
+                    <div id="btnLink" class="form-group django-control row link" style="display: none">
+                        <label class="col-sm-2 text-right">Ссылка: </label>
+                        <div class="col-sm-10">{{ form.link }}</div>
+                    </div>
 
-                        <div class="container-fluid no-margin-padding">
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <label>Картинка</label>{{ form.image }}<br></div>
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><label>Файл</label>{{ form.file }}<br>
-                            </div>
-                        </div>
-                        <hr>
+                    <div id="btnPicture" class="form-group django-control row picture" style="display: none">
+                        <label class="col-sm-2 text-right">Картинка: </label>
+                        <div class="col-sm-10">{{ form.image }}</div>
+                    </div>
 
-                        <label>Описание</label>
-                        <div id="flexarea">
-                            {{ form.text }}
-                        </div>
-                        <input id="isMarkdownLive" type="checkbox">
-                        <label for="isMarkdownLive">Markdown LIVE</label><br>
-
-                        <div id="markdownLive" style="display: none"></div>
-
+                    <div id="btnFile" class="form-group django-control row file" style="display: none">
+                        <label class="col-sm-2 text-right">Файл: </label>
+                        <div class="col-sm-10">{{ form.file }}</div>
                     </div>
 
                     <div class="container-fluid no-margin-padding">
-                        <button type="submit" class="save btn btn-default col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
+                             onclick="displayInputBlock(this, '#btnLink')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-link"></span>
+                        </div>
+                        <div class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
+                             onclick="displayInputBlock(this, '#btnPicture')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-picture"></span>
+                        </div>
+                        <div class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
+                             onclick="displayInputBlock(this, '#btnFile')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-open-file"></span>
+                        </div>
+                        <button type="submit" class="btn btn-default col-xs-12 col-sm-9 col-md-9 col-lg-9">
                             Сохранить
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-3 col-lg-3"></div>
-    </div>
 
+                </div>
+            </div>
+
+            <div class="col-md-3 col-lg-3"></div>
+        </div>
+    </form>
 
 {% endblock %}
 
 {% block js %}
     <script src="{% static 'js/toMarkdown.js' %}"></script>
+    <script>
+
+        $(document).ready(function () {
+            $("#id_type option:first").remove();
+        });
+
+
+        function displayInputBlock(button, groupID) {
+            if ($(groupID).css("display") === "none") {
+                $(groupID).css({"display": "block"});
+                $(button).removeClass("btn-default").addClass("btn-info");
+            } else {
+                $(groupID).css({"display": "none"});
+                $(button).removeClass("btn-info").addClass("btn-default");
+            }
+
+        }
+
+    </script>
 {% endblock %}
