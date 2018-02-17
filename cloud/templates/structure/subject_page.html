@@ -19,8 +19,14 @@
 
                 <h3> {{ subject.title }} </h3>
 
-                <h5>Лектор - {{ subject.lecturer }}</h5>
-                <h5>Семестр - {{ subject.semestr }}</h5>
+                {% if subject.lecturer != none %}
+                    <h5>Лектор - {{ subject.lecturer }}</h5>
+                {% endif %}
+                {% if subject.semestr != 0 %}
+                    <h5> Семестр {{ subject.semestr }}</h5>
+                {% else %}
+                    <h5> Глобальные материалы</h5>
+                {% endif %}
 
                 <hr>
 
@@ -29,7 +35,7 @@
                     <div id="programs-panel" class="collapse">
                         <div class="panel-body no-margin-padding">
                             <div class="list-group">
-                                {% for program in posts.first.subject.programs.all %}
+                                {% for program in subject.programs.all %}
                                     <a class="list-group-item" href="/program/{{ program.pk }}">{{ program.title }}
                                         ({{ program.chair.short_title }})</a>
                                 {% endfor %}

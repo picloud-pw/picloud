@@ -32,12 +32,15 @@
 
 
                 {% for semestr in semesters %}
-                    <h4> Семестр {{ semestr }}:</h4>
+                    {% if semestr != 0 %}
+                        <h4> Семестр {{ semestr }}:</h4>
+                    {% else %}
+                        <h4> Глобальные материалы:</h4>
+                    {% endif %}
 
                         {% for subject in subjects %}
                             {% if  subject.semestr == semestr %}
                                 <a href="/subject/{{ subject.pk }}"><h4>{{ subject.title }}</h4></a>
-                                <h6>Лектор - {{ subject.lecturer }}</h6>
                             {% endif %}
                         {% endfor %}
 
