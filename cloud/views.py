@@ -49,7 +49,8 @@ def post_new(request):
                 return redirect('post_detail', pk=post.pk)
         else:
             form = PostForm()
-        return render(request, 'cloud/post_edit.html', {'form': form})
+            user_info = get_object_or_404(UserInfo, user=request.user)
+            return render(request, 'cloud/post_edit.html', {'form': form, 'user_info': user_info})
     else:
         return redirect("post_list")
 
@@ -67,7 +68,8 @@ def post_edit(request, pk):
                 return redirect('post_detail', pk=post.pk)
         else:
             form = PostForm(instance=post)
-        return render(request, 'cloud/post_edit.html', {'form': form})
+            user_info = get_object_or_404(UserInfo, user=request.user)
+            return render(request, 'cloud/post_edit.html', {'form': form, 'post': post})
     else:
         return redirect("post_list")
 
@@ -408,7 +410,7 @@ def get_programs(request):
 
 def get_subjects(request):
     program_id = request.GET.get('id', None)
-    dictionaries = [obj.as_dict() for obj in Subject.objects.filter(programs=program_id)]
+    dictionaries = [obj.as_dict() for obj in Subject.objects.filter(programs=program_id).order_by('semestr')]
     return JsonResponse(dictionaries, safe=False)
 
 

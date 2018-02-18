@@ -58,6 +58,13 @@
     <script>
 
         $(document).ready(function () {
+            clear_and_disabled_all_elements();
+            get_all_universities();
+            $("#id_university").change(function(){university_updated($(this).val())});
+            $("#id_department").change(function(){department_updated($(this).val())});
+            $("#id_chair").change(function(){chair_updated($(this).val())});
+            $("#id_program").change(function(){program_updated($(this).val())});
+
             $("#id_type option:first").text("Любой");
         });
 

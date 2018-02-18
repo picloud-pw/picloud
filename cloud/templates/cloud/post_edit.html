@@ -97,32 +97,32 @@
                         {{ form.type }}
                     </div>
 
-                    <div id="btnLink" class="form-group django-control row link" style="display: none">
+                    <div id="linkInput" class="form-group django-control row link" style="display: none">
                         <label class="col-sm-2 text-right">Ссылка: </label>
                         <div class="col-sm-10">{{ form.link }}</div>
                     </div>
 
-                    <div id="btnPicture" class="form-group django-control row picture" style="display: none">
+                    <div id="pictureInput" class="form-group django-control row picture" style="display: none">
                         <label class="col-sm-2 text-right">Картинка: </label>
                         <div class="col-sm-10">{{ form.image }}</div>
                     </div>
 
-                    <div id="btnFile" class="form-group django-control row file" style="display: none">
+                    <div id="fileInput" class="form-group django-control row file" style="display: none">
                         <label class="col-sm-2 text-right">Файл: </label>
                         <div class="col-sm-10">{{ form.file }}</div>
                     </div>
 
                     <div class="container-fluid no-margin-padding">
-                        <div class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
-                             onclick="displayInputBlock(this, '#btnLink')">
+                        <div id="btnLink" class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
+                             onclick="displayInputBlock(this, '#linkInput')">
                             <span style="font-size:16px;" class="showopacity glyphicon glyphicon-link"></span>
                         </div>
-                        <div class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
-                             onclick="displayInputBlock(this, '#btnPicture')">
+                        <div id="btnPicture" class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
+                             onclick="displayInputBlock(this, '#pictureInput')">
                             <span style="font-size:16px;" class="showopacity glyphicon glyphicon-picture"></span>
                         </div>
-                        <div class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
-                             onclick="displayInputBlock(this, '#btnFile')">
+                        <div id="btnFile" class="btn btn-default col-xs-4 col-sm-1 col-md-1 col-lg-1"
+                             onclick="displayInputBlock(this, '#fileInput')">
                             <span style="font-size:16px;" class="showopacity glyphicon glyphicon-open-file"></span>
                         </div>
                         <button type="submit" class="btn btn-default col-xs-12 col-sm-9 col-md-9 col-lg-9">
@@ -141,12 +141,19 @@
 
 {% block js %}
     <script src="{% static 'js/toMarkdown.js' %}"></script>
+    <script src="{% static 'js/department_search.js' %}"></script>
     <script>
 
         $(document).ready(function () {
             $("#id_type option:first").remove();
-        });
 
+            $("#id_university").change(function(){university_updated($(this).val())});
+            $("#id_department").change(function(){department_updated($(this).val())});
+            $("#id_chair").change(function(){chair_updated($(this).val())});
+            $("#id_program").change(function(){program_updated($(this).val())});
+
+            checkEditOrNew()
+        });
 
         function displayInputBlock(button, groupID) {
             if ($(groupID).css("display") === "none") {
@@ -157,6 +164,36 @@
                 $(button).removeClass("btn-info").addClass("btn-default");
             }
 
+        }
+
+        function checkEditOrNew() {
+            if ($("#id_title").val() === ""){
+                // Страница создания поста
+                get_all_universities();
+                university_updated(  {{ user_info.program.chair.department.university.pk }}  );
+                department_updated(  {{ user_info.program.chair.department.pk }}  );
+                     chair_updated(  {{ user_info.program.chair.pk }}  );
+                   program_updated(  {{ user_info.program.pk }}  );
+            } else {
+                // Редактирование поста
+                get_all_universities();
+                university_updated(  {{ post.subject.programs.first.chair.department.university.pk }}  );
+                department_updated(  {{ post.subject.programs.first.chair.department.pk }}  );
+                chair_updated(  {{ post.subject.programs.first.chair.pk }}  );
+                program_updated(  {{ post.subject.programs.first.pk }}  );
+
+                if ("{{ post.link }}" != "None")
+                    displayInputBlock("#btnLink", "#linkInput");
+                if ("{{ post.image }}" != "")
+                    displayInputBlock("#btnPicture", "#pictureInput");
+                if ("{{ post.file }}" != "")
+                    displayInputBlock("#btnFile", "#fileInput");
+
+                    //Костыль, ждем пока выполниться ajax запрос!
+                    setTimeout(function () {
+                        $("#id_subject").val({{ post.subject.pk }})
+                    }, 200);
+            }
         }
 
     </script>

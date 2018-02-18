@@ -1,8 +1,3 @@
-$(document).ready(function () {
-    clear_and_disabled_all_elements();
-    get_all_universities();
-});
-
 function get_all_universities() {
     change_options("/get_universities/", 0, "id_university", "Выберите университет");
 }
@@ -28,12 +23,14 @@ function clear_and_disabled_all_elements() {
     clear_options_and_disabled("id_subject", "Выберите предмет");
 }
 
-function change_options(url, id, element_id, default_option) {
+function change_options(url, id, element_id, default_option, changed_element) {
     $.ajax({
         url: url,
         data: {'id': id},
         dataType: 'json',
         success: function (data) {
+            //Костыль, необходимо для автоматического заполнения полей
+            $("#"+changed_element).val(id);
             clear_options(element_id);
             if (data.length !== 0) {
                 $('#' + element_id).append($('<option>', {text: default_option, value: "", disabled: true, selected: true}));
@@ -56,28 +53,26 @@ function change_options(url, id, element_id, default_option) {
     });
 }
 
-$("#id_university").change(function () {
-    let university_id = $(this).val();
-    change_options("/get_departments/", university_id, "id_department", "Выберите факультет");
+
+
+function university_updated(university_id){
+    change_options("/get_departments/", university_id, "id_department", "Выберите факультет", "id_university");
     clear_options_and_disabled("id_chair", "Выберите кафедру");
     clear_options_and_disabled("id_program", "Выберите программу обучения");
     clear_options_and_disabled("id_subject", "Выберите предмет");
-});
+}
 
-$("#id_department").change(function () {
-    let department_id = $(this).val();
-    change_options("/get_chairs/", department_id, "id_chair", "Выберите кафедру");
+function department_updated(department_id) {
+    change_options("/get_chairs/", department_id, "id_chair", "Выберите кафедру", "id_department");
     clear_options_and_disabled("id_program", "Выберите программу обучения");
     clear_options_and_disabled("id_subject", "Выберите предмет");
-});
+}
 
-$("#id_chair").change(function () {
-    let chair_id = $(this).val();
-    change_options("/get_programs/", chair_id, "id_program", "Выберите программу обучения");
+function chair_updated(chair_id) {
+    change_options("/get_programs/", chair_id, "id_program", "Выберите программу обучения", "id_chair");
     clear_options_and_disabled("id_subject", "Выберите предмет");
-});
+}
 
-$("#id_program").change(function () {
-    let program_id = $(this).val();
-    change_options("/get_subjects/", program_id, "id_subject", "Выберите предмет");
-});
+function program_updated(program_id){
+    change_options("/get_subjects/", program_id, "id_subject", "Выберите предмет", "id_program");
+}

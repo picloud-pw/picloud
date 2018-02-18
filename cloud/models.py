@@ -99,7 +99,7 @@ class Subject(models.Model):
     def as_dict(self):
         return {
             "id": self.pk,
-            "title": self.title,
+            "title": self.title + " (" + self.semestr.__str__() + " сем.)",
             "short_title": self.short_title,
             "semestr": self.semestr
         }
@@ -155,7 +155,6 @@ class Post(models.Model):
         return self.title
 
     def as_dict(self):
-
         return {
             "id": self.pk,
             "author_username": self.author.username,
