@@ -32,22 +32,22 @@
                         <div id="structure" class="collapse">
                                 <div class="form-group django-control">
                                     <label class="col-form-label">Университет</label>
-                                    <select name="university" id="id_university" required></select>
+                                    <select name="university" id="id_university"></select>
                                 </div>
 
                                 <div class="form-group django-control">
                                     <label class="col-form-label">Факультет</label>
-                                    <select name="department" id="id_department" required></select>
+                                    <select name="department" id="id_department"></select>
                                 </div>
 
                                 <div class="form-group django-control">
                                     <label class="col-form-label">Кафедра</label>
-                                    <select name="chair" id="id_chair" required></select>
+                                    <select name="chair" id="id_chair"></select>
                                 </div>
 
                                 <div class="form-group django-control">
                                     <label class="col-form-label">Программа обучения</label>
-                                    <select name="program" id="id_program" required></select>
+                                    <select name="program" id="id_program"></select>
                                 </div>
                         </div>
 
@@ -168,13 +168,23 @@
 
         function checkEditOrNew() {
             if ($("#id_title").val() === ""){
+
                 // Страница создания поста
                 get_all_universities();
                 university_updated(  {{ user_info.program.chair.department.university.pk }}  );
                 department_updated(  {{ user_info.program.chair.department.pk }}  );
                      chair_updated(  {{ user_info.program.chair.pk }}  );
                    program_updated(  {{ user_info.program.pk }}  );
+
+                    //Костыль, ждем пока выполниться ajax запрос!
+                    let last_post_subject = "{{ request.session.last_post_subject }}";
+                    if (last_post_subject != "")
+                        setTimeout(function () {
+                            $("#id_subject").val(  last_post_subject  )
+                        }, 200);
+
             } else {
+
                 // Редактирование поста
                 get_all_universities();
                 university_updated(  {{ post.subject.programs.first.chair.department.university.pk }}  );

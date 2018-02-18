@@ -40,6 +40,7 @@ def post_detail(request, pk):
 def post_new(request):
     if request.user.is_authenticated:
         if request.method == "POST":
+            request.session['last_post_subject'] = request.POST["subject"]
             form = PostForm(request.POST, request.FILES)
             if form.is_valid():
                 post = form.save(commit=False)
