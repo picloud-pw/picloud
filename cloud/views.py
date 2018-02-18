@@ -245,12 +245,12 @@ def memes_update(sleep_interval):
                 counter += 1
             global feeds_mem
             feeds_mem = [feed_col_1, feed_col_2]
-            with open('memes.txt', 'w') as outfile:
+            with open('static/memes.txt', 'w') as outfile:
                 json.dump(feeds_mem, outfile)
             print("Memes updated! -- " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
             time.sleep(sleep_interval)
         else:
-            feeds_mem = json.load(open(static('memes.txt')))
+            feeds_mem = json.load('static/memes.txt')
             print("Error updating memes! Try again in an hour! --" + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
             time.sleep(60*60)
 
