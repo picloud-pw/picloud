@@ -3,6 +3,7 @@ node_modules/
 resources/
 *.zip
 lib/*
+static/
 
 ### Python ###
 __pycache__/
