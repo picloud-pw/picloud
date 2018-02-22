@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.template.loader import render_to_string
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import *
 from .tokens import account_activation_token
@@ -25,8 +26,24 @@ def robots(request):
 
 
 def post_list(request):
-    posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('created_date').reverse()
-    return render(request, 'cloud/post_list.html', {'posts': posts})
+    if request.user.is_authenticated:
+        user_program = get_object_or_404(UserInfo, pk=request.user.pk).program.pk
+        posts = Post.objects.filter(created_date__lte=timezone.now())\
+                            .filter(subject__programs__exact=user_program)\
+                            .order_by('created_date').reverse()
+    else:
+        posts = Post.objects.filter(created_date__lte=timezone.now())\
+                            .order_by('created_date').reverse()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 50)
+    try:
+        posts_page = paginator.page(page)
+    except PageNotAnInteger:
+        posts_page = paginator.page(1)
+    except EmptyPage:
+        posts_page = paginator.page(paginator.num_pages)
+
+    return render(request, 'cloud/post_list.html', {'posts': posts_page})
 
 
 def post_detail(request, pk):
@@ -113,7 +130,7 @@ def signin(request):
 
 def validate_signup(username, email, password, second_password):
     error = ""
-    if len(username) > 10 or len(username) < 5:
+    if len(username) > 15 or len(username) < 3:
         error = "Некорректно задан логин"
     if len(password) < 5:
         error = "Некорректно задан пароль"
@@ -424,7 +441,7 @@ def get_posts(request):
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
         posts = posts.filter(type=type_id)
-    posts = posts.order_by('created_date').reverse()
+    posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)
 
@@ -432,6 +449,6 @@ def get_posts(request):
 def search_posts(request):
     words = request.GET.get('search_request', None).split(" ")
     posts = Post.objects.all()
-    posts = posts.order_by('created_date').reverse()
+    posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)

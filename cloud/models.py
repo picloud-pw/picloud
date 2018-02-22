@@ -154,6 +154,18 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        else:
+            return ""
+
+    def get_file_url(self):
+        if self.file and hasattr(self.file, 'url'):
+            return self.file.url
+        else:
+            return ""
+
     def as_dict(self):
         return {
             "id": self.pk,
@@ -167,4 +179,6 @@ class Post(models.Model):
             "type_title": self.type.title,
             "link": self.link,
             "views": self.views,
+            "image": self.get_image_url(),
+            "file": self.get_file_url(),
         }

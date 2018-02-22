@@ -39,7 +39,7 @@ body {
     margin: 5px auto;
 }
 
-.post-panel img.post-img, .mem-panel img {
+.post-panel img.post-img, .mem-panel img, .post-img {
     padding: 5px;
     width: 100%;
 }

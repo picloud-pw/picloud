@@ -11,7 +11,7 @@
 
 {% block head %}
     <!-- Аутентификация в Яндекс Вебмастер -->
-    <meta name="yandex-verification" content="c3f40ad459bc9654" />
+    <meta name="yandex-verification" content="c3f40ad459bc9654"/>
     <!-- Showdown -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
             integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
@@ -48,7 +48,7 @@
                     <table class="table">
                         <tr>
                             <td>{{ post.author }}</td>
-                            <td>{{ post.subject.short_title }}</td>
+                            <td><a href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a></td>
                             <td>{{ post.type.title }}</td>
                             <td>{{ post.created_date }}</td>
                             <td><span style="font-size:12px;"
@@ -58,6 +58,38 @@
                     </table>
                 </div>
             {% endfor %}
+
+
+            {% if posts.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+
+                        {% if posts.has_previous %}
+                            <li><a href="?page={{ posts.previous_page_number }}" aria-label="Previous"><span
+                                    aria-hidden="true">&laquo;</span></a></li>
+                        {% else %}
+                            <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+                        {% endif %}
+
+                        {% for i in posts.paginator.page_range %}
+                            {% if posts.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if posts.has_next %}
+                            <li><a href="?page={{ posts.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                            </li>
+                        {% else %}
+                            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+            {% endif %}
+
 
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>

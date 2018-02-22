@@ -9,6 +9,12 @@
     class="active"
 {% endblock %}
 
+{% block head %}
+    <!-- Showdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
+            integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block content %}
 
 
@@ -43,6 +49,7 @@
                 Введите ваш запрос
             </div>
 
+
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
     </div>
@@ -54,16 +61,25 @@
 {% block js %}
 
     <script src="{% static "js/department_search.js" %}"></script>
+    <script src="{% static 'js/toMarkdown.js' %}"></script>
 
     <script>
 
         $(document).ready(function () {
             clear_and_disabled_all_elements();
             get_all_universities();
-            $("#id_university").change(function(){university_updated($(this).val())});
-            $("#id_department").change(function(){department_updated($(this).val())});
-            $("#id_chair").change(function(){chair_updated($(this).val())});
-            $("#id_program").change(function(){program_updated($(this).val())});
+            $("#id_university").change(function () {
+                university_updated($(this).val())
+            });
+            $("#id_department").change(function () {
+                department_updated($(this).val())
+            });
+            $("#id_chair").change(function () {
+                chair_updated($(this).val())
+            });
+            $("#id_program").change(function () {
+                program_updated($(this).val())
+            });
 
             $("#id_type option:first").text("Любой");
         });
@@ -77,12 +93,25 @@
                     hour: 'numeric',
                     minute: 'numeric'
                 });
+
+            let image, file;
+            if (item.image !== "")
+                image = " <img src=" + item.image + " class='post-img'>";
+            else
+                image = "";
+            if (item.file !== "")
+                file = "<a href='"+item.file+"'> <div class='btn btn-success full-width'>Прикепленный файл</div></a>";
+            else
+                file = "";
+
             return "<div class='search-post-panel'> " +
                 "<a target='_blank' href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
-                "<p>" + item.text + "</p>" +
+                "<div class='post-text'><p>" + item.text + "</p></div>" +
+                image +
+                file +
                 "<table class='table'> <tr>" +
                 "<td>" + item.author_username + "</td>" +
-                "<td>" + item.subject_short_title + "</td>" +
+                "<td><a href='/subject/" + item.subject_id + "'>" + item.subject_short_title + "</td>" +
                 "<td>" + item.type_title + "</td>" +
                 "<td>" + date + "</td>" +
                 "<td> <span style='font-size:12px;' class='showopacity glyphicon glyphicon-eye-open'></span>" + item.views + "</td> " +
@@ -96,6 +125,7 @@
                 posts.forEach(function (item, i, arr) {
                     $('#search_results').append(post_to_html(item));
                 });
+                update_markdown();
             } else {
                 $('#search_results').append("<div class='search-post-panel' style='padding: 10px;'>К сожалению по вашему запросу ничего не найдено :(</div>");
             }
