@@ -25,7 +25,9 @@
 
             {% for post in posts %}
                 <div class="post-panel">
-                    <hr>
+                    {% block edit %}
+                        <hr>
+                    {% endblock %}
                     <h3>
                         <a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a>
                     </h3>
@@ -56,7 +58,23 @@
                             </td>
                         </tr>
                     </table>
+
                 </div>
+
+            {% empty %}
+                {% block emptyloop %}
+                    <div class="post-panel">
+                        <h4>
+                            <hr>
+                            Здесь будут появляться посты, актуальные для вашего направления.
+                            <hr>
+                            Но Вы и сами можете внести свой вклад!
+                            <hr>
+                            <a href="{% url 'post_new' %}">Запостить!</a>
+                            <hr>
+                        </h4>
+                    </div>
+                {% endblock %}
             {% endfor %}
 
 

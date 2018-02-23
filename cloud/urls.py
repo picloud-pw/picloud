@@ -22,11 +22,13 @@ urlpatterns = [
     path('post/new/', views.post_new, name='post_new'),
     re_path(r'post/(?P<pk>\d+)/edit/$', views.post_edit, name='post_edit'),
     re_path(r'post/(?P<pk>\d+)/delete/$', views.post_delete, name='post_delete'),
+    re_path(r'post/(?P<pk>\d+)/checked/$', views.post_checked, name='post_checked'),
 
     path('search/', views.search, name="search"),
     path('memes/', views.memes, name="memes"),
     path('settings/', views.settings, name="settings"),
     path('message/', views.message, name="message"),
+    path('validation/', views.validation, name="validation"),
     path('change_password/', views.change_password, name='change_password'),
     path('change_avatar/', views.change_avatar, name='change_avatar'),
     path('change_user/', views.change_user, name='change_user'),

@@ -20,6 +20,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
 from .tokens import account_activation_token
 
+# constants
+POSTS_PER_PAGE = 50
+
 
 def robots(request):
     return render_to_response('robots.txt', content_type="text/plain")
@@ -31,18 +34,20 @@ def post_list(request):
         user_info = UserInfo.objects.get(user=request.user)
         if user_info.program is not None:
             user_program_id = user_info.program.pk
-            posts = Post.objects.filter(created_date__lte=timezone.now())\
+            posts = Post.objects.filter(validate_status=0)\
+                                .filter(created_date__lte=timezone.now())\
                                 .filter(subject__programs__exact=user_program_id)\
                                 .order_by('created_date').reverse()
         else:
             posts = Post.objects.filter(created_date__lte=timezone.now()) \
                 .order_by('created_date').reverse()
     else:
-        posts = Post.objects.filter(created_date__lte=timezone.now())\
+        posts = Post.objects.filter(validate_status=0)\
+                            .filter(created_date__lte=timezone.now())\
                             .order_by('created_date').reverse()
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(posts, 50)
+    paginator = Paginator(posts, POSTS_PER_PAGE)
     try:
         posts_page = paginator.page(page)
     except PageNotAnInteger:
@@ -51,6 +56,25 @@ def post_list(request):
         posts_page = paginator.page(paginator.num_pages)
 
     return render(request, 'cloud/post_list.html', {'posts': posts_page})
+
+
+def validation(request):
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+
+        posts = Post.objects.filter(validate_status=1).order_by('created_date')
+
+        page = request.GET.get('page', 1)
+        paginator = Paginator(posts, POSTS_PER_PAGE)
+        try:
+            posts_page = paginator.page(page)
+        except PageNotAnInteger:
+            posts_page = paginator.page(1)
+        except EmptyPage:
+            posts_page = paginator.page(paginator.num_pages)
+        return render(request, 'validation.html', {'posts': posts_page})
+
+    else:
+        return redirect("post_list")
 
 
 def post_detail(request, pk):
@@ -69,6 +93,7 @@ def post_new(request):
                 post = form.save(commit=False)
                 post.author = request.user
                 post.created_date = timezone.now()
+                post.validate_status = 1
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
                 return redirect('post_detail', pk=post.pk)
@@ -112,6 +137,15 @@ def post_delete(request, pk):
     if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
         post.delete()
         return redirect("post_list")
+    else:
+        return redirect("post_list")
+
+
+def post_checked(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        Post.objects.filter(pk=pk).update(validate_status=0)
+        return redirect("validation")
     else:
         return redirect("post_list")
 
