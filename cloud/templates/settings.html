@@ -5,7 +5,7 @@
     Cloud Настройки
 {% endblock %}
 
-{% block settings_active%}
+{% block settings_active %}
     class="active"
 {% endblock %}
 
@@ -13,142 +13,194 @@
 
     <div class="container-fluid no-margin-padding">
 
-            {% comment %} TODO убрать это дерьмо {% endcomment %}
-            <input style="visibility: hidden; position: absolute" autofocus>
+        {% comment %} TODO убрать это дерьмо {% endcomment %}
+        <input style="visibility: hidden; position: absolute" autofocus>
 
-            <div class="post-panel panel-settings">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-                        <img class="avatar-settings full-width" src="{{ user_info.avatar.url }}" alt="avatar">
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" style="text-align: left">
-                        <table class="table">
-                            <tr><th scope="row">Логин:</th><td>{{ user.username }}</td></tr>
-                            <tr><th scope="row">Почта:</th><td>{{ user.email }}</td></tr>
-                            <tr><th scope="row">Имя:</th><td>{{ user.first_name }}</td></tr>
-                            <tr><th scope="row">Фамилия:</th><td>{{ user.last_name }}</td></tr>
-                            <tr><th scope="row">Карма:</th><td>{{ user_info.karma }}</td></tr>
-                            <tr><th scope="row">Статус:</th><td>{{ user_info.status.title }}</td></tr>
-                        </table>
-                    </div>
+        <div class="post-panel panel-settings">
+
+            {% if error %}
+                <div class="alert alert-danger alert-dismissible show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ error }}
                 </div>
+            {% endif %}
+            {% if message %}
+                <div class="alert alert-info alert-dismissible show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endif %}
 
-                <hr>
-                <label>Образование</label>
-                <div class="container-fluid">
-                    <table class="table" style="text-align: left">
-                        <tr><th scope="row">Университет:</th><td>{{ user_info.program.chair.department.university.title }}</td></tr>
-                        <tr><th scope="row">Факультет:</th><td>{{ user_info.program.chair.department.title }}</td></tr>
-                        <tr><th scope="row">Кафедра:</th><td>{{ user_info.program.chair.title }}</td></tr>
-                        <tr><th scope="row">Специальность:</th><td>{{ user_info.program.title }}</td></tr>
-                        <tr><th scope="row">Курс:</th><td>{{ user_info.course }}</td></tr>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                    <img class="avatar-settings full-width" src="{{ user_info.avatar.url }}" alt="avatar">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" style="text-align: left">
+                    <table class="table">
+                        <tr>
+                            <th scope="row">Логин:</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Почта:</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Имя:</th>
+                            <td>{{ user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Фамилия:</th>
+                            <td>{{ user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Карма:</th>
+                            <td>{{ user_info.karma }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Статус:</th>
+                            <td>{{ user_info.status.title }}</td>
+                        </tr>
                     </table>
                 </div>
+            </div>
 
-                <hr>
-                <label>Изменить аватар</label>
-                <div class="container-fluid">
-                    <form action="{% url "change_avatar" %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 django-control">
-                            {{ change_avatar_form.avatar }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <button class="btn btn-primary" type="submit" style="width: 100%">Сохранить</button>
-                        </div>
-                    </form>
-                </div>
+            <hr>
+            <label>Образование</label>
+            <div class="container-fluid">
+                <table class="table" style="text-align: left">
+                    <tr>
+                        <th scope="row">Университет:</th>
+                        <td>{{ user_info.program.chair.department.university.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Факультет:</th>
+                        <td>{{ user_info.program.chair.department.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Кафедра:</th>
+                        <td>{{ user_info.program.chair.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Специальность:</th>
+                        <td>{{ user_info.program.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Курс:</th>
+                        <td>{{ user_info.course }}</td>
+                    </tr>
+                </table>
+            </div>
 
-                <hr>
-                <label>Изменить пароль</label>
-                <div class="container-fluid">
-                    <form action="{% url "change_password" %}" method="post">
-                        {% csrf_token %}
-
-                        <table class="table" style="text-align: left">
-                            <tr>
-                                <th scope="row">Текущий пароль:</th>
-                                <td class="django-control">
-                                    {{ change_password_form.old_password }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Новый пароль:</th>
-                                <td class="django-control">
-                                    {{ change_password_form.new_password1 }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Повторите пароль:</th>
-                                <td class="django-control">
-                                    {{ change_password_form.new_password2 }}
-                                </td>
-                            </tr>
-                        </table>
-
-                        <button class="btn btn-primary full-width" type="submit">Изменить пароль</button>
-                        <label class="text-info">{{ message }}</label><br>
-
-                    </form>
-
-                </div>
-
-                <hr>
-
-                <form method="post" action="{% url 'change_user' %}" enctype="multipart/form-data">
+            <hr>
+            <label>Изменить аватар</label>
+            <div class="container-fluid">
+                <form action="{% url "change_avatar" %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="container-fluid">
-
-                        <div class="form-group django-control">
-                            <label class="col-form-label">Имя</label>
-                            {{ change_user_form.first_name }}
-                        </div>
-
-                        <div class="form-group django-control">
-                            <label class="col-form-label">Фамилия</label>
-                            {{ change_user_form.last_name }}
-                        </div>
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading" data-toggle="collapse" href="#structure">
-                               Университет - Факультет - Кафедра
-                            </div>
-                        </div>
-                        <div id="structure" class="collapse">
-                            <div class="form-group django-control">
-                                <label class="col-form-label">Университет</label>
-                                <select name="university" id="id_university"></select>
-                            </div>
-
-                            <div class="form-group django-control">
-                                <label class="col-form-label">Факультет</label>
-                                <select name="department" id="id_department"></select>
-                            </div>
-
-                            <div class="form-group django-control">
-                                <label class="col-form-label">Кафедра</label>
-                                <select name="chair" id="id_chair"></select>
-                            </div>
-                        </div>
-
-                        <div class="form-group django-control">
-                            <label class="col-form-label">Программа обучения</label>
-                            {{ change_user_info_form.program }}
-                        </div>
-
-                        <div class="form-group django-control">
-                            <label class="col-form-label">Курс обучения</label>
-                            {{ change_user_info_form.course }}
-                        </div>
-
-                        <button class="btn btn-primary full-width" type="submit">Сохранить данные</button>
-
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 django-control">
+                        {{ change_avatar_form.avatar }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <button class="btn btn-primary" type="submit" style="width: 100%">Сохранить</button>
                     </div>
                 </form>
-
-                <hr>
-                <a href="{% url 'signout' %}"> <div class="btn btn-warning" >Выйти!</div></a>
             </div>
+
+            <hr>
+            <label>Изменить пароль</label>
+            <div class="container-fluid">
+                <form action="{% url "change_password" %}" method="post">
+                    {% csrf_token %}
+
+                    <table class="table" style="text-align: left">
+                        <tr>
+                            <th scope="row">Текущий пароль:</th>
+                            <td class="django-control">
+                                {{ change_password_form.old_password }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Новый пароль:</th>
+                            <td class="django-control">
+                                {{ change_password_form.new_password1 }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Повторите пароль:</th>
+                            <td class="django-control">
+                                {{ change_password_form.new_password2 }}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <button class="btn btn-primary full-width" type="submit">Изменить пароль</button>
+
+                </form>
+
+            </div>
+
+            <hr>
+
+            <form method="post" action="{% url 'change_user' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container-fluid">
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Имя</label>
+                        {{ change_user_form.first_name }}
+                    </div>
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Фамилия</label>
+                        {{ change_user_form.last_name }}
+                    </div>
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#structure">
+                            Университет - Факультет - Кафедра
+                        </div>
+                    </div>
+                    <div id="structure" class="collapse">
+                        <div class="form-group django-control">
+                            <label class="col-form-label">Университет</label>
+                            <select name="university" id="id_university"></select>
+                        </div>
+
+                        <div class="form-group django-control">
+                            <label class="col-form-label">Факультет</label>
+                            <select name="department" id="id_department"></select>
+                        </div>
+
+                        <div class="form-group django-control">
+                            <label class="col-form-label">Кафедра</label>
+                            <select name="chair" id="id_chair"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Программа обучения</label>
+                        {{ change_user_info_form.program }}
+                    </div>
+
+                    <div class="form-group django-control">
+                        <label class="col-form-label">Курс обучения</label>
+                        {{ change_user_info_form.course }}
+                    </div>
+
+                    <button class="btn btn-primary full-width" type="submit">Сохранить данные</button>
+
+                </div>
+            </form>
+
+            <hr>
+            <a href="{% url 'signout' %}">
+                <div class="btn btn-warning">Выйти!</div>
+            </a>
+        </div>
 
     </div>
 
@@ -162,16 +214,29 @@
         $(document).ready(function () {
             get_all_universities();
 
-            $("#id_university").change(function(){university_updated($(this).val())});
-            $("#id_department").change(function(){department_updated($(this).val())});
-            $("#id_chair").change(function(){chair_updated($(this).val())});
-            $("#id_program").change(function(){program_updated($(this).val())});
+            $("#id_university").change(function () {
+                university_updated($(this).val())
+            });
+            $("#id_department").change(function () {
+                department_updated($(this).val())
+            });
+            $("#id_chair").change(function () {
+                chair_updated($(this).val())
+            });
+            $("#id_program").change(function () {
+                program_updated($(this).val())
+            });
 
             //установка текущего университета, факультета и кафедры
-            university_updated(  {{ user_info.program.chair.department.university.pk }}  );
-            department_updated(  {{ user_info.program.chair.department.pk }}  );
-            chair_updated(  {{ user_info.program.chair.pk }}  );
-            program_updated(  {{ user_info.program.pk }}  );
+            if ("{{ user_info.program.pk }}" !== "") {
+                university_updated({{ user_info.program.chair.department.university.pk }});
+                department_updated({{ user_info.program.chair.department.pk }});
+                chair_updated({{ user_info.program.chair.pk }});
+                program_updated({{ user_info.program.pk }});
+            } else {
+                university_updated(1);
+                $("#structure").addClass("in");
+            }
 
             $("#id_program").attr('required', true);
         });

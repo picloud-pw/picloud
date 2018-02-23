@@ -171,10 +171,15 @@
 
                 // Страница создания поста
                 get_all_universities();
-                university_updated(  {{ user_info.program.chair.department.university.pk }}  );
-                department_updated(  {{ user_info.program.chair.department.pk }}  );
-                     chair_updated(  {{ user_info.program.chair.pk }}  );
-                   program_updated(  {{ user_info.program.pk }}  );
+                if ( "{{ user_info.program.pk }}" !== "" ){
+                    university_updated(  {{ user_info.program.chair.department.university.pk }}  );
+                    department_updated(  {{ user_info.program.chair.department.pk }}  );
+                         chair_updated(  {{ user_info.program.chair.pk }}  );
+                       program_updated(  {{ user_info.program.pk }}  );
+                } else {
+                    university_updated(  1  );
+                    $("#structure").addClass("in");
+                }
 
                     //Костыль, ждем пока выполниться ajax запрос!
                     let last_post_subject = "{{ request.session.last_post_subject }}";

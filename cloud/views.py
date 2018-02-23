@@ -64,14 +64,18 @@ def post_detail(request, pk):
 def post_new(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            request.session['last_post_subject'] = request.POST["subject"]
             form = PostForm(request.POST, request.FILES)
             if form.is_valid():
                 post = form.save(commit=False)
                 post.author = request.user
                 post.created_date = timezone.now()
                 post.save()
+                request.session['last_post_subject'] = request.POST["subject"]
                 return redirect('post_detail', pk=post.pk)
+            else:
+                form = PostForm()
+                user_info = get_object_or_404(UserInfo, user=request.user)
+                return render(request, 'cloud/post_edit.html', {'form': form, 'user_info': user_info})
         else:
             form = PostForm()
             user_info = get_object_or_404(UserInfo, user=request.user)
@@ -91,6 +95,10 @@ def post_edit(request, pk):
                 post.published_date = timezone.now()
                 post.save()
                 return redirect('post_detail', pk=post.pk)
+            else:
+                form = PostForm(instance=post)
+                user_info = get_object_or_404(UserInfo, user=request.user)
+                return render(request, 'cloud/post_edit.html', {'form': form, 'post': post})
         else:
             form = PostForm(instance=post)
             user_info = get_object_or_404(UserInfo, user=request.user)
@@ -148,6 +156,18 @@ def validate_signup(username, email, password, second_password):
     return error
 
 
+def validate_course(course):
+    try:
+        c = int(course)
+        return 0 <= c <= 10
+    except ValueError:
+        return False
+
+
+def validate_name(first_name, last_name):
+    return len(first_name) < 20 and len(last_name) < 20
+
+
 def send_acc_activate_letter(request, user, email):
     current_site = get_current_site(request)
     mail_subject = 'Активация PiCloud аккаунта'
@@ -166,7 +186,14 @@ def signup(request):
     user_info_form = UserInfoForm()
     if request.method == "POST":
         first_name = request.POST['first-name']
+        if not validate_name(first_name, "default"):
+            first_name = None
         last_name = request.POST['last-name']
+        if not validate_name("default", last_name):
+            last_name = None
+        course = request.POST['course']
+        if not validate_course(course):
+            course = None
         email = request.POST['email']
         username = request.POST['username']
         password = request.POST['password']
@@ -190,6 +217,7 @@ def signup(request):
                     # дополнительная информация
                     user_info = user_info_form.save(commit=False)
                     user_info.user = user
+                    user_info.course = course
                     user_info.status = UserStatus.objects.get(title="Рядовой студент")
                     user_info.save()
 
@@ -366,7 +394,7 @@ def contacts(request):
         return render(request, 'contacts.html', {'form': form})
 
 
-def settings(request, message=""):
+def settings(request, msg="", error=""):
     change_avatar_form = AvatarChangeForm()
     change_password_form = PasswordChangeForm(request.user)
     change_user_form = UserChangeForm(instance=User.objects.get(pk=request.user.pk))
@@ -379,7 +407,8 @@ def settings(request, message=""):
                                              'change_avatar_form': change_avatar_form,
                                              'change_user_form': change_user_form,
                                              'change_user_info_form': change_user_info_form,
-                                             'message': message,
+                                             'message': msg,
+                                             'error': error,
                                              }
                   )
 
@@ -390,12 +419,12 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            return settings(request, message='Пароль успешно изменен!')
+            return settings(request, msg='Пароль успешно изменен.')
         else:
-            return settings(request, message='Пароли введены с ошибкой!')
+            return settings(request, error='Пароли введены с ошибкой.')
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
-        return settings(request, message='Пароль должен быть длиннее 8 символов!')
+        return settings(request, error='Пароль должен быть длиннее 8 символов.')
 
 
 def change_avatar(request):
@@ -406,9 +435,9 @@ def change_avatar(request):
         if form.is_valid():
             form.save()
             request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
-            return settings(request)
+            return settings(request, msg="Аватар успешно изменен.")
         else:
-            return settings(request)
+            return settings(request, error="При изменении аватара произошла ошибка.")
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
         return settings(request)
@@ -418,11 +447,15 @@ def change_user(request):
     if request.method == 'POST':
         user_form = UserChangeForm(request.POST, instance=User.objects.get(pk=request.user.pk))
         user_info_form = UserInfoChangeForm(request.POST, instance=UserInfo.objects.get(user=request.user))
-        if user_form.is_valid():
+        if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
             user_form.save()
-        if user_info_form.is_valid():
+        else:
+            return settings(request, error="Ошибка при изменении данных.")
+        if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
-        return settings(request)
+        else:
+            return settings(request, error="Ошибка при изменении данных.")
+        return settings(request, msg="Данные успешно сохранены.")
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
         return settings(request)
