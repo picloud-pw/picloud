@@ -38,6 +38,20 @@ class AvatarChangeForm(forms.ModelForm):
         fields = ('avatar',)
 
 
+class UserInfoChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = UserInfo
+        fields = ('program', 'course')
+
+
+class UserChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name')
+
+
 class ChooseUniversityForm(forms.ModelForm):
 
     class Meta:

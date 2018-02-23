@@ -26,14 +26,21 @@ def robots(request):
 
 
 def post_list(request):
+
     if request.user.is_authenticated:
-        user_program = get_object_or_404(UserInfo, pk=request.user.pk).program.pk
-        posts = Post.objects.filter(created_date__lte=timezone.now())\
-                            .filter(subject__programs__exact=user_program)\
-                            .order_by('created_date').reverse()
+        user_info = UserInfo.objects.get(user=request.user)
+        if user_info.program is not None:
+            user_program_id = user_info.program.pk
+            posts = Post.objects.filter(created_date__lte=timezone.now())\
+                                .filter(subject__programs__exact=user_program_id)\
+                                .order_by('created_date').reverse()
+        else:
+            posts = Post.objects.filter(created_date__lte=timezone.now()) \
+                .order_by('created_date').reverse()
     else:
         posts = Post.objects.filter(created_date__lte=timezone.now())\
                             .order_by('created_date').reverse()
+
     page = request.GET.get('page', 1)
     paginator = Paginator(posts, 50)
     try:
@@ -131,9 +138,9 @@ def signin(request):
 def validate_signup(username, email, password, second_password):
     error = ""
     if len(username) > 15 or len(username) < 3:
-        error = "Некорректно задан логин"
+        error = "Некорректно задан логин. (Длина должна быть от 3 до 15 символов)"
     if len(password) < 5:
-        error = "Некорректно задан пароль"
+        error = "Некорректно задан пароль. (Длина должна быть не менее 5 символов)"
     if email is None or email == "" or len(email) > 128:
         error = "Некорректно задана почта"
     if password != second_password:
@@ -282,20 +289,6 @@ def memes(request):
     return render(request, 'memes.html', {'colomns_feed': feeds_mem})
 
 
-def settings(request, message=""):
-    change_avatar_form = AvatarChangeForm()
-    change_password_form = PasswordChangeForm(request.user)
-    user = User.objects.get(pk=request.user.pk)
-    user_info = UserInfo.objects.get(user=user)
-    return render(request, 'settings.html', {'user': user,
-                                             'user_info': user_info,
-                                             'change_password_form': change_password_form,
-                                             'change_avatar_form': change_avatar_form,
-                                             'message': message,
-                                             }
-                  )
-
-
 def universities_list(request):
     univer_list = University.objects.all()
     return render(request, 'structure/universities.html', {"univer_list": univer_list})
@@ -373,6 +366,24 @@ def contacts(request):
         return render(request, 'contacts.html', {'form': form})
 
 
+def settings(request, message=""):
+    change_avatar_form = AvatarChangeForm()
+    change_password_form = PasswordChangeForm(request.user)
+    change_user_form = UserChangeForm(instance=User.objects.get(pk=request.user.pk))
+    change_user_info_form = UserInfoChangeForm(instance=UserInfo.objects.get(user=request.user))
+    user = User.objects.get(pk=request.user.pk)
+    user_info = UserInfo.objects.get(user=user)
+    return render(request, 'settings.html', {'user': user,
+                                             'user_info': user_info,
+                                             'change_password_form': change_password_form,
+                                             'change_avatar_form': change_avatar_form,
+                                             'change_user_form': change_user_form,
+                                             'change_user_info_form': change_user_info_form,
+                                             'message': message,
+                                             }
+                  )
+
+
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -398,6 +409,20 @@ def change_avatar(request):
             return settings(request)
         else:
             return settings(request)
+    else:
+        # не достижимый участок кода, только если на прямую обратиться по адресу
+        return settings(request)
+
+
+def change_user(request):
+    if request.method == 'POST':
+        user_form = UserChangeForm(request.POST, instance=User.objects.get(pk=request.user.pk))
+        user_info_form = UserInfoChangeForm(request.POST, instance=UserInfo.objects.get(user=request.user))
+        if user_form.is_valid():
+            user_form.save()
+        if user_info_form.is_valid():
+            user_info_form.save()
+        return settings(request)
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
         return settings(request)
