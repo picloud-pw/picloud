@@ -23,6 +23,7 @@
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 no-margin-padding">
 
+        {% autoescape on %}
             {% for post in posts %}
                 <div class="post-panel">
                     {% block edit %}
@@ -61,6 +62,7 @@
 
                 </div>
 
+
             {% empty %}
                 {% block emptyloop %}
                     <div class="post-panel">
@@ -76,6 +78,8 @@
                     </div>
                 {% endblock %}
             {% endfor %}
+
+        {% endautoescape %}
 
 
             {% if posts.has_other_pages %}

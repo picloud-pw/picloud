@@ -39,8 +39,9 @@ def post_list(request):
                                 .filter(subject__programs__exact=user_program_id)\
                                 .order_by('created_date').reverse()
         else:
-            posts = Post.objects.filter(created_date__lte=timezone.now()) \
-                .order_by('created_date').reverse()
+            posts = Post.objects.filter(validate_status=0)\
+                                .filter(created_date__lte=timezone.now()) \
+                                .order_by('created_date').reverse()
     else:
         posts = Post.objects.filter(validate_status=0)\
                             .filter(created_date__lte=timezone.now())\
@@ -77,26 +78,39 @@ def validation(request):
         return redirect("post_list")
 
 
-def post_detail(request, pk):
+def post_detail(request, pk, msg=""):
     post = get_object_or_404(Post, pk=pk)
     if post.views < 99999:
         post.views += 1
         post.save()
-    return render(request, 'cloud/post_detail.html', {'post': post})
+    return render(request, 'cloud/post_detail.html', {'post': post, 'message': msg})
+
+
+def get_validate_status(user):
+    user_status = UserInfo.objects.get(user=user).status
+    if user_status.status_level > 7 or user.is_superuser or user.is_staff:
+        return 0
+    else:
+        return 1
 
 
 def post_new(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             form = PostForm(request.POST, request.FILES)
+            v_s = get_validate_status(request.user)
             if form.is_valid():
                 post = form.save(commit=False)
                 post.author = request.user
                 post.created_date = timezone.now()
-                post.validate_status = 1
+                post.validate_status = v_s
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
-                return redirect('post_detail', pk=post.pk)
+                if v_s == 0:
+                    return redirect('post_detail', pk=post.pk)
+                else:
+                    msg = "Спасибо за ваш вклад! Мы уже уведомлены о вашем посте, он будет проверен в ближайшее время."
+                    return post_detail(request, pk=post.pk, msg=msg)
             else:
                 form = PostForm()
                 user_info = get_object_or_404(UserInfo, user=request.user)
@@ -114,12 +128,18 @@ def post_edit(request, pk):
     if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
         if request.method == "POST":
             form = PostForm(request.POST, request.FILES, instance=post)
+            v_s = get_validate_status(request.user)
             if form.is_valid():
                 post = form.save(commit=False)
                 post.author = request.user
                 post.published_date = timezone.now()
+                post.validate_status = v_s
                 post.save()
-                return redirect('post_detail', pk=post.pk)
+                if v_s == 0:
+                    return redirect('post_detail', pk=post.pk)
+                else:
+                    msg = "Благодарим за правки, мы скоро их проверим и они станут доступны всем."
+                    return post_detail(request, pk=post.pk, msg=msg)
             else:
                 form = PostForm(instance=post)
                 user_info = get_object_or_404(UserInfo, user=request.user)
@@ -484,11 +504,13 @@ def change_user(request):
         if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
             user_form.save()
         else:
-            return settings(request, error="Ошибка при изменении данных.")
+            return settings(request, error="Ошибка при изменении данных. " +
+                                           "Убедитесь, что поля 'Имя' и 'Фамилия' не превышают 20 символов")
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
         else:
-            return settings(request, error="Ошибка при изменении данных.")
+            return settings(request, error="Ошибка при изменении данных. " +
+                                           "Убедитесь, что поля 'Программа обучения' и 'Курс обучения' заполнены")
         return settings(request, msg="Данные успешно сохранены.")
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
@@ -528,7 +550,7 @@ def get_posts(request):
     program_id = request.GET.get('program_id', None)
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
-    posts = Post.objects.all()
+    posts = Post.objects.filter(validate_status=0)
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
@@ -540,7 +562,7 @@ def get_posts(request):
 
 def search_posts(request):
     words = request.GET.get('search_request', None).split(" ")
-    posts = Post.objects.all()
+    posts = Post.objects.filter(validate_status=0)
     posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)
