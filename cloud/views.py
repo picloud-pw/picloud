@@ -21,7 +21,7 @@ from .forms import *
 from .tokens import account_activation_token
 
 # constants
-POSTS_PER_PAGE = 50
+POSTS_PER_PAGE = 10
 
 
 def robots(request):
