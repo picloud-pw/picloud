@@ -50,7 +50,7 @@
                     {% endif %}
                     <table class="table">
                         <tr>
-                            <td>{{ post.author }}</td>
+                            <td><a href="/user/{{ post.author.pk }}">{{ post.author }}</a></td>
                             <td><a href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a></td>
                             <td>{{ post.type.title }}</td>
                             <td>{{ post.created_date }}</td>

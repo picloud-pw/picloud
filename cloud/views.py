@@ -171,7 +171,7 @@ def post_checked(request, pk):
 
 
 def message(request, msg):
-    return render(request, 'message.html', {message: msg})
+    return render(request, 'message.html', {'message': msg})
 
 
 def signout(request):
@@ -446,6 +446,16 @@ def contacts(request):
     else:
         form = ContactForm()
         return render(request, 'contacts.html', {'form': form})
+
+
+def user_page(request, user_id):
+    if request.user.is_authenticated:
+        fr_user = User.objects.get(pk=user_id)
+        fr_user_info = UserInfo.objects.get(user=fr_user)
+        fr_user_posts = Post.objects.filter(author=fr_user)
+        return render(request, 'user.html', locals())
+    else:
+        return message(request, msg="Авторизуйтесь для того чтобы посещать страницы других пользователей.")
 
 
 def settings(request, msg="", error=""):

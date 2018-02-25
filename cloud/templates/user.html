@@ -1,0 +1,82 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Cloud {{ fr_user.username }}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container-fluid no-margin-padding">
+
+        <div class="post-panel panel-settings">
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                    <img class="avatar-settings full-width" src="{{ fr_user_info.avatar.url }}" alt="avatar">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" style="text-align: left">
+                    <table class="table">
+                        <tr>
+                            <th scope="row">Логин:</th>
+                            <td>{{ fr_user.username }}</td>
+                        </tr>
+                        {% if user.is_staff or user.is_superuser %}
+                        <tr>
+                            <th scope="row">Почта:</th>
+                            <td>{{ fr_user.email }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th scope="row">Имя:</th>
+                            <td>{{ fr_user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Фамилия:</th>
+                            <td>{{ fr_user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Карма:</th>
+                            <td>{{ fr_user_info.karma }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Статус:</th>
+                            <td>{{ fr_user_info.status.title }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+            <label>Образование</label>
+            <div class="container-fluid">
+                <table class="table" style="text-align: left">
+                    <tr>
+                        <th scope="row">Университет:</th>
+                        <td>{{ fr_user_info.program.chair.department.university.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Факультет:</th>
+                        <td>{{ fr_user_info.program.chair.department.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Кафедра:</th>
+                        <td>{{ fr_user_info.program.chair.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Специальность:</th>
+                        <td>{{ fr_user_info.program.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Курс:</th>
+                        <td>{{ fr_user_info.course }}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

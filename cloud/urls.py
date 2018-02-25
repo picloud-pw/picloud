@@ -36,6 +36,7 @@ urlpatterns = [
     path('universities/<university_id>/', views.university_page, name='university_page'),
     path('program/<program_id>', views.program_page, name='program_page'),
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
+    path('user/<user_id>', views.user_page, name='user_page'),
     path('contacts', views.contacts, name='contacts'),
 
     path('get_universities/', views.get_universities, name='get_universities'),
