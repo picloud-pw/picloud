@@ -24,6 +24,9 @@ urlpatterns = [
     re_path(r'post/(?P<pk>\d+)/delete/$', views.post_delete, name='post_delete'),
     re_path(r'post/(?P<pk>\d+)/checked/$', views.post_checked, name='post_checked'),
 
+    path('user/<user_id>', views.user_page, name='user_page'),
+    path('user/<user_id>/posts', views.user_posts, name='user_posts'),
+
     path('search/', views.search, name="search"),
     path('memes/', views.memes, name="memes"),
     path('settings/', views.settings, name="settings"),
@@ -36,7 +39,6 @@ urlpatterns = [
     path('universities/<university_id>/', views.university_page, name='university_page'),
     path('program/<program_id>', views.program_page, name='program_page'),
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
-    path('user/<user_id>', views.user_page, name='user_page'),
     path('contacts', views.contacts, name='contacts'),
 
     path('get_universities/', views.get_universities, name='get_universities'),

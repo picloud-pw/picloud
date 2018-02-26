@@ -28,7 +28,7 @@ def robots(request):
     return render_to_response('robots.txt', content_type="text/plain")
 
 
-def post_list(request):
+def post_list(request, display_posts=None):
 
     if request.user.is_authenticated:
         user_info = UserInfo.objects.get(user=request.user)
@@ -42,6 +42,8 @@ def post_list(request):
             posts = Post.objects.filter(validate_status=0)\
                                 .filter(created_date__lte=timezone.now()) \
                                 .order_by('created_date').reverse()
+        if display_posts is not None:
+            posts = display_posts
     else:
         posts = Post.objects.filter(validate_status=0)\
                             .filter(created_date__lte=timezone.now())\
@@ -452,10 +454,20 @@ def user_page(request, user_id):
     if request.user.is_authenticated:
         fr_user = User.objects.get(pk=user_id)
         fr_user_info = UserInfo.objects.get(user=fr_user)
-        fr_user_posts = Post.objects.filter(author=fr_user)
         return render(request, 'user.html', locals())
     else:
         return message(request, msg="Авторизуйтесь для того чтобы посещать страницы других пользователей.")
+
+
+def user_posts(request, user_id):
+    if request.user.is_authenticated:
+        fr_user = User.objects.get(pk=user_id)
+        fr_user_posts = Post.objects.filter(author=fr_user).filter(validate_status=0)\
+                                    .filter(created_date__lte=timezone.now()) \
+                                    .order_by('created_date').reverse()
+        return post_list(request, display_posts=fr_user_posts)
+    else:
+        return message(request, msg="Авторизуйтесь для того чтобы просматривать посты конкретных пользователей.")
 
 
 def settings(request, msg="", error=""):

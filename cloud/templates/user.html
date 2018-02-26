@@ -75,6 +75,10 @@
                 </table>
             </div>
 
+        <a href="{% url 'user_posts' user_id=fr_user.pk %}">
+            <div class="btn btn-primary full-width">Все публикации {{ fr_user.username }}</div>
+        </a>
+
         </div>
 
     </div>
