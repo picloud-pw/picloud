@@ -29,7 +29,7 @@ def robots(request):
 
 
 def post_list(request, display_posts=None):
-
+    e_m = ""
     if request.user.is_authenticated:
         user_info = UserInfo.objects.get(user=request.user)
         if user_info.program is not None:
@@ -44,6 +44,7 @@ def post_list(request, display_posts=None):
                                 .order_by('created_date').reverse()
         if display_posts is not None:
             posts = display_posts
+            e_m = "Данный пользователь пока не поделился своими материалами."
     else:
         posts = Post.objects.filter(validate_status=0)\
                             .filter(created_date__lte=timezone.now())\
@@ -58,7 +59,7 @@ def post_list(request, display_posts=None):
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
 
-    return render(request, 'cloud/post_list.html', {'posts': posts_page})
+    return render(request, 'cloud/post_list.html', {'posts': posts_page, 'empty_message': e_m})
 
 
 def validation(request):

@@ -65,17 +65,27 @@
 
             {% empty %}
                 {% block emptyloop %}
-                    <div class="post-panel">
-                        <h4>
-                            <hr>
-                            Здесь будут появляться посты, актуальные для вашего направления.
-                            <hr>
-                            Но Вы и сами можете внести свой вклад!
-                            <hr>
-                            <a href="{% url 'post_new' %}">Запостить!</a>
-                            <hr>
-                        </h4>
-                    </div>
+                    {% if empty_message %}
+                        <div class="post-panel">
+                            <h4>
+                                <hr>
+                                    {{ empty_message }}
+                                <hr>
+                            </h4>
+                        </div>
+                    {% else %}
+                        <div class="post-panel">
+                            <h4>
+                                <hr>
+                                Здесь будут появляться посты, актуальные для вашего направления.
+                                <hr>
+                                Но Вы и сами можете внести свой вклад!
+                                <hr>
+                                <a href="{% url 'post_new' %}">Запостить!</a>
+                                <hr>
+                            </h4>
+                        </div>
+                    {% endif %}
                 {% endblock %}
             {% endfor %}
 

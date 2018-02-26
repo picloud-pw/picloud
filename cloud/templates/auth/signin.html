@@ -1,4 +1,5 @@
 {% extends 'main_template.html' %}
+{% load staticfiles %}
 
 {% block title %}
     Cloud Вход
@@ -14,6 +15,7 @@
         {% csrf_token %}
 
         <div class="container-fluid sign-form">
+
             <div class="form-group">
                 <label for="username" class="col-form-label">Логин</label>
                 <input class="form-control" type="text" name="username" id="username" placeholder="Введите логин">
@@ -28,8 +30,17 @@
                 {% if error %} <p>{{ error }}</p> {% endif %}
             </div>
 
-            <div class="form-group" style="text-align: left">
-                <a href="{% url 'password_reset' %}" ><label>Восстановить пароль</label></a>
+            <div class="form-group row">
+                <div class="col-xs-6" style="text-align: left">
+                    <label><a href="{% url 'password_reset' %}" >Восстановить пароль</a></label>
+                </div>
+                <div class="col-xs-6" style="text-align: right; word-wrap: break-word;">
+                    <label><a href="{% url 'signup' %}" >Зарегистрироваться</a></label>
+                </div>
+            </div>
+
+            <div class="form-group" style="text-align: right">
+
             </div>
 
             <div class="form-group">

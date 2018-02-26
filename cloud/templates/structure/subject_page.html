@@ -47,7 +47,11 @@
                 <hr>
 
                 {% for type in post_types %}
-                    <h4>{{ type.title }}:</h4>
+                    {% if type.plural %}
+                        <h4>{{ type.plural }}:</h4>
+                    {% else %}
+                        <h4>{{ type.title }}:</h4>
+                    {% endif %}
 
                     {% for post in posts %}
                         {% if  post.type == type %}

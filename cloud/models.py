@@ -129,6 +129,7 @@ class UserInfo(models.Model):
 
 class PostType(models.Model):
     title = models.CharField(max_length=256, null=False, unique=True)
+    plural = models.CharField(max_length=128, default="")
 
     def __str__(self):
         return self.title

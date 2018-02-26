@@ -68,12 +68,17 @@
                                                                               class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
                             </li>
                         {% endif %}
+
+
+                        {% comment %} TODO запилить мемесы
                         <li {% block memes_active %}{% endblock %}>
                             <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;"
                                                                     class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
                         </li>
+                        {% endcomment %}
+
                         <li {% block universities_active %}{% endblock %}>
-                            <a href="{% url 'universities_list' %}">Подразделения<span style="font-size:16px;"
+                            <a href="{% url 'universities_list' %}">ВУЗы<span style="font-size:16px;"
                                                                                        class="pull-right hidden-xs showopacity glyphicon glyphicon-education"></span></a>
                         </li>
                         <li {% block contacts_active %}{% endblock %}>
