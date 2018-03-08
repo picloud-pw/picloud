@@ -49,7 +49,7 @@
                         {% if user.is_authenticated %}
                             <li {% block settings_active %}{% endblock %}>
                                 <a href="{% url 'settings' %}">
-                                    <img id="avatar" src="{{ request.session.user_ava_url }}" alt="avatar"/>
+                                    <div id="avatar" style="background-image: url({{ request.session.user_ava_url }})"></div>
                                     <h3 style="margin: 0;">{{ user.username }}</h3>
                                 </a>
                             </li>

@@ -24,6 +24,10 @@ from .tokens import account_activation_token
 POSTS_PER_PAGE = 10
 
 
+def index(request):
+    return render(request, 'index.html', {})
+
+
 def robots(request):
     return render_to_response('robots.txt', content_type="text/plain")
 

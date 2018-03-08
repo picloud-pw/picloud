@@ -37,7 +37,7 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-                    <img class="avatar-settings full-width" src="{{ user_info.avatar.url }}" alt="avatar">
+                    <div class="avatar-settings" style="background-image: url({{ user_info.avatar.url }})"></div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" style="text-align: left">
                     <table class="table">
@@ -95,6 +95,13 @@
                     </tr>
                 </table>
             </div>
+
+            <div class="container-fluid">
+                <a href="{% url 'user_posts' user_id=user.pk %}">
+                <div class="btn btn-primary full-width">Все публикации</div>
+                </a>
+            </div>
+
 
             <hr>
             <label>Изменить аватар</label>

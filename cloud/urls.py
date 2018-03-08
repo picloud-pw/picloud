@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
+    path('index', views.index, name='index'),
     path('robots.txt/', views.robots, name='robots'),
 
     path('auth/signup/', views.signup, name="signup"),

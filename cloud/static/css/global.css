@@ -25,9 +25,15 @@ body {
 }
 
 .avatar-settings {
-    border-radius: 100%;
-    width: 100%;
-    max-width: 250px;
+    margin: auto;
+
+    width: 250px;
+    height: 250px;
+
+    background-size: cover;
+    background-position: top center;
+
+    border-radius: 50%;
 }
 
 .post-panel, .sign-form, .universities, .search-post-panel, .post-edit-panel,

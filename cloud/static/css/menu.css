@@ -23,9 +23,16 @@ nav.sidebar, .main {
 }
 
 #avatar {
-    border-radius: 100%;
     padding: 5px;
+    margin: auto;
+
     width: 75px;
+    height: 75px;
+
+    background-size: cover;
+    background-position: top center;
+
+    border-radius: 50%;
 }
 
 .navbar-position {
