@@ -194,7 +194,14 @@ def signin(request):
 
         if user is not None and user.is_active:
             login(request, user)
+
             request.session['user_ava_url'] = UserInfo.objects.get(user=user).avatar.url
+            program = UserInfo.objects.get(user=user).program
+            if program is not None:
+                request.session['program_id'] = program.pk
+            else:
+                request.session['program_id'] = ""
+                
             return redirect('post_list')
         else:
             error = "Не верно введены логин или пароль!"
@@ -308,7 +315,14 @@ def activate(request, uid, token):
         user.is_active = True
         user.save()
         login(request, user)
+
         request.session['user_ava_url'] = UserInfo.objects.get(user=user).avatar.url
+        program = UserInfo.objects.get(user=user).program
+        if program is not None:
+            request.session['program_id'] = program.pk
+        else:
+            request.session['program_id'] = ""
+
         msg = 'Почта подтверждена! Теперь вы можете заходить в свой личный кабинет!'
         return render(request, 'message.html', {'message': msg})
     else:
@@ -535,6 +549,12 @@ def change_user(request):
                                            "Убедитесь, что поля 'Имя' и 'Фамилия' не превышают 20 символов")
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
+
+            program = UserInfo.objects.get(user=request.user).program
+            if program is not None:
+                request.session['program_id'] = program.pk
+            else:
+                request.session['program_id'] = ""
         else:
             return settings(request, error="Ошибка при изменении данных. " +
                                            "Убедитесь, что поля 'Программа обучения' и 'Курс обучения' заполнены")

@@ -54,6 +54,14 @@
                                 </a>
                             </li>
                         {% endif %}
+
+                        {% if user.is_authenticated and request.session.program_id %}
+                            <li>
+                                <a href="{% url 'program_page' program_id=request.session.program_id %}">Моя программа<span style="font-size:16px;"
+                                                                              class="pull-right hidden-xs showopacity glyphicon glyphicon-heart"></span></a>
+                            </li>
+                        {% endif %}
+
                         <li {% block cloud_active %}{% endblock %}>
                             <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;"
                                                                         class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
@@ -68,7 +76,6 @@
                                                                               class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
                             </li>
                         {% endif %}
-
 
                         {% comment %} TODO запилить мемесы
                         <li {% block memes_active %}{% endblock %}>
