@@ -423,7 +423,7 @@ def program_page(request, program_id):
 
 def subject_page(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
-    posts = Post.objects.filter(subject=subject)
+    posts = Post.objects.filter(subject=subject).filter(validate_status=0)
     post_types = set()
     for post in posts:
         post_types.add(post.type)
