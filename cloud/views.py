@@ -1,5 +1,7 @@
 import threading
 import time
+import urllib
+
 import feedparser
 import json
 
@@ -11,6 +13,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.template.loader import render_to_string
@@ -249,6 +252,22 @@ def send_acc_activate_letter(request, user, email):
     email.send()
 
 
+def recaptcha_is_valid(request):
+
+    recaptcha_response = request.POST.get('g-recaptcha-response')
+    url = 'https://www.google.com/recaptcha/api/siteverify'
+    values = {
+        'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        'response': recaptcha_response
+    }
+    data = urllib.parse.urlencode(values).encode()
+    req = urllib.request.Request(url, data=data)
+    response = urllib.request.urlopen(req)
+    result = json.loads(response.read().decode())
+
+    return result['success']
+
+
 def signup(request):
     error = ""
     user_info_form = UserInfoForm()
@@ -272,7 +291,7 @@ def signup(request):
         if error == "":
             if not (User.objects.filter(username__iexact=username).exists() or
                     User.objects.filter(email__iexact=email).exists()):
-                if user_info_form.is_valid():
+                if user_info_form.is_valid() and recaptcha_is_valid(request):
 
                     # заполнение основной информации
                     user = User.objects.create_user(username, email, password)
@@ -489,7 +508,7 @@ def user_posts(request, user_id):
         return message(request, msg="Авторизуйтесь для того чтобы просматривать посты конкретных пользователей.")
 
 
-def settings(request, msg="", error=""):
+def settings_page(request, msg="", error=""):
     change_avatar_form = AvatarChangeForm()
     change_password_form = PasswordChangeForm(request.user)
     change_user_form = UserChangeForm(instance=User.objects.get(pk=request.user.pk))
@@ -514,12 +533,12 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            return settings(request, msg='Пароль успешно изменен.')
+            return settings_page(request, msg='Пароль успешно изменен.')
         else:
-            return settings(request, error='Пароли введены с ошибкой.')
+            return settings_page(request, error='Пароли введены с ошибкой.')
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
-        return settings(request, error='Пароль должен быть длиннее 8 символов.')
+        return settings_page(request, error='Пароль должен быть длиннее 8 символов.')
 
 
 def change_avatar(request):
@@ -530,12 +549,12 @@ def change_avatar(request):
         if form.is_valid():
             form.save()
             request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
-            return settings(request, msg="Аватар успешно изменен.")
+            return settings_page(request, msg="Аватар успешно изменен.")
         else:
-            return settings(request, error="При изменении аватара произошла ошибка.")
+            return settings_page(request, error="При изменении аватара произошла ошибка.")
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
-        return settings(request)
+        return settings_page(request)
 
 
 def change_user(request):
@@ -545,7 +564,7 @@ def change_user(request):
         if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
             user_form.save()
         else:
-            return settings(request, error="Ошибка при изменении данных. " +
+            return settings_page(request, error="Ошибка при изменении данных. " +
                                            "Убедитесь, что поля 'Имя' и 'Фамилия' не превышают 20 символов")
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
@@ -556,12 +575,12 @@ def change_user(request):
             else:
                 request.session['program_id'] = ""
         else:
-            return settings(request, error="Ошибка при изменении данных. " +
+            return settings_page(request, error="Ошибка при изменении данных. " +
                                            "Убедитесь, что поля 'Программа обучения' и 'Курс обучения' заполнены")
-        return settings(request, msg="Данные успешно сохранены.")
+        return settings_page(request, msg="Данные успешно сохранены.")
     else:
         # не достижимый участок кода, только если на прямую обратиться по адресу
-        return settings(request)
+        return settings_page(request)
 
 
 def get_universities(request):
