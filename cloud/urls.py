@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.post_list, name='post_list'),
     path('index', views.index, name='index'),
-    path('robots.txt/', views.robots, name='robots'),
+    path('robots.txt', views.robots, name='robots'),
 
     path('auth/signup/', views.signup, name="signup"),
     path('auth/signin/', views.signin, name="signin"),
@@ -27,6 +27,7 @@ urlpatterns = [
 
     path('user/<user_id>', views.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user_posts, name='user_posts'),
+    path('user/<user_id>/not_checked_posts', views.user_not_checked_posts, name='user_not_checked_posts'),
 
     path('search/', views.search, name="search"),
     path('memes/', views.memes, name="memes"),

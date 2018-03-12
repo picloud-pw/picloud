@@ -14,7 +14,7 @@
     <div class="container-fluid no-margin-padding">
 
         {% comment %} TODO убрать это дерьмо {% endcomment %}
-        <input style="visibility: hidden; position: absolute" autofocus>
+        <input style="display: none; visibility: hidden; position: absolute" autofocus>
 
         <div class="post-panel panel-settings">
 
@@ -98,10 +98,12 @@
 
             <div class="container-fluid">
                 <a href="{% url 'user_posts' user_id=user.pk %}">
-                <div class="btn btn-primary full-width">Все проверенные публикации</div>
+                    <div class="btn btn-primary full-width" style="margin-bottom: 10px">Все проверенные публикации</div>
+                </a>
+                <a href="{% url 'user_not_checked_posts' user_id=user.pk %}">
+                    <div class="btn btn-warning full-width">Посты на модерации</div>
                 </a>
             </div>
-
 
             <hr>
             <label>Изменить аватар</label>

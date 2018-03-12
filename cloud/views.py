@@ -207,7 +207,7 @@ def signin(request):
                 
             return redirect('post_list')
         else:
-            error = "Не верно введены логин или пароль!"
+            error = "Неверно введены логин или пароль!"
             return render(request, 'auth/signin.html', {'error': error})
     else:
         error = ""
@@ -508,6 +508,17 @@ def user_posts(request, user_id):
         return message(request, msg="Авторизуйтесь для того чтобы просматривать посты конкретных пользователей.")
 
 
+def user_not_checked_posts(request, user_id):
+    if request.user.is_authenticated and int(user_id) == request.user.pk:
+        user = User.objects.get(pk=user_id)
+        not_validate_posts = Post.objects.filter(author=user).filter(validate_status=1) \
+                                         .filter(created_date__lte=timezone.now()) \
+                                         .order_by('created_date').reverse()
+        return post_list(request, display_posts=not_validate_posts)
+    else:
+        return message(request, msg="Вы можете просматривать только проверенные посты этого пользователя.")
+
+
 def settings_page(request, msg="", error=""):
     change_avatar_form = AvatarChangeForm()
     change_password_form = PasswordChangeForm(request.user)
@@ -565,7 +576,7 @@ def change_user(request):
             user_form.save()
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
-                                           "Убедитесь, что поля 'Имя' и 'Фамилия' не превышают 20 символов")
+                                                "Убедитесь, что поля 'Имя' и 'Фамилия' не превышают 20 символов")
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
 
@@ -576,10 +587,10 @@ def change_user(request):
                 request.session['program_id'] = ""
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
-                                           "Убедитесь, что поля 'Программа обучения' и 'Курс обучения' заполнены")
+                                                "Убедитесь, что поля 'Программа обучения' и 'Курс обучения' заполнены")
         return settings_page(request, msg="Данные успешно сохранены.")
     else:
-        # не достижимый участок кода, только если на прямую обратиться по адресу
+        # недостижимый участок кода, только если на прямую обратиться по адресу
         return settings_page(request)
 
 
