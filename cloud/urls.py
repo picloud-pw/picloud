@@ -4,8 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.post_list, name='post_list'),
-    path('index', views.index, name='index'),
+    path('', views.index, name='index'),
     path('robots.txt', views.robots, name='robots'),
 
     path('auth/signup/', views.signup, name="signup"),
@@ -29,8 +28,8 @@ urlpatterns = [
     path('user/<user_id>/posts', views.user_posts, name='user_posts'),
     path('user/<user_id>/not_checked_posts', views.user_not_checked_posts, name='user_not_checked_posts'),
 
+    path('cloud/', views.post_list, name='post_list'),
     path('search/', views.search, name="search"),
-    path('memes/', views.memes, name="memes"),
     path('settings/', views.settings_page, name="settings"),
     path('message/', views.message, name="message"),
     path('validation/', views.validation, name="validation"),

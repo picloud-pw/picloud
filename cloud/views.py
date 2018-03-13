@@ -28,7 +28,10 @@ POSTS_PER_PAGE = 10
 
 
 def index(request):
-    return render(request, 'index.html', {})
+    if request.user.is_authenticated:
+        return redirect("post_list")
+    else:
+        return render(request, 'index.html', {})
 
 
 def robots(request):
@@ -186,7 +189,7 @@ def message(request, msg):
 
 def signout(request):
     auth.logout(request)
-    return redirect("post_list")
+    return redirect("index")
 
 
 def signin(request):
@@ -361,54 +364,6 @@ def search(request):
                                            'program': program,
                                            'subject': subject,
                                            })
-
-
-def memes_update(sleep_interval):
-    while True:
-        feeds_rss = []
-        feed_col_1 = []
-        feed_col_2 = []
-        counter = 0
-        vk_urls_rss = [
-            "http://feed.exileed.com/vk/feed/klimenkovdefacto/?owner=1&only_admin=1",
-            "http://feed.exileed.com/vk/feed/pashasmeme/?owner=1&only_admin=1",
-            "http://feed.exileed.com/vk/feed/dnische1/?owner=1&only_admin=1",
-            "http://feed.exileed.com/vk/feed/itmoquotepad/?owner=1&only_admin=1",
-            "http://feed.exileed.com/vk/feed/wisemrduck/?owner=1&only_admin=1",
-        ]
-        for url in vk_urls_rss:
-            feeds = feedparser.parse(url)["entries"]
-            feeds_rss.extend(feeds)
-        if len(feeds_rss) > 0:
-            for feed in feeds_rss:
-                feed["published"] = parser.parse(feed.published).strftime("%y.%m.%d %H:%M")
-            feeds_rss.sort(key=lambda x: x['published'], reverse=True)
-            for feed in feeds_rss:
-                if counter % 2 == 0:
-                    feed_col_1.append(feed)
-                else:
-                    feed_col_2.append(feed)
-                counter += 1
-            global feeds_mem
-            feeds_mem = [feed_col_1, feed_col_2]
-            with open('static/memes.txt', 'w') as outfile:
-                json.dump(feeds_mem, outfile)
-            print("Memes updated! -- " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-            time.sleep(sleep_interval)
-        else:
-            feeds_mem = json.load('static/memes.txt')
-            print("Error updating memes! Try again in an hour! --" + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-            time.sleep(60*60)
-
-
-feeds_mem = []
-t = threading.Thread(target=memes_update, args=(60*60*12,))
-t.daemon = True
-t.start()
-
-
-def memes(request):
-    return render(request, 'memes.html', {'colomns_feed': feeds_mem})
 
 
 def universities_list(request):
