@@ -47,7 +47,7 @@ function change_options(url, id, element_id, default_option, changed_element) {
                 $('#' + element_id)
                     .prop('disabled', true)
                     .css('background-color', '#FFCCCC')
-                    .append($('<option>', {text: "К сожалению список пуст"}));
+                    .append($('<option>', {text: "К сожалению, список пуст"}));
             }
         }
     });

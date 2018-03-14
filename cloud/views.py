@@ -151,7 +151,7 @@ def post_edit(request, pk):
                 if v_s == 0:
                     return redirect('post_detail', pk=post.pk)
                 else:
-                    msg = "Благодарим за правки, мы скоро их проверим и они станут доступны всем."
+                    msg = "Благодарим за правки! В ближайшее время мы проверим и опубликуем их."
                     return post_detail(request, pk=post.pk, msg=msg)
             else:
                 form = PostForm(instance=post)
@@ -244,7 +244,7 @@ def validate_name(first_name, last_name):
 
 def send_acc_activate_letter(request, user, email):
     current_site = get_current_site(request)
-    mail_subject = 'Активация PiCloud аккаунта'
+    mail_subject = 'Активация аккаунта PiCloud'
     msg = render_to_string('auth/acc_active_email.html', {
         'user': user,
         'domain': current_site.domain,
@@ -314,13 +314,13 @@ def signup(request):
                     # подтверждение почты (активация аккаунта)
                     send_acc_activate_letter(request, user, email)
 
-                    msg = 'Пожалуйста подтвердите адрес элетронной почты для завершения регистрации'
+                    msg = 'Пожалуйста, подтвердите адрес элетронной почты для завершения регистрации.'
                     return render(request, 'message.html', {'message': msg})
                 else:
-                    error = "Не все поля формы прошли валидацию!"
+                    error = "Форма заполнена неправильно."
                     return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
             else:
-                error = "Такой пользователь уже существует!"
+                error = "Пользователь с таким логином уже существует!"
                 return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
         else:
             return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
@@ -348,7 +348,7 @@ def activate(request, uid, token):
         msg = 'Почта подтверждена! Теперь вы можете заходить в свой личный кабинет!'
         return render(request, 'message.html', {'message': msg})
     else:
-        msg = 'Ссылка не корректна! Обратитесь в службу обратной связи с этой проблемой!'
+        msg = 'Ссылка недействительна. Обратитесь в службу обратной связи, если возникла проблема.'
         return render(request, 'message.html', {'message': msg})
 
 
@@ -433,10 +433,10 @@ def contacts(request):
             mail_msg = content + " <<< " + email + " >>>" + "(((" + name + ")))"
             email = EmailMessage(subject, mail_msg, email, to=["itmo.cloud@gmail.com"])
             email.send()
-            msg = "Ваш email отправлен! Спасибо за обращение! Оно будет рассмотрено в ближайшее время!"
+            msg = "Спасибо! Письмо отправлено. Ваше обращение будет рассмотрено в ближайшее время."
             return render(request, 'message.html', {'message': msg})
         else:
-            msg = "Ваше сообщение не было отправленно! Не все поля заполнены корректно!"
+            msg = "Форма заполнена неправильно. Письмо не было отправлено."
             return render(request, 'message.html', {'message': msg})
     else:
         form = ContactForm()
@@ -449,7 +449,7 @@ def user_page(request, user_id):
         fr_user_info = UserInfo.objects.get(user=fr_user)
         return render(request, 'user.html', locals())
     else:
-        return message(request, msg="Авторизуйтесь для того чтобы посещать страницы других пользователей.")
+        return message(request, msg="Авторизуйтесь, чтобы посещать страницы других пользователей.")
 
 
 def user_posts(request, user_id):
@@ -460,7 +460,7 @@ def user_posts(request, user_id):
                                     .order_by('created_date').reverse()
         return post_list(request, display_posts=fr_user_posts)
     else:
-        return message(request, msg="Авторизуйтесь для того чтобы просматривать посты конкретных пользователей.")
+        return message(request, msg="Авторизуйтесь, чтобы просматривать посты конкретных пользователей.")
 
 
 def user_not_checked_posts(request, user_id):
@@ -531,7 +531,7 @@ def change_user(request):
             user_form.save()
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
-                                                "Убедитесь, что поля 'Имя' и 'Фамилия' не превышают 20 символов")
+                                                "Убедитесь, что длина полей «Имя» и «Фамилия» не превышает 20 символов")
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
 
@@ -542,7 +542,7 @@ def change_user(request):
                 request.session['program_id'] = ""
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
-                                                "Убедитесь, что поля 'Программа обучения' и 'Курс обучения' заполнены")
+                                                "Убедитесь, что поля «Программа обучения» и «Курс обучения» заполнены")
         return settings_page(request, msg="Данные успешно сохранены.")
     else:
         # недостижимый участок кода, только если на прямую обратиться по адресу
