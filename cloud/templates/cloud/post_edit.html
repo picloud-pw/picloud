@@ -147,10 +147,18 @@
         $(document).ready(function () {
             $("#id_type option:first").remove();
 
-            $("#id_university").change(function(){university_updated($(this).val())});
-            $("#id_department").change(function(){department_updated($(this).val())});
-            $("#id_chair").change(function(){chair_updated($(this).val())});
-            $("#id_program").change(function(){program_updated($(this).val())});
+            $("#id_university").change(function () {
+                university_updated($(this).val())
+            });
+            $("#id_department").change(function () {
+                department_updated($(this).val())
+            });
+            $("#id_chair").change(function () {
+                chair_updated($(this).val())
+            });
+            $("#id_program").change(function () {
+                program_updated($(this).val())
+            });
 
             checkEditOrNew()
         });
@@ -167,35 +175,35 @@
         }
 
         function checkEditOrNew() {
-            if ($("#id_title").val() === ""){
+            if ($("#id_title").val() === "") {
 
                 // Страница создания поста
                 get_all_universities();
-                if ( "{{ user_info.program.pk }}" !== "" ){
-                    university_updated(  {{ user_info.program.chair.department.university.pk }}  );
-                    department_updated(  {{ user_info.program.chair.department.pk }}  );
-                         chair_updated(  {{ user_info.program.chair.pk }}  );
-                       program_updated(  {{ user_info.program.pk }}  );
+                if ("{{ user_info.program.pk }}" !== "") {
+                    university_updated({{ user_info.program.chair.department.university.pk }});
+                    department_updated({{ user_info.program.chair.department.pk }});
+                    chair_updated({{ user_info.program.chair.pk }});
+                    program_updated({{ user_info.program.pk }});
                 } else {
-                    university_updated(  1  );
+                    university_updated(1);
                     $("#structure").addClass("in");
                 }
 
-                    //Костыль, ждем пока выполниться ajax запрос!
-                    let last_post_subject = "{{ request.session.last_post_subject }}";
-                    if (last_post_subject != "")
-                        setTimeout(function () {
-                            $("#id_subject").val(  last_post_subject  )
-                        }, 200);
+                // FIXME: Костыль. Ждём, пока выполнится AJAX-запрос!
+                let last_post_subject = "{{ request.session.last_post_subject }}";
+                if (last_post_subject != "")
+                    setTimeout(function () {
+                        $("#id_subject").val(last_post_subject)
+                    }, 200);
 
             } else {
 
                 // Редактирование поста
                 get_all_universities();
-                university_updated(  {{ post.subject.programs.first.chair.department.university.pk }}  );
-                department_updated(  {{ post.subject.programs.first.chair.department.pk }}  );
-                chair_updated(  {{ post.subject.programs.first.chair.pk }}  );
-                program_updated(  {{ post.subject.programs.first.pk }}  );
+                university_updated({{ post.subject.programs.first.chair.department.university.pk }});
+                department_updated({{ post.subject.programs.first.chair.department.pk }});
+                chair_updated({{ post.subject.programs.first.chair.pk }});
+                program_updated({{ post.subject.programs.first.pk }});
 
                 if ("{{ post.link }}" != "None")
                     displayInputBlock("#btnLink", "#linkInput");
@@ -204,10 +212,10 @@
                 if ("{{ post.file }}" != "")
                     displayInputBlock("#btnFile", "#fileInput");
 
-                    //Костыль, ждем пока выполниться ajax запрос!
-                    setTimeout(function () {
-                        $("#id_subject").val({{ post.subject.pk }})
-                    }, 200);
+                // FIXME: Костыль. Ждём, пока выполнится AJAX-запрос!
+                setTimeout(function () {
+                    $("#id_subject").val({{ post.subject.pk }})
+                }, 200);
             }
         }
 

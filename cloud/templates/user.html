@@ -23,10 +23,10 @@
                             <td>{{ fr_user.username }}</td>
                         </tr>
                         {% if user.is_staff or user.is_superuser %}
-                        <tr>
-                            <th scope="row">Почта:</th>
-                            <td>{{ fr_user.email }}</td>
-                        </tr>
+                            <tr>
+                                <th scope="row">Почта:</th>
+                                <td>{{ fr_user.email }}</td>
+                            </tr>
                         {% endif %}
                         <tr>
                             <th scope="row">Имя:</th>
@@ -75,9 +75,9 @@
                 </table>
             </div>
 
-        <a href="{% url 'user_posts' user_id=fr_user.pk %}">
-            <div class="btn btn-primary full-width">Все публикации {{ fr_user.username }}</div>
-        </a>
+            <a href="{% url 'user_posts' user_id=fr_user.pk %}">
+                <div class="btn btn-primary full-width">Все публикации {{ fr_user.username }}</div>
+            </a>
 
         </div>
 
