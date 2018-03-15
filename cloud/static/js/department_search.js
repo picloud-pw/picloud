@@ -29,7 +29,7 @@ function change_options(url, id, element_id, default_option, changed_element) {
         data: {'id': id},
         dataType: 'json',
         success: function (data) {
-            //Костыль, необходимо для автоматического заполнения полей
+            // FIXME: Костыль. Необходимо для автоматического заполнения полей
             $("#"+changed_element).val(id);
             clear_options(element_id);
             if (data.length !== 0) {
@@ -47,7 +47,7 @@ function change_options(url, id, element_id, default_option, changed_element) {
                 $('#' + element_id)
                     .prop('disabled', true)
                     .css('background-color', '#FFCCCC')
-                    .append($('<option>', {text: "К сожалению список пуст"}));
+                    .append($('<option>', {text: "К сожалению, список пуст"}));
             }
         }
     });

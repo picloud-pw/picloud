@@ -39,9 +39,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a id="menu-brand" class="navbar-brand" href="{% url 'index' %}"><img id="picloud-logo"
-                                                                                      src="{% static 'img/piLogo.png' %}"
-                                                                                      alt="logo"></a>
+            <a id="menu-brand" class="navbar-brand" href="{% url 'index' %}">
+                <img id="picloud-logo"
+                     src="{% static 'img/piLogo.png' %}"
+                     alt="logo">
+            </a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
@@ -56,39 +58,62 @@
                 {% endif %}
 
                 <li {% block cloud_active %}{% endblock %}>
-                    <a href="{% url 'post_list' %}">Облако<span style="font-size:16px;"
-                                                                class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud"></span></a>
+                    <a href="{% url 'post_list' %}">
+                        Облако
+                        <span style="font-size:16px;"
+                              class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud">
+                        </span>
+                    </a>
                 </li>
 
                 {% if user.is_authenticated and request.session.program_id %}
                     <li {% block my_program %}{% endblock %}>
-                        <a href="{% url 'program_page' program_id=request.session.program_id %}">Моя программа<span
-                                style="font-size:16px;"
-                                class="pull-right hidden-xs showopacity glyphicon glyphicon-heart"></span></a>
+                        <a href="{% url 'program_page' program_id=request.session.program_id %}">
+                            Моя программа
+                            <span style="font-size:16px;"
+                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-heart">
+                            </span>
+                        </a>
                     </li>
                 {% endif %}
 
                 <li {% block search_active %}{% endblock %}>
-                    <a href="{% url 'search' %}">Поиск<span style="font-size:16px;"
-                                                            class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a>
+                    <a href="{% url 'search' %}">
+                        Поиск
+                        <span style="font-size:16px;"
+                              class="pull-right hidden-xs showopacity glyphicon glyphicon-search">
+                        </span>
+                    </a>
                 </li>
                 {% if user.is_authenticated %}
                     <li {% block newpost_active %}{% endblock %}>
-                        <a href="{% url 'post_new' %}">Запостить<span style="font-size:16px;"
-                                                                      class="pull-right hidden-xs showopacity glyphicon glyphicon-upload"></span></a>
+                        <a href="{% url 'post_new' %}">
+                            Запостить
+                            <span style="font-size:16px;"
+                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-upload">
+                            </span>
+                        </a>
                     </li>
                 {% endif %}
 
                 {% comment %} TODO запилить мемесы
                         <li {% block memes_active %}{% endblock %}>
-                            <a href="{% url 'memes' %}">Мемесы<span style="font-size:16px;"
-                                                                    class="pull-right hidden-xs showopacity glyphicon glyphicon-fire"></span></a>
+                            <a href="{% url 'memes' %}">
+                                Мемесы
+                                <span style="font-size:16px;"
+                                      class="pull-right hidden-xs showopacity glyphicon glyphicon-fire">
+                                </span>
+                            </a>
                         </li>
                         {% endcomment %}
 
                 <li {% block universities_active %}{% endblock %}>
-                    <a href="{% url 'universities_list' %}">ВУЗы<span style="font-size:16px;"
-                                                                      class="pull-right hidden-xs showopacity glyphicon glyphicon-education"></span></a>
+                    <a href="{% url 'universities_list' %}">
+                        Вузы
+                        <span style="font-size:16px;"
+                              class="pull-right hidden-xs showopacity glyphicon glyphicon-education">
+                        </span>
+                    </a>
                 </li>
                 <li {% block contacts_active %}{% endblock %}>
                     <a href="{% url 'contacts' %}">
@@ -112,24 +137,40 @@
 
                 {% if user.is_superuser %}
                     <li style="background-color: #DBC6EB">
-                        <a href="/admin">Администрирование<span style="font-size:16px;"
-                                                                class="pull-right hidden-xs showopacity glyphicon glyphicon-king"></span></a>
+                        <a href="/admin">
+                            Администрирование
+                            <span style="font-size:16px;"
+                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-king">
+                            </span>
+                        </a>
                     </li>
                 {% endif %}
 
                 {% if user.is_authenticated %}
                     <li style="background-color: #FFCCCC">
-                        <a href="{% url 'signout' %}">Выйти<span style="font-size:16px;"
-                                                                 class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a>
+                        <a href="{% url 'signout' %}">
+                            Выйти
+                            <span style="font-size:16px;"
+                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out">
+                            </span>
+                        </a>
                     </li>
                 {% else %}
                     <li {% block signin_active %}{% endblock %} style="background-color: #CCFFFF">
-                        <a href="{% url 'signin' %}">Войти<span style="font-size:16px;"
-                                                                class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in"></span></a>
+                        <a href="{% url 'signin' %}">
+                            Войти
+                            <span style="font-size:16px;"
+                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in">
+                            </span>
+                        </a>
                     </li>
                     <li {% block signup_active %}{% endblock %} style="background-color: #CCFFCC">
-                        <a href="{% url 'signup' %}">Регистрация<span style="font-size:16px;"
-                                                                      class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a>
+                        <a href="{% url 'signup' %}">
+                            Регистрация
+                            <span style="font-size:16px;"
+                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil">
+                            </span>
+                        </a>
                     </li>
                 {% endif %}
             </ul>

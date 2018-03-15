@@ -100,7 +100,7 @@
             else
                 image = "";
             if (item.file !== "")
-                file = "<a href='"+item.file+"'> <div class='btn btn-success full-width'>Прикепленный файл</div></a>";
+                file = "<a href='" + item.file + "'> <div class='btn btn-success full-width'>Прикепленный файл</div></a>";
             else
                 file = "";
 
@@ -127,7 +127,7 @@
                 });
                 update_markdown();
             } else {
-                $('#search_results').append("<div class='search-post-panel' style='padding: 10px;'>К сожалению по вашему запросу ничего не найдено :(</div>");
+                $('#search_results').append("<div class='search-post-panel' style='padding: 10px;'>К сожалению, по вашему запросу ничего не найдено :(</div>");
             }
         }
 
