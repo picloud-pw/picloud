@@ -25,51 +25,7 @@
     {% if posts %}
         <main class="post-list">
             {% for post in posts %}
-                <article class="post">
-                    <div class="post-container">
-                        <header>
-                            <h1>
-                                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
-                            </h1>
-                            <p class="subject">
-                                <span class="type">{{ post.type.title }}</span>
-                                |
-                                <a class="subject"
-                                   href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a>
-                            </p>
-                        </header>
-                        <hr/>
-                        <p class="text">
-                            {% autoescape on %}
-                                {{ post.text }}
-                            {% endautoescape %}
-                        </p>
-                        {% if post.image %}
-                            <img src="{{ post.image.url }}" class="post-img">
-                        {% endif %}
-                        {% if post.link %}
-                            <a href="{{ post.link }}">
-                                <div class="btn btn-primary ">Прикрепленная ссылка</div>
-                            </a>
-                        {% endif %}
-                        {% if post.file %}
-                            <a href="{{ post.file.url }}">
-                                <div class="btn btn-success ">Прикепленный файл</div>
-                            </a>
-                        {% endif %}
-                        <hr/>
-                        <footer>
-                            <a href="/user/{{ post.author.pk }}" class="author">{{ post.author }}</a>
-                            ({{ post.created_date }})
-                            <span style="float: right;">
-                            <span style="font-size:12px;"
-                                  class="showopacity glyphicon glyphicon-eye-open">
-                            </span>
-                                {{ post.views }}
-                        </span>
-                        </footer>
-                    </div>
-                </article>
+                {% include "cloud/post.html" %}
             {% endfor %}
         </main>
     {% else %}
