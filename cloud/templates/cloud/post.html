@@ -21,13 +21,13 @@
             <img src="{{ post.image.url }}" class="post-img">
         {% endif %}
         {% if post.link %}
-            <a href="{{ post.link }}">
-                <div class="btn btn-primary ">Прикрепленная ссылка</div>
+            <a href="{{ post.link }}" class="btn btn-success">
+                Перейти по&nbsp;ссылке
             </a>
         {% endif %}
         {% if post.file %}
-            <a href="{{ post.file.url }}">
-                <div class="btn btn-success ">Прикепленный файл</div>
+            <a href="{{ post.file.url }}" class="btn btn-success">
+                Скачать файл
             </a>
         {% endif %}
         <hr/>
