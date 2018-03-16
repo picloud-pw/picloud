@@ -12,6 +12,9 @@
 {% block head %}
     <!-- Аутентификация в Яндекс Вебмастер -->
     <meta name="yandex-verification" content="c3f40ad459bc9654"/>
+
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+
     <!-- Showdown -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
             integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
@@ -19,116 +22,129 @@
 
 {% block content %}
 
-    <div class="post-list no-margin-padding">
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 no-margin-padding">
-
-            {% autoescape on %}
-                {% for post in posts %}
-                    <div class="post-panel">
-                        {% block edit %}
-                            <hr>
-                        {% endblock %}
-                        <h3>
-                            <a href="{% url 'post_detail' pk=post.pk %}"> {{ post.title }} </a>
-                        </h3>
-                        <div class="post-text">
-                            <p>{{ post.text }}</p>
-                        </div>
+    {% if posts %}
+        <main class="post-list">
+            {% for post in posts %}
+                <article class="post">
+                    <div class="post-container">
+                        <header>
+                            <h1>
+                                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+                            </h1>
+                            <p class="subject">
+                                <span class="type">{{ post.type.title }}</span>
+                                |
+                                <a class="subject"
+                                   href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a>
+                            </p>
+                        </header>
+                        <hr/>
+                        <p class="text">
+                            {% autoescape on %}
+                                {{ post.text }}
+                            {% endautoescape %}
+                        </p>
                         {% if post.image %}
                             <img src="{{ post.image.url }}" class="post-img">
                         {% endif %}
                         {% if post.link %}
                             <a href="{{ post.link }}">
-                                <div class="btn btn-primary full-width">Прикрепленная ссылка</div>
+                                <div class="btn btn-primary ">Прикрепленная ссылка</div>
                             </a>
                         {% endif %}
                         {% if post.file %}
                             <a href="{{ post.file.url }}">
-                                <div class="btn btn-success full-width">Прикепленный файл</div>
+                                <div class="btn btn-success ">Прикепленный файл</div>
                             </a>
                         {% endif %}
-                        <table class="table">
-                            <tr>
-                                <td><a href="/user/{{ post.author.pk }}">{{ post.author }}</a></td>
-                                <td><a href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a></td>
-                                <td>{{ post.type.title }}</td>
-                                <td>{{ post.created_date }}</td>
-                                <td><span style="font-size:12px;"
-                                          class="showopacity glyphicon glyphicon-eye-open"></span> {{ post.views }}
-                                </td>
-                            </tr>
-                        </table>
-
+                        <hr/>
+                        <footer>
+                            <a href="/user/{{ post.author.pk }}" class="author">{{ post.author }}</a>
+                            ({{ post.created_date }})
+                            <span style="float: right;">
+                            <span style="font-size:12px;"
+                                  class="showopacity glyphicon glyphicon-eye-open">
+                            </span>
+                                {{ post.views }}
+                        </span>
+                        </footer>
                     </div>
+                </article>
+            {% endfor %}
+        </main>
+    {% else %}
+        {% block emptyloop %}
+            {% if empty_message %}
+                <div class="no-posts">
+                    <h4>
+                        <hr>
+                        {{ empty_message }}
+                        <hr>
+                    </h4>
+                </div>
+            {% else %}
+                <div class="no-posts">
+                    <p>
+                        Здесь будут появляться посты, актуальные для вашего направления.
+                    </p>
+                    <p>
+                        Вы можете внести свой вклад и <a href="{% url 'post_new' %}">запостить что-нибудь</a>.
+                    </p>
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endif %}
 
+    {% if posts.has_other_pages %}
+        <nav class="pagination" aria-label="Page navigation">
+            <ul class="pagination">
 
-                {% empty %}
-                    {% block emptyloop %}
-                        {% if empty_message %}
-                            <div class="post-panel">
-                                <h4>
-                                    <hr>
-                                    {{ empty_message }}
-                                    <hr>
-                                </h4>
-                            </div>
-                        {% else %}
-                            <div class="post-panel">
-                                <h4>
-                                    <hr>
-                                    Здесь будут появляться посты, актуальные для вашего направления.
-                                    <hr>
-                                    Но Вы и сами можете внести свой вклад!
-                                    <hr>
-                                    <a href="{% url 'post_new' %}">Запостить!</a>
-                                    <hr>
-                                </h4>
-                            </div>
-                        {% endif %}
-                    {% endblock %}
+                {% if posts.has_previous %}
+                    <li>
+                        <a href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <span aria-hidden="true">&laquo;</span>
+                    </li>
+                {% endif %}
+
+                {% for i in posts.paginator.page_range %}
+                    {% if posts.number == i %}
+                        <li class="active">
+                            <span>
+                                {{ i }}
+                                <span class="sr-only">
+                                    (current)
+                                </span>
+                            </span></li>
+                    {% else %}
+                        <li>
+                            <a href="?page={{ i }}">
+                                {{ i }}
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
 
-            {% endautoescape %}
+                {% if posts.has_next %}
+                    <li><a href="?page={{ posts.next_page_number }}" aria-label="Next"><span
+                            aria-hidden="true">&raquo;</span></a>
+                    </li>
+                {% else %}
+                    <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+                {% endif %}
 
-
-            {% if posts.has_other_pages %}
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-
-                        {% if posts.has_previous %}
-                            <li><a href="?page={{ posts.previous_page_number }}" aria-label="Previous"><span
-                                    aria-hidden="true">&laquo;</span></a></li>
-                        {% else %}
-                            <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
-                        {% endif %}
-
-                        {% for i in posts.paginator.page_range %}
-                            {% if posts.number == i %}
-                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                            {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if posts.has_next %}
-                            <li><a href="?page={{ posts.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-                            </li>
-                        {% else %}
-                            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
-                        {% endif %}
-
-                    </ul>
-                </nav>
-            {% endif %}
-
-
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
-    </div>
+            </ul>
+        </nav>
+    {% endif %}
 
 {% endblock %}
 
 {% block js %}
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="{% static 'js/post_list.js' %}"></script>
     <script src="{% static 'js/toMarkdown.js' %}"></script>
 {% endblock %}
