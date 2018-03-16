@@ -41,7 +41,7 @@ nav.navbar {
 }
 
 .post-panel, .sign-form, .universities, .search-post-panel, .post-edit-panel,
-.message-panel, .password-reset-panel, .mem-panel{
+.message-panel, .password-reset-panel, .mem-panel {
     background-color: #f8f8f8;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
@@ -54,12 +54,12 @@ nav.navbar {
     width: 100%;
 }
 
-.post-text{
+.post-text {
     text-align: left;
     padding: 0 20px;
 }
 
-.post-edit-panel{
+.post-edit-panel {
     padding: 10px;
     margin: 10px;
 }
@@ -70,7 +70,7 @@ nav.navbar {
     padding: 20px;
 }
 
-.mem-panel{
+.mem-panel {
 
 }
 
@@ -79,7 +79,7 @@ nav.navbar {
     margin-bottom: 20px;
 }
 
-img.univer-logo{
+img.univer-logo {
     max-height: 100%;
     max-width: 100%;
     padding: 5px;
@@ -99,7 +99,7 @@ img.univer-logo{
     padding-top: 10px;
 }
 
-.search-select{
+.search-select {
     margin-bottom: 10px;
 }
 
@@ -145,30 +145,34 @@ input[type="checkbox"] {
     height: 20px;
 }
 
-.panel-heading{
+.panel-heading {
     cursor: pointer;
 }
 
-#search-line{
+#search-line {
     padding-right: 15px;
 }
-#search-type{
+
+#search-type {
     padding-right: 15px;
-    padding-left: 15px;
-}
-#search-button{
     padding-left: 15px;
 }
 
-@media (min-width: 676px){
-    #search-line{
+#search-button {
+    padding-left: 15px;
+}
+
+@media (min-width: 676px) {
+    #search-line {
         padding-right: 0;
     }
-    #search-type{
+
+    #search-type {
         padding-right: 0;
         padding-left: 0;
     }
-    #search-button{
+
+    #search-button {
         padding-left: 0;
     }
 }
@@ -179,7 +183,7 @@ textarea {
     resize: none;
 }
 
-#markdownLive{
+#markdownLive {
     border-radius: 10px;
     text-align: left;
 }
