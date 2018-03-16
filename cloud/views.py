@@ -24,7 +24,7 @@ from .forms import *
 from .tokens import account_activation_token
 
 # constants
-POSTS_PER_PAGE = 10
+POSTS_PER_PAGE = 12
 
 
 def index(request):
