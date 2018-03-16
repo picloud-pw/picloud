@@ -1,0 +1,71 @@
+body {
+    background-color: hsl(208, 100%, 93%);
+}
+
+.content-block.main {
+    margin-top: 0;
+}
+
+.post-list article {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin: 1rem auto;
+}
+
+.post-list article .post-container {
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.post-list article .post-container h1 {;
+    font-size: 2rem;
+}
+
+.post-list article .post-container .text {
+    text-align: left;
+}
+
+.post-list article .post-container footer {
+    text-align: left;
+}
+
+@supports (display: grid) {
+    main.post-list {
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
+        grid-auto-rows: 1rem;
+        margin: 1rem;
+    }
+
+    @media (max-width: 40rem) {
+        main.post-list {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    main.post-list article {
+        /* No need in margin, we have a grid-gap. */
+        margin: 0;
+    }
+}
+
+nav.pagination {
+    max-width: 40rem;
+    margin: auto;
+}
+
+.no-posts {
+    background-color: #f8f8f8;
+    border-radius: 1rem;
+    max-width: 50rem;
+    margin: 1rem auto;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.no-posts p {
+    margin: 1rem;
+}
