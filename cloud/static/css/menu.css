@@ -15,11 +15,11 @@ nav.sidebar, .main {
 
 #picloud-logo {
     height: 100%;
+    margin: 0 auto;
 }
 
 #menu-brand {
-    padding: 0;
-    margin-left: 15px;
+    padding: 7px;
 }
 
 #avatar {
@@ -58,6 +58,10 @@ nav.sidebar, .main {
 
     nav.sidebar:hover + .main {
         margin-left: 200px;
+    }
+
+    nav.sidebar .navbar-brand {
+        height: 70px;
     }
 
     nav.sidebar.navbar.sidebar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
