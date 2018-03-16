@@ -53,6 +53,7 @@ body {
 
 nav.pagination {
     max-width: 40rem;
+    padding: 0 1rem;
     margin: auto;
 }
 
