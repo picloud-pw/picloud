@@ -42,11 +42,12 @@ urlpatterns = [
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
     path('contacts', views.contacts, name='contacts'),
 
-    path('get_universities/', views.get_universities, name='get_universities'),
-    path('get_departments/', views.get_departments, name='get_departments'),
-    path('get_chairs/', views.get_chairs, name='get_chairs'),
-    path('get_programs/', views.get_programs, name='get_programs'),
-    path('get_subjects/', views.get_subjects, name='get_subjects'),
-    path('get_posts/', views.get_posts, name='get_posts'),
-    path('search_posts/', views.search_posts, name='search_posts'),
+    # TODO: Сделать похожим на RESTful
+    path('api/universities/', views.get_universities, name='get_universities'),
+    path('api/departments/', views.get_departments, name='get_departments'),
+    path('api/chairs/', views.get_chairs, name='get_chairs'),
+    path('api/programs/', views.get_programs, name='get_programs'),
+    path('api/subjects/', views.get_subjects, name='get_subjects'),
+    path('api/posts/', views.get_posts, name='get_posts'),
+    path('api/search_posts/', views.search_posts, name='search_posts'),
 ]

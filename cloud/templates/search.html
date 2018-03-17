@@ -162,7 +162,7 @@
 
         function new_search_request(data) {
             $.ajax({
-                url: "/get_posts/",
+                url: "/api/posts/",
                 data: data,
                 dataType: 'json',
                 success: function (data) {
@@ -182,7 +182,7 @@
         function search_posts() {
             let search_request = $("#search-line").find("input").val().toLowerCase();
             $.ajax({
-                url: "/search_posts/",
+                url: "/api/search_posts/",
                 data: {"search_request": search_request},
                 dataType: 'json',
                 success: function (data) {
