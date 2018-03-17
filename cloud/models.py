@@ -157,6 +157,7 @@ class Post(models.Model):
         u'h3',
         u'h4',
         u'p',
+        u'a',
         u'li',
         u'ul',
         u'ol',
