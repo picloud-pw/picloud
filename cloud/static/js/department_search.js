@@ -55,7 +55,7 @@ function change_options(url, id, element_id, default_option, changed_element) {
 
 
 function university_updated(university_id) {
-    change_options("/api/departments", university_id, "id_department", "Выберите факультет", "id_university");
+    change_options("/api/departments/", university_id, "id_department", "Выберите факультет", "id_university");
     clear_options_and_disabled("id_chair", "Выберите кафедру");
     clear_options_and_disabled("id_program", "Выберите программу обучения");
     clear_options_and_disabled("id_subject", "Выберите предмет");
