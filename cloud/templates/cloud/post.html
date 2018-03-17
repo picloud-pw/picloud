@@ -12,11 +12,9 @@
             </p>
         </header>
         <hr/>
-        <p class="text">
-            {% autoescape on %}
-                {{ post.text }}
-            {% endautoescape %}
-        </p>
+        <div class="text">
+            {{ post.html | safe }}
+        </div>
         {% if post.image %}
             <img src="{{ post.image.url }}" class="post-img">
         {% endif %}

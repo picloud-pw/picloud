@@ -1,6 +1,9 @@
 from django.db import models
 from django.utils import timezone
 
+import markdown
+import bleach
+
 
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
@@ -147,6 +150,26 @@ class Post(models.Model):
     views = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
     validate_status = models.PositiveSmallIntegerField(default=0)
+
+    ALLOWED_HTML_TAGS = allowed_html_tags = bleach.ALLOWED_TAGS + [
+        u'h1',
+        u'h2',
+        u'h3',
+        u'h4',
+        u'p',
+        u'li',
+        u'ul',
+        u'ol',
+        u'pre',
+        u'hr',
+    ]
+
+    def html(self):
+        import bleach
+        import markdown
+        dangerous_html = markdown.markdown(self.text)
+        safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
+        return safe_html
 
     def publish(self):
         self.created_date = timezone.now()
