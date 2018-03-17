@@ -169,7 +169,8 @@ class Post(models.Model):
         import markdown
         dangerous_html = markdown.markdown(self.text)
         safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
-        return safe_html
+        html_with_hyperlinks = bleach.linkify(safe_html)
+        return html_with_hyperlinks
 
     def publish(self):
         self.created_date = timezone.now()
