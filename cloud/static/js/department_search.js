@@ -1,19 +1,38 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+let csrf_token = getCookie('csrftoken');
+
 function get_all_universities() {
     change_options("/api/universities/", 0, "id_university", "Выберите университет");
 }
 
 function clear_options_and_disabled(element_id, default_option) {
-    $('#' + element_id)
-        .find('option')
-        .remove()
-        .end()
-        .append($('<option>', {text: default_option}))
-        .prop('disabled', true)
-        .css('background-color', 'lightgray');
+    let element = document.getElementById(element_id);
+    clear_options(element);
+    let option = document.createElement('option');
+    option.textContent = default_option;
+    element.append(option);
+    element.disabled = true;
+    element.style.backgroundColor = 'lightgray';
 }
 
-function clear_options(element_id) {
-    $('#' + element_id).find('option').remove().end();
+function clear_options(element) {
+    while (element.lastChild) {
+        element.removeChild(element.lastChild);
+    }
 }
 
 function clear_and_disabled_all_elements() {
@@ -23,34 +42,53 @@ function clear_and_disabled_all_elements() {
     clear_options_and_disabled("id_subject", "Выберите предмет");
 }
 
-function change_options(url, id, element_id, default_option, changed_element) {
-    $.ajax({
-        url: url,
-        data: {'id': id},
-        dataType: 'json',
-        success: function (data) {
+function change_options(url, id, element_id, default_option, changed_element_id) {
+    let changed_element = document.getElementById(changed_element_id);
+    let element = document.getElementById(element_id);
+
+    let request = new XMLHttpRequest();
+    request.open('GET', url + '?id=' + id, true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            // Success!
+            let data = JSON.parse(request.responseText);
             // FIXME: Костыль. Необходимо для автоматического заполнения полей
-            $("#"+changed_element).val(id);
-            clear_options(element_id);
-            if (data.length !== 0) {
-                $('#' + element_id).append($('<option>', {text: default_option, value: "", disabled: true, selected: true}));
-                data.forEach(function (item, i, arr) {
-                    $('#' + element_id).append($('<option>', {
-                        value: item["id"],
-                        text: item["title"]
-                    }));
-                });
-                $('#' + element_id)
-                    .prop('disabled', false)
-                    .css('background-color', 'white');
-            } else {
-                $('#' + element_id)
-                    .prop('disabled', true)
-                    .css('background-color', '#FFCCCC')
-                    .append($('<option>', {text: "К сожалению, список пуст"}));
+            if (changed_element != null) {
+                changed_element.value = id;
             }
+            clear_options(element);
+            if (data.length !== 0) {
+                let option = document.createElement("option");
+                option.textContent = default_option;
+                option.value = "";
+                option.disabled = true;
+                element.appendChild(option);
+                element.value = "";
+                data.forEach(function (item, i, arr) {
+                    let option = document.createElement("option");
+                    option.value = item["id"];
+                    option.textContent = item["title"];
+                    element.appendChild(option);
+                });
+                element.disabled = false;
+                element.style.backgroundColor = 'white';
+            } else {
+                element.style.backgroundColor = '#FFCCCC';
+                let option = document.createElement('option');
+                option.textContent = "К сожалению, список пуст";
+                element.disabled = true;
+                element.appendChild(option);
+            }
+        } else {
+            // TODO: Обработать ошибку, возвращённую сервером
         }
-    });
+    };
+    request.onerror = function () {
+        // TODO: Обработать ошибку соединения
+    };
+    request.send();
 }
 
 
