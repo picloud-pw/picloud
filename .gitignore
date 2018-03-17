@@ -4,6 +4,7 @@ resources/
 *.zip
 lib/*
 /static/
+/PiCloud/settings/secrets.json
 
 ### Python ###
 __pycache__/
