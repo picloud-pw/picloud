@@ -3,19 +3,17 @@ function get_all_universities() {
 }
 
 function clear_options_and_disabled(element_id, default_option) {
-    let element = document.getElementById(element_id);
-    clear_options(element);
-    let option = document.createElement('option');
-    option.textContent = default_option;
-    element.append(option);
-    element.disabled = true;
-    element.style.backgroundColor = 'lightgray';
+    $('#' + element_id)
+        .find('option')
+        .remove()
+        .end()
+        .append($('<option>', {text: default_option}))
+        .prop('disabled', true)
+        .css('background-color', 'lightgray');
 }
 
-function clear_options(element) {
-    while (element.lastChild) {
-        element.removeChild(element.lastChild);
-    }
+function clear_options(element_id) {
+    $('#' + element_id).find('option').remove().end();
 }
 
 function clear_and_disabled_all_elements() {
@@ -25,51 +23,34 @@ function clear_and_disabled_all_elements() {
     clear_options_and_disabled("id_subject", "Выберите предмет");
 }
 
-function change_options(url, id, element_id, default_option, changed_element_id) {
-    let changed_element = document.getElementById(changed_element_id);
-    let element = document.getElementById(element_id);
-
-    let request = new XMLHttpRequest();
-    request.open('GET', url + '?id=' + id, true);
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', csrftoken);
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            // Success!
-            let data = JSON.parse(request.responseText);
+function change_options(url, id, element_id, default_option, changed_element) {
+    $.ajax({
+        url: url,
+        data: {'id': id},
+        dataType: 'json',
+        success: function (data) {
             // FIXME: Костыль. Необходимо для автоматического заполнения полей
-            changed_element.value = id;
-            clear_options(element);
+            $("#"+changed_element).val(id);
+            clear_options(element_id);
             if (data.length !== 0) {
-                let option = document.createElement("option");
-                option.textContent = default_option;
-                option.value = "";
-                option.disabled = true;
-                element.appendChild(option);
-                element.value = "";
+                $('#' + element_id).append($('<option>', {text: default_option, value: "", disabled: true, selected: true}));
                 data.forEach(function (item, i, arr) {
-                    let option = document.createElement("option");
-                    option.value = item["id"];
-                    option.textContent = item["title"];
-                    element.appendChild(option);
+                    $('#' + element_id).append($('<option>', {
+                        value: item["id"],
+                        text: item["title"]
+                    }));
                 });
-                element.disabled = false;
-                element.style.backgroundColor = 'white';
+                $('#' + element_id)
+                    .prop('disabled', false)
+                    .css('background-color', 'white');
             } else {
-                element.style.backgroundColor = '#FFCCCC';
-                let option = document.createElement('option');
-                option.textContent = "К сожалению, список пуст";
-                element.disabled = true;
-                element.appendChild(option);
+                $('#' + element_id)
+                    .prop('disabled', true)
+                    .css('background-color', '#FFCCCC')
+                    .append($('<option>', {text: "К сожалению, список пуст"}));
             }
-        } else {
-            // The target server returned an error
         }
-    };
-    request.onerror = function () {
-        // There was a connection error of some sort
-    };
-    request.send();
+    });
 }
 
 
