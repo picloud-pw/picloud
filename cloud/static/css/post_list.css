@@ -32,7 +32,7 @@ body {
 }
 
 @supports (display: grid) {
-    main.post-list {
+    .post-list {
         display: grid;
         grid-gap: 1rem;
         grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
@@ -41,12 +41,12 @@ body {
     }
 
     @media (max-width: 40rem) {
-        main.post-list {
+        .post-list {
             grid-template-columns: 1fr !important;
         }
     }
 
-    main.post-list article {
+    .post-list article {
         /* No need in margin, we have a grid-gap. */
         margin: 0;
     }

@@ -1,4 +1,12 @@
-$(document).ready(function () {
+function ready(callback) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        callback();
+    } else {
+        document.addEventListener('DOMContentLoaded', callback);
+    }
+}
+
+ready(function () {
     clear_and_disabled_all_elements();
     get_all_universities();
     document.getElementById("id_university").addEventListener("change", function () {
@@ -13,94 +21,84 @@ $(document).ready(function () {
     document.getElementById("id_program").addEventListener("change", function () {
         program_updated(document.getElementById("id_program").value);
     });
-    document.getElementById("id_type").options[0].textContent = "Любой";
+    document.getElementById("id_type").options[0].textContent = "Любого типа";
 });
 
-function post_to_html(item) {
-    date = new Date(item.created_date)
-        .toLocaleString("ru", {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
-        });
-
-    let image, file;
-    if (item.image !== "")
-        image = " <img src=" + item.image + " class='post-img'>";
-    else
-        image = "";
-    if (item.file !== "")
-        file = "<a href='" + item.file + "'> <div class='btn btn-success full-width'>Прикепленный файл</div></a>";
-    else
-        file = "";
-
-    return "<div class='search-post-panel'> " +
-        "<a target='_blank' href='/post/" + item.id + "/'><h4>" + item.title + "</h4> </a>" +
-        "<div class='post-text'><p>" + item.text + "</p></div>" +
-        image +
-        file +
-        "<table class='table'> <tr>" +
-        "<td>" + item.author_username + "</td>" +
-        "<td><a href='/subject/" + item.subject_id + "'>" + item.subject_short_title + "</td>" +
-        "<td>" + item.type_title + "</td>" +
-        "<td>" + date + "</td>" +
-        "<td> <span style='font-size:12px;' class='showopacity glyphicon glyphicon-eye-open'></span>" + item.views + "</td> " +
-        "</tr></table>" +
-        "</div>"
+function post_to_html(post) {
+    let request = new XMLHttpRequest();
+    request.open('GET', '/post/' + post.id + '/render/', false);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.send();
+    return request.responseText;
 }
 
 function update_post_list(posts) {
-    $("#search_results").empty();
-    if (posts.length !== 0) {
+    let search_results = document.getElementById("search_results");
+    while (search_results.lastChild) search_results.removeChild(search_results.lastChild);
+    if (search_results.querySelector('.post') === null) {
+        $('#search_results').append("");
+    } else {
         posts.forEach(function (item, i, arr) {
             $('#search_results').append(post_to_html(item));
         });
-        update_markdown();
-    } else {
-        $('#search_results').append("<div class='search-post-panel' style='padding: 10px;'>К сожалению, по вашему запросу ничего не найдено :(</div>");
     }
 }
 
+function get_element_value_if_enabled(element_id) {
+    let subject_elem = document.getElementById(element_id);
+    return subject_elem.disabled === false ? subject_elem.value : null;
+}
+
 function get_current_values() {
-    let university_id;
-    let department_id;
-    let chair_id;
-    let program_id;
-    let subject_id;
-    let type_id;
-    if ($("#id_university").prop('disabled') === false)
-        university_id = $("#id_university").val();
-    if ($("#id_department").prop('disabled') === false)
-        department_id = $("#id_department").val();
-    if ($("#id_chair").prop('disabled') === false)
-        chair_id = $("#id_chair").val();
-    if ($("#id_program").prop('disabled') === false)
-        program_id = $("#id_program").val();
-    if ($("#id_subject").prop('disabled') === false)
-        subject_id = $("#id_subject").val();
-    if ($("#id_type").val() !== '')
-        type_id = $("#id_type").val();
+    let university_id = get_element_value_if_enabled('id_university');
+    let department_id = get_element_value_if_enabled('id_department');
+    let chair_id = get_element_value_if_enabled('id_chair');
+    let program_id = get_element_value_if_enabled('id_program');
+    let subject_id = get_element_value_if_enabled('id_subject');
+    let type_id = get_element_value_if_enabled('id_type');
     return {
         "university_id": university_id,
         "department_id": department_id,
         "chair_id": chair_id,
         "program_id": program_id,
         "subject_id": subject_id,
-        "type_id": type_id
+        "type_id": type_id,
     };
 }
 
 function new_search_request(data) {
-    $.ajax({
-        url: "/api/posts/",
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            update_post_list(data);
+    let url = '/api/posts?subject_id=' + data.subject_id;
+    if (data.type_id) url += '&type_id=' + (data.type_id ? data.type_id : '');
+
+    let request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            document.getElementById("search_results").innerHTML = request.responseText;
+            // TODO: Найти лучший способ определения пустого результата
+            if (document.getElementById("search_results").querySelector('.post')) {
+                assignOnImageLoadedHooks();
+            } else {
+                let element = document.createElement('article');
+                element.classList.add('post');
+                let container = document.createElement('div');
+                container.classList.add('post-container');
+                container.textContent = 'К сожалению, по вашему запросу ничего не найдено :(';
+                element.appendChild(container);
+                document.getElementById("search_results").appendChild(element);
+            }
+            resizeAllPosts();
+        } else {
+            // TODO: Обработать ошибку, возвращённую сервером
         }
-    });
+    };
+    request.onerror = function () {
+        // TODO: Обработать ошибку соединения
+    };
+    request.send(data);
 }
 
 $("#id_type").change(function () {
@@ -118,7 +116,7 @@ function search_posts() {
         data: {"search_request": search_request},
         dataType: 'json',
         success: function (data) {
-            update_post_list(data);
+            $("#search_results").innerHTML = data;
         }
     });
 }

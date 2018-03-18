@@ -162,7 +162,10 @@ class Post(models.Model):
         u'ul',
         u'ol',
         u'pre',
+        u'code',
         u'hr',
+        u'br',
+        u'strong',
     ]
 
     def html(self):

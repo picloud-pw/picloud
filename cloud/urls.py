@@ -48,6 +48,6 @@ urlpatterns = [
     path('api/chairs/', views.get_chairs, name='get_chairs'),
     path('api/programs/', views.get_programs, name='get_programs'),
     path('api/subjects/', views.get_subjects, name='get_subjects'),
-    path('api/posts/', views.get_posts, name='get_posts'),
+    path('api/posts/', views.search_and_render_posts, name='get_posts'),
     path('api/search_posts/', views.search_posts, name='search_posts'),
 ]

@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
     <!-- Showdown -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
             integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
@@ -17,9 +18,7 @@
 
 {% block content %}
 
-
     <div class="search-panel row">
-
 
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ university.university }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ department.department }}</div>
@@ -29,36 +28,42 @@
 
         <hr>
         <div id="search-line" class="col-xs-12 col-sm-7 col-md-9 col-lg-9">
-            <input class="form-control" type="text" placeholder="Введите запрос">
+            <input class="form-control" type="text"
+                   title="Извините, полнотекстовый поиск временно не работает." disabled
+                   placeholder="Введите запрос">
         </div>
         <div id="search-type" class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
             {{ subject.type }}
         </div>
         <div id="search-button" class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
-            <input class="form-control btn btn-primary" type="submit" onclick="search_posts()" value="Поиск">
+            <input class="form-control btn btn-primary" type="submit"
+                   title="Извините, полнотекстовый поиск временно не работает." disabled
+                   onclick="search_posts()" value="Поиск">
         </div>
 
     </div>
 
-    <div class="post-list">
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
-        <div id="search_results" class="col-xs-12 col-sm-12 col-md-6 col-lg-6 no-margin-padding">
-
-            <div class='search-post-panel' style='padding: 10px;'>
-                Здесь будут отображаться результаты поиска. <br>
-                Введите ваш запрос
+    <div id="search_results" class="post-list">
+        <article class="post">
+            <div class="post-container">
+                <p>
+                    Здесь будут отображаться результаты поиска.
+                </p>
+                <p>
+                    Введите ваш запрос.
+                </p>
             </div>
-
-
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+        </article>
+    </div>
     </div>
 
 {% endblock %}
 
 {% block js %}
 
+    <script src="{% static "js/imagesloaded.pkgd.min.js" %}"></script>
     <script src="{% static "js/department_search.js" %}"></script>
+    <script src="{% static "js/post_list.js" %}"></script>
     <script src="{% static "js/search.js" %}"></script>
 
 {% endblock %}
