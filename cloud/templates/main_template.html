@@ -57,15 +57,6 @@
                     </li>
                 {% endif %}
 
-                <li>
-                    <a href="{% url 'post_list' %}">
-                        Облако
-                        <span style="font-size:16px;"
-                              class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud">
-                        </span>
-                    </a>
-                </li>
-
                 {% if user.is_authenticated and request.session.program_id %}
                     <li {% block my_program %}{% endblock %}>
                         <a href="{% url 'program_page' program_id=request.session.program_id %}">
