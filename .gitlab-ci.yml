@@ -1,6 +1,8 @@
 deploy:
   image: alpine
   stage: deploy
+  only:
+    - master
   variables:
     GIT_STRATEGY: none
   before_script:
