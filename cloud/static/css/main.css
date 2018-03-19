@@ -257,8 +257,8 @@ img.logo {
 }
 
 .heroes .description {
-    max-width: 600px; 
-    margin: 2em auto; 
+    max-width: 600px;
+    margin: 2em auto;
     font-family: 'Alegreya Sans', sans-serif;
 }
 
@@ -285,7 +285,6 @@ a.button {
 a.button:hover {
     background-color: #DDDDDD;
 }
-
 
 /**
  * List of advantages
