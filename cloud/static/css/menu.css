@@ -22,6 +22,11 @@ nav.sidebar, .main {
     padding: 7px;
 }
 
+#menu-brand.active {
+    background-color: #e7e7e7;
+    box-shadow: inset 0 3px 9px rgba(0,0,0,.075);
+}
+
 #avatar {
     padding: 5px;
     margin: auto;
