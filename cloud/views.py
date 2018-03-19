@@ -620,3 +620,7 @@ def search_and_render_posts(request):
         posts_page = paginator.page(paginator.num_pages)
 
     return render(request, 'cloud/bare_post_list.html', {'posts': posts_page})
+
+
+def privacy_policy(request):
+    return render(request, 'legal/privacy_policy.html')
