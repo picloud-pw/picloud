@@ -39,10 +39,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a id="menu-brand" class="navbar-brand" href="{% url 'index' %}">
-                <img id="picloud-logo"
-                     src="{% static 'img/piLogo.png' %}"
-                     alt="logo">
+            <a id="menu-brand" class="navbar-brand {% block cloud_active %}{% endblock %}" href="{% url 'index' %}">
+                <object id="picloud-logo" data="{% static 'img/logo.svg' %}" type="image/svg+xml">
+                    <img src="{% static 'img/piLogo.png' %}" alt="PiCloud">
+                </object>
             </a>
         </div>
 
