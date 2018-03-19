@@ -10,6 +10,5 @@ deploy:
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-    - ssh picloud@picloud.pw
-    - ./update.sh
+    - ssh picloud@picloud.pw /home/picloud/update.sh
     - exit
