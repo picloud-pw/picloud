@@ -16,6 +16,7 @@ nav.sidebar, .main {
 #picloud-logo {
     height: 100%;
     margin: 0 auto;
+    pointer-events: none;
 }
 
 #menu-brand {
