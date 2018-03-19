@@ -1,6 +1,8 @@
 deploy:
   image: alpine
   stage: deploy
+  variables:
+    GIT_STRATEGY: none
   before_script:
     - apk update && apk add openssh-client bash
   script:
