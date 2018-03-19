@@ -42,6 +42,8 @@ urlpatterns = [
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
     path('contacts', views.contacts, name='contacts'),
 
+    path('legal/privacy-policy/', views.privacy_policy, name='privacy_policy'),
+
     # TODO: Сделать похожим на RESTful
     path('api/universities/', views.get_universities, name='get_universities'),
     path('api/departments/', views.get_departments, name='get_departments'),
