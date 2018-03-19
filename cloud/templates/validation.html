@@ -4,10 +4,6 @@
     Cloud Валидация
 {% endblock %}
 
-{% block validation_active %}
-    class="active"
-{% endblock %}
-
 {% block edit %}
 
     {% if user == post.author or user.is_staff or user.is_superuser %}
