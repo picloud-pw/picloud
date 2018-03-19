@@ -67,7 +67,7 @@ function change_options(url, id, element_id, default_option, changed_element_id)
                 option.disabled = true;
                 element.appendChild(option);
                 element.value = "";
-                data.forEach(function (item, i, arr) {
+                data.forEach(function (item) {
                     let option = document.createElement("option");
                     option.value = item["id"];
                     option.textContent = item["title"];

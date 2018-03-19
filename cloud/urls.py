@@ -1,7 +1,7 @@
-from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
-from . import views
+from django.urls import path
 
+from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -18,11 +18,11 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
-    re_path(r'post/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
     path('post/new/', views.post_new, name='post_new'),
-    re_path(r'post/(?P<pk>\d+)/edit/$', views.post_edit, name='post_edit'),
-    re_path(r'post/(?P<pk>\d+)/delete/$', views.post_delete, name='post_delete'),
-    re_path(r'post/(?P<pk>\d+)/checked/$', views.post_checked, name='post_checked'),
+    path('post/<int:pk>/', views.post_detail, name='post_detail'),
+    path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
+    path('post/<int:pk>/delete/', views.post_delete, name='post_delete'),
+    path('post/<int:pk>/checked/', views.post_checked, name='post_checked'),
 
     path('user/<user_id>', views.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user_posts, name='user_posts'),

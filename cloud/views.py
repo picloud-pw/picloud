@@ -37,21 +37,21 @@ def post_list(request, display_posts=None):
         user_info = UserInfo.objects.get(user=request.user)
         if user_info.program is not None:
             user_program_id = user_info.program.pk
-            posts = Post.objects.filter(validate_status=0)\
-                                .filter(created_date__lte=timezone.now())\
-                                .filter(subject__programs__exact=user_program_id)\
-                                .order_by('created_date').reverse()
+            posts = Post.objects.filter(validate_status=0) \
+                .filter(created_date__lte=timezone.now()) \
+                .filter(subject__programs__exact=user_program_id) \
+                .order_by('created_date').reverse()
         else:
-            posts = Post.objects.filter(validate_status=0)\
-                                .filter(created_date__lte=timezone.now()) \
-                                .order_by('created_date').reverse()
+            posts = Post.objects.filter(validate_status=0) \
+                .filter(created_date__lte=timezone.now()) \
+                .order_by('created_date').reverse()
         if display_posts is not None:
             posts = display_posts
             e_m = "Данный пользователь пока не поделился своими материалами."
     else:
-        posts = Post.objects.filter(validate_status=0)\
-                            .filter(created_date__lte=timezone.now())\
-                            .order_by('created_date').reverse()
+        posts = Post.objects.filter(validate_status=0) \
+            .filter(created_date__lte=timezone.now()) \
+            .order_by('created_date').reverse()
 
     page = request.GET.get('page', 1)
     paginator = Paginator(posts, POSTS_PER_PAGE)
@@ -200,7 +200,7 @@ def signin(request):
                 request.session['program_id'] = program.pk
             else:
                 request.session['program_id'] = ""
-                
+
             return redirect('post_list')
         else:
             error = "Неверно введены логин или пароль!"
@@ -249,7 +249,6 @@ def send_acc_activate_letter(request, user, email):
 
 
 def recaptcha_is_valid(request):
-
     recaptcha_response = request.POST.get('g-recaptcha-response')
     url = 'https://www.google.com/recaptcha/api/siteverify'
     values = {
@@ -351,12 +350,13 @@ def search(request):
     chair = ChooseChairForm()
     program = ChooseProgramForm()
     subject = ChooseSubjectForm()
-    return render(request, 'search.html', {'university': university,
-                                           'department': department,
-                                           'chair': chair,
-                                           'program': program,
-                                           'subject': subject,
-                                           })
+    return render(request, 'search.html', {
+        'university': university,
+        'department': department,
+        'chair': chair,
+        'program': program,
+        'subject': subject,
+    })
 
 
 def universities_list(request):
@@ -377,16 +377,17 @@ def university_page(request, university_id):
         views += post.views
     persons = UserInfo.objects.filter(program__in=programs).count()
 
-    return render(request, "structure/university_page.html", {"univer": univer,
-                                                              "departments": departments,
-                                                              "chairs": chairs,
-                                                              "programs": programs,
-                                                              "stats": {"posts": posts,
-                                                                        "views": views,
-                                                                        "persons": persons
-                                                                        }
-                                                              }
-                  )
+    return render(request, "structure/university_page.html", {
+        "univer": univer,
+        "departments": departments,
+        "chairs": chairs,
+        "programs": programs,
+        "stats": {
+            "posts": posts,
+            "views": views,
+            "persons": persons
+        }
+    })
 
 
 def program_page(request, program_id):
@@ -395,11 +396,11 @@ def program_page(request, program_id):
     semesters = set()
     for sub in subjects:
         semesters.add(sub.semestr)
-    return render(request, "structure/program_page.html", {"program": program,
-                                                           "subjects": subjects,
-                                                           "semesters": semesters,
-                                                           }
-                  )
+    return render(request, "structure/program_page.html", {
+        "program": program,
+        "subjects": subjects,
+        "semesters": semesters,
+    })
 
 
 def subject_page(request, subject_id):
@@ -408,11 +409,11 @@ def subject_page(request, subject_id):
     post_types = set()
     for post in posts:
         post_types.add(post.type)
-    return render(request, "structure/subject_page.html", {"subject": subject,
-                                                           "posts": posts,
-                                                           "post_types": post_types,
-                                                           }
-                  )
+    return render(request, "structure/subject_page.html", {
+        "subject": subject,
+        "posts": posts,
+        "post_types": post_types,
+    })
 
 
 def contacts(request):
@@ -448,9 +449,12 @@ def user_page(request, user_id):
 def user_posts(request, user_id):
     if request.user.is_authenticated:
         fr_user = User.objects.get(pk=user_id)
-        fr_user_posts = Post.objects.filter(author=fr_user).filter(validate_status=0)\
-                                    .filter(created_date__lte=timezone.now()) \
-                                    .order_by('created_date').reverse()
+        fr_user_posts = Post.objects \
+            .filter(author=fr_user) \
+            .filter(validate_status=0) \
+            .filter(created_date__lte=timezone.now()) \
+            .order_by('created_date') \
+            .reverse()
         return post_list(request, display_posts=fr_user_posts)
     else:
         return message(request, msg="Авторизуйтесь, чтобы просматривать посты конкретных пользователей.")
@@ -459,9 +463,12 @@ def user_posts(request, user_id):
 def user_not_checked_posts(request, user_id):
     if request.user.is_authenticated and int(user_id) == request.user.pk:
         user = User.objects.get(pk=user_id)
-        not_validate_posts = Post.objects.filter(author=user).filter(validate_status=1) \
-                                         .filter(created_date__lte=timezone.now()) \
-                                         .order_by('created_date').reverse()
+        not_validate_posts = Post.objects \
+            .filter(author=user) \
+            .filter(validate_status=1) \
+            .filter(created_date__lte=timezone.now()) \
+            .order_by('created_date') \
+            .reverse()
         return post_list(request, display_posts=not_validate_posts)
     else:
         return message(request, msg="Вы можете просматривать только проверенные посты этого пользователя.")

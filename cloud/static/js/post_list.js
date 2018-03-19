@@ -18,7 +18,7 @@ function resizePostWithImagesLoaded(instance) {
 }
 
 function resizeAllPosts() {
-    posts = document.getElementsByClassName("post");
+    let posts = document.getElementsByClassName("post");
     for (let post of posts) {
         resizePost(post);
     }
