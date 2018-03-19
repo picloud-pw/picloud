@@ -11,3 +11,5 @@ deploy:
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
     - ssh picloud@picloud.pw
+    - ./update.sh
+    - exit
