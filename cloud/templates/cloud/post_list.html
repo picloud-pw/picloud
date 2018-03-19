@@ -10,6 +10,7 @@
     <meta name="yandex-verification" content="c3f40ad459bc9654"/>
 
     <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal_image.css' %}">
 
     <!-- Showdown -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
@@ -17,6 +18,14 @@
 {% endblock %}
 
 {% block content %}
+
+    <div id="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg" src="#">
+        <a id="show-full-btn" href="#" target="_blank" class="btn btn-primary">
+            Открыть оригинал в новой вкладке
+        </a>
+    </div>
 
     {% if posts %}
         <main class="post-list">
@@ -98,4 +107,22 @@
 {% block js %}
     <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
     <script src="{% static 'js/post_list.js' %}"></script>
+    <script>
+        let modal = document.getElementById('modal');
+        let modalImg = document.getElementById("modalImg");
+        let showFullBtn = document.getElementById("show-full-btn");
+
+        for (let img of document.getElementsByClassName('post-img')) {
+            img.onclick = function () {
+                modal.style.display = "grid";
+                modalImg.src = this.src;
+                showFullBtn.href = this.src;
+            }
+        }
+
+        let closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.onclick = function () {
+            modal.style.display = "none";
+        }
+    </script>
 {% endblock %}
