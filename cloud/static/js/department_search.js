@@ -21,6 +21,7 @@ function get_all_universities() {
 
 function clear_options_and_disabled(element_id, default_option) {
     let element = document.getElementById(element_id);
+    if (!element) return;
     clear_options(element);
     let option = document.createElement('option');
     option.textContent = default_option;
