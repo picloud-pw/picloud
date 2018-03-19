@@ -1,0 +1,16 @@
+deploy:
+  image: alpine
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - apk update && apk add openssh-client bash
+  script:
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+    - ssh picloud@picloud.pw /home/picloud/update.sh
+    - exit
