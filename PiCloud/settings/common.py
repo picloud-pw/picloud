@@ -38,13 +38,13 @@ def get_config(setting, config=json_config):
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cloud',
+    'django.contrib.admin',
+    'django.contrib.auth',
 ]
 
 ROOT_URLCONF = 'PiCloud.urls'
@@ -52,8 +52,7 @@ ROOT_URLCONF = 'PiCloud.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../../templates')]
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
