@@ -10,4 +10,4 @@ deploy:
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-    - ssh picloud.pw
+    - ssh picloud@picloud.pw
