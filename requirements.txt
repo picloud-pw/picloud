@@ -1,0 +1,8 @@
+Django
+feedparser
+Pillow
+psycopg2-binary
+python-dateutil
+six
+bleach
+markdown
