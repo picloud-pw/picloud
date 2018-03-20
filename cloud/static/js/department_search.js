@@ -44,8 +44,8 @@ function clear_and_disabled_all_elements() {
 }
 
 function change_options(url, id, element_id, default_option, changed_element_id) {
-    let changed_element = document.getElementById(changed_element_id);
     let element = document.getElementById(element_id);
+    if (!element) return;
 
     let request = new XMLHttpRequest();
     request.open('GET', url + '?id=' + id, true);
@@ -56,6 +56,7 @@ function change_options(url, id, element_id, default_option, changed_element_id)
             // Success!
             let data = JSON.parse(request.responseText);
             // FIXME: Костыль. Необходимо для автоматического заполнения полей
+            let changed_element = document.getElementById(changed_element_id);
             if (changed_element != null) {
                 changed_element.value = id;
             }
