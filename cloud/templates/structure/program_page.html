@@ -21,7 +21,9 @@
                 <h5>
                     {{ program.chair.short_title }} &mdash;
                     {{ program.chair.department.short_title }} &mdash;
-                    {{ program.chair.department.university.short_title }}
+                    <a href="{% url 'university_page' program.chair.department.university.pk %}">
+                        {{ program.chair.department.university.short_title }}
+                    </a>
                 </h5>
 
                 <hr>
