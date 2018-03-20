@@ -86,9 +86,6 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
                 element.disabled = true;
                 element.appendChild(option);
             }
-        })
-        .catch(function (error) {
-            alert(error);
         });
 }
 
