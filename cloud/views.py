@@ -441,7 +441,7 @@ def contacts(request):
 
 def user_page(request, user_id):
     if request.user.is_authenticated:
-        fr_user = User.objects.get(pk=user_id)
+        fr_user = get_object_or_404(User, pk=user_id)
         fr_user_info = UserInfo.objects.get(user=fr_user)
         return render(request, 'user.html', locals())
     else:
