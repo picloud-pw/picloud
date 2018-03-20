@@ -217,33 +217,32 @@
 
     <script>
         $(document).ready(function () {
-            get_all_universities();
-
-            $("#id_university").change(function () {
-                university_updated($(this).val())
-            });
-            $("#id_department").change(function () {
-                department_updated($(this).val())
-            });
-            $("#id_chair").change(function () {
-                chair_updated($(this).val())
-            });
-            $("#id_program").change(function () {
-                program_updated($(this).val())
-            });
-
             //установка текущего университета, факультета и кафедры
-            if ("{{ user_info.program.pk }}" !== "") {
-                university_updated({{ user_info.program.chair.department.university.pk }});
-                department_updated({{ user_info.program.chair.department.pk }});
-                chair_updated({{ user_info.program.chair.pk }});
-                program_updated({{ user_info.program.pk }});
-            } else {
-                university_updated(1);
+            {% if user_info.program %}
+                loadUniversities()
+                    .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
+                    .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
+                    .then(() => setChair({{ user_info.program.chair.pk }}))
+                    .then(() => setProgram({{ user_info.program.pk }}));
+            {% else %}
+                loadUniversities().then(() => setUniversity(1));
                 $("#structure").addClass("in");
-            }
+            {% endif %}
 
             $("#id_program").attr('required', true);
+
+            $("#id_university").change(function () {
+                setUniversity($(this).val())
+            });
+            $("#id_department").change(function () {
+                setDepartment($(this).val())
+            });
+            $("#id_chair").change(function () {
+                setChair($(this).val())
+            });
+            $("#id_program").change(function () {
+                setProgram($(this).val())
+            });
         });
     </script>
 

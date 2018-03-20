@@ -350,12 +350,14 @@ def search(request):
     chair = ChooseChairForm()
     program = ChooseProgramForm()
     subject = ChooseSubjectForm()
+    user_info = UserInfo.objects.filter(user=request.user.pk).first()
     return render(request, 'search.html', {
         'university': university,
         'department': department,
         'chair': chair,
         'program': program,
         'subject': subject,
+        'user_info': user_info,
     })
 
 

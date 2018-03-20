@@ -15,14 +15,10 @@ function getCookie(name) {
 
 let csrf_token = getCookie('csrftoken');
 
-function get_all_universities() {
-    change_options("/api/universities/", 0, "id_university", "Выберите университет");
-}
-
-function clear_options_and_disabled(element_id, default_option) {
+function clearAndDisableList(element_id, default_option) {
     let element = document.getElementById(element_id);
     if (!element) return;
-    clear_options(element);
+    clearOptions(element);
     let option = document.createElement('option');
     option.textContent = default_option;
     element.append(option);
@@ -30,45 +26,52 @@ function clear_options_and_disabled(element_id, default_option) {
     element.style.backgroundColor = 'lightgray';
 }
 
-function clear_options(element) {
+function clearOptions(element) {
     while (element.lastChild) {
         element.removeChild(element.lastChild);
     }
 }
 
-function clear_and_disabled_all_elements() {
-    clear_options_and_disabled("id_department", "Выберите факультет");
-    clear_options_and_disabled("id_chair", "Выберите кафедру");
-    clear_options_and_disabled("id_program", "Выберите программу обучения");
-    clear_options_and_disabled("id_subject", "Выберите предмет");
+function clearAndDisableAllLists() {
+    clearAndDisableList("id_department", "Выберите факультет");
+    clearAndDisableList("id_chair", "Выберите кафедру");
+    clearAndDisableList("id_program", "Выберите программу обучения");
+    clearAndDisableList("id_subject", "Выберите предмет");
 }
 
-function change_options(url, id, element_id, default_option, changed_element_id) {
-    let element = document.getElementById(element_id);
+function loadUniversities() {
+    return loadOptions("id_university", "/api/universities/", null, "Выберите университет");
+}
+
+function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionText) {
+    let element = document.getElementById(elementId);
     if (!element) return;
 
-    let request = new XMLHttpRequest();
-    request.open('GET', url + '?id=' + id, true);
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', csrf_token);
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            // Success!
-            let data = JSON.parse(request.responseText);
-            // FIXME: Костыль. Необходимо для автоматического заполнения полей
-            let changed_element = document.getElementById(changed_element_id);
-            if (changed_element != null) {
-                changed_element.value = id;
+    let request = new Request(`${endpointUrl}?id=${changedElementValue}`, {
+        method: 'GET',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrf_token,
+        }),
+    });
+    return fetch(request)
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Response.error();
             }
-            clear_options(element);
-            if (data.length !== 0) {
+        })
+        .then(function (jsonArray) {
+            clearOptions(element);
+            if (jsonArray.length !== 0) {
                 let option = document.createElement("option");
-                option.textContent = default_option;
+                option.textContent = defaultOptionText;
                 option.value = "";
                 option.disabled = true;
                 element.appendChild(option);
                 element.value = "";
-                data.forEach(function (item) {
+                jsonArray.forEach(function (item) {
                     let option = document.createElement("option");
                     option.value = item["id"];
                     option.textContent = item["title"];
@@ -83,35 +86,48 @@ function change_options(url, id, element_id, default_option, changed_element_id)
                 element.disabled = true;
                 element.appendChild(option);
             }
-        } else {
-            // TODO: Обработать ошибку, возвращённую сервером
-        }
-    };
-    request.onerror = function () {
-        // TODO: Обработать ошибку соединения
-    };
-    request.send();
+        })
+        .catch(function (error) {
+            alert(error);
+        });
 }
 
-
-function university_updated(university_id) {
-    change_options("/api/departments/", university_id, "id_department", "Выберите факультет", "id_university");
-    clear_options_and_disabled("id_chair", "Выберите кафедру");
-    clear_options_and_disabled("id_program", "Выберите программу обучения");
-    clear_options_and_disabled("id_subject", "Выберите предмет");
+function setOption(elementId, value) {
+    let element = document.getElementById(elementId);
+    if (element) element.value = value;
 }
 
-function department_updated(department_id) {
-    change_options("/api/chairs/", department_id, "id_chair", "Выберите кафедру", "id_department");
-    clear_options_and_disabled("id_program", "Выберите программу обучения");
-    clear_options_and_disabled("id_subject", "Выберите предмет");
+function setUniversity(university_id) {
+    setOption('id_university', university_id);
+    return loadOptions("id_department", "/api/departments/", university_id, "Выберите факультет")
+        .then(() => {
+            clearAndDisableList("id_chair", "Выберите кафедру");
+            clearAndDisableList("id_program", "Выберите программу обучения");
+            clearAndDisableList("id_subject", "Выберите предмет");
+            return Promise.resolve();
+        });
 }
 
-function chair_updated(chair_id) {
-    change_options("/api/programs/", chair_id, "id_program", "Выберите программу обучения", "id_chair");
-    clear_options_and_disabled("id_subject", "Выберите предмет");
+function setDepartment(department_id) {
+    setOption('id_department', department_id);
+    return loadOptions('id_chair', '/api/chairs/', department_id, 'Выберите кафедру')
+        .then(() => {
+            clearAndDisableList("id_program", 'Выберите программу обучения');
+            clearAndDisableList("id_subject", "Выберите предмет");
+            return Promise.resolve();
+        });
 }
 
-function program_updated(program_id) {
-    change_options("/api/subjects/", program_id, "id_subject", "Выберите предмет", "id_program");
+function setChair(chair_id) {
+    setOption('id_chair', chair_id);
+    return loadOptions('id_program', '/api/programs/', chair_id, 'Выберите программу обучения')
+        .then(() => {
+            clearAndDisableList('id_subject', 'Выберите предмет');
+            return Promise.resolve();
+        });
+}
+
+function setProgram(program_id) {
+    setOption('id_program', program_id);
+    return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите предмет');
 }

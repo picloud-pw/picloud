@@ -144,16 +144,16 @@
             $("#id_type option:first").remove();
 
             $("#id_university").change(function () {
-                university_updated($(this).val())
+                setUniversity($(this).val())
             });
             $("#id_department").change(function () {
-                department_updated($(this).val())
+                setDepartment($(this).val())
             });
             $("#id_chair").change(function () {
-                chair_updated($(this).val())
+                setChair($(this).val())
             });
             $("#id_program").change(function () {
-                program_updated($(this).val())
+                setProgram($(this).val())
             });
 
             checkEditOrNew()
@@ -174,14 +174,14 @@
             if ($("#id_title").val() === "") {
 
                 // Страница создания поста
-                get_all_universities();
+                loadUniversities();
                 if ("{{ user_info.program.pk }}" !== "") {
-                    university_updated({{ user_info.program.chair.department.university.pk }});
-                    department_updated({{ user_info.program.chair.department.pk }});
-                    chair_updated({{ user_info.program.chair.pk }});
-                    program_updated({{ user_info.program.pk }});
+                    setUniversity({{ user_info.program.chair.department.university.pk }});
+                    setDepartment({{ user_info.program.chair.department.pk }});
+                    setChair({{ user_info.program.chair.pk }});
+                    setProgram({{ user_info.program.pk }});
                 } else {
-                    university_updated(1);
+                    setUniversity(1);
                     $("#structure").addClass("in");
                 }
 
@@ -195,11 +195,11 @@
             } else {
 
                 // Редактирование поста
-                get_all_universities();
-                university_updated({{ post.subject.programs.first.chair.department.university.pk }});
-                department_updated({{ post.subject.programs.first.chair.department.pk }});
-                chair_updated({{ post.subject.programs.first.chair.pk }});
-                program_updated({{ post.subject.programs.first.pk }});
+                loadUniversities();
+                setUniversity({{ post.subject.programs.first.chair.department.university.pk }});
+                setDepartment({{ post.subject.programs.first.chair.department.pk }});
+                setChair({{ post.subject.programs.first.chair.pk }});
+                setProgram({{ post.subject.programs.first.pk }});
 
                 if ("{{ post.link }}" != "None")
                     displayInputBlock("#btnLink", "#linkInput");

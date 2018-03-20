@@ -6,24 +6,6 @@ function ready(callback) {
     }
 }
 
-ready(function () {
-    clear_and_disabled_all_elements();
-    get_all_universities();
-    document.getElementById("id_university").addEventListener("change", function () {
-        university_updated(document.getElementById("id_university").value);
-    });
-    document.getElementById("id_department").addEventListener("change", function () {
-        department_updated(document.getElementById("id_department").value);
-    });
-    document.getElementById("id_chair").addEventListener("change", function () {
-        chair_updated(document.getElementById("id_chair").value);
-    });
-    document.getElementById("id_program").addEventListener("change", function () {
-        program_updated(document.getElementById("id_program").value);
-    });
-    document.getElementById("id_type").options[0].textContent = "Любого типа";
-});
-
 function post_to_html(post) {
     let request = new XMLHttpRequest();
     request.open('GET', '/post/' + post.id + '/render/', false);

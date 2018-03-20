@@ -62,4 +62,38 @@
     <script src="{% static "js/post_list.js" %}"></script>
     <script src="{% static "js/search.js" %}"></script>
 
+    <script>
+
+        ready(function () {
+            clearAndDisableAllLists();
+
+            {% if user_info %}
+                loadUniversities()
+                    .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
+                    .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
+                    .then(() => setChair({{ user_info.program.chair.pk }}))
+                    .then(() => setProgram({{ user_info.program.pk }}));
+                document.getElementById("id_type").options[0].textContent = "Любого типа";
+            {% else %}
+                loadUniversities().then(() => setUniversity(1));
+                $("#structure").addClass("in");
+            {% endif %}
+
+            document.getElementById("id_university").addEventListener("change", () => {
+                setUniversity(document.getElementById("id_university").value);
+            });
+            document.getElementById("id_department").addEventListener("change", () => {
+                setDepartment(document.getElementById("id_department").value);
+            });
+            document.getElementById("id_chair").addEventListener("change", () => {
+                setChair(document.getElementById("id_chair").value);
+            });
+            document.getElementById("id_program").addEventListener("change", () => {
+                setProgram(document.getElementById("id_program").value);
+            });
+            document.getElementById("id_type").options[0].textContent = "Любого типа";
+        });
+
+    </script>
+
 {% endblock %}
