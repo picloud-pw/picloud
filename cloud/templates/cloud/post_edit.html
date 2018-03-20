@@ -156,7 +156,45 @@
                 setProgram($(this).val())
             });
 
-            checkEditOrNew()
+            {% if post.pk %}
+
+                // Редактирование поста
+
+                loadUniversities()
+                    .then(() => setUniversity({{ post.subject.programs.first.chair.department.university.pk }}))
+                    .then(() => setDepartment({{ post.subject.programs.first.chair.department.pk }}))
+                    .then(() => setChair({{ post.subject.programs.first.chair.pk }}))
+                    .then(() => setProgram({{ post.subject.programs.first.pk }}))
+                    .then(() => setSubject({{ post.subject.pk }}));
+
+                {% if post.link %}
+                    displayInputBlock("#btnLink", "#linkInput");
+                {% endif %}
+
+                {% if post.image %}
+                    displayInputBlock("#btnPicture", "#pictureInput");
+                {% endif %}
+
+                {% if post.file %}
+                    displayInputBlock("#btnFile", "#fileInput");
+                {% endif %}
+
+            {% else %}
+
+                // Создание поста
+
+                {% if user_info %}
+                    loadUniversities()
+                        .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
+                        .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
+                        .then(() => setChair({{ user_info.program.chair.pk }}))
+                        .then(() => setProgram({{ user_info.program.pk }}));
+                {% else %}
+                    loadUniversities();
+                    document.getElementById('structure').classList.add('in');
+                {% endif %}
+
+            {% endif %}
         });
 
         function displayInputBlock(button, groupID) {
@@ -167,52 +205,11 @@
                 $(groupID).css({"display": "none"});
                 $(button).removeClass("btn-info").addClass("btn-default");
             }
-
         }
 
-        function checkEditOrNew() {
-            if ($("#id_title").val() === "") {
-
-                // Страница создания поста
-                loadUniversities();
-                if ("{{ user_info.program.pk }}" !== "") {
-                    setUniversity({{ user_info.program.chair.department.university.pk }});
-                    setDepartment({{ user_info.program.chair.department.pk }});
-                    setChair({{ user_info.program.chair.pk }});
-                    setProgram({{ user_info.program.pk }});
-                } else {
-                    setUniversity(1);
-                    $("#structure").addClass("in");
-                }
-
-                // FIXME: Костыль. Ждём, пока выполнится AJAX-запрос!
-                let last_post_subject = "{{ request.session.last_post_subject }}";
-                if (last_post_subject != "")
-                    setTimeout(function () {
-                        $("#id_subject").val(last_post_subject)
-                    }, 200);
-
-            } else {
-
-                // Редактирование поста
-                loadUniversities();
-                setUniversity({{ post.subject.programs.first.chair.department.university.pk }});
-                setDepartment({{ post.subject.programs.first.chair.department.pk }});
-                setChair({{ post.subject.programs.first.chair.pk }});
-                setProgram({{ post.subject.programs.first.pk }});
-
-                if ("{{ post.link }}" != "None")
-                    displayInputBlock("#btnLink", "#linkInput");
-                if ("{{ post.image }}" != "")
-                    displayInputBlock("#btnPicture", "#pictureInput");
-                if ("{{ post.file }}" != "")
-                    displayInputBlock("#btnFile", "#fileInput");
-
-                // FIXME: Костыль. Ждём, пока выполнится AJAX-запрос!
-                setTimeout(function () {
-                    $("#id_subject").val({{ post.subject.pk }})
-                }, 200);
-            }
+        function setSubject(id) {
+            setOption('id_subject', id);
+            return Promise.resolve();
         }
 
     </script>
