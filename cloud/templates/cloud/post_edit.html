@@ -136,11 +136,11 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'js/ready.js' %}"></script>
     <script src="{% static 'js/markdown_live_preview.js' %}"></script>
     <script src="{% static 'js/department_search.js' %}"></script>
     <script>
-
-        $(document).ready(function () {
+        ready(function () {
             $("#id_type option:first").remove();
 
             $("#id_university").change(function () {

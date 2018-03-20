@@ -1,11 +1,3 @@
-function ready(callback) {
-    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
-        callback();
-    } else {
-        document.addEventListener('DOMContentLoaded', callback);
-    }
-}
-
 function post_to_html(post) {
     let request = new XMLHttpRequest();
     request.open('GET', '/post/' + post.id + '/render/', false);

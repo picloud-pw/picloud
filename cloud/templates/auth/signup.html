@@ -152,10 +152,11 @@
 
 {% block js %}
 
+    <script src="{% static 'js/ready.js' %}"></script>
     <script src="{% static "js/department_search.js" %}"></script>
 
     <script>
-        $(document).ready(function () {
+        ready(function () {
             clearAndDisableAllLists();
             loadUniversities();
 
