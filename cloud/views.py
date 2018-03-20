@@ -1,6 +1,8 @@
 import json
 import urllib
 
+from .vkModule import *
+
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
@@ -437,6 +439,12 @@ def contacts(request):
     else:
         form = ContactForm()
         return render(request, 'contacts.html', {'form': form})
+
+
+def get_memes(request):
+    mem_list = memes()
+    print(mem_list)
+    return render(request, "memes.html", {"mem_list": mem_list})
 
 
 def user_page(request, user_id):

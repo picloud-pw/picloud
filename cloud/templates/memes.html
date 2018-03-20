@@ -8,34 +8,34 @@
 
     <div class="container-fluid no-margin-padding">
 
-        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
-        {% for col_feed in colomns_feed %}
-            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
                 <table width="100%">
-                    {% for feed in col_feed %}
-                        <tr>
-                            <td>
-                                <div class="mem-panel">
-                                    <div class="mem-title container-fluid">
-                                        <a href="{{ feed.link }}"><h3>{{ feed.author }}</h3></a>
-                                        <h5 style="color: #9e9e9e">{{ feed.published }}</h5>
+                    {% for mem in mem_list %}
+                        {% if mem.text or mem.attachments %}
+                            <tr>
+                                <td>
+                                    <div class="mem-panel">
+                                        <hr>
+                                        <div class="mem-content">
+                                            {{ mem.text }}
+                                            {% for photo in mem.attachments %}
+                                                <img src="{{ photo.photo.photo_604 }}" alt="mem">
+                                            {% endfor %}
+                                        </div>
+                                        <hr>
                                     </div>
-                                    <hr>
-                                    <div class="mem-content">
-                                        {{ feed.summary|safe }}
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
 
             </div>
-        {% endfor %}
 
-        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
     </div>
 
