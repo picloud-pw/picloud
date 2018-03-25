@@ -1,6 +1,8 @@
 <svg id="piCloudLogo" viewBox="0 0 1100 415" x="0px" y="0px" width="1100" height="415"
      xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1">
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Alegreya');
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
         #maskRect {
             fill: #ffffff;
             fill-opacity: 1;
