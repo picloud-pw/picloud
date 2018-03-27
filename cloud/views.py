@@ -1,5 +1,6 @@
 import json
 import urllib
+import threading
 
 from .vkModule import *
 
@@ -20,6 +21,12 @@ from .tokens import account_activation_token
 
 # constants
 POSTS_PER_PAGE = 12
+
+
+# vk bot start
+t = threading.Thread(target=vk_bot)
+t.daemon = True
+t.start()
 
 
 def index(request):
@@ -443,7 +450,6 @@ def contacts(request):
 
 def get_memes(request):
     mem_list = memes()
-    print(mem_list)
     return render(request, "memes.html", {"mem_list": mem_list})
 
 

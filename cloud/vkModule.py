@@ -2,23 +2,25 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 import vk
-import json
+import time
 
 VK_API_VERSION = 5.73
 
-ACCESS_TOKEN = getattr(settings, 'VK_GLOBAL_TOKEN', None)
-if ACCESS_TOKEN is None:
+GLOBAL_TOKEN = getattr(settings, 'VK_GLOBAL_TOKEN', None)
+GROUP_TOKEN = getattr(settings, 'VK_GROUP_TOKEN', None)
+if GLOBAL_TOKEN is None or GROUP_TOKEN is None:
     raise ImproperlyConfigured('Cannot get VK access token from application settings')
 
 VK_GROUPS = {
     'pashasmeme',
 }
+BOT_TIME_SLEEP = 1
 
 COL_POSTS = 1000
 
 
 def memes():
-    session = vk.Session(access_token=ACCESS_TOKEN)
+    session = vk.Session(access_token=GLOBAL_TOKEN)
     vk_api = vk.API(session)
 
     mem_posts = []
@@ -28,3 +30,27 @@ def memes():
         )
 
     return mem_posts
+
+
+def bot_answ(vk_api, user_id, msg):
+    vk_api.messages.send(user_id=user_id, message=msg, v=VK_API_VERSION)
+
+
+def bot_logic(vk_api, user_id, msg):
+    bot_answ(vk_api=vk_api, user_id=user_id, msg=msg)
+
+
+def vk_bot():
+    session = vk.Session(access_token=GROUP_TOKEN)
+    vk_api = vk.API(session)
+
+    # TODO: Переделать на LongPoll
+    last_msg = 0
+    while True:
+        # при первом запуске просматривает сообщения за последние 10 сек., но может повторно ответить на прочитанные
+        resp = vk_api.messages.get(last_message_id=last_msg, count=100, time_offset=10, v=VK_API_VERSION)
+        if resp['items']:
+            last_msg = resp['items'][0]['id']
+        for msg in resp['items']:
+            bot_logic(vk_api=vk_api, user_id=msg['user_id'], msg=msg['body'])
+        time.sleep(BOT_TIME_SLEEP)
