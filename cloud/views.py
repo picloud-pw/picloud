@@ -1,5 +1,8 @@
 import json
 import urllib
+import threading
+
+from .vkontakte import *
 
 from django.conf import settings
 from django.contrib import auth
@@ -18,6 +21,12 @@ from .tokens import account_activation_token
 
 # constants
 POSTS_PER_PAGE = 12
+
+
+# vk bot start
+t = threading.Thread(target=vk_bot)
+t.daemon = True
+t.start()
 
 
 def index(request):
@@ -439,6 +448,11 @@ def contacts(request):
         return render(request, 'contacts.html', {'form': form})
 
 
+def get_memes(request):
+    memes = fetch_and_sort_memes_from_all_groups()
+    return render(request, "memes.html", {"memes": memes})
+
+
 def user_page(request, user_id):
     if request.user.is_authenticated:
         fr_user = get_object_or_404(User, pk=user_id)
@@ -595,7 +609,7 @@ def get_posts(request):
 
 
 def search_posts(request):
-    words = request.GET.get('search_request', None).split(" ")
+    words = request.GET.get('search_request', None).lover().split(" ")
     posts = Post.objects.filter(validate_status=0)
     posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]

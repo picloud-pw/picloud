@@ -6,3 +6,4 @@ python-dateutil
 six
 bleach
 markdown
+vk
