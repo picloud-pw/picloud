@@ -11,45 +11,43 @@ GROUP_TOKEN = getattr(settings, 'VK_GROUP_TOKEN', None)
 if GLOBAL_TOKEN is None or GROUP_TOKEN is None:
     raise ImproperlyConfigured('Cannot get VK access token from application settings')
 
-VK_GROUPS = {
-    'pashasmeme',
-    'dnische1',
-    'klimenkovdefacto',
-    'itmoquotepad',
-    'wisemrduck',
+VK_GROUPS = getattr(settings, 'VK_GROUP_LIST', None)
+if VK_GROUPS is None:
+    raise ImproperlyConfigured('Cannot get list of VK groups from application settings')
 
-}
-BOT_TIME_SLEEP = 1
-
-COL_POSTS = 1000
+POSTS_COUNT = 10
+BOT_LOOP_TIMEOUT = 1
 
 
-def memes():
+def fetch_memes_for_group(vk_api, group_uri):
+    return vk_api.wall.get(domain=group_uri,
+                           count=POSTS_COUNT,
+                           v=VK_API_VERSION)["items"]
+
+
+def fetch_and_sort_memes_from_all_groups():
     session = vk.Session(access_token=GLOBAL_TOKEN)
     vk_api = vk.API(session)
 
-    mem_posts = []
-    for group_domain in VK_GROUPS:
-        mem_posts.extend(
-            vk_api.wall.get(domain=group_domain, count=COL_POSTS, v=VK_API_VERSION)["items"]
-        )
+    memes = [meme
+             for group_uri in VK_GROUPS
+             for meme in fetch_memes_for_group(vk_api, group_uri)]
 
     def sort_by_date(post):
         return post["date"]
 
-    mem_posts.sort(key=sort_by_date, reverse=True)
+    memes.sort(key=sort_by_date, reverse=True)
+    return memes
 
-    return mem_posts
 
-
-def bot_answ(vk_api, user_id, msg):
+def bot_answer(vk_api, user_id, msg):
     if msg is not None:
         vk_api.messages.send(user_id=user_id, message=msg, v=VK_API_VERSION)
 
 
 def bot_logic(vk_api, user_id, msg):
     words = msg.lower().split(" ")
-    bot_answ(vk_api=vk_api, user_id=user_id, msg=words[0])
+    bot_answer(vk_api=vk_api, user_id=user_id, msg=words[0])
 
 
 def vk_bot():
@@ -65,4 +63,4 @@ def vk_bot():
             last_msg = resp['items'][0]['id']
         for msg in resp['items']:
             bot_logic(vk_api=vk_api, user_id=msg['user_id'], msg=msg['body'])
-        time.sleep(BOT_TIME_SLEEP)
+        time.sleep(BOT_LOOP_TIMEOUT)

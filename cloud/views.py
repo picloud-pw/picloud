@@ -2,7 +2,7 @@ import json
 import urllib
 import threading
 
-from .vkModule import *
+from .vkontakte import *
 
 from django.conf import settings
 from django.contrib import auth
@@ -449,8 +449,8 @@ def contacts(request):
 
 
 def get_memes(request):
-    mem_list = memes()
-    return render(request, "memes.html", {"mem_list": mem_list})
+    memes = fetch_and_sort_memes_from_all_groups()
+    return render(request, "memes.html", {"memes": memes})
 
 
 def user_page(request, user_id):

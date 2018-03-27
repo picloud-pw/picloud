@@ -10,30 +10,35 @@
 
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-                <table width="100%">
-                    {% for mem in mem_list %}
-                        {% if mem.text or mem.attachments %}
-                            <tr>
-                                <td>
-                                    <div class="mem-panel">
-                                        <hr>
-                                        <div class="mem-content">
-                                            {{ mem.text }}
-                                            {% for photo in mem.attachments %}
-                                                <img src="{{ photo.photo.photo_604 }}" alt="mem">
-                                            {% endfor %}
-                                        </div>
-                                        <hr>
-                                    </div>
-                                </td>
-                            </tr>
+            {% for meme in memes %}
+                {% if meme.text or meme.attachments %}
+                    <div class="meme">
+                        {% if meme.text %}
+                            <p class="meme-text">{{ meme.text }}</p>
                         {% endif %}
-                    {% endfor %}
-                </table>
+                        <div class="meme-gallery">
+                            {% for attachment in meme.attachments %}
+                                {% if attachment.type == 'photo' %}
+                                    <img src="{{ attachment.photo.photo_604 }}"
+                                         alt="Прикреплённое изображение {{ attachment }}">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {#                        <hr>#}
+                        <p class="meme-source">
+                            <a href="https://vk.com/wall{{ meme.from_id }}_{{ meme.id }}"
+                               target="_blank" title="Ссылка откроется в новой вкладке.">
+                                Источник
+                                <span class="glyphicon glyphicon-share"></span>
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
+            {% endfor %}
 
-            </div>
+        </div>
 
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
