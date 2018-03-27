@@ -13,6 +13,11 @@ if GLOBAL_TOKEN is None or GROUP_TOKEN is None:
 
 VK_GROUPS = {
     'pashasmeme',
+    'dnische1',
+    'klimenkovdefacto',
+    'itmoquotepad',
+    'wisemrduck',
+
 }
 BOT_TIME_SLEEP = 1
 
@@ -29,15 +34,22 @@ def memes():
             vk_api.wall.get(domain=group_domain, count=COL_POSTS, v=VK_API_VERSION)["items"]
         )
 
+    def sort_by_date(post):
+        return post["date"]
+
+    mem_posts.sort(key=sort_by_date, reverse=True)
+
     return mem_posts
 
 
 def bot_answ(vk_api, user_id, msg):
-    vk_api.messages.send(user_id=user_id, message=msg, v=VK_API_VERSION)
+    if msg is not None:
+        vk_api.messages.send(user_id=user_id, message=msg, v=VK_API_VERSION)
 
 
 def bot_logic(vk_api, user_id, msg):
-    bot_answ(vk_api=vk_api, user_id=user_id, msg=msg)
+    words = msg.lower().split(" ")
+    bot_answ(vk_api=vk_api, user_id=user_id, msg=words[0])
 
 
 def vk_bot():

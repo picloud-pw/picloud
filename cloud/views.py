@@ -609,7 +609,7 @@ def get_posts(request):
 
 
 def search_posts(request):
-    words = request.GET.get('search_request', None).split(" ")
+    words = request.GET.get('search_request', None).lover().split(" ")
     posts = Post.objects.filter(validate_status=0)
     posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
