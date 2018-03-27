@@ -22,7 +22,7 @@
                             {% for attachment in meme.attachments %}
                                 {% if attachment.type == 'photo' %}
                                     <img src="{{ attachment.photo.photo_604 }}"
-                                         alt="Прикреплённое изображение {{ attachment }}">
+                                         alt="Прикреплённое изображение">
                                 {% endif %}
                             {% endfor %}
                         </div>
