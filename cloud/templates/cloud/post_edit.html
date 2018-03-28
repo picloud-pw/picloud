@@ -143,17 +143,17 @@
         ready(function () {
             $("#id_type option:first").remove();
 
-            $("#id_university").change(function () {
-                setUniversity($(this).val())
+            document.getElementById("id_university").addEventListener("change", () => {
+                universityChanged(document.getElementById("id_university").value);
             });
-            $("#id_department").change(function () {
-                setDepartment($(this).val())
+            document.getElementById("id_department").addEventListener("change", () => {
+                departmentChanged(document.getElementById("id_department").value);
             });
-            $("#id_chair").change(function () {
-                setChair($(this).val())
+            document.getElementById("id_chair").addEventListener("change", () => {
+                chairChanged(document.getElementById("id_chair").value);
             });
-            $("#id_program").change(function () {
-                setProgram($(this).val())
+            document.getElementById("id_program").addEventListener("change", () => {
+                programChanged(document.getElementById("id_program").value);
             });
 
             {% if post.pk %}
