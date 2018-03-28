@@ -61,37 +61,52 @@
     <script src="{% static "js/search.js" %}"></script>
 
     <script>
-
         ready(function () {
             clearAndDisableAllLists();
 
+            {# TODO: Если subject_id предоставлен, подгрузить департаменты #}
+
+            {% if request.GET.subject_id %}
+                let subject_id = {{ request.GET.subject_id }};
+                search(subject_id);
+            {% endif %}
+
+            {% if request.GET.type_id %}
+                setType({{ request.GET.type_id }});
+            {% endif %}
+
             {% if user_info %}
+                document.getElementById("id_type").options[0].textContent = "Любого типа";
                 loadUniversities()
                     .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
                     .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
                     .then(() => setChair({{ user_info.program.chair.pk }}))
-                    .then(() => setProgram({{ user_info.program.pk }}));
-                document.getElementById("id_type").options[0].textContent = "Любого типа";
+                    .then(() => setProgram({{ user_info.program.pk }}))
+                    .then(() => {
+                        {% if request.GET.subject_id %}
+                            let subject_id = {{ request.GET.subject_id }};
+                            setSubject(subject_id);
+                        {% endif %}
+                    });
             {% else %}
                 loadUniversities().then(() => setUniversity(1));
                 $("#structure").addClass("in");
             {% endif %}
 
             document.getElementById("id_university").addEventListener("change", () => {
-                setUniversity(document.getElementById("id_university").value);
+                universityChanged(document.getElementById("id_university").value);
             });
             document.getElementById("id_department").addEventListener("change", () => {
-                setDepartment(document.getElementById("id_department").value);
+                departmentChanged(document.getElementById("id_department").value);
             });
             document.getElementById("id_chair").addEventListener("change", () => {
-                setChair(document.getElementById("id_chair").value);
+                chairChanged(document.getElementById("id_chair").value);
             });
             document.getElementById("id_program").addEventListener("change", () => {
-                setProgram(document.getElementById("id_program").value);
+                programChanged(document.getElementById("id_program").value);
             });
             document.getElementById("id_type").options[0].textContent = "Любого типа";
         });
-
     </script>
 
 {% endblock %}

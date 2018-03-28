@@ -89,13 +89,21 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
         });
 }
 
-function setOption(elementId, value) {
+function setOption(elementId, newValue) {
     let element = document.getElementById(elementId);
-    if (element) element.value = value;
+    if (element && element.value.toString() !== newValue.toString()) {
+        element.value = newValue;
+        return true;
+    } else {
+        return false;
+    }
 }
 
-function setUniversity(university_id) {
-    setOption('id_university', university_id);
+/*
+ * Change hooks
+ */
+
+function universityChanged(university_id) {
     return loadOptions("id_department", "/api/departments/", university_id, "Выберите факультет")
         .then(() => {
             clearAndDisableList("id_chair", "Выберите кафедру");
@@ -105,8 +113,7 @@ function setUniversity(university_id) {
         });
 }
 
-function setDepartment(department_id) {
-    setOption('id_department', department_id);
+function departmentChanged(department_id) {
     return loadOptions('id_chair', '/api/chairs/', department_id, 'Выберите кафедру')
         .then(() => {
             clearAndDisableList("id_program", 'Выберите программу обучения');
@@ -115,8 +122,7 @@ function setDepartment(department_id) {
         });
 }
 
-function setChair(chair_id) {
-    setOption('id_chair', chair_id);
+function chairChanged(chair_id) {
     return loadOptions('id_program', '/api/programs/', chair_id, 'Выберите программу обучения')
         .then(() => {
             clearAndDisableList('id_subject', 'Выберите предмет');
@@ -124,7 +130,34 @@ function setChair(chair_id) {
         });
 }
 
-function setProgram(program_id) {
-    setOption('id_program', program_id);
+function programChanged(program_id) {
     return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите предмет');
+}
+
+/*
+ * Setters
+ */
+
+function setUniversity(university_id) {
+    if (setOption('id_university', university_id)) {
+        return universityChanged(university_id);
+    } else return Promise.resolve();
+}
+
+function setDepartment(department_id) {
+    if (setOption('id_department', department_id)) {
+        return departmentChanged(department_id);
+    } else return Promise.resolve();
+}
+
+function setChair(chair_id) {
+    if (setOption('id_chair', chair_id)) {
+        return chairChanged(chair_id);
+    } else return Promise.resolve();
+}
+
+function setProgram(program_id) {
+    if (setOption('id_program', program_id)) {
+        return programChanged(program_id);
+    } else return Promise.resolve();
 }

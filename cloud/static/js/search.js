@@ -41,10 +41,43 @@ function get_current_values() {
     };
 }
 
-function new_search_request(data) {
-    let url = '/api/posts?subject_id=' + data.subject_id;
-    if (data.type_id) url += '&type_id=' + (data.type_id ? data.type_id : '');
+function setType(id) {
+    setOption('id_type', id);
+    return Promise.resolve();
+}
 
+// FIXME: copied from post_edit
+function setSubject(id) {
+    setOption('id_subject', id);
+    return Promise.resolve();
+}
+
+window.addEventListener('popstate', event => {
+    let data = event.state;
+    if (!data) return;
+    Promise.resolve()
+        .then(() => setUniversity(data.university_id))
+        .then(() => setDepartment(data.department_id))
+        .then(() => setChair(data.chair_id))
+        .then(() => setProgram(data.program_id))
+        .then(() => setSubject(data.subject_id));
+    document.getElementById("id_type").value = data.type_id;
+    new_search_request(data);
+});
+
+function calculateSuffix(data) {
+    let components = [];
+    if (data.type_id) components.push(`type_id=${data.type_id ? data.type_id : ''}`);
+    if (data.subject_id) components.push(`subject_id=${data.subject_id}`);
+    return components.join('&');
+}
+
+function search(subject_id = undefined, type_id = undefined) {
+    let data = {
+        subject_id: subject_id,
+        type_id: type_id,
+    };
+    let url = `/api/posts?${calculateSuffix(data)}`;
     let request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.setRequestHeader('Content-Type', 'application/json');
@@ -75,12 +108,19 @@ function new_search_request(data) {
     request.send(data);
 }
 
-$("#id_type").change(function () {
-    new_search_request(get_current_values());
-});
+function new_search_request(data) {
+    search(data.subject_id, data.type_id);
+}
 
-$("#id_subject").change(function () {
-    new_search_request(get_current_values());
+[
+    document.getElementById('id_subject'),
+    document.getElementById('id_type'),
+].forEach(element => {
+    element.addEventListener('change', function () {
+        let data = get_current_values();
+        history.pushState(data, null, `/search/?${calculateSuffix(data)}`);
+        new_search_request(data);
+    });
 });
 
 function search_posts() {
