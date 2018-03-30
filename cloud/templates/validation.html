@@ -1,35 +1,13 @@
 {% extends 'cloud/post_list.html' %}
 
 {% block title %}
-    Cloud Валидация
+    Cloud Модерация
 {% endblock %}
 
-{% block edit %}
-
-    {% if user == post.author or user.is_staff or user.is_superuser %}
-        <div class="row" style="margin-top: 0; padding-top: 0">
-
-            <a href="{% url 'post_checked' pk=post.pk %}">
-                <div class="btn btn-success"><span style="font-size:13px;"
-                                                   class="showopacity glyphicon glyphicon-ok"></span> Checked
-                </div>
-            </a>
-
-            <a href="{% url 'post_delete' pk=post.pk %}">
-                <div class="btn btn-danger"><span style="font-size:13px;"
-                                                  class="showopacity glyphicon glyphicon-remove"></span> Delete
-                </div>
-            </a>
-
-            <a href="{% url 'post_edit' pk=post.pk %}">
-                <div class="btn btn-warning"><span style="font-size:13px;"
-                                                   class="showopacity glyphicon glyphicon-pencil"></span> Edit
-                </div>
-            </a>
-
-        </div>
-    {% endif %}
-
+{% block content %}
+    {% with editable=True %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
 
 {% block emptyloop %}

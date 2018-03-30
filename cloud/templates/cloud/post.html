@@ -1,5 +1,28 @@
 <article class="post">
     <div class="post-container">
+        {% if editable %}
+            {% if user == post.author or user.is_staff or user.is_superuser %}
+                <div>
+                    <a href="{% url 'post_checked' pk=post.pk %}">
+                        <div class="btn btn-success">
+                            <span class="showopacity glyphicon glyphicon-ok"></span>
+                            Одобрить
+                        </div>
+                    </a>
+                    <a href="{% url 'post_edit' pk=post.pk %}">
+                        <div class="btn btn-warning">
+                            <span class="showopacity glyphicon glyphicon-pencil"></span>
+                        </div>
+                    </a>
+                    <a href="{% url 'post_delete' pk=post.pk %}">
+                        <div class="btn btn-danger">
+                            <span class="showopacity glyphicon glyphicon-trash"></span>
+                        </div>
+                    </a>
+                </div>
+                <hr>
+            {% endif %}
+        {% endif %}
         <header>
             <h1>
                 <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
