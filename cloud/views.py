@@ -74,7 +74,7 @@ def post_list(request, display_posts=None):
     return render(request, 'cloud/post_list.html', {'posts': posts_page, 'empty_message': e_m})
 
 
-def validation(request):
+def moderation(request):
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
 
         posts = Post.objects.filter(validate_status=1).order_by('created_date')
@@ -87,7 +87,7 @@ def validation(request):
             posts_page = paginator.page(1)
         except EmptyPage:
             posts_page = paginator.page(paginator.num_pages)
-        return render(request, 'validation.html', {'posts': posts_page})
+        return render(request, 'moderation.html', {'posts': posts_page})
 
     else:
         return redirect("post_list")
@@ -180,7 +180,7 @@ def post_checked(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
         Post.objects.filter(pk=pk).update(validate_status=0)
-        return redirect("validation")
+        return redirect("moderation")
     else:
         return redirect("post_list")
 
