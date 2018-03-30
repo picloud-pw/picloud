@@ -2,19 +2,26 @@
     <div class="post-container">
         {% if editable %}
             {% if user == post.author or user.is_staff or user.is_superuser %}
-                <nav class="post-moderation">
-                    <a href="{% url 'post_checked' pk=post.pk %}" class="btn btn-success">
+                <nav class="post-moderation btn-group">
+                    <a href="{% url 'post_checked' pk=post.pk %}"
+                       class="btn btn-success">
                         <span class="showopacity glyphicon glyphicon-ok"></span>
                         Одобрить
                     </a>
-                    <a href="{% url 'post_edit' pk=post.pk %}" class="btn btn-warning">
+                    <a href="{% url 'post_edit' pk=post.pk %}"
+                       class="btn btn-warning"
+                       title="Редактировать"
+                       aria-label="Редактировать">
                         <span class="showopacity glyphicon glyphicon-pencil"></span>
                     </a>
-                    <a href="{% url 'post_delete' pk=post.pk %}" class="btn btn-danger">
+                    <a href="{% url 'post_delete' pk=post.pk %}"
+                       class="btn btn-danger"
+                       title="Удалить"
+                       aria-label="Удалить">
                         <span class="showopacity glyphicon glyphicon-trash"></span>
                     </a>
-                    <hr>
                 </nav>
+                <hr/>
             {% endif %}
         {% endif %}
         <header>

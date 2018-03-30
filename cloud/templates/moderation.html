@@ -1,7 +1,13 @@
 {% extends 'cloud/post_list.html' %}
+{% load static %}
 
 {% block title %}
     Cloud Модерация
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/moderation.css' %}">
 {% endblock %}
 
 {% block content %}
