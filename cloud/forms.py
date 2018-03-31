@@ -112,3 +112,10 @@ class ContactForm(forms.Form):
         required=True,
         widget=forms.Textarea(attrs={'style': 'width: 100%; height:150px; resize: none'})
     )
+
+
+class NewUniversityForm(forms.ModelForm):
+
+    class Meta:
+        model = University
+        fields = ('title', 'short_title', 'link', 'logo', )
