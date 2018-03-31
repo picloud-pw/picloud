@@ -377,8 +377,6 @@ def universities_list(request):
 
 def university_page(request, university_id):
     univer = get_object_or_404(University, pk=university_id)
-    # departments = Department.objects.filter(university_id=university_id)
-    # chairs = Chair.objects.filter(department__university__id=university_id)
     programs = Program.objects.filter(chair__department__university_id=university_id)
     chairs = Chair.objects.filter(program__in=programs).distinct()
     departments = Department.objects.filter(chair__in=chairs).distinct()

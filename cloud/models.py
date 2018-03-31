@@ -12,6 +12,7 @@ class University(models.Model):
     logo = models.ImageField(upload_to='resources/u_logo/',
                              default='resources/default/u_logo.png',
                              null=True, blank=True)
+    validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -29,6 +30,7 @@ class Department(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -46,6 +48,7 @@ class Chair(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.short_title
@@ -63,6 +66,7 @@ class Program(models.Model):
     title = models.CharField(max_length=256, null=False)
     code = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.title + " (" + self.chair.__str__() + ")"
@@ -84,6 +88,7 @@ class Lecturer(models.Model):
     image = models.ImageField(upload_to='resources/lec_avatars/',
                               default='resources/default/lec_avatar.png',
                               null=True, blank=True)
+    validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.surname + " " + self.name + " " + self.patronymic
@@ -95,6 +100,7 @@ class Subject(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
     semestr = models.PositiveSmallIntegerField(null=True, blank=True)
+    validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.short_title + " (" + self.semestr.__str__() + " семестр)"
