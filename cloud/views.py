@@ -661,8 +661,9 @@ def new_department(request):
                 university = new_university.save(commit=False)
                 university.validate_status = NOT_VALID
                 university.save()
-            new_university = NewUniversityForm()
-            return render(request, 'structure/new_department.html', {"new_university": new_university})
+                return message(request, "Данные успешно сохранены. В ближайшее время они будут проверены модераторами.")
+            else:
+                return message(request, "Одно из полей формы заполнено некорректно")
         else:
             new_university = NewUniversityForm()
             return render(request, 'structure/new_department.html', {"new_university": new_university})
