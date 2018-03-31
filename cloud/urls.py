@@ -12,7 +12,7 @@ urlpatterns = [
     path('auth/signout/', views.signout, name="signout"),
     path('activate/<uid>/<token>/', views.activate, name='activate'),
 
-    # auth встроенное приложение, сброс пароля, переопределяющие шаблоны в registration/*
+    # auth встроенное приложение, сброс пароля, переопределяющие шаблоны в registration
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -40,6 +40,7 @@ urlpatterns = [
     path('universities/<university_id>/', views.university_page, name='university_page'),
     path('program/<program_id>', views.program_page, name='program_page'),
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
+    path('new_department/', views.new_department, name='new_department'),
     path('contacts/', views.contacts, name='contacts'),
     path('memes/', views.get_memes, name='memes'),
 

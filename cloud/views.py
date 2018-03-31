@@ -640,3 +640,7 @@ def search_and_render_posts(request):
 
 def privacy_policy(request):
     return render(request, 'legal/privacy_policy.html')
+
+
+def new_department(request):
+    return render(request, 'structure/new_department.html')
