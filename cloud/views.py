@@ -21,6 +21,8 @@ from .tokens import account_activation_token
 
 # constants
 POSTS_PER_PAGE = 12
+VALID = 0
+NOT_VALID = 1
 
 
 # vk bot start
@@ -46,19 +48,19 @@ def post_list(request, display_posts=None):
         user_info = UserInfo.objects.get(user=request.user)
         if user_info.program is not None:
             user_program_id = user_info.program.pk
-            posts = Post.objects.filter(validate_status=0) \
+            posts = Post.objects.filter(validate_status=VALID) \
                 .filter(created_date__lte=timezone.now()) \
                 .filter(subject__programs__exact=user_program_id) \
                 .order_by('created_date').reverse()
         else:
-            posts = Post.objects.filter(validate_status=0) \
+            posts = Post.objects.filter(validate_status=VALID) \
                 .filter(created_date__lte=timezone.now()) \
                 .order_by('created_date').reverse()
         if display_posts is not None:
             posts = display_posts
             e_m = "Данный пользователь пока не поделился своими материалами."
     else:
-        posts = Post.objects.filter(validate_status=0) \
+        posts = Post.objects.filter(validate_status=VALID) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date').reverse()
 
@@ -77,7 +79,7 @@ def post_list(request, display_posts=None):
 def moderation(request):
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
 
-        posts = Post.objects.filter(validate_status=1).order_by('created_date')
+        posts = Post.objects.filter(validate_status=NOT_VALID).order_by('created_date')
 
         page = request.GET.get('page', 1)
         paginator = Paginator(posts, POSTS_PER_PAGE)
@@ -104,9 +106,9 @@ def post_detail(request, pk, msg=""):
 def get_validate_status(user):
     user_status = UserInfo.objects.get(user=user).status
     if user_status.status_level > 7 or user.is_superuser or user.is_staff:
-        return 0
+        return VALID
     else:
-        return 1
+        return NOT_VALID
 
 
 def post_new(request):
@@ -121,7 +123,7 @@ def post_new(request):
                 post.validate_status = v_s
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
-                if v_s == 0:
+                if v_s == VALID:
                     return redirect('post_detail', pk=post.pk)
                 else:
                     msg = "Спасибо за ваш вклад! Мы уже уведомлены о вашем посте, он будет проверен в ближайшее время."
@@ -150,7 +152,7 @@ def post_edit(request, pk):
                 post.published_date = timezone.now()
                 post.validate_status = v_s
                 post.save()
-                if v_s == 0:
+                if v_s == VALID:
                     return redirect('post_detail', pk=post.pk)
                 else:
                     msg = "Благодарим за правки! В ближайшее время мы проверим и опубликуем их."
@@ -179,7 +181,7 @@ def post_delete(request, pk):
 def post_checked(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
-        Post.objects.filter(pk=pk).update(validate_status=0)
+        Post.objects.filter(pk=pk).update(validate_status=VALID)
         return redirect("moderation")
     else:
         return redirect("post_list")
@@ -416,7 +418,7 @@ def program_page(request, program_id):
 
 def subject_page(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
-    posts = Post.objects.filter(subject=subject).filter(validate_status=0)
+    posts = Post.objects.filter(subject=subject).filter(validate_status=VALID)
     post_types = set()
     for post in posts:
         post_types.add(post.type)
@@ -467,7 +469,7 @@ def user_posts(request, user_id):
         fr_user = User.objects.get(pk=user_id)
         fr_user_posts = Post.objects \
             .filter(author=fr_user) \
-            .filter(validate_status=0) \
+            .filter(validate_status=VALID) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
@@ -481,7 +483,7 @@ def user_not_checked_posts(request, user_id):
         user = User.objects.get(pk=user_id)
         not_validate_posts = Post.objects \
             .filter(author=user) \
-            .filter(validate_status=1) \
+            .filter(validate_status=NOT_VALID) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
@@ -566,7 +568,7 @@ def change_user(request):
 
 
 def get_universities(request):
-    dictionaries = [obj.as_dict() for obj in University.objects.all()]
+    dictionaries = [obj.as_dict() for obj in University.objects.filter(validate_status=VALID)]
     return JsonResponse(dictionaries, safe=False)
 
 
@@ -598,7 +600,7 @@ def get_posts(request):
     program_id = request.GET.get('program_id', None)
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
-    posts = Post.objects.filter(validate_status=0)
+    posts = Post.objects.filter(validate_status=VALID)
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
@@ -610,7 +612,7 @@ def get_posts(request):
 
 def search_posts(request):
     words = request.GET.get('search_request', None).lover().split(" ")
-    posts = Post.objects.filter(validate_status=0)
+    posts = Post.objects.filter(validate_status=VALID)
     posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)
@@ -619,7 +621,7 @@ def search_posts(request):
 def search_and_render_posts(request):
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
-    posts = Post.objects.filter(validate_status=0)
+    posts = Post.objects.filter(validate_status=VALID)
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
@@ -643,4 +645,17 @@ def privacy_policy(request):
 
 
 def new_department(request):
-    return render(request, 'structure/new_department.html')
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            new_university = NewUniversityForm(request.POST)
+            if new_university.is_valid():
+                university = new_university.save(commit=False)
+                university.validate_status = NOT_VALID
+                university.save()
+            new_university = NewUniversityForm()
+            return render(request, 'structure/new_department.html', {"new_university": new_university})
+        else:
+            new_university = NewUniversityForm()
+            return render(request, 'structure/new_department.html', {"new_university": new_university})
+    else:
+        return redirect("signin")
