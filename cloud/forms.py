@@ -119,3 +119,31 @@ class NewUniversityForm(forms.ModelForm):
     class Meta:
         model = University
         fields = ('title', 'short_title', 'link', 'logo', )
+
+
+class NewDepartmentForm(forms.ModelForm):
+
+    class Meta:
+        model = Department
+        fields = ('university', 'title', 'short_title', 'link', )
+
+
+class NewChairForm(forms.ModelForm):
+
+    class Meta:
+        model = Chair
+        fields = ('department', 'title', 'short_title', 'link', )
+
+
+class NewProgramForm(forms.ModelForm):
+
+    class Meta:
+        model = Program
+        fields = ('chair', 'title', 'code', 'link', )
+
+
+class NewSubjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Subject
+        fields = ('programs', 'title', 'short_title', 'semestr', )
