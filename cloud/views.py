@@ -653,19 +653,68 @@ def privacy_policy(request):
     return render(request, 'legal/privacy_policy.html')
 
 
-def new_department(request):
+# за одну отправку формы можно добавить только одну структуру
+def new_structure(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            new_university = NewUniversityForm(request.POST)
-            if new_university.is_valid():
-                university = new_university.save(commit=False)
-                university.validate_status = NOT_VALID
-                university.save()
-                return message(request, "Данные успешно сохранены. В ближайшее время они будут проверены модераторами.")
-            else:
-                return message(request, "Одно из полей формы заполнено некорректно")
+            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
+
+            if request.POST["structure"] == "university":
+                new_university = NewUniversityForm(request.POST)
+                if new_university.is_valid():
+                    university = new_university.save(commit=False)
+                    university.validate_status = NOT_VALID
+                    university.save()
+                    return message(request, success_msg)
+                else:
+                    return message(request, 'Одно из полей формы "Университет" заполнено некорректно')
+
+            if request.POST["structure"] == "department":
+                new_department = NewDepartmentForm(request.POST)
+                if new_department.is_valid():
+                    department = new_department.save(commit=False)
+                    department.validate_status = NOT_VALID
+                    department.save()
+                    return message(request, success_msg)
+                else:
+                    return message(request, 'Одно из полей формы "Факультет" заполнено некорректно')
+
+            if request.POST["structure"] == "chair":
+                new_chair = NewChairForm(request.POST)
+                if new_chair.is_valid():
+                    chair = new_chair.save(commit=False)
+                    chair.validate_status = NOT_VALID
+                    chair.save()
+                    return message(request, success_msg)
+                else:
+                    return message(request, 'Одно из полей формы "Кафедра" заполнено некорректно')
+
+            if request.POST["structure"] == "program":
+                new_program = NewProgramForm(request.POST)
+                if new_program.is_valid():
+                    program = new_program.save(commit=False)
+                    program.validate_status = NOT_VALID
+                    program.save()
+                    return message(request, success_msg)
+                else:
+                    return message(request, 'Одно из полей формы "Программа" заполнено некорректно')
+
+            if request.POST["structure"] == "subject":
+                new_subject = NewSubjectForm(request.POST)
+                if new_subject.is_valid():
+                    subject = new_subject.save(commit=False)
+                    subject.validate_status = NOT_VALID
+                    subject.save()
+                    return message(request, success_msg)
+                else:
+                    return message(request, 'Одно из полей формы "Предмет" заполнено некорректно')
+
         else:
             new_university = NewUniversityForm()
-            return render(request, 'structure/new_department.html', {"new_university": new_university})
+            new_department = NewDepartmentForm()
+            new_chair = NewChairForm()
+            new_program = NewProgramForm()
+            new_subject = NewSubjectForm()
+            return render(request, 'structure/new_structure.html', locals())
     else:
         return redirect("signin")

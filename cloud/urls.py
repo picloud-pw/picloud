@@ -40,7 +40,7 @@ urlpatterns = [
     path('universities/<university_id>/', views.university_page, name='university_page'),
     path('program/<program_id>', views.program_page, name='program_page'),
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
-    path('new_department/', views.new_department, name='new_department'),
+    path('new_department/', views.new_structure, name='new_structure'),
     path('contacts/', views.contacts, name='contacts'),
     path('memes/', views.get_memes, name='memes'),
 
