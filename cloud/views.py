@@ -373,15 +373,15 @@ def search(request):
 
 
 def universities_list(request):
-    univer_list = University.objects.all()
+    univer_list = University.objects.filter(validate_status=VALID)
     return render(request, 'structure/universities.html', {"univer_list": univer_list})
 
 
 def university_page(request, university_id):
     univer = get_object_or_404(University, pk=university_id)
-    programs = Program.objects.filter(chair__department__university_id=university_id)
-    chairs = Chair.objects.filter(program__in=programs).distinct()
-    departments = Department.objects.filter(chair__in=chairs).distinct()
+    programs = Program.objects.filter(chair__department__university_id=university_id).filter(validate_status=VALID)
+    chairs = Chair.objects.filter(program__in=programs).distinct().filter(validate_status=VALID)
+    departments = Department.objects.filter(chair__in=chairs).distinct().filter(validate_status=VALID)
 
     posts_queryset = Post.objects.filter(subject__programs__in=programs).distinct()
     posts = posts_queryset.count()
@@ -405,7 +405,7 @@ def university_page(request, university_id):
 
 def program_page(request, program_id):
     program = get_object_or_404(Program, pk=program_id)
-    subjects = Subject.objects.filter(programs=program)
+    subjects = Subject.objects.filter(programs=program).filter(validate_status=VALID)
     semesters = set()
     for sub in subjects:
         semesters.add(sub.semestr)
