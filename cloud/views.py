@@ -89,7 +89,21 @@ def moderation(request):
             posts_page = paginator.page(1)
         except EmptyPage:
             posts_page = paginator.page(paginator.num_pages)
-        return render(request, 'moderation.html', {'posts': posts_page})
+
+        universities = University.objects.filter(validate_status=NOT_VALID)
+        departments = Department.objects.filter(validate_status=NOT_VALID)
+        chairs = Chair.objects.filter(validate_status=NOT_VALID)
+        programs = Program.objects.filter(validate_status=NOT_VALID)
+        subjects = Subject.objects.filter(validate_status=NOT_VALID)
+
+        return render(request, 'moderation.html', {
+            'posts': posts_page,
+            'universities': universities,
+            'departments': departments,
+            'chair': chairs,
+            'programs': programs,
+            'subjects': subjects,
+        })
 
     else:
         return redirect("post_list")

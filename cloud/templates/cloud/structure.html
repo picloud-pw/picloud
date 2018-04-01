@@ -1,0 +1,74 @@
+<div class="col-xs-12 col-sm-3 col-md-4 col-lg-4">
+    <div class="post-panel">
+
+
+        {% if structure.logo %}
+            <img class="univer-logo" src="{{ structure.logo.url }}" alt="logo">
+        {% endif %}
+
+        <table class="table table-striped">
+
+            {% if structure.university %}
+                <tr>
+                    <td><b>Университет</b></td>
+                    <td>{{ structure.university.short_title }}</td>
+                </tr>
+            {% endif %}
+
+            {% if structure.chair %}
+                <tr>
+                    <td><b>Кафедра</b></td>
+                    <td>{{ structure.chair.short_title }}</td>
+                </tr>
+            {% endif %}
+
+            {% if structure.program %}
+                <tr>
+                    <td><b>Программа</b></td>
+                    <td>{{ structure.program.title }}</td>
+                </tr>
+            {% endif %}
+
+            {% if structure.subject %}
+                <tr>
+                    <td><b>Предмет</b></td>
+                    <td>{{ structure.subject.short_title }}</td>
+                </tr>
+            {% endif %}
+
+            {% if structure.title %}
+                <tr>
+                    <td><b>Название</b></td>
+                    <td>{{ structure.title }}</td>
+                </tr>
+            {% endif %}
+            {% if structure.short_title %}
+                <tr>
+                    <td><b>Аббривиатура</b></td>
+                    <td>{{ structure.short_title }}</td>
+                </tr>
+            {% endif %}
+            {% if structure.link %}
+                <tr>
+                    <td><b>Ссылка</b></td>
+                    <td>{{ structure.link }}</td>
+                </tr>
+            {% endif %}
+            {% if structure.code %}
+                <tr>
+                    <td><b>Код программы</b></td>
+                    <td>{{ structure.code }}</td>
+                </tr>
+            {% endif %}
+            {% if structure.semestr %}
+                <tr>
+                    <td><b>Семестр</b></td>
+                    <td>{{ structure.semestr }}</td>
+                </tr>
+            {% endif %}
+
+        </table>
+
+
+    </div>
+</div>

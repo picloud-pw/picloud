@@ -24,6 +24,8 @@
         </a>
     </div>
 
+    {% block structure_moderation %}{% endblock %}
+
     {% if posts %}
         <main class="post-list">
             {% for post in posts %}
