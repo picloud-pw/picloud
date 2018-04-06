@@ -1,0 +1,40 @@
+{% extends 'structure/new/new_structure_template.html' %}
+
+{% block title %}
+    Новый университет | PiCloud
+{% endblock %}
+
+{% block structure_form %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="structure" value="university">
+
+            <div class="form-group django-control">
+                <label class="col-form-label">Полное название</label>
+                {{ new_university.title }}
+            </div>
+
+            <div class="form-group django-control">
+                <label class="col-form-label">Аббревиатура</label>
+                {{ new_university.short_title }}
+            </div>
+
+            <div class="form-group django-control">
+                <label class="col-form-label">Официальный сайт</label>
+                {{ new_university.link }}
+            </div>
+
+            <div class="form-group django-control">
+                <label class="col-form-label">Логотип</label>
+                {{ new_university.logo }}
+            </div>
+
+            <hr>
+            <button type="submit" class="btn btn-default" style="width: 100%">Отправить на
+                модерацию
+            </button>
+        </form>
+
+
+{% endblock %}

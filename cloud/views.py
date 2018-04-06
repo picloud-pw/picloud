@@ -667,68 +667,106 @@ def privacy_policy(request):
     return render(request, 'legal/privacy_policy.html')
 
 
-# за одну отправку формы можно добавить только одну структуру
-def new_structure(request):
+def new_university(request):
     if request.user.is_authenticated:
+
         if request.method == "POST":
             success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
 
-            if request.POST["structure"] == "university":
-                new_university = NewUniversityForm(request.POST)
-                if new_university.is_valid():
-                    university = new_university.save(commit=False)
-                    university.validate_status = NOT_VALID
-                    university.save()
-                    return message(request, success_msg)
-                else:
-                    return message(request, 'Одно из полей формы "Университет" заполнено некорректно')
-
-            if request.POST["structure"] == "department":
-                new_department = NewDepartmentForm(request.POST)
-                if new_department.is_valid():
-                    department = new_department.save(commit=False)
-                    department.validate_status = NOT_VALID
-                    department.save()
-                    return message(request, success_msg)
-                else:
-                    return message(request, 'Одно из полей формы "Факультет" заполнено некорректно')
-
-            if request.POST["structure"] == "chair":
-                new_chair = NewChairForm(request.POST)
-                if new_chair.is_valid():
-                    chair = new_chair.save(commit=False)
-                    chair.validate_status = NOT_VALID
-                    chair.save()
-                    return message(request, success_msg)
-                else:
-                    return message(request, 'Одно из полей формы "Кафедра" заполнено некорректно')
-
-            if request.POST["structure"] == "program":
-                new_program = NewProgramForm(request.POST)
-                if new_program.is_valid():
-                    program = new_program.save(commit=False)
-                    program.validate_status = NOT_VALID
-                    program.save()
-                    return message(request, success_msg)
-                else:
-                    return message(request, 'Одно из полей формы "Программа" заполнено некорректно')
-
-            if request.POST["structure"] == "subject":
-                new_subject = NewSubjectForm(request.POST)
-                if new_subject.is_valid():
-                    subject = new_subject.save(commit=False)
-                    subject.validate_status = NOT_VALID
-                    subject.save()
-                    return message(request, success_msg)
-                else:
-                    return message(request, 'Одно из полей формы "Предмет" заполнено некорректно')
-
+            new_university = NewUniversityForm(request.POST)
+            if new_university.is_valid():
+                university = new_university.save(commit=False)
+                university.validate_status = NOT_VALID
+                university.save()
+                return message(request, success_msg)
+            else:
+                return message(request, 'Одно из полей формы "Университет" заполнено некорректно')
         else:
             new_university = NewUniversityForm()
+            return render(request, 'structure/new/university.html', {'new_university': new_university})
+    else:
+        return redirect("signin")
+
+
+def new_department(request):
+    if request.user.is_authenticated:
+
+        if request.method == "POST":
+            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
+
+            new_department = NewDepartmentForm(request.POST)
+            if new_department.is_valid():
+                department = new_department.save(commit=False)
+                department.validate_status = NOT_VALID
+                department.save()
+                return message(request, success_msg)
+            else:
+                return message(request, 'Одно из полей формы "Факультет" заполнено некорректно')
+        else:
             new_department = NewDepartmentForm()
+            return render(request, 'structure/new/department.html', {'new_department': new_department})
+    else:
+        return redirect("signin")
+
+
+def new_chair(request):
+    if request.user.is_authenticated:
+
+        if request.method == "POST":
+            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
+
+            new_chair = NewChairForm(request.POST)
+            if new_chair.is_valid():
+                chair = new_chair.save(commit=False)
+                chair.validate_status = NOT_VALID
+                chair.save()
+                return message(request, success_msg)
+            else:
+                return message(request, 'Одно из полей формы "Кафедра" заполнено некорректно')
+        else:
             new_chair = NewChairForm()
+            return render(request, 'structure/new/chair.html', {'new_chair': new_chair})
+    else:
+        return redirect("signin")
+
+
+def new_program(request):
+    if request.user.is_authenticated:
+
+        if request.method == "POST":
+            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
+
+            new_program = NewProgramForm(request.POST)
+            if new_program.is_valid():
+                program = new_program.save(commit=False)
+                program.validate_status = NOT_VALID
+                program.save()
+                return message(request, success_msg)
+            else:
+                return message(request, 'Одно из полей формы "Программа" заполнено некорректно')
+        else:
             new_program = NewProgramForm()
+            return render(request, 'structure/new/program.html', {'new_program': new_program})
+    else:
+        return redirect("signin")
+
+
+def new_subject(request):
+    if request.user.is_authenticated:
+
+        if request.method == "POST":
+            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
+
+            new_subject = NewSubjectForm(request.POST)
+            if new_subject.is_valid():
+                subject = new_subject.save(commit=False)
+                subject.validate_status = NOT_VALID
+                subject.save()
+                return message(request, success_msg)
+            else:
+                return message(request, 'Одно из полей формы "Предмет" заполнено некорректно')
+        else:
             new_subject = NewSubjectForm()
-            return render(request, 'structure/new_structure.html', locals())
+            return render(request, 'structure/new/subject.html', {'new_subject': new_subject})
     else:
         return redirect("signin")
