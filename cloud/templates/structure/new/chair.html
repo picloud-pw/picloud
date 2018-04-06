@@ -1,0 +1,38 @@
+{% extends 'structure/new/new_structure_template.html' %}
+
+{% block title %}
+    Новая кафедра | PiCloud
+{% endblock %}
+
+{% block structure_form %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="structure" value="chair">
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Факультет</label>
+            {{ new_chair.department }}
+        </div>
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Полное название</label>
+            {{ new_chair.title }}
+        </div>
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Аббревиатура</label>
+            {{ new_chair.short_title }}
+        </div>
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Страница кафедры</label>
+            {{ new_chair.link }}
+        </div>
+
+        <hr>
+        <button type="submit" class="btn btn-default" style="width: 100%">Отправить на модерацию
+        </button>
+    </form>
+
+{% endblock %}

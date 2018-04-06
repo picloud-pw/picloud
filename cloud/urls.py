@@ -40,9 +40,14 @@ urlpatterns = [
     path('universities/<university_id>/', views.university_page, name='university_page'),
     path('program/<program_id>', views.program_page, name='program_page'),
     path('subject/<subject_id>', views.subject_page, name='subject_page'),
-    path('new_department/', views.new_structure, name='new_structure'),
     path('contacts/', views.contacts, name='contacts'),
     path('memes/', views.get_memes, name='memes'),
+
+    path('new_university/', views.new_university, name='new_university'),
+    path('new_department/', views.new_department, name='new_department'),
+    path('new_chair/', views.new_chair, name='new_chair'),
+    path('new_program/', views.new_program, name='new_program'),
+    path('new_subject/', views.new_subject, name='new_subject'),
 
     path('legal/privacy-policy/', views.privacy_policy, name='privacy_policy'),
 
