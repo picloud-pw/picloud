@@ -151,7 +151,7 @@ def post_new(request):
             user_info = get_object_or_404(UserInfo, user=request.user)
             return render(request, 'cloud/post_edit.html', {'form': form, 'user_info': user_info})
     else:
-        return redirect("post_list")
+        return redirect("signin")
 
 
 def post_edit(request, pk):
