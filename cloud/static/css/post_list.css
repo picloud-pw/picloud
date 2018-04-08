@@ -24,6 +24,7 @@ body {
 }
 
 .post-list article .post-container .text {
+    font-family: 'Alegreya', serif;
     text-align: left;
 }
 
