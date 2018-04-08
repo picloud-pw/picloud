@@ -25,23 +25,23 @@ body {
 
 .post-list article .post-container .text {
     font-family: 'Roboto', sans-serif;
-    font-size: 16px; /* FIXME: Use relative units once possible */
+    font-size: 15px; /* FIXME: Use relative units once possible */
     text-align: left;
 }
 
 article .post-container .text h1 {
     font-family: 'Alegreya', serif;
-    font-size: 1.6em;
+    font-size: 1.7em;
 }
 
 article .post-container .text h2 {
     font-family: 'Alegreya', serif;
-    font-size: 1.4em;
+    font-size: 1.5em;
 }
 
 article .post-container .text h3 {
     font-family: 'Alegreya', serif;
-    font-size: 1.25em;
+    font-size: 1.3em;
 }
 
 article .post-container .text h4 {
