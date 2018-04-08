@@ -16,6 +16,8 @@
 
 {% block content %}
 
+    {% block navigation %}{% endblock %}
+
     <div id="modal">
         <span class="close">&times;</span>
         <img class="modal-content" id="modalImg" src="#">
@@ -23,8 +25,6 @@
             Открыть оригинал в новой вкладке
         </a>
     </div>
-
-    {% block structure_moderation %}{% endblock %}
 
     {% if posts %}
         <main class="post-list">

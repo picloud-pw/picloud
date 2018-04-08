@@ -229,7 +229,7 @@ textarea {
 
 .structure-panel {
     padding: 10px;
-    max-width: 800px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -238,3 +238,9 @@ textarea {
     text-decoration: none;
 }
 
+.moderation-container{
+    padding: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
