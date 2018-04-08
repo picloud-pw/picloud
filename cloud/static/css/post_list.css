@@ -24,7 +24,7 @@ body {
 }
 
 .post-list article .post-container .text {
-    font-family: 'Alegreya Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px; /* FIXME: Use relative units once possible */
     text-align: left;
 }
