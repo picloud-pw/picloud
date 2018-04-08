@@ -668,92 +668,75 @@ def privacy_policy(request):
 
 
 def new_university(request):
-    if request.user.is_authenticated:
+    if request.method == "POST":
+        success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
 
-        if request.method == "POST":
-            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
-
-            new_university = NewUniversityForm(request.POST)
-            if new_university.is_valid():
-                university = new_university.save(commit=False)
-                university.validate_status = NOT_VALID
-                university.save()
-                return message(request, success_msg)
-            else:
-                return message(request, 'Одно из полей формы "Университет" заполнено некорректно')
+        new_university = NewUniversityForm(request.POST)
+        if new_university.is_valid():
+            university = new_university.save(commit=False)
+            university.validate_status = NOT_VALID
+            university.save()
+            return message(request, success_msg)
         else:
-            new_university = NewUniversityForm()
-            return render(request, 'structure/new/university.html', {'new_university': new_university})
+            return message(request, 'Одно из полей формы "Университет" заполнено некорректно')
     else:
-        return redirect("signin")
+        new_university = NewUniversityForm()
+        return render(request, 'structure/new/university.html', {'new_university': new_university})
 
 
 def new_department(request):
-    if request.user.is_authenticated:
+    if request.method == "POST":
+        success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
 
-        if request.method == "POST":
-            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
-
-            new_department = NewDepartmentForm(request.POST)
-            if new_department.is_valid():
-                department = new_department.save(commit=False)
-                department.validate_status = NOT_VALID
-                department.save()
-                return message(request, success_msg)
-            else:
-                return message(request, 'Одно из полей формы "Факультет" заполнено некорректно')
+        new_department = NewDepartmentForm(request.POST)
+        if new_department.is_valid():
+            department = new_department.save(commit=False)
+            department.validate_status = NOT_VALID
+            department.save()
+            return message(request, success_msg)
         else:
-            new_department = NewDepartmentForm()
-            return render(request, 'structure/new/department.html', {'new_department': new_department})
+            return message(request, 'Одно из полей формы "Факультет" заполнено некорректно')
     else:
-        return redirect("signin")
+        new_department = NewDepartmentForm()
+        return render(request, 'structure/new/department.html', {'new_department': new_department})
 
 
 def new_chair(request):
-    if request.user.is_authenticated:
+    if request.method == "POST":
+        success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
 
-        if request.method == "POST":
-            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
-
-            new_chair = NewChairForm(request.POST)
-            if new_chair.is_valid():
-                chair = new_chair.save(commit=False)
-                chair.validate_status = NOT_VALID
-                chair.save()
-                return message(request, success_msg)
-            else:
-                return message(request, 'Одно из полей формы "Кафедра" заполнено некорректно')
+        new_chair = NewChairForm(request.POST)
+        if new_chair.is_valid():
+            chair = new_chair.save(commit=False)
+            chair.validate_status = NOT_VALID
+            chair.save()
+            return message(request, success_msg)
         else:
-            new_chair = NewChairForm()
-            return render(request, 'structure/new/chair.html', {'new_chair': new_chair})
+            return message(request, 'Одно из полей формы "Кафедра" заполнено некорректно')
     else:
-        return redirect("signin")
+        new_chair = NewChairForm()
+        return render(request, 'structure/new/chair.html', {'new_chair': new_chair})
 
 
 def new_program(request):
-    if request.user.is_authenticated:
+    if request.method == "POST":
+        success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
 
-        if request.method == "POST":
-            success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
-
-            new_program = NewProgramForm(request.POST)
-            if new_program.is_valid():
-                program = new_program.save(commit=False)
-                program.validate_status = NOT_VALID
-                program.save()
-                return message(request, success_msg)
-            else:
-                return message(request, 'Одно из полей формы "Программа" заполнено некорректно')
+        new_program = NewProgramForm(request.POST)
+        if new_program.is_valid():
+            program = new_program.save(commit=False)
+            program.validate_status = NOT_VALID
+            program.save()
+            return message(request, success_msg)
         else:
-            new_program = NewProgramForm()
-            return render(request, 'structure/new/program.html', {'new_program': new_program})
+            return message(request, 'Одно из полей формы "Программа" заполнено некорректно')
     else:
-        return redirect("signin")
+        new_program = NewProgramForm()
+        return render(request, 'structure/new/program.html', {'new_program': new_program})
 
 
 def new_subject(request):
     if request.user.is_authenticated:
-
         if request.method == "POST":
             success_msg = "Данные успешно сохранены. В ближайшее время они будут проверены модераторами."
 

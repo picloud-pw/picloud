@@ -115,27 +115,56 @@
 
                     <div class="form-group django-control">
                         <label class="col-form-label">Университет</label>
-                        <select name="university" id="id_university"></select>
+                        <div class="input-group">
+                            <select name="university" id="id_university" class="form-control"></select>
+                            <div class="input-group-btn">
+                                <a href="{% url 'new_university' %}" class="btn btn-primary ">
+                                    <span class="showopacity glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="form-group django-control">
                         <label class="col-form-label">Факультет</label>
-                        <select name="department" id="id_department"></select>
+                        <div class="input-group">
+                            <select name="department" id="id_department"></select>
+                            <div class="input-group-btn">
+                                <a href="{% url 'new_department' %}" class="btn btn-primary ">
+                                    <span class="showopacity glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group django-control">
                         <label class="col-form-label">Кафедра</label>
-                        <select name="chair" id="id_chair"></select>
+                        <div class="input-group">
+                            <select name="chair" id="id_chair"></select>
+                            <div class="input-group-btn">
+                                <a href="{% url 'new_chair' %}" class="btn btn-primary ">
+                                    <span class="showopacity glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group django-control">
                         <label class="col-form-label">Программа обучения</label>
-                        {{ user_info_form.program }}
+                        <div class="input-group">
+                            {{ user_info_form.program }}
+                            <div class="input-group-btn">
+                                <a href="{% url 'new_program' %}" class="btn btn-primary ">
+                                    <span class="showopacity glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group django-control">
                         <label class="col-form-label">Курс обучения</label>
-                        {{ user_info_form.course }}
+                            {{ user_info_form.course }}
                     </div>
                 </div>
 
