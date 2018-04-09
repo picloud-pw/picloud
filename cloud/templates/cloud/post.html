@@ -1,5 +1,5 @@
 <article class="post">
-    <div class="post-container">
+    <div class="post-container" id="post-{{ post.pk }}">
         {% if editable %}
             {% if user == post.author or user.is_staff or user.is_superuser %}
                 <nav class="post-moderation btn-group">
@@ -75,5 +75,14 @@
                 {{ post.views }}
             </span>
         </footer>
+        <script>
+            document
+                .querySelector('#post-{{ post.pk }} .post-footer-button-delete')
+                .addEventListener('click', (e) => {
+                    if (!confirm("Удалить пост?")) {
+                        e.preventDefault();
+                    }
+                });
+        </script>
     </div>
 </article>
