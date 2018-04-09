@@ -8,7 +8,7 @@ POSTS_PER_PAGE = 12
 
 
 def can_user_publish_instantly(user):
-    user_status = UserInfo.objects.get(user=user).status
+    user_status = user.userinfo.status
     if user_status.can_publish_without_moderation or user.is_superuser or user.is_staff:
         return True
     else:
@@ -18,7 +18,7 @@ def can_user_publish_instantly(user):
 def post_list(request, display_posts=None):
     e_m = ""
     if request.user.is_authenticated:
-        user_info = UserInfo.objects.get(user=request.user)
+        user_info = request.user.userinfo
         if user_info.program is not None:
             user_program_id = user_info.program.pk
             posts = Post.objects.filter(approved=True) \

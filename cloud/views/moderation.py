@@ -8,7 +8,7 @@ from . import NOT_VALID
 
 def moderation(request):
     if request.user.is_authenticated and (
-            request.user.status.can_moderate or
+            request.user.userinfo.status.can_moderate or
             request.user.is_staff or
             request.user.is_superuser):
 

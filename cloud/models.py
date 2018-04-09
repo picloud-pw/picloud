@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib import auth
 
 import bleach
 import markdown
@@ -220,6 +221,6 @@ class Post(models.Model):
 
     def can_be_edited_by(self, user):
         return self.author == user or \
-               user.status.can_moderate or \
+               user.userinfo.status.can_moderate or \
                user.is_staff() or \
                user.is_superuser()

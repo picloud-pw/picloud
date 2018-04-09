@@ -127,7 +127,7 @@
                     </a>
                 </li>
 
-                {% if user.status.can_moderate or user.is_superuser or user.is_staff %}
+                {% if user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
                     <li style="background-color: #F4FF81">
                         <a href="{% url 'moderation' %}">
                             Модерация
