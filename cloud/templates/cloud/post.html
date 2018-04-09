@@ -80,7 +80,7 @@
             document
                 .querySelector('#post-{{ post.pk }} .post-footer-button-delete')
                 .addEventListener('click', (e) => {
-                    if (!confirm("Удалить пост?")) {
+                    if (!confirm("Удалить пост? После этого действия пост будет невозможно восстановить.")) {
                         e.preventDefault();
                     }
                 });
