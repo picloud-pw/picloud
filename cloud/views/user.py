@@ -73,7 +73,7 @@ def change_avatar(request):
                                 instance=UserInfo.objects.get(user=request.user))
         if form.is_valid():
             form.save()
-            request.session['user_ava_url'] = UserInfo.objects.get(user=request.user).avatar.url
+            request.session['user_avatar_url'] = UserInfo.objects.get(user=request.user).avatar.url
             return settings_page(request, msg="Аватар успешно изменен.")
         else:
             return settings_page(request, error="При изменении аватара произошла ошибка.")

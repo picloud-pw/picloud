@@ -92,7 +92,7 @@ def activate(request, uid, token):
         user.save()
         login(request, user)
 
-        request.session['user_ava_url'] = UserInfo.objects.get(user=user).avatar.url
+        request.session['user_avatar_url'] = UserInfo.objects.get(user=user).avatar.url
         program = UserInfo.objects.get(user=user).program
         if program is not None:
             request.session['program_id'] = program.pk
