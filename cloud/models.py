@@ -177,7 +177,7 @@ class Post(models.Model):
     def html(self):
         import bleach
         import markdown
-        dangerous_html = markdown.markdown(self.text)
+        dangerous_html = markdown.markdown(self.text, extensions=['markdown.extensions.fenced_code'])
         safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
         html_with_hyperlinks = bleach.linkify(safe_html)
         return html_with_hyperlinks
