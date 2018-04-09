@@ -76,6 +76,7 @@
             </span>
         </footer>
         <script>
+            {# TODO: Не генерировать этот код на каждом посте #}
             document
                 .querySelector('#post-{{ post.pk }} .post-footer-button-delete')
                 .addEventListener('click', (e) => {
