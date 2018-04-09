@@ -48,19 +48,19 @@ def post_list(request, display_posts=None):
         user_info = UserInfo.objects.get(user=request.user)
         if user_info.program is not None:
             user_program_id = user_info.program.pk
-            posts = Post.objects.filter(validate_status=VALID) \
+            posts = Post.objects.filter(approved=True) \
                 .filter(created_date__lte=timezone.now()) \
                 .filter(subject__programs__exact=user_program_id) \
                 .order_by('created_date').reverse()
         else:
-            posts = Post.objects.filter(validate_status=VALID) \
+            posts = Post.objects.filter(approved=True) \
                 .filter(created_date__lte=timezone.now()) \
                 .order_by('created_date').reverse()
         if display_posts is not None:
             posts = display_posts
             e_m = "Данный пользователь пока не поделился своими материалами."
     else:
-        posts = Post.objects.filter(validate_status=VALID) \
+        posts = Post.objects.filter(approved=True) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date').reverse()
 
@@ -79,7 +79,9 @@ def post_list(request, display_posts=None):
 def moderation(request):
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
 
-        posts = Post.objects.filter(validate_status=NOT_VALID).order_by('created_date')
+        posts = Post.objects \
+            .filter(approved=False) \
+            .order_by('created_date')
 
         page = request.GET.get('page', 1)
         paginator = Paginator(posts, POSTS_PER_PAGE)
@@ -195,7 +197,7 @@ def post_delete(request, pk):
 def post_checked(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
-        Post.objects.filter(pk=pk).update(validate_status=VALID)
+        Post.objects.filter(pk=pk).update(approved=True)
         return redirect("moderation")
     else:
         return redirect("post_list")
@@ -432,7 +434,7 @@ def program_page(request, program_id):
 
 def subject_page(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
-    posts = Post.objects.filter(subject=subject).filter(validate_status=VALID)
+    posts = Post.objects.filter(subject=subject).filter(approved=True)
     post_types = set()
     for post in posts:
         post_types.add(post.type)
@@ -483,7 +485,7 @@ def user_posts(request, user_id):
         fr_user = User.objects.get(pk=user_id)
         fr_user_posts = Post.objects \
             .filter(author=fr_user) \
-            .filter(validate_status=VALID) \
+            .filter(approved=True) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
@@ -497,7 +499,7 @@ def user_not_checked_posts(request, user_id):
         user = User.objects.get(pk=user_id)
         not_validate_posts = Post.objects \
             .filter(author=user) \
-            .filter(validate_status=NOT_VALID) \
+            .filter(approved=False) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
@@ -623,7 +625,7 @@ def get_posts(request):
     program_id = request.GET.get('program_id', None)
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
-    posts = Post.objects.filter(validate_status=VALID)
+    posts = Post.objects.filter(approved=True)
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
@@ -635,7 +637,7 @@ def get_posts(request):
 
 def search_posts(request):
     words = request.GET.get('search_request', None).lover().split(" ")
-    posts = Post.objects.filter(validate_status=VALID)
+    posts = Post.objects.filter(approved=True)
     posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)
@@ -644,7 +646,7 @@ def search_posts(request):
 def search_and_render_posts(request):
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
-    posts = Post.objects.filter(validate_status=VALID)
+    posts = Post.objects.filter(approved=True)
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:

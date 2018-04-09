@@ -155,7 +155,7 @@ class Post(models.Model):
     link = models.URLField(max_length=512, null=True, blank=True)
     views = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    approved = models.BooleanField(default=True)
 
     ALLOWED_HTML_TAGS = allowed_html_tags = bleach.ALLOWED_TAGS + [
         u'h1',
