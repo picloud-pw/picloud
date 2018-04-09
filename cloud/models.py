@@ -117,6 +117,8 @@ class Subject(models.Model):
 class UserStatus(models.Model):
     title = models.CharField(max_length=256, null=False)
     status_level = models.PositiveSmallIntegerField(default=0, null=False)
+    can_publish_without_moderation = models.BooleanField(default=False, null=False)
+    can_moderate = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         return self.title
@@ -215,3 +217,9 @@ class Post(models.Model):
             "image": self.get_image_url(),
             "file": self.get_file_url(),
         }
+
+    def can_be_edited_by(self, user):
+        return self.author == user or \
+               user.status.can_moderate or \
+               user.is_staff() or \
+               user.is_superuser()

@@ -1,7 +1,7 @@
 <article class="post">
     <div class="post-container" id="post-{{ post.pk }}">
         {% if editable %}
-            {% if user == post.author or user.is_staff or user.is_superuser %}
+            {% if user == post.author or user.status.can_moderate or user.is_staff or user.is_superuser %}
                 <nav class="post-moderation btn-group">
                     <a href="{% url 'post_checked' pk=post.pk %}"
                        class="btn btn-success">
@@ -61,7 +61,7 @@
                 ({{ post.created_date }})
             </span>
             <span class="post-footer-badges">
-                {% if user == post.author or user.is_staff or user.is_superuser %}
+                {% if user == post.author or user.status.can_moderate or user.is_staff or user.is_superuser %}
                     <a class="post-footer-button-delete"
                        title="Удалить запись"
                        href="{% url 'post_delete' pk=post.pk %}">
