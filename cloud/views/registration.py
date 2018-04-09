@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.shortcuts import render
@@ -7,7 +8,8 @@ from django.template.loader import render_to_string
 from cloud.forms import UserInfoForm, UserStatus
 from cloud.models import UserInfo
 from cloud.tokens import account_activation_token
-from cloud.views.user import validate_name
+from cloud.views.recaptcha import recaptcha_is_valid
+from cloud.views.user import validate_name, validate_course
 
 
 def sign_up(request):

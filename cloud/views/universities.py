@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
+from cloud.forms import NewUniversityForm
 from cloud.models import University, Program, Chair, Department, Post, UserInfo
 from cloud.views import VALID, NOT_VALID
 from cloud.views.message import message
