@@ -1,0 +1,89 @@
+article.post {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin: 1rem auto;
+    box-shadow: 0 0.15em 0 #dddddd;
+}
+
+article.post .post-container {
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+article.post .post-container h1 {;
+    font-size: 2rem;
+}
+
+article.post .post-container .text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px; /* FIXME: Use relative units once possible */
+    text-align: left;
+}
+
+article.post .post-container .text h1 {
+    font-family: 'Alegreya', serif;
+    font-size: 1.7em;
+}
+
+article.post .post-container .text h2 {
+    font-family: 'Alegreya', serif;
+    font-size: 1.5em;
+}
+
+article.post .post-container .text h3 {
+    font-family: 'Alegreya', serif;
+    font-size: 1.3em;
+}
+
+article.post .post-container .text h4 {
+    font-family: 'Alegreya', serif;
+    font-size: 1.1em;
+}
+
+article.post .post-container footer {
+    text-align: left;
+}
+
+article.post a.post-author {
+    color: #6b8599;
+}
+
+article.post a.post-author:visited {
+    color: #8a6b99;
+}
+
+article.post .post-created-date {
+    color: #888888;
+}
+
+article.post .post-footer-badges {
+    float: right;
+}
+
+article.post .post-footer-badges > * {
+    padding-right: 0.2rem;
+    padding-left: 0.2rem;
+}
+
+article.post .post-footer-button-delete {
+    color: #ffb3b3;
+    color: #ff000030;
+}
+
+article.post .post-footer-button-delete:hover {
+    color: #ff4d4d;
+    color: #ff0000a0;
+    text-decoration: none;
+}
+
+article.post .post-footer-button-edit {
+    color: #b3b3ff;
+    color: #0000ff30;
+}
+
+article.post .post-footer-button-edit:hover {
+    color: #4d4dff;
+    color: #0000ffa0;
+    text-decoration: none;
+}

@@ -5,6 +5,10 @@
     Cloud Пост
 {% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+{% endblock %}
+
 {% block content %}
 
     <div class="container-fluid no-margin-padding">
@@ -13,78 +17,14 @@
             <div class="post-panel">
                 {% if message %}
                     <div class="alert alert-info alert-dismissible show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         {{ message }}
                     </div>
+                    <hr>
                 {% endif %}
-                <hr>
-                <h3 style="text-align: left; padding: 0 20px">
-                    {{ post.title }}
-
-                    {% if user == post.author or user.is_staff or user.is_superuser %}
-                        <a href="{% url 'post_delete' pk=post.pk %}">
-                            <div class="btn btn-danger pull-right">
-                                <span style="font-size:16px;" class="showopacity glyphicon glyphicon-remove"></span>
-                            </div>
-                        </a>
-                        <a href="{% url 'post_edit' pk=post.pk %}">
-                            <div class="btn btn-warning pull-right">
-                                <span style="font-size:16px;" class="showopacity glyphicon glyphicon-pencil"></span>
-                            </div>
-                        </a>
-                    {% endif %}
-                </h3>
-
-                <hr>
-                <div class="post-text">
-                    <p>{{ post.html | safe }}</p>
-                </div>
-
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" class="post-img">
-                {% endif %}
-
-                {% if post.link %}
-                    <br><br>
-                    <a href="{{ post.link }}">
-                        <div class="btn btn-primary" style="width:100%">Прикреплённая ссылка</div>
-                    </a>
-                {% endif %}
-
-                {% if post.file %}
-                    <br><br>
-                    <a href="{{ post.file.url }}">
-                        <div class="btn btn-success" style="width:100%">Прикреплённый файл</div>
-                    </a>
-                    <br><br>
-                {% endif %}
-
-                <table class="table" style="text-align: left">
-                    <tr>
-                        <th>Предмет:</th>
-                        <td><a href="/subject/{{ post.subject.pk }}">{{ post.subject.title }}</a></td>
-                    </tr>
-                    <tr>
-                        <th>Автор:</th>
-                        <td><a href="/user/{{ post.author.pk }}">{{ post.author }}</a></td>
-                    </tr>
-                    <tr>
-                        <th>Тип:</th>
-                        <td>{{ post.type.title }}</td>
-                    </tr>
-                    <tr>
-                        <th>Дата публикации:</th>
-                        <td>{{ post.created_date }}</td>
-                    </tr>
-                    <tr>
-                        <th>Просмотров:</th>
-                        <td>{{ post.views }}</td>
-                    </tr>
-                </table>
-
-
+                {% include 'cloud/post.html' %}
             </div>
         </div>
         <div class="col-md-3 col-lg-3"></div>

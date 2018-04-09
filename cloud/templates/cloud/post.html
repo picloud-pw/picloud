@@ -54,14 +54,26 @@
         {% endif %}
         <hr/>
         <footer>
-            <a href="/user/{{ post.author.pk }}" class="author">{{ post.author }}</a>
-            ({{ post.created_date }})
-            <span style="float: right;">
-                            <span style="font-size:12px;"
-                                  class="showopacity glyphicon glyphicon-eye-open">
-                            </span>
-                                {{ post.views }}
-                        </span>
+            <a class="post-author" href="/user/{{ post.author.pk }}">{{ post.author }}</a>
+            <span class="post-created-date">({{ post.created_date }})</span>
+            <span class="post-footer-badges">
+                {% if user == post.author or user.is_staff or user.is_superuser %}
+                    <a class="post-footer-button-delete"
+                       title="Удалить"
+                       href="{% url 'post_delete' pk=post.pk %}">
+                        <span class="showopacity glyphicon glyphicon-remove"></span>
+                    </a>
+                    <a class="post-footer-button-edit"
+                       title="Редактировать"
+                       href="{% url 'post_edit' pk=post.pk %}">
+                        <span class="showopacity glyphicon glyphicon-pencil"></span>
+                    </a>
+                {% endif %}
+                <span style="font-size:12px;"
+                      class="showopacity glyphicon glyphicon-eye-open">
+                </span>
+                {{ post.views }}
+            </span>
         </footer>
     </div>
 </article>
