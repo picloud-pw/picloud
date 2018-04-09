@@ -41,7 +41,10 @@
                 <span class="icon-bar"></span>
             </button>
             <a id="menu-brand" class="navbar-brand" href="{% url 'index' %}">
-                <object id="picloud-logo" data="{% static 'img/logo.svg' %}" type="image/svg+xml">
+                <object aria-label="Главная страница PiCloud"
+                        id="picloud-logo"
+                        data="{% static 'img/logo.svg' %}"
+                        type="image/svg+xml">
                     <img src="{% static 'img/piLogo.png' %}" alt="PiCloud">
                 </object>
             </a>
@@ -52,7 +55,7 @@
                 {% if user.is_authenticated %}
                     <li>
                         <a href="{% url 'settings' %}">
-                            <div id="avatar" style="background-image: url({{ request.session.user_ava_url }})"></div>
+                            <div id="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
                             <h3 style="margin: 0;">{{ user.username }}</h3>
                         </a>
                     </li>
@@ -95,7 +98,6 @@
                             </span>
                     </a>
                 </li>
-
 
 
                 <li>

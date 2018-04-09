@@ -1,36 +1,25 @@
-function post_to_html(post) {
+function postToHtml(post) {
     let request = new XMLHttpRequest();
     request.open('GET', '/post/' + post.id + '/render/', false);
     request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.send();
-    return request.responseText;
+    let html = request.responseText;
+    return new DOMParser().parseFromString(html, 'text/xml');
 }
 
-function update_post_list(posts) {
-    let search_results = document.getElementById("search_results");
-    while (search_results.lastChild) search_results.removeChild(search_results.lastChild);
-    if (search_results.querySelector('.post') === null) {
-        $('#search_results').append("");
-    } else {
-        posts.forEach(function (item, i, arr) {
-            $('#search_results').append(post_to_html(item));
-        });
-    }
-}
-
-function get_element_value_if_enabled(element_id) {
+function getElementValueIfEnabled(element_id) {
     let subject_elem = document.getElementById(element_id);
     return subject_elem.disabled === false ? subject_elem.value : null;
 }
 
-function get_current_values() {
-    let university_id = get_element_value_if_enabled('id_university');
-    let department_id = get_element_value_if_enabled('id_department');
-    let chair_id = get_element_value_if_enabled('id_chair');
-    let program_id = get_element_value_if_enabled('id_program');
-    let subject_id = get_element_value_if_enabled('id_subject');
-    let type_id = get_element_value_if_enabled('id_type');
+function getCurrentValues() {
+    let university_id = getElementValueIfEnabled('id_university');
+    let department_id = getElementValueIfEnabled('id_department');
+    let chair_id = getElementValueIfEnabled('id_chair');
+    let program_id = getElementValueIfEnabled('id_program');
+    let subject_id = getElementValueIfEnabled('id_subject');
+    let type_id = getElementValueIfEnabled('id_type');
     return {
         "university_id": university_id,
         "department_id": department_id,
@@ -46,12 +35,6 @@ function setType(id) {
     return Promise.resolve();
 }
 
-// FIXME: copied from post_edit
-function setSubject(id) {
-    setOption('id_subject', id);
-    return Promise.resolve();
-}
-
 window.addEventListener('popstate', event => {
     let data = event.state;
     if (!data) return;
@@ -62,7 +45,7 @@ window.addEventListener('popstate', event => {
         .then(() => setProgram(data.program_id))
         .then(() => setSubject(data.subject_id));
     document.getElementById("id_type").value = data.type_id;
-    new_search_request(data);
+    newSearchRequest(data);
 });
 
 function calculateSuffix(data) {
@@ -81,7 +64,7 @@ function search(subject_id = undefined, type_id = undefined) {
     let request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
             document.getElementById("search_results").innerHTML = request.responseText;
@@ -108,29 +91,20 @@ function search(subject_id = undefined, type_id = undefined) {
     request.send(data);
 }
 
-function new_search_request(data) {
+function newSearchRequest(data) {
     search(data.subject_id, data.type_id);
 }
 
-[
-    document.getElementById('id_subject'),
-    document.getElementById('id_type'),
-].forEach(element => {
-    element.addEventListener('change', function () {
-        let data = get_current_values();
-        history.pushState(data, null, `/search/?${calculateSuffix(data)}`);
-        new_search_request(data);
-    });
+ready(() => {
+    [
+        document.getElementById('id_subject'),
+        document.getElementById('id_type'),
+    ]
+        .forEach(element => {
+            element.addEventListener('change', function () {
+                let data = getCurrentValues();
+                history.pushState(data, null, `/search/?${calculateSuffix(data)}`);
+                newSearchRequest(data);
+            });
+        });
 });
-
-function search_posts() {
-    let search_request = $("#search-line").find("input").val().toLowerCase();
-    $.ajax({
-        url: "/api/search_posts/",
-        data: {"search_request": search_request},
-        dataType: 'json',
-        success: function (data) {
-            $("#search_results").innerHTML = data;
-        }
-    });
-}

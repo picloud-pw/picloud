@@ -31,7 +31,7 @@
             <p class="subject">
                 <span class="type">{{ post.type.title }}</span>
                 |
-                <a class="subject"
+                <a class="subject" title="{{ post.subject.title }}"
                    href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a>
             </p>
         </header>
@@ -54,25 +54,32 @@
         {% endif %}
         <hr/>
         <footer>
-            <a class="post-author" href="/user/{{ post.author.pk }}">{{ post.author }}</a>
-            <span class="post-created-date">({{ post.created_date }})</span>
+            <a class="post-author"
+               title="Автор записи"
+               href="/user/{{ post.author.pk }}">{{ post.author }}</a>
+            <span class="post-created-date" title="Дата и время создания записи">
+                ({{ post.created_date }})
+            </span>
             <span class="post-footer-badges">
                 {% if user == post.author or user.is_staff or user.is_superuser %}
                     <a class="post-footer-button-delete"
-                       title="Удалить"
+                       title="Удалить запись"
                        href="{% url 'post_delete' pk=post.pk %}">
                         <span class="showopacity glyphicon glyphicon-remove"></span>
                     </a>
                     <a class="post-footer-button-edit"
-                       title="Редактировать"
+                       title="Редактировать запись"
                        href="{% url 'post_edit' pk=post.pk %}">
                         <span class="showopacity glyphicon glyphicon-pencil"></span>
                     </a>
                 {% endif %}
-                <span style="font-size:12px;"
-                      class="showopacity glyphicon glyphicon-eye-open">
+                <span class="post-views-counter" title="Число просмотров">
+                    <span style="font-size:12px;"
+                          aria-label="Число просмотров"
+                          class="showopacity glyphicon glyphicon-eye-open">
+                    </span>
+                    {{ post.views }}
                 </span>
-                {{ post.views }}
             </span>
         </footer>
         <script>
@@ -80,7 +87,7 @@
             document
                 .querySelector('#post-{{ post.pk }} .post-footer-button-delete')
                 .addEventListener('click', (e) => {
-                    if (!confirm("Удалить пост? После этого действия пост будет невозможно восстановить.")) {
+                    if (!confirm("Удалить запись? После этого действия пост будет невозможно восстановить.")) {
                         e.preventDefault();
                     }
                 });
