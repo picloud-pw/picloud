@@ -13,7 +13,9 @@ function getCookie(name) {
     return cookieValue;
 }
 
-let csrf_token = getCookie('csrftoken');
+function getCsrfToken() {
+    return getCookie('csrftoken');
+}
 
 function clearAndDisableList(element_id, default_option) {
     let element = document.getElementById(element_id);
@@ -51,7 +53,7 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrf_token,
+            'X-CSRFToken': getCsrfToken(),
         }),
     });
     return fetch(request)

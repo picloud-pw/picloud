@@ -2,7 +2,7 @@ function post_to_html(post) {
     let request = new XMLHttpRequest();
     request.open('GET', '/post/' + post.id + '/render/', false);
     request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.send();
     return request.responseText;
 }
@@ -81,7 +81,7 @@ function search(subject_id = undefined, type_id = undefined) {
     let request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', csrf_token);
+    request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
             document.getElementById("search_results").innerHTML = request.responseText;
