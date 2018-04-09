@@ -158,7 +158,7 @@
 
             {% if post.pk %}
 
-                // Редактирование поста
+                {# Редактирование поста #}
 
                 loadUniversities()
                     .then(() => setUniversity({{ post.subject.programs.first.chair.department.university.pk }}))
@@ -181,7 +181,7 @@
 
             {% else %}
 
-                // Создание поста
+                {# Создание поста #}
 
                 {% if user_info %}
                     loadUniversities()
