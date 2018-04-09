@@ -9,7 +9,7 @@ POSTS_PER_PAGE = 12
 
 def can_user_publish_instantly(user):
     user_status = UserInfo.objects.get(user=user).status
-    if user_status.status_level > 7 or user.is_superuser or user.is_staff:
+    if user_status.can_publish_without_moderation or user.is_superuser or user.is_staff:
         return True
     else:
         return False
