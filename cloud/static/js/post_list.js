@@ -1,16 +1,16 @@
-window.addEventListener("load", function () {
-    resizeAllPosts();
-    assignOnImageLoadedHooks();
-});
-
-window.addEventListener("resize", resizeAllPosts);
-
 function assignOnImageLoadedHooks() {
     let allItems = document.getElementsByClassName("post");
     for (let post of allItems) {
         imagesLoaded(post, resizePostWithImagesLoaded);
     }
 }
+
+window.addEventListener("load", function () {
+    resizeAllPosts();
+    assignOnImageLoadedHooks();
+});
+
+window.addEventListener("resize", resizeAllPosts);
 
 function resizePostWithImagesLoaded(instance) {
     let post = instance.elements[0];

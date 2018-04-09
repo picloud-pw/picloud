@@ -23,9 +23,9 @@ function clearAndDisableList(element_id, default_option) {
     clearOptions(element);
     let option = document.createElement('option');
     option.textContent = default_option;
-    element.append(option);
     element.disabled = true;
-    element.style.backgroundColor = 'lightgray';
+    element.style.backgroundColor = '#d3d3d3';
+    element.appendChild(option);
 }
 
 function clearOptions(element) {
@@ -162,4 +162,9 @@ function setProgram(program_id) {
     if (setOption('id_program', program_id)) {
         return programChanged(program_id);
     } else return Promise.resolve();
+}
+
+function setSubject(id) {
+    setOption('id_subject', id);
+    return Promise.resolve();
 }

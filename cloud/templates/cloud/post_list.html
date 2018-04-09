@@ -113,16 +113,16 @@
         let showFullBtn = document.getElementById("show-full-btn");
 
         for (let img of document.getElementsByClassName('post-img')) {
-            img.onclick = function () {
+            img.addEventListener('click', function () {
                 modal.style.display = "grid";
                 modalImg.src = this.src;
                 showFullBtn.href = this.src;
-            }
+            });
         }
 
         let closeBtn = document.getElementsByClassName("close")[0];
-        closeBtn.onclick = function () {
+        closeBtn.addEventListener('click', () => {
             modal.style.display = "none";
-        }
+        });
     </script>
 {% endblock %}
