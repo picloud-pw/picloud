@@ -43,9 +43,9 @@ def get_subjects(request):
     subjects = [
         subject.as_dict()
         for subject
-        in Subject.objects \
-            .filter(programs=program_id) \
-            .order_by('semestr') \
+        in Subject.objects
+            .filter(programs=program_id)
+            .order_by('semester')
             .filter(validate_status=VALID)
     ]
     return JsonResponse(subjects, safe=False)

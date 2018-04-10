@@ -11,7 +11,7 @@ def program_page(request, program_id):
     subjects = Subject.objects.filter(programs=program).filter(validate_status=VALID)
     semesters = set()
     for sub in subjects:
-        semesters.add(sub.semestr)
+        semesters.add(sub.semester)
     return render(request, "structure/program_page.html", {
         "program": program,
         "subjects": subjects,

@@ -70,7 +70,7 @@ class Program(models.Model):
     validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        return self.title + " (" + self.chair.__str__() + ")"
+        return self.title + " (" + str(self.chair) + ")"
 
     def as_dict(self):
         return {
@@ -100,18 +100,18 @@ class Subject(models.Model):
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
-    semestr = models.PositiveSmallIntegerField(null=True, blank=True)
+    semester = models.PositiveSmallIntegerField(null=True, blank=True)
     validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        return self.short_title + " (" + self.semestr.__str__() + " семестр)"
+        return self.short_title + " (" + str(self.semester) + " семестр)"
 
     def as_dict(self):
         return {
             "id": self.pk,
-            "title": self.title + " (" + self.semestr.__str__() + " сем.)",
+            "title": self.title + " (" + str(self.semester) + " семестр)",
             "short_title": self.short_title,
-            "semestr": self.semestr
+            "semester": self.semester
         }
 
 

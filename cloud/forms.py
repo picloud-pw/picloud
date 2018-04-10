@@ -146,4 +146,4 @@ class NewSubjectForm(forms.ModelForm):
 
     class Meta:
         model = Subject
-        fields = ('programs', 'title', 'short_title', 'semestr', )
+        fields = ('programs', 'title', 'short_title', 'semester',)
