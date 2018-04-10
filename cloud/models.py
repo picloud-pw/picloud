@@ -104,12 +104,18 @@ class Subject(models.Model):
     validate_status = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        return self.short_title + " (" + str(self.semester) + " семестр)"
+        return self.displayed_title()
+
+    def displayed_title(self):
+        if self.semester != 0:
+            return self.title + " (" + str(self.semester) + " сем.)"
+        else:
+            return self.title
 
     def as_dict(self):
         return {
             "id": self.pk,
-            "title": self.title + " (" + str(self.semester) + " семестр)",
+            "title": self.displayed_title(),
             "short_title": self.short_title,
             "semester": self.semester
         }
