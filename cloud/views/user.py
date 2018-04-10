@@ -1,10 +1,10 @@
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from cloud.forms import AvatarChangeForm, UserInfoChangeForm
+from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserChangeForm
 from cloud.models import UserInfo, Post
 from cloud.views.message import message
 from cloud.views.posts import post_list
