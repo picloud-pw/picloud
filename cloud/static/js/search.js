@@ -62,6 +62,7 @@ let pageNumber = 1;
 let nothingLeft = true;
 
 let loadMoreButton = document.getElementById('btn-load-more');
+let searchResults = document.getElementById("search_results");
 
 function loadMore() {
     if (baseUrl === null) return;
@@ -88,7 +89,7 @@ function loadMore() {
                 nothingLeft = true;
             } else {
                 Array.from(posts).forEach(post => {
-                    document.getElementById("search_results").appendChild(post);
+                    searchResults.appendChild(post);
                 });
                 assignOnImageLoadedHooks();
                 loadMoreButton.textContent = `Загрузить ещё`;
@@ -108,6 +109,12 @@ function loadMore() {
 }
 
 function search(subject_id = undefined, type_id = undefined) {
+    while (searchResults.lastChild) {
+        searchResults.removeChild(searchResults.lastChild);
+    }
+    loadMoreButton.textContent = "Подождите…";
+    loadMoreButton.disabled = true;
+
     pageNumber = 1;
     let data = {
         subject_id: subject_id,
@@ -121,9 +128,9 @@ function search(subject_id = undefined, type_id = undefined) {
     request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
-            document.getElementById("search_results").innerHTML = request.responseText;
+            searchResults.innerHTML = request.responseText;
             // TODO: Найти лучший способ определения пустого результата
-            if (document.getElementById("search_results").querySelector('.post')) {
+            if (searchResults.querySelector('.post')) {
                 loadMoreButton.textContent = "Загрузить ещё";
                 loadMoreButton.disabled = false;
                 assignOnImageLoadedHooks();
