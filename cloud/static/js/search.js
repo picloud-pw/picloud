@@ -52,17 +52,71 @@ function calculateSuffix(data) {
     let components = [];
     if (data.type_id) components.push(`type_id=${data.type_id ? data.type_id : ''}`);
     if (data.subject_id) components.push(`subject_id=${data.subject_id}`);
+    if (data.page) components.push(`page=${data.page}`);
     return components.join('&');
 }
 
+let baseUrl = null;
+let loading = false;
+let pageNumber = 1;
+let nothingLeft = true;
+
+let loadMoreButton = document.getElementById('btn-load-more');
+
+function loadMore() {
+    if (baseUrl === null) return;
+    if (loading) return;
+
+    loading = true;
+    loadMoreButton.textContent = 'Загрузка…';
+    loadMoreButton.disabled = true;
+
+    pageNumber++;
+    let url = `${baseUrl}&page=${pageNumber}`;
+
+    let request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('X-CSRFToken', getCsrfToken());
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            let parser = new DOMParser();
+            let posts = parser.parseFromString(request.responseText, "text/html").body.children;
+            if (posts.length === 0) {
+                loadMoreButton.textContent = "Больше ничего нет.";
+                loadMoreButton.disabled = true;
+                nothingLeft = true;
+            } else {
+                Array.from(posts).forEach(post => {
+                    document.getElementById("search_results").appendChild(post);
+                });
+                assignOnImageLoadedHooks();
+                loadMoreButton.textContent = `Загрузить ещё`;
+                loadMoreButton.disabled = false;
+                nothingLeft = false;
+            }
+            resizeAllPosts();
+        } else {
+            // TODO: Обработать ошибку, возвращённую сервером
+        }
+        loading = false;
+    };
+    request.onerror = function () {
+        // TODO: Обработать ошибку соединения
+    };
+    request.send(/* FIXME: data */);
+}
+
 function search(subject_id = undefined, type_id = undefined) {
+    pageNumber = 1;
     let data = {
         subject_id: subject_id,
         type_id: type_id,
+        page: 1,
     };
-    let url = `/api/posts?${calculateSuffix(data)}`;
+    baseUrl = `/api/posts?${calculateSuffix(data)}`;
     let request = new XMLHttpRequest();
-    request.open('GET', url, true);
+    request.open('GET', baseUrl, true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.onload = function () {
@@ -70,15 +124,14 @@ function search(subject_id = undefined, type_id = undefined) {
             document.getElementById("search_results").innerHTML = request.responseText;
             // TODO: Найти лучший способ определения пустого результата
             if (document.getElementById("search_results").querySelector('.post')) {
+                loadMoreButton.textContent = "Загрузить ещё";
+                loadMoreButton.disabled = false;
                 assignOnImageLoadedHooks();
+                nothingLeft = false;
             } else {
-                let element = document.createElement('article');
-                element.classList.add('post');
-                let container = document.createElement('div');
-                container.classList.add('post-container');
-                container.textContent = 'К сожалению, по вашему запросу ничего не найдено :(';
-                element.appendChild(container);
-                document.getElementById("search_results").appendChild(element);
+                nothingLeft = true;
+                loadMoreButton.textContent = "Ничего не найдено";
+                loadMoreButton.disabled = true;
             }
             resizeAllPosts();
         } else {
@@ -107,4 +160,27 @@ ready(() => {
                 newSearchRequest(data);
             });
         });
+
+    document.getElementById("id_university").addEventListener("change", () => {
+        universityChanged(document.getElementById("id_university").value);
+    });
+    document.getElementById("id_department").addEventListener("change", () => {
+        departmentChanged(document.getElementById("id_department").value);
+    });
+    document.getElementById("id_chair").addEventListener("change", () => {
+        chairChanged(document.getElementById("id_chair").value);
+    });
+    document.getElementById("id_program").addEventListener("change", () => {
+        programChanged(document.getElementById("id_program").value);
+    });
+    document.getElementById("id_type").options[0].textContent = "Любого типа";
+
+    window.addEventListener('scroll', function (event) {
+        if (nothingLeft) return;
+        let scrElem = event.target.scrollingElement;
+        let scrolledToTheEnd = scrElem.scrollHeight - scrElem.scrollTop <= scrElem.clientHeight;
+        if (scrolledToTheEnd) {
+            loadMore();
+        }
+    });
 });

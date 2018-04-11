@@ -8,6 +8,7 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/post.css' %}">
     <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -37,17 +38,12 @@
     </div>
 
     <div id="search_results" class="post-list">
-        <article class="post">
-            <div class="post-container">
-                <p>
-                    Здесь будут отображаться результаты поиска.
-                </p>
-                <p>
-                    Введите ваш запрос.
-                </p>
-            </div>
-        </article>
     </div>
+
+    <div id="load-more-panel">
+        <button id="btn-load-more" class="btn btn-default" onclick="loadMore()" disabled>
+            Подождите…
+        </button>
     </div>
 
 {% endblock %}
@@ -66,14 +62,20 @@
 
             {# TODO: Если subject_id предоставлен, подгрузить департаменты #}
 
+            let subject_id = undefined;
+            let type_id = undefined;
+
             {% if request.GET.subject_id %}
-                let subject_id = {{ request.GET.subject_id }};
+                subject_id = {{ request.GET.subject_id }};
                 search(subject_id);
             {% endif %}
 
             {% if request.GET.type_id %}
-                setType({{ request.GET.type_id }});
+                type_id = {{ request.GET.type_id }};
+                setType(type_id);
             {% endif %}
+
+            search(subject_id, type_id);
 
             {% if user_info %}
                 document.getElementById("id_type").options[0].textContent = "Любого типа";
@@ -82,30 +84,16 @@
                     .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
                     .then(() => setChair({{ user_info.program.chair.pk }}))
                     .then(() => setProgram({{ user_info.program.pk }}))
-                    .then(() => {
-                        {% if request.GET.subject_id %}
+                    {% if request.GET.subject_id %}
+                        .then(() => {
                             let subject_id = {{ request.GET.subject_id }};
                             setSubject(subject_id);
-                        {% endif %}
-                    });
+                        })
+                    {% endif %};
             {% else %}
                 loadUniversities().then(() => setUniversity(1));
                 $("#structure").addClass("in");
             {% endif %}
-
-            document.getElementById("id_university").addEventListener("change", () => {
-                universityChanged(document.getElementById("id_university").value);
-            });
-            document.getElementById("id_department").addEventListener("change", () => {
-                departmentChanged(document.getElementById("id_department").value);
-            });
-            document.getElementById("id_chair").addEventListener("change", () => {
-                chairChanged(document.getElementById("id_chair").value);
-            });
-            document.getElementById("id_program").addEventListener("change", () => {
-                programChanged(document.getElementById("id_program").value);
-            });
-            document.getElementById("id_type").options[0].textContent = "Любого типа";
         });
     </script>
 

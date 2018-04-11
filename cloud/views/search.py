@@ -17,6 +17,8 @@ def search_posts(request):
 def search_and_render_posts(request):
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
+    page_number = request.GET.get('page', 1)
+
     posts = Post.objects.filter(approved=True)
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
@@ -24,13 +26,12 @@ def search_and_render_posts(request):
         posts = posts.filter(type=type_id)
     posts = posts.order_by('created_date').reverse()[:100]
 
-    page = request.GET.get('page', 1)
     paginator = Paginator(posts, POSTS_PER_PAGE)
     try:
-        posts_page = paginator.page(page)
+        posts_page = paginator.page(page_number)
     except PageNotAnInteger:
         posts_page = paginator.page(1)
     except EmptyPage:
-        posts_page = paginator.page(paginator.num_pages)
+        posts_page = []
 
     return render(request, 'cloud/bare_post_list.html', {'posts': posts_page})
