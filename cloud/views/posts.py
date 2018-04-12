@@ -70,9 +70,10 @@ def post_new(request):
             user_can_publish = can_user_publish_instantly(request.user)
             if form.is_valid():
                 post = form.save(commit=False)
+                post.last_editor = request.user
                 post.author = request.user
                 post.created_date = timezone.now()
-                post.validate_status = user_can_publish
+                post.approved = user_can_publish
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
                 if user_can_publish:
@@ -100,7 +101,7 @@ def post_edit(request, pk):
             user_can_publish = can_user_publish_instantly(request.user)
             if form.is_valid():
                 post = form.save(commit=False)
-                post.author = request.user
+                post.last_editor = request.user
                 post.published_date = timezone.now()
                 post.validate_status = user_can_publish
                 post.save()

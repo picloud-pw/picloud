@@ -157,7 +157,8 @@ class PostType(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    author = models.ForeignKey('auth.User', null=True, on_delete=models.SET_NULL)
+    last_editor = models.ForeignKey('auth.User', related_name='last_editor', null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=256, null=False)
     text = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
