@@ -21,14 +21,14 @@ def user_page(request, user_id):
 
 def user_posts(request, user_id):
     if request.user.is_authenticated:
-        fr_user = User.objects.get(pk=user_id)
+        fr_user = get_object_or_404(User, pk=user_id)
         fr_user_posts = Post.objects \
             .filter(author=fr_user) \
             .filter(approved=True) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
-        return post_list(request, display_posts=fr_user_posts)
+        return post_list(request, displayed_posts=fr_user_posts)
     else:
         return message(request, msg="Авторизуйтесь, чтобы просматривать посты конкретных пользователей.")
 
@@ -42,7 +42,7 @@ def user_not_checked_posts(request, user_id):
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
-        return post_list(request, display_posts=not_validate_posts)
+        return post_list(request, displayed_posts=not_validate_posts)
     else:
         return message(request, msg="Вы можете просматривать только проверенные посты этого пользователя.")
 

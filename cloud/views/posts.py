@@ -15,27 +15,27 @@ def can_user_publish_instantly(user):
         return False
 
 
-def post_list(request, display_posts=None):
-    e_m = ""
+def post_list(request, displayed_posts=None):
+    empty_message = ""
+    posts = Post.objects \
+        .filter(approved=True) \
+        .filter(created_date__lte=timezone.now())
+
     if request.user.is_authenticated:
         user_info = request.user.userinfo
         if user_info.program is not None:
-            user_program_id = user_info.program.pk
-            posts = Post.objects.filter(approved=True) \
-                .filter(created_date__lte=timezone.now()) \
-                .filter(subject__programs__exact=user_program_id) \
-                .order_by('created_date').reverse()
-        else:
-            posts = Post.objects.filter(approved=True) \
-                .filter(created_date__lte=timezone.now()) \
-                .order_by('created_date').reverse()
-        if display_posts is not None:
-            posts = display_posts
-            e_m = "Данный пользователь пока не поделился своими материалами."
-    else:
-        posts = Post.objects.filter(approved=True) \
-            .filter(created_date__lte=timezone.now()) \
-            .order_by('created_date').reverse()
+            posts = posts.filter(subject__programs__exact=user_info.program.pk)
+            # TODO: Фильтровать по семестру?
+        if displayed_posts is not None:
+            # TODO: Возможно, небезопасное использование параметра запроса
+            # Может ли пользователь таким образом запросить запрещённый пост?
+            # Возможно, следует использовать пересечение (QuerySet.intersection).
+            posts = displayed_posts
+            empty_message = "Данный пользователь пока не поделился своими материалами."
+
+    posts = posts \
+        .order_by('created_date') \
+        .reverse()
 
     page = request.GET.get('page', 1)
     paginator = Paginator(posts, POSTS_PER_PAGE)
@@ -46,7 +46,10 @@ def post_list(request, display_posts=None):
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
 
-    return render(request, 'cloud/post_list.html', {'posts': posts_page, 'empty_message': e_m})
+    return render(request, 'cloud/post_list.html', {
+        'posts': posts_page,
+        'empty_message': empty_message
+    })
 
 
 def post_detail(request, pk, msg=""):
@@ -54,7 +57,10 @@ def post_detail(request, pk, msg=""):
     if post.views < 99999:
         post.views += 1
         post.save()
-    return render(request, 'cloud/post_detail.html', {'post': post, 'message': msg})
+    return render(request, 'cloud/post_detail.html', {
+        'post': post,
+        'message': msg
+    })
 
 
 def post_new(request):
@@ -106,11 +112,17 @@ def post_edit(request, pk):
             else:
                 form = PostForm(instance=post)
                 user_info = get_object_or_404(UserInfo, user=request.user)
-                return render(request, 'cloud/post_edit.html', {'form': form, 'post': post})
+                return render(request, 'cloud/post_edit.html', {
+                    'form': form,
+                    'post': post
+                })
         else:
             form = PostForm(instance=post)
             user_info = get_object_or_404(UserInfo, user=request.user)
-            return render(request, 'cloud/post_edit.html', {'form': form, 'post': post})
+            return render(request, 'cloud/post_edit.html', {
+                'form': form,
+                'post': post,
+            })
     else:
         return redirect("post_list")
 
@@ -119,9 +131,7 @@ def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
         post.delete()
-        return redirect("post_list")
-    else:
-        return redirect("post_list")
+    return redirect("post_list")
 
 
 def post_checked(request, pk):
