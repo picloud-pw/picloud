@@ -110,12 +110,6 @@ function loadMore() {
 }
 
 function search(subject_id = undefined, type_id = undefined) {
-    while (searchResults.lastChild) {
-        searchResults.removeChild(searchResults.lastChild);
-    }
-    loadMoreButton.textContent = "Подождите…";
-    loadMoreButton.disabled = true;
-
     pageNumber = 1;
     let data = {
         subject_id: subject_id,
@@ -151,6 +145,12 @@ function search(subject_id = undefined, type_id = undefined) {
         // TODO: Обработать ошибку соединения
     };
     request.send(data);
+
+    while (searchResults.lastChild) {
+        searchResults.removeChild(searchResults.lastChild);
+    }
+    loadMoreButton.textContent = "Подождите…";
+    loadMoreButton.disabled = true;
 }
 
 function newSearchRequest(data) {
