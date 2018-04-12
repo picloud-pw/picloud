@@ -116,7 +116,7 @@ function search(subject_id = undefined, type_id = undefined) {
         type_id: type_id,
         page: 1,
     };
-    baseUrl = `/api/posts?${calculateSuffix(data)}`;
+    baseUrl = `/api/posts/?${calculateSuffix(data)}`;
     let request = new XMLHttpRequest();
     request.open('GET', baseUrl, true);
     request.setRequestHeader('Content-Type', 'application/json');
