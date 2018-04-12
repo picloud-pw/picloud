@@ -81,8 +81,9 @@ function loadMore() {
     request.setRequestHeader('X-CSRFToken', getCsrfToken());
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
-            let parser = new DOMParser();
-            let posts = parser.parseFromString(request.responseText, "text/html").body.children;
+            let posts = new DOMParser()
+                .parseFromString(request.responseText, "text/html")
+                .body.children;
             if (posts.length === 0) {
                 loadMoreButton.textContent = "Больше ничего нет.";
                 loadMoreButton.disabled = true;
@@ -117,18 +118,33 @@ function search(subject_id = undefined, type_id = undefined) {
         page: 1,
     };
     baseUrl = `/api/posts/?${calculateSuffix(data)}`;
-    let request = new XMLHttpRequest();
-    request.open('GET', baseUrl, true);
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', getCsrfToken());
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            searchResults.innerHTML = request.responseText;
-            // TODO: Найти лучший способ определения пустого результата
-            if (searchResults.querySelector('.post')) {
-                loadMoreButton.textContent = "Загрузить ещё";
+
+    while (searchResults.lastChild) {
+        searchResults.removeChild(searchResults.lastChild);
+    }
+
+    loadMoreButton.textContent = "Подождите…";
+    loadMoreButton.disabled = true;
+
+    let request = new Request(baseUrl, {
+        method: 'GET',
+        headers: new Headers({
+            'X-CSRFToken': getCsrfToken(),
+        }),
+    });
+
+    return fetch(request)
+        .then(response => response.ok ? response.text() : Response.error())
+        .then(responseText => {
+            let posts = new DOMParser().parseFromString(responseText, "text/html").body.children;
+            if (posts.length > 0) {
+                Array.from(posts).forEach(post => {
+                    searchResults.appendChild(post);
+                    resizePost(post);
+                    imagesLoaded(post, resizePostWithImagesLoaded);
+                });
+                loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
-                assignOnImageLoadedHooks();
                 nothingLeft = false;
             } else {
                 nothingLeft = true;
@@ -137,20 +153,11 @@ function search(subject_id = undefined, type_id = undefined) {
             }
             resizeAllPosts();
             updateImageModalHooks();
-        } else {
-            // TODO: Обработать ошибку, возвращённую сервером
-        }
-    };
-    request.onerror = function () {
-        // TODO: Обработать ошибку соединения
-    };
-    request.send(data);
-
-    while (searchResults.lastChild) {
-        searchResults.removeChild(searchResults.lastChild);
-    }
-    loadMoreButton.textContent = "Подождите…";
-    loadMoreButton.disabled = true;
+        })
+        .catch(() => {
+            loadMoreButton.textContent = "Не удалось загрузить результаты.";
+            loadMoreButton.disabled = true;
+        });
 }
 
 function newSearchRequest(data) {
