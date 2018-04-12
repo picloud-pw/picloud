@@ -8,6 +8,7 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/post.css' %}">
     <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal_image.css' %}">
     <link rel="stylesheet" href="{% static 'css/search.css' %}">
 {% endblock %}
 
@@ -35,6 +36,14 @@
                    title="Извините, полнотекстовый поиск временно не работает." disabled
                    onclick="search_posts()" value="Поиск">
         </div>
+    </div>
+
+    <div id="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg" src="#">
+        <a id="show-full-btn" href="#" target="_blank" class="btn btn-primary">
+            Открыть оригинал в новой вкладке
+        </a>
     </div>
 
     <div id="search_results" class="post-list">
@@ -76,6 +85,7 @@
             {% endif %}
 
             search(subject_id, type_id);
+            updateImageModalHooks();
 
             {% if user_info %}
                 document.getElementById("id_type").options[0].textContent = "Любого типа";
@@ -94,6 +104,14 @@
                 loadUniversities().then(() => setUniversity(1));
                 $("#structure").addClass("in");
             {% endif %}
+        });
+    </script>
+
+    <script>
+        let modal = document.getElementById('modal');
+        let closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = "none";
         });
     </script>
 

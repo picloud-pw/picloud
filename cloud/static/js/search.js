@@ -97,6 +97,7 @@ function loadMore() {
                 nothingLeft = false;
             }
             resizeAllPosts();
+            updateImageModalHooks();
         } else {
             // TODO: Обработать ошибку, возвращённую сервером
         }
@@ -141,6 +142,7 @@ function search(subject_id = undefined, type_id = undefined) {
                 loadMoreButton.disabled = true;
             }
             resizeAllPosts();
+            updateImageModalHooks();
         } else {
             // TODO: Обработать ошибку, возвращённую сервером
         }
@@ -153,6 +155,20 @@ function search(subject_id = undefined, type_id = undefined) {
 
 function newSearchRequest(data) {
     search(data.subject_id, data.type_id);
+}
+
+function updateImageModalHooks() {
+    let modal = document.getElementById('modal');
+    let modalImg = document.getElementById("modalImg");
+    let showFullBtn = document.getElementById("show-full-btn");
+
+    for (let img of document.getElementsByClassName('post-img')) {
+        img.addEventListener('click', function () {
+            modal.style.display = "grid";
+            modalImg.src = this.src;
+            showFullBtn.href = this.src;
+        });
+    }
 }
 
 ready(() => {
