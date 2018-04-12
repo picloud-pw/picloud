@@ -20,6 +20,14 @@ def search_and_render_posts(request):
     page_number = request.GET.get('page', 1)
 
     posts = Post.objects.filter(approved=True)
+
+    if subject_id is None and type_id is None:
+        if request.user.is_authenticated:
+            user_info = request.user.userinfo
+            if user_info.program is not None:
+                posts = posts.filter(subject__programs__exact=user_info.program.pk)
+                # TODO: Фильтровать по семестру?
+
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
