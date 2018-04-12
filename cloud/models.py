@@ -146,6 +146,9 @@ class UserInfo(models.Model):
 
 
 class PostType(models.Model):
+    class Meta:
+        ordering = ['title']
+
     title = models.CharField(max_length=256, null=False, unique=True)
     plural = models.CharField(max_length=128, default="")
 
