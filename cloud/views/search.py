@@ -32,7 +32,8 @@ def search_and_render_posts(request):
         posts = posts.filter(subject=subject_id)
     if type_id is not None:
         posts = posts.filter(type=type_id)
-    posts = posts.order_by('created_date').reverse()[:100]
+
+    posts = posts.order_by('created_date').reverse()
 
     paginator = Paginator(posts, POSTS_PER_PAGE)
     try:
