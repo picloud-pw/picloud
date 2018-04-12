@@ -55,7 +55,7 @@ def sign_up(request):
                     # подтверждение почты (активация аккаунта)
                     send_acc_activate_letter(request, user, email)
 
-                    msg = 'Пожалуйста, подтвердите адрес элетронной почты для завершения регистрации.'
+                    msg = 'Пожалуйста, подтвердите адрес электронной почты для завершения регистрации.'
                     return render(request, 'message.html', {'message': msg})
                 else:
                     error = "Форма заполнена неправильно."
