@@ -17,11 +17,95 @@
 
 {% block content %}
 
-    {% block navigation %}{% endblock %}
+    {% block navigation %}
+        <div style="width: calc(100% - 20px); display:flex; flex-wrap; align-items: center; border-radius: 0.5rem; /* border: 1px #b3b3ff solid; */ overflow: hidden; overflow-x: auto;margin:1rem;padding:0;box-sizing: border-box;">
+            <div style="display: block; flex-shrink: 0; padding: 1rem 1.5rem; background: hsl(240,100%,90%)">
+                <span style="">Интересные мне</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div style="padding: 1rem 1.5rem;flex-shrink: 0; display: block; background: hsl(300,100%,90%)">
+                Автор:
+                <span style="font-weight: bold; border-bottom: #666666 dotted 1px; cursor: pointer">@edubenetskiy</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div style="padding: 1rem 1.5rem; flex-shrink: 0;display: block; background: hsl(0,100%,90%)">
+                Кафедра:
+                <span style="font-weight: bold; border-bottom: #666666 dotted 1px;cursor: pointer">ВТ</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div style="padding: 1rem 1.5rem; flex-shrink: 0;display: block; background: hsl(60,100%,90%)">
+                Предмет:
+                <span style="font-weight: bold; border-bottom: #666666 dotted 1px;cursor: pointer">ПИП</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <button style="color: hsl(120,25%,50%); padding: 1rem 1.5rem; flex-shrink: 0; background: hsl(120,100%,95%); border:0;"
+                    title="Добавить критерий поиска"
+                    aria-label="Добавить критерий поиска"
+                    onclick="addCriteria()">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <script>
+                function addCriteria() {
+                    let panel = document.getElementById('search_misc');
+                    panel.style.display = (panel.style.display == "none" ? "flex" : "none");
+                }
+            </script>
+            <input type="text"
+                   style=" width: 100%; background: white; border: 0; padding: 1rem 1.5rem;margin:0;"
+                   placeholder="Поисковый запрос">
+            <button style="color: hsl(240,50%,50%); padding: 1rem 1.5rem; flex-shrink: 0; background: hsl(0,0%,95%); border:0;"
+                    type="button"
+                    title="Искать"
+                    aria-label="Искать">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+        <div id="search_misc"
+             style="width: calc(100% - 20px); display:flex; flex-wrap; align-items: center; border-radius: 0.5rem; /* border: 1px #b3b3ff solid; */ overflow: hidden; overflow-x: auto;margin:1rem;padding:0;box-sizing: border-box;">
+            <select name="sas" id="kek">
+                <option value="kek">Sas</option>
+            </select>
+            <div style="display: block; flex-shrink: 0; padding: 1rem 1.5rem; background: hsl(240,100%,90%)">
+                <span style="">Интересные мне</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div style="padding: 1rem 1.5rem;flex-shrink: 0; display: block; background: hsl(300,100%,90%)">
+                Автор:
+                <span style="font-weight: bold; border-bottom: #666666 dotted 1px; cursor: pointer">@edubenetskiy</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div style="padding: 1rem 1.5rem; flex-shrink: 0;display: block; background: hsl(0,100%,90%)">
+                Кафедра:
+                <span style="font-weight: bold; border-bottom: #666666 dotted 1px;cursor: pointer">ВТ</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div style="padding: 1rem 1.5rem; flex-shrink: 0;display: block; background: hsl(60,100%,90%)">
+                Предмет:
+                <span style="font-weight: bold; border-bottom: #666666 dotted 1px;cursor: pointer">ПИП</span>
+                <a href="#" style="color: grey;"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <button style="color: hsl(120,25%,50%); padding: 1rem 1.5rem; flex-shrink: 0; background: hsl(120,100%,95%); border:0;"
+                    title="Добавить критерий поиска"
+                    aria-label="Добавить критерий поиска"
+                    onclick="addCriteria()">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <input type="text"
+                   style=" width: 100%; background: white; border: 0; padding: 1rem 1.5rem;margin:0;"
+                   placeholder="Поисковый запрос">
+            <button style="color: hsl(240,50%,50%); padding: 1rem 1.5rem; flex-shrink: 0; background: hsl(0,0%,95%); border:0;"
+                    type="button"
+                    title="Искать"
+                    aria-label="Искать">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+    {% endblock %}
 
     <div id="modal">
         <span class="close">&times;</span>
-        <img class="modal-content" id="modalImg" src="#">
+        {# Загружает GIF-изображение размером 1×1 пиксел. #}
+        <img class="modal-content" id="modalImg" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
         <a id="show-full-btn" href="#" target="_blank" class="btn btn-primary">
             Открыть оригинал в новой вкладке
         </a>
