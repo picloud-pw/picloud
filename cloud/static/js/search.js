@@ -79,6 +79,7 @@ function loadMore() {
     request.open('GET', url, true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('X-CSRFToken', getCsrfToken());
+    request.withCredentials = true;
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
             let posts = new DOMParser()
@@ -131,6 +132,7 @@ function search(subject_id = undefined, type_id = undefined) {
         headers: new Headers({
             'X-CSRFToken': getCsrfToken(),
         }),
+        credentials: "same-origin",
     });
 
     return fetch(request)

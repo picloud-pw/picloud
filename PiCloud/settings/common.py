@@ -129,3 +129,6 @@ VK_GROUP_TOKEN = get_config('VK_GROUP_TOKEN')
 VK_GROUP_LIST = get_config('VK_GROUP_LIST')
 
 GOOGLE_RECAPTCHA_SECRET_KEY = get_config('GOOGLE_RECAPTCHA_SECRET_KEY')
+
+# FIXME XXX HACK: Подвергает сайт риску XSS, хотя и позволяет аутентифицироваться через REST
+SESSION_COOKIE_HTTPONLY = False
