@@ -206,6 +206,22 @@ class Post(models.Model):
         else:
             return ""
 
+    def get_image_width(self):
+        if not self.image:
+            return None
+        try:
+            return self.image.width
+        except IOError or FileNotFoundError:
+            return None
+
+    def get_image_height(self):
+        if not self.image:
+            return None
+        try:
+            return self.image.height
+        except IOError or FileNotFoundError:
+            return None
+
     def get_file_url(self):
         if self.file and hasattr(self.file, 'url'):
             return self.file.url
