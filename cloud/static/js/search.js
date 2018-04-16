@@ -114,6 +114,9 @@ function loadMore() {
         .catch(() => {
             loadMoreButton.textContent = "Не удалось загрузить результаты.";
             loadMoreButton.disabled = true;
+        })
+        .finally(() => {
+            loading = false;
         });
 }
 
@@ -173,6 +176,9 @@ function search(subject_id = undefined, type_id = undefined) {
         .catch(() => {
             loadMoreButton.textContent = "Не удалось загрузить результаты.";
             loadMoreButton.disabled = true;
+        })
+        .finally(() => {
+            loading = false;
         });
 }
 
