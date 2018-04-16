@@ -86,6 +86,11 @@ function loadMore() {
             if (posts.length > 0) {
                 Array.from(posts).forEach(post => {
                     searchResults.appendChild(post);
+                    let image = post.querySelector('img');
+                    if (image) {
+                        let [origWidth, origHeight] = image.attributes['ratio'].value.split('x');
+                        image.height = image.width * origHeight / origWidth;
+                    }
                     resizePost(post);
                     imagesLoaded(post, resizePostWithImagesLoaded);
                 });
@@ -141,6 +146,11 @@ function search(subject_id = undefined, type_id = undefined) {
             let posts = Array.from(document.body.children);
             posts.forEach(post => {
                 searchResults.appendChild(post);
+                let image = post.querySelector('img');
+                if (image) {
+                    let [origWidth, origHeight] = image.attributes['ratio'].value.split('x');
+                    image.height = image.width * origHeight / origWidth;
+                }
                 resizePost(post);
                 imagesLoaded(post, resizePostWithImagesLoaded);
             });
