@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block title %}
-    Cloud Редактирование
+    {% if post.pk %}
+        Редактирование: {{ post.title }}
+    {% else %}
+        Новый пост
+    {% endif %}
 {% endblock %}
 
 {% block head %}
