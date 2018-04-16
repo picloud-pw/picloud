@@ -149,7 +149,7 @@ function search(subject_id = undefined, type_id = undefined) {
                 loadMoreButton.disabled = false;
                 nothingLeft = false;
             } else {
-                loadMoreButton.textContent = "Больше ничего нет.";
+                loadMoreButton.textContent = "Ничего не найдено.";
                 loadMoreButton.disabled = true;
                 nothingLeft = true;
             }
