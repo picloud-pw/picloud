@@ -148,8 +148,12 @@ function search(subject_id = undefined, type_id = undefined) {
                 loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
                 nothingLeft = false;
-            } else {
+            } else if (posts.length === 0) {
                 loadMoreButton.textContent = "Ничего не найдено.";
+                loadMoreButton.disabled = true;
+                nothingLeft = true;
+            } else {
+                loadMoreButton.textContent = "Больше ничего нет.";
                 loadMoreButton.disabled = true;
                 nothingLeft = true;
             }
