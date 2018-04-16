@@ -3,6 +3,7 @@ from django.shortcuts import render
 from cloud.forms import NewDepartmentForm
 from cloud.views import NOT_VALID
 from cloud.views.message import message
+from cloud.views.posts import can_user_publish_instantly
 
 
 def new_department(request):
@@ -12,7 +13,7 @@ def new_department(request):
         new_department = NewDepartmentForm(request.POST)
         if new_department.is_valid():
             department = new_department.save(commit=False)
-            department.validate_status = NOT_VALID
+            department.is_approved = can_user_publish_instantly(request.user)
             department.save()
             return message(request, success_msg)
         else:

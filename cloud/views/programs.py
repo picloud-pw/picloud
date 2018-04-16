@@ -4,11 +4,12 @@ from cloud.forms import NewProgramForm
 from cloud.models import Program, Subject
 from cloud.views import VALID, NOT_VALID
 from cloud.views.message import message
+from cloud.views.posts import can_user_publish_instantly
 
 
 def program_page(request, program_id):
     program = get_object_or_404(Program, pk=program_id)
-    subjects = Subject.objects.filter(programs=program).filter(validate_status=VALID)
+    subjects = Subject.objects.filter(programs=program).filter(is_approved=True)
     semesters = set()
     for sub in subjects:
         semesters.add(sub.semester)
@@ -26,7 +27,7 @@ def new_program(request):
         new_program = NewProgramForm(request.POST)
         if new_program.is_valid():
             program = new_program.save(commit=False)
-            program.validate_status = NOT_VALID
+            program.is_approved = can_user_publish_instantly(request.user)
             program.save()
             return message(request, success_msg)
         else:

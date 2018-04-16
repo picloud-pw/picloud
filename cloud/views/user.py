@@ -24,7 +24,7 @@ def user_posts(request, user_id):
         fr_user = get_object_or_404(User, pk=user_id)
         fr_user_posts = Post.objects \
             .filter(author=fr_user) \
-            .filter(approved=True) \
+            .filter(is_approved=True) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()
@@ -38,7 +38,7 @@ def user_not_checked_posts(request, user_id):
         user = User.objects.get(pk=user_id)
         not_validate_posts = Post.objects \
             .filter(author=user) \
-            .filter(approved=False) \
+            .filter(is_approved=False) \
             .filter(created_date__lte=timezone.now()) \
             .order_by('created_date') \
             .reverse()

@@ -13,7 +13,7 @@ class University(models.Model):
     logo = models.ImageField(upload_to='resources/u_logo/',
                              default='resources/default/u_logo.png',
                              null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -31,7 +31,7 @@ class Department(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -49,7 +49,7 @@ class Chair(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.short_title
@@ -67,7 +67,7 @@ class Program(models.Model):
     title = models.CharField(max_length=256, null=False)
     code = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title + " (" + str(self.chair) + ")"
@@ -89,7 +89,7 @@ class Lecturer(models.Model):
     image = models.ImageField(upload_to='resources/lec_avatars/',
                               default='resources/default/lec_avatar.png',
                               null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.surname + " " + self.name + " " + self.patronymic
@@ -101,7 +101,7 @@ class Subject(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
     semester = models.PositiveSmallIntegerField(null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.displayed_title()
@@ -168,7 +168,7 @@ class Post(models.Model):
     link = models.URLField(max_length=512, null=True, blank=True)
     views = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
-    approved = models.BooleanField(default=True)
+    is_approved = models.BooleanField(default=False)
 
     ALLOWED_HTML_TAGS = allowed_html_tags = bleach.ALLOWED_TAGS + [
         u'h1',

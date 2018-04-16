@@ -3,7 +3,6 @@ from django.shortcuts import redirect, render
 
 from cloud.models import *
 from .posts import POSTS_PER_PAGE
-from . import NOT_VALID
 
 
 def moderation(request):
@@ -13,7 +12,7 @@ def moderation(request):
             request.user.is_superuser):
 
         posts = Post.objects \
-            .filter(approved=False) \
+            .filter(is_approved=False) \
             .order_by('created_date')
 
         page = request.GET.get('page', 1)
@@ -25,11 +24,11 @@ def moderation(request):
         except EmptyPage:
             posts_page = paginator.page(paginator.num_pages)
 
-        universities = University.objects.filter(validate_status=NOT_VALID)
-        departments = Department.objects.filter(validate_status=NOT_VALID)
-        chairs = Chair.objects.filter(validate_status=NOT_VALID)
-        programs = Program.objects.filter(validate_status=NOT_VALID)
-        subjects = Subject.objects.filter(validate_status=NOT_VALID)
+        universities = University.objects.filter(is_approved=False)
+        departments = Department.objects.filter(is_approved=False)
+        chairs = Chair.objects.filter(is_approved=False)
+        programs = Program.objects.filter(is_approved=False)
+        subjects = Subject.objects.filter(is_approved=False)
 
         return render(request, 'moderation.html', {
             'posts': posts_page,

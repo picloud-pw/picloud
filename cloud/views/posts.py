@@ -8,6 +8,8 @@ POSTS_PER_PAGE = 12
 
 
 def can_user_publish_instantly(user):
+    if not user.is_authenticated:
+        return False
     user_status = user.userinfo.status
     if user_status.can_publish_without_moderation or user.is_superuser or user.is_staff:
         return True
@@ -18,7 +20,7 @@ def can_user_publish_instantly(user):
 def post_list(request, displayed_posts=None):
     empty_message = ""
     posts = Post.objects \
-        .filter(approved=True) \
+        .filter(is_approved=True) \
         .filter(created_date__lte=timezone.now())
 
     if request.user.is_authenticated:
@@ -73,7 +75,7 @@ def post_new(request):
                 post.last_editor = request.user
                 post.author = request.user
                 post.created_date = timezone.now()
-                post.approved = user_can_publish
+                post.is_approved = user_can_publish
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
                 if user_can_publish:
@@ -103,7 +105,7 @@ def post_edit(request, pk):
                 post = form.save(commit=False)
                 post.last_editor = request.user
                 post.published_date = timezone.now()
-                post.validate_status = user_can_publish
+                post.is_approved = user_can_publish
                 post.save()
                 if user_can_publish:
                     return redirect('post_detail', pk=post.pk)
@@ -138,7 +140,7 @@ def post_delete(request, pk):
 def post_checked(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
-        Post.objects.filter(pk=pk).update(approved=True)
+        Post.objects.filter(pk=pk).update(is_approved=True)
         return redirect("moderation")
     else:
         return redirect("post_list")

@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 from cloud.forms import NewChairForm
-from cloud.views import NOT_VALID
 from cloud.views.message import message
+from cloud.views.posts import can_user_publish_instantly
 
 
 def new_chair(request):
@@ -12,7 +12,7 @@ def new_chair(request):
         new_chair = NewChairForm(request.POST)
         if new_chair.is_valid():
             chair = new_chair.save(commit=False)
-            chair.validate_status = NOT_VALID
+            chair.is_approved = can_user_publish_instantly(request.user)
             chair.save()
             return message(request, success_msg)
         else:

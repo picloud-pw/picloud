@@ -2,13 +2,13 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from cloud.forms import NewSubjectForm
 from cloud.models import Subject, Post
-from cloud.views import NOT_VALID
 from cloud.views.message import message
+from cloud.views.posts import can_user_publish_instantly
 
 
 def subject_page(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
-    posts = Post.objects.filter(subject=subject).filter(approved=True)
+    posts = Post.objects.filter(subject=subject).filter(is_approved=True)
     post_types = set()
     for post in posts:
         post_types.add(post.type)
@@ -27,7 +27,7 @@ def new_subject(request):
             new_subject = NewSubjectForm(request.POST)
             if new_subject.is_valid():
                 subject = new_subject.save(commit=False)
-                subject.validate_status = NOT_VALID
+                subject.is_approved = can_user_publish_instantly(request.user)
                 subject.save()
                 return message(request, success_msg)
             else:
