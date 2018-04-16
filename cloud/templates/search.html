@@ -77,7 +77,7 @@
 
             {% if request.GET.subject_id %}
                 subject_id = {{ request.GET.subject_id }};
-                search(subject_id);
+                setSubject(subject_id)
             {% endif %}
 
             {% if request.GET.type_id %}

@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils import timezone
 
 from cloud.models import Post
 from .posts import POSTS_PER_PAGE
@@ -43,4 +45,9 @@ def search_and_render_posts(request):
     except EmptyPage:
         posts_page = []
 
-    return render(request, 'cloud/bare_post_list.html', {'posts': posts_page})
+    return JsonResponse({
+        'current_page': posts_page.number,
+        'total_pages': paginator.num_pages,
+        'has_next': posts_page.has_next(),
+        'html': render_to_string('cloud/bare_post_list.html', {'posts': posts_page}),
+    })

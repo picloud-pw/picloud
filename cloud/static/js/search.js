@@ -52,7 +52,6 @@ function calculateSuffix(data) {
     let components = [];
     if (data.type_id) components.push(`type_id=${data.type_id ? data.type_id : ''}`);
     if (data.subject_id) components.push(`subject_id=${data.subject_id}`);
-    if (data.page) components.push(`page=${data.page}`);
     return components.join('&');
 }
 
@@ -75,40 +74,42 @@ function loadMore() {
     pageNumber++;
     let url = `${baseUrl}&page=${pageNumber}`;
 
-    let request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', getCsrfToken());
-    request.withCredentials = true;
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            let posts = new DOMParser()
-                .parseFromString(request.responseText, "text/html")
-                .body.children;
-            if (posts.length === 0) {
-                loadMoreButton.textContent = "Больше ничего нет.";
-                loadMoreButton.disabled = true;
-                nothingLeft = true;
-            } else {
+    let request = new Request(url, {
+        method: 'GET',
+        credentials: "same-origin",
+    });
+
+    return fetch(request)
+        .then(response => response.ok ? response.json() : Response.error())
+        .then(json => {
+            let posts = new DOMParser().parseFromString(json['html'], "text/html").body.children;
+            if (posts.length > 0) {
                 Array.from(posts).forEach(post => {
                     searchResults.appendChild(post);
+                    resizePost(post);
+                    imagesLoaded(post, resizePostWithImagesLoaded);
                 });
-                assignOnImageLoadedHooks();
+            }
+
+            assignOnImageLoadedHooks();
+
+            if (json['has_next']) {
                 loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
                 nothingLeft = false;
+            } else {
+                loadMoreButton.textContent = "Больше ничего нет.";
+                loadMoreButton.disabled = true;
+                nothingLeft = true;
             }
+
             resizeAllPosts();
             updateImageModalHooks();
-        } else {
-            // TODO: Обработать ошибку, возвращённую сервером
-        }
-        loading = false;
-    };
-    request.onerror = function () {
-        // TODO: Обработать ошибку соединения
-    };
-    request.send(/* FIXME: data */);
+        })
+        .catch(() => {
+            loadMoreButton.textContent = "Не удалось загрузить результаты.";
+            loadMoreButton.disabled = true;
+        });
 }
 
 function search(subject_id = undefined, type_id = undefined) {
@@ -119,6 +120,7 @@ function search(subject_id = undefined, type_id = undefined) {
         page: 1,
     };
     baseUrl = `/api/posts/?${calculateSuffix(data)}`;
+    let url = `${baseUrl}&page=${data.page}`;
 
     while (searchResults.lastChild) {
         searchResults.removeChild(searchResults.lastChild);
@@ -129,30 +131,29 @@ function search(subject_id = undefined, type_id = undefined) {
 
     let request = new Request(baseUrl, {
         method: 'GET',
-        headers: new Headers({
-            'X-CSRFToken': getCsrfToken(),
-        }),
         credentials: "same-origin",
     });
 
     return fetch(request)
-        .then(response => response.ok ? response.text() : Response.error())
-        .then(responseText => {
-            let posts = new DOMParser().parseFromString(responseText, "text/html").body.children;
-            if (posts.length > 0) {
-                Array.from(posts).forEach(post => {
-                    searchResults.appendChild(post);
-                    resizePost(post);
-                    imagesLoaded(post, resizePostWithImagesLoaded);
-                });
+        .then(response => response.ok ? response.json() : Response.error())
+        .then(json => {
+            let posts = new DOMParser().parseFromString(json['html'], "text/html").body.children;
+            Array.from(posts).forEach(post => {
+                searchResults.appendChild(post);
+                resizePost(post);
+                imagesLoaded(post, resizePostWithImagesLoaded);
+            });
+
+            if (json['has_next']) {
                 loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
                 nothingLeft = false;
             } else {
-                nothingLeft = true;
-                loadMoreButton.textContent = "Ничего не найдено";
+                loadMoreButton.textContent = "Больше ничего нет.";
                 loadMoreButton.disabled = true;
+                nothingLeft = true;
             }
+
             resizeAllPosts();
             updateImageModalHooks();
         })
