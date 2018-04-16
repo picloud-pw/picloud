@@ -40,7 +40,9 @@
             {{ post.html | safe }}
         </div>
         {% if post.image %}
-            <img src="{{ post.image.url }}" class="post-img">
+            <img src="{{ post.image.url }}"
+                 ratio="{{ post.image.width }}x{{ post.image.height }}"
+                 class="post-img">
         {% endif %}
         {% if post.link %}
             <a href="{{ post.link }}" class="btn btn-primary">

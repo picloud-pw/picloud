@@ -41,6 +41,10 @@ article.post .post-container .text h4 {
     font-size: 1.1em;
 }
 
+article.post .post-container img.post-img {
+    background: url("/static/img/loading.svg") center no-repeat;
+}
+
 article.post .post-container footer {
     text-align: left;
 }
