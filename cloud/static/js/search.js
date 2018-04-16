@@ -137,8 +137,9 @@ function search(subject_id = undefined, type_id = undefined) {
     return fetch(request)
         .then(response => response.ok ? response.json() : Response.error())
         .then(json => {
-            let posts = new DOMParser().parseFromString(json['html'], "text/html").body.children;
-            Array.from(posts).forEach(post => {
+            let document = new DOMParser().parseFromString(json['html'], "text/html");
+            let posts = Array.from(document.body.children);
+            posts.forEach(post => {
                 searchResults.appendChild(post);
                 resizePost(post);
                 imagesLoaded(post, resizePostWithImagesLoaded);
@@ -148,12 +149,10 @@ function search(subject_id = undefined, type_id = undefined) {
                 loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
                 nothingLeft = false;
-            } else if (posts.length === 0) {
-                loadMoreButton.textContent = "Ничего не найдено.";
-                loadMoreButton.disabled = true;
-                nothingLeft = true;
             } else {
-                loadMoreButton.textContent = "Больше ничего нет.";
+                loadMoreButton.textContent = posts.length > 0
+                    ? "Больше ничего нет."
+                    : "Ничего не найдено.";
                 loadMoreButton.disabled = true;
                 nothingLeft = true;
             }
