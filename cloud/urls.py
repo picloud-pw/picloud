@@ -43,11 +43,11 @@ urlpatterns = [
     path('contacts/', views.contacts.contacts, name='contacts'),
     path('memes/', views.memes.get_memes, name='memes'),
 
-    path('new_university/', views.universities.new_university, name='new_university'),
-    path('new_department/', views.departments.new_department, name='new_department'),
-    path('new_chair/', views.chairs.new_chair, name='new_chair'),
-    path('new_program/', views.programs.new_program, name='new_program'),
-    path('new_subject/', views.subjects.new_subject, name='new_subject'),
+    path('submit/university/', views.universities.new_university, name='new_university'),
+    path('submit/department/', views.departments.new_department, name='new_department'),
+    path('submit/chair/', views.chairs.new_chair, name='new_chair'),
+    path('submit/program/', views.programs.new_program, name='new_program'),
+    path('submit/subject/', views.subjects.new_subject, name='new_subject'),
 
     path('legal/privacy-policy/', views.legal.privacy_policy, name='privacy_policy'),
 
