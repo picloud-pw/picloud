@@ -1,0 +1,38 @@
+{% extends 'moderation/structure/structure_template.html' %}
+
+{% block approve_url %}
+    {% url 'program_approve' program_id=program.pk %}
+{% endblock %}
+
+{% block delete_url %}
+    {% url 'program_delete' program_id=program.pk %}
+{% endblock %}
+
+
+{% block structure_content %}
+
+    <table class="table table-striped">
+
+        <tr>
+            <td><b>Кафедра</b></td>
+            <td>{{ program.chair.short_title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Название</b></td>
+            <td>{{ program.title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Ссылка</b></td>
+            <td>{{ program.link }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Код программы</b></td>
+            <td>{{ program.code }}</td>
+        </tr>
+
+    </table>
+
+{% endblock %}

@@ -30,11 +30,11 @@ def moderation(request):
         programs = Program.objects.filter(is_approved=False)
         subjects = Subject.objects.filter(is_approved=False)
 
-        return render(request, 'moderation.html', {
+        return render(request, 'moderation/moderation.html', {
             'posts': posts_page,
             'universities': universities,
             'departments': departments,
-            'chair': chairs,
+            'chairs': chairs,
             'programs': programs,
             'subjects': subjects,
         })

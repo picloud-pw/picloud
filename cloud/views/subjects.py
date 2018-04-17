@@ -37,3 +37,18 @@ def new_subject(request):
             return render(request, 'structure/new/subject.html', {'new_subject': new_subject})
     else:
         return redirect("signin")
+
+
+def subject_delete(request, subject_id):
+    subject = get_object_or_404(Subject, pk=subject_id)
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        subject.delete()
+    return redirect("moderation")
+
+
+def subject_approve(request, subject_id):
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        Subject.objects.filter(pk=subject_id).update(is_approved=True)
+        return redirect("moderation")
+    else:
+        return redirect("post_list")

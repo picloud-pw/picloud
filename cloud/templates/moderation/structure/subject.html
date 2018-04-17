@@ -1,0 +1,43 @@
+{% extends 'moderation/structure/structure_template.html' %}
+
+{% block approve_url %}
+    {% url 'subject_approve' subject_id=subject.pk %}
+{% endblock %}
+
+{% block delete_url %}
+    {% url 'subject_delete' subject_id=subject.pk %}
+{% endblock %}
+
+
+{% block structure_content %}
+
+    <table class="table table-striped">
+
+        <tr>
+            <td><b>Программа обучения</b></td>
+            <td>{{ subject.programs.first }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Название</b></td>
+            <td>{{ subject.title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Аббривиатура</b></td>
+            <td>{{ subject.short_title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Семестр</b></td>
+            <td>{{ subject.semester }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Ссылка</b></td>
+            <td>{{ subject.lecture }}</td>
+        </tr>
+
+    </table>
+
+{% endblock %}

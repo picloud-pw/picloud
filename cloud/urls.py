@@ -42,8 +42,20 @@ urlpatterns = [
     path('universities/<university_id>/delete', views.universities.university_delete, name='university_delete'),
     path('universities/<university_id>/approve', views.universities.university_approve, name='university_approve'),
 
-    path('program/<program_id>', views.programs.program_page, name='program_page'),
-    path('subject/<subject_id>', views.subjects.subject_page, name='subject_page'),
+    path('departments/<department_id>/approve', views.departments.department_approve, name='department_approve'),
+    path('departments/<department_id>/delete', views.departments.department_delete, name='department_delete'),
+
+    path('chairs/<chair_id>/approve', views.chairs.chair_approve, name='chair_approve'),
+    path('chairs/<chair_id>/delete', views.chairs.chair_delete, name='chair_delete'),
+
+    path('programs/<program_id>', views.programs.program_page, name='program_page'),
+    path('programs/<program_id>/approve', views.programs.program_approve, name='program_approve'),
+    path('programs/<program_id>/delete', views.programs.program_delete, name='program_delete'),
+
+    path('subjects/<subject_id>', views.subjects.subject_page, name='subject_page'),
+    path('subjects/<subject_id>/approve', views.subjects.subject_approve, name='subject_approve'),
+    path('subjects/<subject_id>/delete', views.subjects.subject_delete, name='subject_delete'),
+
     path('contacts/', views.contacts.contacts, name='contacts'),
     path('memes/', views.memes.get_memes, name='memes'),
 

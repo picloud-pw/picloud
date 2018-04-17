@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 
 from cloud.forms import NewDepartmentForm
-from cloud.views import NOT_VALID
+from cloud.models import Department
 from cloud.views.message import message
 from cloud.views.posts import can_user_publish_instantly
 
@@ -21,3 +21,18 @@ def new_department(request):
     else:
         new_department = NewDepartmentForm()
         return render(request, 'structure/new/department.html', {'new_department': new_department})
+
+
+def department_delete(request, department_id):
+    department = get_object_or_404(Department, pk=department_id)
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        department.delete()
+    return redirect("moderation")
+
+
+def department_approve(request, department_id):
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        Department.objects.filter(pk=department_id).update(is_approved=True)
+        return redirect("moderation")
+    else:
+        return redirect("post_list")

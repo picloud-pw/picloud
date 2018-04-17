@@ -1,8 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 
 from cloud.forms import NewProgramForm
 from cloud.models import Program, Subject
-from cloud.views import VALID, NOT_VALID
 from cloud.views.message import message
 from cloud.views.posts import can_user_publish_instantly
 
@@ -35,3 +34,18 @@ def new_program(request):
     else:
         new_program = NewProgramForm()
         return render(request, 'structure/new/program.html', {'new_program': new_program})
+
+
+def program_delete(request, program_id):
+    program = get_object_or_404(Program, pk=program_id)
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        program.delete()
+    return redirect("moderation")
+
+
+def program_approve(request, program_id):
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        Program.objects.filter(pk=program_id).update(is_approved=True)
+        return redirect("moderation")
+    else:
+        return redirect("post_list")
