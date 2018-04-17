@@ -197,6 +197,8 @@
                 programChanged(document.getElementById("id_program").value);
             });
 
+            clearAndDisableAllLists();
+
             {% if post.pk %}
 
                 {# Редактирование поста #}
@@ -224,7 +226,7 @@
 
                 {# Создание поста #}
 
-                {% if user_info %}
+                {% if user_info and user_info.program %}
                     loadUniversities()
                         .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
                         .then(() => setDepartment({{ user_info.program.chair.department.pk }}))

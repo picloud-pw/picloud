@@ -93,7 +93,7 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
 
 function setOption(elementId, newValue) {
     let element = document.getElementById(elementId);
-    if (element && element.value.toString() !== newValue.toString()) {
+    if (element && element.value.toString() !== (newValue || '').toString()) {
         element.value = newValue;
         return true;
     } else {
