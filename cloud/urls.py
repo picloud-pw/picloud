@@ -36,8 +36,12 @@ urlpatterns = [
     path('change_password/', views.user.change_password, name='change_password'),
     path('change_avatar/', views.user.change_avatar, name='change_avatar'),
     path('change_user/', views.user.change_user, name='change_user'),
+
     path('universities/', views.universities.universities_list, name='universities_list'),
     path('universities/<university_id>/', views.universities.university_page, name='university_page'),
+    path('universities/<university_id>/delete', views.universities.university_delete, name='university_delete'),
+    path('universities/<university_id>/approve', views.universities.university_approve, name='university_approve'),
+
     path('program/<program_id>', views.programs.program_page, name='program_page'),
     path('subject/<subject_id>', views.subjects.subject_page, name='subject_page'),
     path('contacts/', views.contacts.contacts, name='contacts'),

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from cloud.forms import NewUniversityForm
 from cloud.models import University, Program, Chair, Department, Post, UserInfo
@@ -53,3 +53,19 @@ def new_university(request):
     else:
         new_university = NewUniversityForm()
         return render(request, 'structure/new/university.html', {'new_university': new_university})
+
+
+def university_delete(request, university_id):
+    university = get_object_or_404(University, pk=university_id)
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        university.delete()
+    return redirect("moderation")
+
+
+def university_approve(request, university_id):
+    university = get_object_or_404(University, pk=university_id)
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        University.objects.filter(pk=university_id).update(is_approved=True)
+        return redirect("moderation")
+    else:
+        return redirect("post_list")
