@@ -40,6 +40,21 @@ def fetch_and_sort_memes_from_all_groups():
     return memes
 
 
+def fetch_and_sort_memes(sources):
+    session = vk.Session(access_token=GLOBAL_TOKEN)
+    vk_api = vk.API(session)
+
+    memes = [meme
+             for source in sources
+             for meme in fetch_memes_for_group(vk_api, source.link.split('/')[-1])]
+
+    def sort_by_date(post):
+        return post["date"]
+
+    memes.sort(key=sort_by_date, reverse=True)
+    return memes
+
+
 def bot_answer(vk_api, user_id, msg):
     if msg is not None:
         vk_api.messages.send(user_id=user_id, message=msg, v=VK_API_VERSION)

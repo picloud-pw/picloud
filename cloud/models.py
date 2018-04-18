@@ -145,6 +145,19 @@ class UserInfo(models.Model):
         return self.user.username
 
 
+class MemeSource(models.Model):
+    link = models.URLField(null=False, blank=True)
+    author = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
+    university = models.ForeignKey('University', on_delete=models.SET_NULL, null=True, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
+    chair = models.ForeignKey('Chair', on_delete=models.SET_NULL, null=True, blank=True)
+    program = models.ForeignKey('Program', on_delete=models.SET_NULL, null=True, blank=True)
+    subject = models.ForeignKey('Subject', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.link
+
+
 class PostType(models.Model):
     class Meta:
         ordering = ['title']

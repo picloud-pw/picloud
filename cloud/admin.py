@@ -8,6 +8,8 @@ admin.site.register(Subject)
 admin.site.register(Program)
 admin.site.register(Lecturer)
 
+admin.site.register(MemeSource)
+
 admin.site.register(UserInfo)
 admin.site.register(UserStatus)
 
