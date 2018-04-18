@@ -32,7 +32,7 @@
                 <span class="type">{{ post.type.title }}</span>
                 |
                 <a class="subject" title="{{ post.subject.title }}"
-                   href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a>
+                   href="{% url 'subject_page' post.subject.pk %}">{{ post.subject.short_title }}</a>
             </p>
         </header>
         <hr/>
