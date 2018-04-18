@@ -38,7 +38,7 @@
 
                     {% for subject in subjects %}
                         {% if subject.semester == semester %}
-                            <a href="/subject/{{ subject.pk }}"><h4>{{ subject.title }}</h4></a>
+                            <a href="{% url 'subject_page' subject.pk%}"><h4>{{ subject.title }}</h4></a>
                         {% endif %}
                     {% endfor %}
 
