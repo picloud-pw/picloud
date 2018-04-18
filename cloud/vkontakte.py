@@ -11,10 +11,6 @@ GROUP_TOKEN = getattr(settings, 'VK_GROUP_TOKEN', None)
 if GLOBAL_TOKEN is None or GROUP_TOKEN is None:
     raise ImproperlyConfigured('Cannot get VK access token from application settings')
 
-VK_GROUPS = getattr(settings, 'VK_GROUP_LIST', None)
-if VK_GROUPS is None:
-    raise ImproperlyConfigured('Cannot get list of VK groups from application settings')
-
 POSTS_COUNT = 10
 BOT_LOOP_TIMEOUT = 1
 
@@ -23,21 +19,6 @@ def fetch_memes_for_group(vk_api, group_uri):
     return vk_api.wall.get(domain=group_uri,
                            count=POSTS_COUNT,
                            v=VK_API_VERSION)["items"]
-
-
-def fetch_and_sort_memes_from_all_groups():
-    session = vk.Session(access_token=GLOBAL_TOKEN)
-    vk_api = vk.API(session)
-
-    memes = [meme
-             for group_uri in VK_GROUPS
-             for meme in fetch_memes_for_group(vk_api, group_uri)]
-
-    def sort_by_date(post):
-        return post["date"]
-
-    memes.sort(key=sort_by_date, reverse=True)
-    return memes
 
 
 def fetch_and_sort_memes(sources):
