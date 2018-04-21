@@ -171,6 +171,7 @@ class PostType(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey('auth.User', null=True, on_delete=models.SET_NULL)
+    parent_post = models.ForeignKey('Post', on_delete=models.SET_NULL, null=True, blank=True, default=None)
     last_editor = models.ForeignKey('auth.User', related_name='last_editor', null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=256, null=False)
     text = models.TextField(null=True, blank=True)

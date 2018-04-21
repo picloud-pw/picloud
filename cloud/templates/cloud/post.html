@@ -67,6 +67,11 @@
                 ({{ post.created_date }})
             </span>
             <span class="post-footer-badges">
+                    <a class="post-footer-button-child-post"
+                       title="Дочерняя запись"
+                       href="{% url 'post_new_child' pk=post.pk %}">
+                        <span class="showopacity glyphicon glyphicon-plus"></span>
+                    </a>
                 {% if user == post.author or user.userinfo.status.can_moderate or user.is_staff or user.is_superuser %}
                     <a class="post-footer-button-delete"
                        title="Удалить запись"

@@ -70,12 +70,15 @@ def post_new(request):
         if request.method == "POST":
             form = PostForm(request.POST, request.FILES)
             user_can_publish = can_user_publish_instantly(request.user)
+            parent_post_id = request.GET.get("parent_post_id", None)
             if form.is_valid():
                 post = form.save(commit=False)
                 post.last_editor = request.user
                 post.author = request.user
                 post.created_date = timezone.now()
                 post.is_approved = user_can_publish
+                if parent_post_id is not None:
+                    post.parent_post = Post.objects.get(pk=parent_post_id)
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
                 if user_can_publish:
@@ -128,6 +131,10 @@ def post_edit(request, pk):
             })
     else:
         return redirect("post_list")
+
+
+def post_new_child(request, pk):
+    return redirect("/post/new/?parent_post_id=" + str(pk))
 
 
 def post_delete(request, pk):

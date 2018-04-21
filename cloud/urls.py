@@ -23,6 +23,7 @@ urlpatterns = [
     path('post/<int:pk>/edit/', views.posts.post_edit, name='post_edit'),
     path('post/<int:pk>/delete/', views.posts.post_delete, name='post_delete'),
     path('post/<int:pk>/checked/', views.posts.post_checked, name='post_checked'),
+    path('post/<int:pk>/new_child/', views.posts.post_new_child, name='post_new_child'),
 
     path('user/<user_id>', views.user.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),
