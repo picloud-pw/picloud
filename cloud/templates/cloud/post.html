@@ -26,7 +26,13 @@
         {% endif %}
         <header>
             <h1>
-                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }} </a>
+                {% if post.is_parent %}
+                    <span style="font-size:12px;"
+                          aria-label="Дочерние посты"
+                          class="showopacity glyphicon glyphicon-share-alt">
+                    </span>
+                {% endif %}
             </h1>
             <p class="subject">
                 <span class="type">{{ post.type.title }}</span>

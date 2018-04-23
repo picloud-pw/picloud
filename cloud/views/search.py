@@ -10,7 +10,7 @@ from .posts import POSTS_PER_PAGE
 
 def search_posts(request):
     words = request.GET.get('search_request', None).lover().split(" ")
-    posts = Post.objects.filter(is_approved=True)
+    posts = Post.objects.filter(is_approved=True).filter(parent_post=None)
     posts = posts.order_by('created_date').reverse()[:100]
     posts = [obj.as_dict() for obj in posts]
     return JsonResponse(posts, safe=False)
@@ -21,7 +21,7 @@ def search_and_render_posts(request):
     type_id = request.GET.get('type_id', None)
     page_number = request.GET.get('page', 1)
 
-    posts = Post.objects.filter(is_approved=True)
+    posts = Post.objects.filter(is_approved=True).filter(parent_post=None)
 
     if subject_id is None and type_id is None:
         if request.user.is_authenticated:

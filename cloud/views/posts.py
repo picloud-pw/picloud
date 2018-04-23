@@ -21,6 +21,7 @@ def post_list(request, displayed_posts=None):
     empty_message = ""
     posts = Post.objects \
         .filter(is_approved=True) \
+        .filter(parent_post=None) \
         .filter(created_date__lte=timezone.now())
 
     if request.user.is_authenticated:
@@ -56,11 +57,13 @@ def post_list(request, displayed_posts=None):
 
 def post_detail(request, pk, msg=""):
     post = get_object_or_404(Post, pk=pk)
+    child_posts = Post.objects.filter(parent_post=post)
     if post.views < 99999:
         post.views += 1
         post.save()
     return render(request, 'cloud/post_detail.html', {
         'post': post,
+        'child_posts': child_posts,
         'message': msg
     })
 
