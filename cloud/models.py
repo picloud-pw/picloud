@@ -266,7 +266,8 @@ class Post(models.Model):
                user.is_superuser()
 
     def is_parent(self):
-        return Post.objects.filter(parent_post=self).count() > 0
+        return self.post_set.count() > 0
 
     def get_childs(self):
-        return Post.objects.filter(parent_post=self)
+        return self.post_set
+
