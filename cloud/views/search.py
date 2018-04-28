@@ -49,5 +49,5 @@ def search_and_render_posts(request):
         'current_page': posts_page.number,
         'total_pages': paginator.num_pages,
         'has_next': posts_page.has_next(),
-        'html': render_to_string('cloud/bare_post_list.html', {'posts': posts_page}),
+        'html': render_to_string('cloud/bare_post_list.html', {'posts': posts_page}, request=request),
     })
