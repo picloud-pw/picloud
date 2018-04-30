@@ -92,13 +92,13 @@ article.post .post-footer-button-edit:hover {
     text-decoration: none;
 }
 
-article.post .post-footer-button-child-post {
-    color: #c390ff;
-    color: rgba(181, 3, 255, 0.19);
+article.post .post-footer-button-create-child-post {
+    color: #b3b3b3;
+    color: gray(0, 0.19);
 }
 
-article.post .post-footer-button-child-post:hover {
-    color: #ffb1f7;
-    color: rgba(171, 20, 255, 0.63);
+article.post .post-footer-button-create-child-post:hover {
+    color: #4d4d4d;
+    color: gray(0, 0.63);
     text-decoration: none;
 }
