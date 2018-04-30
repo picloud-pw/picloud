@@ -51,4 +51,4 @@ def subject_approve(request, subject_id):
         Subject.objects.filter(pk=subject_id).update(is_approved=True)
         return redirect("moderation")
     else:
-        return redirect("post_list")
+        return redirect("cloud")

@@ -35,4 +35,4 @@ def chair_approve(request, chair_id):
         Chair.objects.filter(pk=chair_id).update(is_approved=True)
         return redirect("moderation")
     else:
-        return redirect("post_list")
+        return redirect("cloud")

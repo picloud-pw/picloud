@@ -66,4 +66,4 @@ def university_approve(request, university_id):
         University.objects.filter(pk=university_id).update(is_approved=True)
         return redirect("moderation")
     else:
-        return redirect("post_list")
+        return redirect("cloud")

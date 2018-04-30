@@ -1,5 +1,5 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 
 def robots(request):
-    return render_to_response('robots.txt', content_type="text/plain")
+    return render(request, 'robots.txt', content_type="text/plain")

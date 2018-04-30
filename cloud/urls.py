@@ -1,10 +1,12 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
+from django.views.generic import RedirectView
 
 from cloud import views
 
 urlpatterns = [
     path('', views.index.index, name='index'),
+    path('about/', views.index.about, name='about'),
     path('robots.txt', views.robots.robots, name='robots'),
 
     path('auth/signup/', views.registration.sign_up, name="signup"),
@@ -29,8 +31,8 @@ urlpatterns = [
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),
     path('user/<user_id>/not_checked_posts', views.user.user_not_checked_posts, name='user_not_checked_posts'),
 
-    path('cloud/', views.posts.post_list, name='post_list'),
-    path('search/', views.posts.search, name="search"),
+    path('cloud/', views.posts.cloud, name='cloud'),
+    path('search/', RedirectView.as_view(pattern_name='cloud'), name='search'),
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),
     path('moderation/', views.moderation.moderation, name="moderation"),

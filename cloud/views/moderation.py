@@ -40,4 +40,4 @@ def moderation(request):
         })
 
     else:
-        return redirect("post_list")
+        return redirect("cloud")

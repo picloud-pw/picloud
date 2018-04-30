@@ -133,7 +133,7 @@ def post_edit(request, pk):
                 'post': post,
             })
     else:
-        return redirect("post_list")
+        return redirect("cloud")
 
 
 def post_new_child(request, pk):
@@ -144,7 +144,7 @@ def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
         post.delete()
-    return redirect("post_list")
+    return redirect("cloud")
 
 
 def post_checked(request, pk):
@@ -153,10 +153,10 @@ def post_checked(request, pk):
         Post.objects.filter(pk=pk).update(is_approved=True)
         return redirect("moderation")
     else:
-        return redirect("post_list")
+        return redirect("cloud")
 
 
-def search(request):
+def cloud(request):
     university = ChooseUniversityForm()
     department = ChooseDepartmentForm()
     chair = ChooseChairForm()

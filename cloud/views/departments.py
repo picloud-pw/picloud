@@ -35,4 +35,4 @@ def department_approve(request, department_id):
         Department.objects.filter(pk=department_id).update(is_approved=True)
         return redirect("moderation")
     else:
-        return redirect("post_list")
+        return redirect("cloud")

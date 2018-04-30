@@ -48,4 +48,4 @@ def program_approve(request, program_id):
         Program.objects.filter(pk=program_id).update(is_approved=True)
         return redirect("moderation")
     else:
-        return redirect("post_list")
+        return redirect("cloud")

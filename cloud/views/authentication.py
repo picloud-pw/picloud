@@ -26,7 +26,7 @@ def sign_in(request):
             else:
                 request.session['program_id'] = ""
 
-            return redirect('post_list')
+            return redirect('cloud')
         else:
             error = "Неверно введены логин или пароль!"
             return render(request, 'auth/signin.html', {'error': error})
