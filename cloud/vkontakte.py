@@ -21,7 +21,7 @@ def fetch_memes_for_group(vk_api, group_uri):
     match = re.match('^club(\d)+$', group_uri)
     if match:
         group_id = int(match.group(1))
-        return vk_api.wall.get(owner_id=group_id,
+        return vk_api.wall.get(owner_id=-group_id,
                                count=POSTS_COUNT,
                                v=VK_API_VERSION)["items"]
     else:
