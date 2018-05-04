@@ -1,3 +1,5 @@
+import re
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
@@ -16,9 +18,16 @@ BOT_LOOP_TIMEOUT = 1
 
 
 def fetch_memes_for_group(vk_api, group_uri):
-    return vk_api.wall.get(domain=group_uri,
-                           count=POSTS_COUNT,
-                           v=VK_API_VERSION)["items"]
+    match = re.match('^club(\d)+$', group_uri)
+    if match:
+        group_id = int(match.group(1))
+        return vk_api.wall.get(owner_id=group_id,
+                               count=POSTS_COUNT,
+                               v=VK_API_VERSION)["items"]
+    else:
+        return vk_api.wall.get(domain=group_uri,
+                               count=POSTS_COUNT,
+                               v=VK_API_VERSION)["items"]
 
 
 def fetch_and_sort_memes(sources):
