@@ -14,59 +14,36 @@ from cloud.views.user import validate_name, validate_course
 
 def sign_up(request):
     error = ""
-    user_info_form = UserInfoForm()
     if request.method == "POST":
-        first_name = request.POST['first-name']
-        if not validate_name(first_name, "default"):
-            first_name = None
-        last_name = request.POST['last-name']
-        if not validate_name("default", last_name):
-            last_name = None
-        course = request.POST['course']
-        if not validate_course(course):
-            course = None
         email = request.POST['email']
         username = request.POST['username']
         password = request.POST['password']
         second_password = request.POST['second_password']
-        user_info_form = UserInfoForm(request.POST, request.FILES)
 
         error = validate_signup(username, email, password, second_password)
         if error == "":
             if not (User.objects.filter(username__iexact=username).exists() or
                     User.objects.filter(email__iexact=email).exists()):
-                if user_info_form.is_valid() and recaptcha_is_valid(request):
-
-                    # заполнение основной информации
+                if recaptcha_is_valid(request):
                     user = User.objects.create_user(username, email, password)
-                    if first_name is not None:
-                        user.first_name = first_name
-                    if last_name is not None:
-                        user.second_name = last_name
                     user.is_active = False
-                    user.save()
-                    # дополнительная информация
-                    user_info = user_info_form.save(commit=False)
-                    user_info.user = user
-                    user_info.course = course
-                    user_info.status = UserStatus.objects.get(title="Рядовой студент")
-                    user_info.save()
-
-                    # подтверждение почты (активация аккаунта)
-                    send_acc_activate_letter(request, user, email)
-
-                    msg = 'Пожалуйста, подтвердите адрес электронной почты для завершения регистрации.'
-                    return render(request, 'message.html', {'message': msg})
+                    if send_acc_activate_letter(request, user, email):
+                        user.save()
+                        msg = 'Пожалуйста, подтвердите адрес электронной почты для завершения регистрации.'
+                        return render(request, 'message.html', {'message': msg})
+                    else:
+                        error = "Ошибка при отправке сообщения для подтверждения почты."
+                        return render(request, 'auth/signup.html', {'error': error})
                 else:
-                    error = "Форма заполнена неправильно."
-                    return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
+                    error = "ReCaptcha не пройдена, попробуйте снова."
+                    return render(request, 'auth/signup.html', {'error': error})
             else:
-                error = "Пользователь с таким логином уже существует!"
-                return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
+                error = "Пользователь с таким логином или почтой уже существует!"
+                return render(request, 'auth/signup.html', {'error': error})
         else:
-            return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
+            return render(request, 'auth/signup.html', {'error': error})
     else:
-        return render(request, 'auth/signup.html', {'error': error, 'user_info_form': user_info_form})
+        return render(request, 'auth/signup.html', {'error': error})
 
 
 def validate_signup(username, email, password, second_password):
@@ -115,5 +92,10 @@ def send_acc_activate_letter(request, user, email):
         'uid': user.pk,
         'token': account_activation_token.make_token(user),
     })
-    email = EmailMessage(mail_subject, msg, to=[email])
-    email.send()
+    try:
+        email = EmailMessage(mail_subject, msg, to=[email])
+        email.send()
+    except Exception:
+        return False
+    else:
+        return True
