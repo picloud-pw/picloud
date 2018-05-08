@@ -8,7 +8,7 @@ from cloud.views.posts import can_user_publish_instantly
 
 def subject_page(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
-    posts = Post.objects.filter(subject=subject).filter(is_approved=True)
+    posts = Post.objects.filter(subject=subject).filter(is_approved=True).filter(parent_post=None)
     post_types = set()
     for post in posts:
         post_types.add(post.type)
