@@ -27,8 +27,13 @@ def sign_up(request):
                 if recaptcha_is_valid(request):
                     user = User.objects.create_user(username, email, password)
                     user.is_active = False
+                    user.save()
+                    
+                    user_info = UserInfo(user=user)
+                    user_info.status = UserStatus.objects.get(title="Рядовой студент")
+                    user_info.save()
+
                     if send_acc_activate_letter(request, user, email):
-                        user.save()
                         msg = 'Пожалуйста, подтвердите адрес электронной почты для завершения регистрации.'
                         return render(request, 'message.html', {'message': msg})
                     else:
