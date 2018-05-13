@@ -1,8 +1,13 @@
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
+import requests
 
 from cloud.models import UserInfo
+
+VK_ID = '6477166'
+VK_API_VERSION = '5.74'
+VK_SECRET = 'loqcCdT0JDj5fTrQd0ku'
 
 
 def sign_out(request):
@@ -29,9 +34,24 @@ def sign_in(request):
             return redirect('cloud')
         else:
             error = "Неверно введены логин или пароль!"
-            return render(request, 'auth/signin.html', {'error': error})
+            return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(),})
     else:
         error = ""
-        return render(request, 'auth/signin.html', {'error': error})
+        return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(),})
 
 
+def vk_auth(request):
+    code = request.GET["code"]
+    if code is not None:
+        URL = 'https://oauth.vk.com/access_token?' \
+              'client_id=' + VK_ID + \
+              '&client_secret=' + VK_SECRET + \
+              '&code=' + code + \
+              '&redirect_uri=' + request.get_host() + '/vk_auth/'
+        print (URL)
+        token = requests.get(URL).json()
+        print (token)
+        return redirect("cloud")
+    else:
+        error = request.GET('error_description')
+        return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })
