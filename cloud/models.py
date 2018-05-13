@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import auth
+import os
 
 import bleach
 import markdown
@@ -271,3 +272,8 @@ class Post(models.Model):
     def get_childs(self):
         return self.post_set
 
+    def file_extension(self):
+        if self.file:
+            return os.path.splitext(self.file.name)[1][1:].upper()
+        else:
+            return None
