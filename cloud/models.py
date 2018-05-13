@@ -1,10 +1,10 @@
-from django.db import models
-from django.utils import timezone
-from django.contrib import auth
 import os
+from datetime import datetime
 
 import bleach
 import markdown
+from django.db import models
+from django.utils import timezone
 
 
 class University(models.Model):
@@ -207,6 +207,38 @@ class Post(models.Model):
         safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
         html_with_hyperlinks = bleach.linkify(safe_html)
         return html_with_hyperlinks
+
+    def created_date_natural(self):
+        date = self.created_date
+        try:
+            tzinfo = getattr(date, 'tzinfo', None)
+            delta = (date - datetime.now(tzinfo))
+            if delta.seconds < 60:
+                return 'только что'
+            elif delta.seconds <= 3000:
+                return '{} мин. назад'.format(delta.seconds // 60),
+            elif delta.seconds <= 4000:
+                return 'час назад'
+            date = date.date()
+        except AttributeError:
+            # Passed value wasn't a date object
+            return date
+        except ValueError:
+            # Date arguments out of range
+            return date
+        today = datetime.now(tzinfo).date()
+        delta = date - today
+        if delta.days == 0:
+            return 'сегодня в {0:%H}:{0:%M}'.format(self.created_date)
+        elif delta.days == 1:
+            return 'завтра в {0:%H}:{0:%M}'.format(self.created_date)
+        elif delta.days == -1:
+            return 'вчера в {0:%H}:{0:%M}'.format(self.created_date)
+
+        if date.year == today.year:
+            return '{0:%d} {0:%b} в {0:%H}:{0:%M}'.format(self.created_date)
+        else:
+            return '{0:%x}'
 
     def publish(self):
         self.created_date = timezone.now()
