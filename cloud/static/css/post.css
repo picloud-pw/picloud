@@ -71,34 +71,34 @@ article.post .post-footer-badges > * {
 }
 
 article.post .post-footer-button-delete {
-    color: #ffb3b3;
-    color: #ff000030;
+    color: rgb(255, 179, 179);
+    color: rgba(255, 0, 0, 0.19);
 }
 
 article.post .post-footer-button-delete:hover {
-    color: #ff4d4d;
-    color: #ff0000a0;
+    color: rgb(255, 77, 77);
+    color: rgba(255, 0, 0, 0.63);
     text-decoration: none;
 }
 
 article.post .post-footer-button-edit {
-    color: #b3b3ff;
-    color: #0000ff30;
+    color: rgb(179, 179, 255);
+    color: rgba(0, 0, 255, 0.19);
 }
 
 article.post .post-footer-button-edit:hover {
-    color: #4d4dff;
-    color: #0000ffa0;
+    color: rgb(77, 77, 255);
+    color: rgba(0, 0, 255, 0.63);
     text-decoration: none;
 }
 
 article.post .post-footer-button-create-child-post {
-    color: #b3b3b3;
-    color: gray(0, 0.19);
+    color: rgb(179, 179, 179);
+    color: rgba(0, 0, 0, 0.19);
 }
 
 article.post .post-footer-button-create-child-post:hover {
-    color: #4d4d4d;
-    color: gray(0, 0.63);
+    color: rgb(77, 77, 77);
+    color: rgba(0, 0, 0, 0.63);
     text-decoration: none;
 }
