@@ -102,3 +102,7 @@ article.post .post-footer-button-create-child-post:hover {
     color: rgba(0, 0, 0, 0.63);
     text-decoration: none;
 }
+
+article.post .btn-follow-link, article.post .btn-download {
+    margin: 1rem 0.5rem;
+}

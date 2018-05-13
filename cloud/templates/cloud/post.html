@@ -56,12 +56,12 @@
             {% endif %}
         {% endif %}
         {% if post.link %}
-            <a href="{{ post.link }}" class="btn btn-primary">
+            <a href="{{ post.link }}" class="btn btn-primary btn-follow-link">
                 Перейти по&nbsp;ссылке
             </a>
         {% endif %}
         {% if post.file %}
-            <a href="{{ post.file.url }}" class="btn btn-success">
+            <a href="{{ post.file.url }}" class="btn btn-success btn-download">
                 Скачать файл ({{ post.file_extension }})
             </a>
         {% endif %}
