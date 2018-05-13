@@ -82,6 +82,7 @@
                 {% if user == post.author or user.userinfo.status.can_moderate or user.is_staff or user.is_superuser %}
                     <a class="post-footer-button-delete"
                        title="Удалить запись"
+                       onclick="return confirm('Удалить запись? После этого действия запись будет невозможно восстановить.')"
                        href="{% url 'post_delete' pk=post.pk %}">
                         <span class="showopacity glyphicon glyphicon-remove"></span>
                     </a>
@@ -100,15 +101,5 @@
                 </span>
             </span>
         </footer>
-        <script>
-            {# TODO: Не генерировать этот код на каждом посте #}
-            document
-                .querySelector('#post-{{ post.pk }} .post-footer-button-delete')
-                .addEventListener('click', (e) => {
-                    if (!confirm("Удалить запись? После этого действия запись будет невозможно восстановить.")) {
-                        e.preventDefault();
-                    }
-                });
-        </script>
     </div>
 </article>
