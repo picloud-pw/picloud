@@ -38,8 +38,8 @@
             <p class="subject">
                 <span class="type">{{ post.type.title }}</span>
                 |
-                <a class="subject" title="{{ post.subject.title }}"
-                   href="{% url 'subject_page' post.subject.pk %}">{{ post.subject.short_title }}</a>
+                <a class="subject" title="{{ post.subject.displayed_title }}"
+                   href="{% url 'subject_page' post.subject.pk %}">{{ post.subject.short_title }}{% if post.subject.semester > 0 %}<sup>{{ post.subject.semester }}</sup>{% endif %}</a>
             </p>
         </header>
         <hr/>
