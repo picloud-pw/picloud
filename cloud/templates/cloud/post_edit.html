@@ -182,7 +182,11 @@
                              onclick="displayInputBlock(this, '#fileInput')">
                             <span style="font-size:16px;" class="showopacity glyphicon glyphicon-open-file"></span>
                         </div>
-                        {% if user_info and user_info.status.can_publish_without_moderation %}
+                        {% if post.pk %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                Сохранить
+                            </button>
+                        {% elif user_info and user_info.status.can_publish_without_moderation %}
                             <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9"
                                     title="Запись будет немедленно опубликована.">
                                 Опубликовать
