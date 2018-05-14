@@ -70,7 +70,7 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
                 let option = document.createElement("option");
                 option.textContent = defaultOptionText;
                 option.value = "";
-                option.disabled = false;
+                option.disabled = (elementId !== 'id_subject');
                 element.appendChild(option);
                 element.value = "";
 
