@@ -38,7 +38,7 @@ function clearAndDisableAllLists() {
     clearAndDisableList("id_department", "Выберите факультет");
     clearAndDisableList("id_chair", "Выберите кафедру");
     clearAndDisableList("id_program", "Выберите программу обучения");
-    clearAndDisableList("id_subject", "Выберите предмет");
+    clearAndDisableList("id_subject", "Выберите дисциплину");
 }
 
 function loadUniversities() {
@@ -70,7 +70,7 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
                 let option = document.createElement("option");
                 option.textContent = defaultOptionText;
                 option.value = "";
-                option.disabled = true;
+                option.disabled = false;
                 element.appendChild(option);
                 element.value = "";
 
@@ -132,7 +132,7 @@ function universityChanged(university_id) {
         .then(() => {
             clearAndDisableList("id_chair", "Выберите кафедру");
             clearAndDisableList("id_program", "Выберите программу обучения");
-            clearAndDisableList("id_subject", "Выберите предмет");
+            clearAndDisableList("id_subject", "Выберите дисциплину");
             return Promise.resolve();
         });
 }
@@ -141,7 +141,7 @@ function departmentChanged(department_id) {
     return loadOptions('id_chair', '/api/chairs/', department_id, 'Выберите кафедру')
         .then(() => {
             clearAndDisableList("id_program", 'Выберите программу обучения');
-            clearAndDisableList("id_subject", "Выберите предмет");
+            clearAndDisableList("id_subject", "Выберите дисциплину");
             return Promise.resolve();
         });
 }
@@ -149,13 +149,13 @@ function departmentChanged(department_id) {
 function chairChanged(chair_id) {
     return loadOptions('id_program', '/api/programs/', chair_id, 'Выберите программу обучения')
         .then(() => {
-            clearAndDisableList('id_subject', 'Выберите предмет');
+            clearAndDisableList('id_subject', 'Выберите дисциплину');
             return Promise.resolve();
         });
 }
 
 function programChanged(program_id) {
-    return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите дисциплину');
+    return loadOptions('id_subject', '/api/subjects/', program_id, 'Любая дисциплина');
 }
 
 /*
