@@ -73,12 +73,34 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
                 option.disabled = true;
                 element.appendChild(option);
                 element.value = "";
+
+                let lastSemester = null;
                 jsonArray.forEach(function (item) {
+                    if (elementId === 'id_subject') {
+                        if (lastSemester !== item.semester) {
+                            let lineSplitter = document.createElement("option");
+                            lineSplitter.textContent = "____________________";
+                            lineSplitter.disabled = true;
+                            element.appendChild(lineSplitter);
+
+                            let headingSplitter = document.createElement("option");
+                            headingSplitter.disabled = true;
+                            if (item["semester"] > 0) {
+                                headingSplitter.textContent = `Семестр ${item.semester}`;
+                            } else {
+                                headingSplitter.textContent = "Общие дисциплины";
+                            }
+                            headingSplitter.style.fontFamily = "bold";
+                            element.appendChild(headingSplitter);
+                            lastSemester = item.semester;
+                        }
+                    }
                     let option = document.createElement("option");
-                    option.value = item["id"];
-                    option.textContent = item["title"];
+                    option.value = item.id;
+                    option.textContent = item.title;
                     element.appendChild(option);
                 });
+
                 element.disabled = false;
                 element.style.backgroundColor = 'white';
             } else {
@@ -133,7 +155,7 @@ function chairChanged(chair_id) {
 }
 
 function programChanged(program_id) {
-    return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите предмет');
+    return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите дисциплину');
 }
 
 /*
