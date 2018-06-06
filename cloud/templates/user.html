@@ -8,6 +8,13 @@
 
 {% block content %}
 
+    <style>
+        .secret-field{
+            background-image: url({% static 'img/secret_field.png' %});
+            border-radius: 10px;
+        }
+    </style>
+
     <div class="container-fluid no-margin-padding">
 
         <div class="post-panel panel-settings">
@@ -25,20 +32,20 @@
                         {% if user.is_staff or user.is_superuser %}
                             <tr>
                                 <th scope="row">Почта:</th>
-                                <td>{{ fr_user.email }}</td>
+                                <td class="secret-field"></td>
                             </tr>
                         {% endif %}
                         <tr>
                             <th scope="row">Имя:</th>
-                            <td>{{ fr_user.first_name }}</td>
+                            <td class="secret-field"></td>
                         </tr>
                         <tr>
                             <th scope="row">Фамилия:</th>
-                            <td>{{ fr_user.last_name }}</td>
+                            <td class="secret-field"></td>
                         </tr>
                         <tr>
                             <th scope="row">Карма:</th>
-                            <td>{{ fr_user_info.karma }}</td>
+                            <td >{{ fr_user_info.karma }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Статус:</th>
