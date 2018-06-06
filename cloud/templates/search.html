@@ -21,15 +21,13 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ chair.chair }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ program.program }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.subject }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.type }}</div>
 
         <hr>
-        <div id="search-line" class="col-xs-12 col-sm-7 col-md-9 col-lg-9">
+        <div id="search-line" class="col-xs-12 col-sm-10 col-md-11 col-lg-11">
             <input class="form-control" type="text"
                    title="Извините, полнотекстовый поиск временно не работает." disabled
                    placeholder="Введите запрос">
-        </div>
-        <div id="search-type" class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
-            {{ subject.type }}
         </div>
         <div id="search-button" class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
             <input class="form-control btn btn-primary" type="submit"
