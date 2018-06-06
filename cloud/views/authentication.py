@@ -48,9 +48,9 @@ def vk_auth(request):
               '&client_secret=' + VK_SECRET + \
               '&code=' + code + \
               '&redirect_uri=' + request.get_host() + '/vk_auth/'
-        print (URL)
-        token = requests.get(URL).json()
-        print (token)
+        data = requests.get(URL).json()
+        token = data['access_token']
+        user_id = data['user_id']
         return redirect("cloud")
     else:
         error = request.GET('error_description')
