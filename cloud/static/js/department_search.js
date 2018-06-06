@@ -38,7 +38,7 @@ function clearAndDisableAllLists() {
     clearAndDisableList("id_department", "Выберите факультет");
     clearAndDisableList("id_chair", "Выберите кафедру");
     clearAndDisableList("id_program", "Выберите программу обучения");
-    clearAndDisableList("id_subject", "Выберите предмет");
+    clearAndDisableList("id_subject", "Выберите дисциплину");
 }
 
 function loadUniversities() {
@@ -70,15 +70,37 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
                 let option = document.createElement("option");
                 option.textContent = defaultOptionText;
                 option.value = "";
-                option.disabled = true;
+                option.disabled = (elementId !== 'id_subject');
                 element.appendChild(option);
                 element.value = "";
+
+                let lastSemester = null;
                 jsonArray.forEach(function (item) {
+                    if (elementId === 'id_subject') {
+                        if (lastSemester !== item.semester) {
+                            let lineSplitter = document.createElement("option");
+                            lineSplitter.textContent = "____________________";
+                            lineSplitter.disabled = true;
+                            element.appendChild(lineSplitter);
+
+                            let headingSplitter = document.createElement("option");
+                            headingSplitter.disabled = true;
+                            if (item["semester"] > 0) {
+                                headingSplitter.textContent = `Семестр ${item.semester}`;
+                            } else {
+                                headingSplitter.textContent = "Общие дисциплины";
+                            }
+                            headingSplitter.style.fontFamily = "bold";
+                            element.appendChild(headingSplitter);
+                            lastSemester = item.semester;
+                        }
+                    }
                     let option = document.createElement("option");
-                    option.value = item["id"];
-                    option.textContent = item["title"];
+                    option.value = item.id;
+                    option.textContent = item.title;
                     element.appendChild(option);
                 });
+
                 element.disabled = false;
                 element.style.backgroundColor = 'white';
             } else {
@@ -110,7 +132,7 @@ function universityChanged(university_id) {
         .then(() => {
             clearAndDisableList("id_chair", "Выберите кафедру");
             clearAndDisableList("id_program", "Выберите программу обучения");
-            clearAndDisableList("id_subject", "Выберите предмет");
+            clearAndDisableList("id_subject", "Выберите дисциплину");
             return Promise.resolve();
         });
 }
@@ -119,7 +141,7 @@ function departmentChanged(department_id) {
     return loadOptions('id_chair', '/api/chairs/', department_id, 'Выберите кафедру')
         .then(() => {
             clearAndDisableList("id_program", 'Выберите программу обучения');
-            clearAndDisableList("id_subject", "Выберите предмет");
+            clearAndDisableList("id_subject", "Выберите дисциплину");
             return Promise.resolve();
         });
 }
@@ -127,13 +149,13 @@ function departmentChanged(department_id) {
 function chairChanged(chair_id) {
     return loadOptions('id_program', '/api/programs/', chair_id, 'Выберите программу обучения')
         .then(() => {
-            clearAndDisableList('id_subject', 'Выберите предмет');
+            clearAndDisableList('id_subject', 'Выберите дисциплину');
             return Promise.resolve();
         });
 }
 
 function programChanged(program_id) {
-    return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите предмет');
+    return loadOptions('id_subject', '/api/subjects/', program_id, 'Любая дисциплина');
 }
 
 /*

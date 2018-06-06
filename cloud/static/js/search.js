@@ -198,7 +198,7 @@ ready(() => {
         .forEach(element => {
             element.addEventListener('change', function () {
                 let data = getCurrentValues();
-                history.pushState(data, null, `/search/?${calculateSuffix(data)}`);
+                history.pushState(data, null, `/cloud/?${calculateSuffix(data)}`);
                 newSearchRequest(data);
             });
         });

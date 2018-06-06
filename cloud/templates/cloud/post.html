@@ -26,19 +26,20 @@
         {% endif %}
         <header>
             <h1>
-                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }} </a>
+                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
                 {% if post.is_parent %}
                     <span style="font-size:12px;"
-                          aria-label="Дочерние посты"
-                          class="showopacity glyphicon glyphicon-share-alt">
+                          aria-label="Есть дочерние записи"
+                          title="Есть дочерние записи"
+                          class="showopacity glyphicon glyphicon-th-large">
                     </span>
                 {% endif %}
             </h1>
             <p class="subject">
                 <span class="type">{{ post.type.title }}</span>
                 |
-                <a class="subject" title="{{ post.subject.title }}"
-                   href="{% url 'subject_page' post.subject.pk %}">{{ post.subject.short_title }}</a>
+                <a class="subject" title="{{ post.subject.displayed_title }}"
+                   href="{% url 'subject_page' post.subject.pk %}">{{ post.subject.short_title }}{% if post.subject.semester > 0 %}<sup>{{ post.subject.semester }}</sup>{% endif %}</a>
             </p>
         </header>
         <hr/>
@@ -55,13 +56,13 @@
             {% endif %}
         {% endif %}
         {% if post.link %}
-            <a href="{{ post.link }}" class="btn btn-primary">
+            <a href="{{ post.link }}" class="btn btn-primary btn-follow-link">
                 Перейти по&nbsp;ссылке
             </a>
         {% endif %}
         {% if post.file %}
-            <a href="{{ post.file.url }}" class="btn btn-success">
-                Скачать файл
+            <a href="{{ post.file.url }}" class="btn btn-success btn-download">
+                Скачать файл ({{ post.file_extension }})
             </a>
         {% endif %}
         <hr/>
@@ -81,6 +82,7 @@
                 {% if user == post.author or user.userinfo.status.can_moderate or user.is_staff or user.is_superuser %}
                     <a class="post-footer-button-delete"
                        title="Удалить запись"
+                       onclick="return confirm('Удалить запись? После этого действия запись будет невозможно восстановить.')"
                        href="{% url 'post_delete' pk=post.pk %}">
                         <span class="showopacity glyphicon glyphicon-remove"></span>
                     </a>
@@ -99,15 +101,5 @@
                 </span>
             </span>
         </footer>
-        <script>
-            {# TODO: Не генерировать этот код на каждом посте #}
-            document
-                .querySelector('#post-{{ post.pk }} .post-footer-button-delete')
-                .addEventListener('click', (e) => {
-                    if (!confirm("Удалить запись? После этого действия запись будет невозможно восстановить.")) {
-                        e.preventDefault();
-                    }
-                });
-        </script>
     </div>
 </article>

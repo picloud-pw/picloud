@@ -134,19 +134,39 @@
             <div class="col-md-6 col-lg-6">
                 <div class="post-edit-panel">
 
-                    <div id="linkInput" class="form-group django-control row link" style="display: none">
+                    <div id="linkInput" class="form-group django-control link" style="display: none">
                         <label class="col-sm-2 text-right">Ссылка: </label>
                         <div class="col-sm-10">{{ form.link }}</div>
+                        <p class="small">
+                            Пожалуйста, прикрепляйте <em>прямые ссылки</em> на&nbsp;материалы
+                            из&nbsp;внешних источников.
+                        </p>
                     </div>
 
-                    <div id="pictureInput" class="form-group django-control row picture" style="display: none">
+                    <div id="pictureInput" class="form-group django-control picture" style="display: none">
                         <label class="col-sm-2 text-right">Картинка: </label>
                         <div class="col-sm-10">{{ form.image }}</div>
+                        <p class="small">
+                            Прикрепите самое качественное изображение из&nbsp;всех имеющихся у&nbsp;вас.
+                            Сюда можно добавить, например, обложку для публикуемого учебного пособия.
+                        </p>
                     </div>
 
-                    <div id="fileInput" class="form-group django-control row file" style="display: none">
+                    <div id="fileInput" class="form-group django-control file" style="display: none">
                         <label class="col-sm-2 text-right">Файл: </label>
                         <div class="col-sm-10">{{ form.file }}</div>
+                        <p class="small">
+                            Пожалуйста, прикрепляйте документы и&nbsp;презентации <em>в&nbsp;формате PDF</em>,
+                            если они не&nbsp;предполагают дальнейшего редактирования. Это упрощает
+                            работу пользователей с&nbsp;материалами. Даже если редактирование предполагается,
+                            старайтесь прикреплять PDF-файл как вложение, а&nbsp;редактируемый оригинал
+                            в&nbsp;отдельном посте или как ссылку в&nbsp;тексте.
+                        </p>
+                        <p class="small">
+                            Настоятельно просим вас прикреплять материалы, которые могут
+                            быть защищены законом об&nbsp;авторском праве, в&nbsp;виде
+                            <em>ссылок на&nbsp;источники</em>, а&nbsp;не&nbsp;копий файлов.
+                        </p>
                     </div>
 
                     <div class="container-fluid no-margin-padding">
@@ -162,9 +182,21 @@
                              onclick="displayInputBlock(this, '#fileInput')">
                             <span style="font-size:16px;" class="showopacity glyphicon glyphicon-open-file"></span>
                         </div>
-                        <button type="submit" class="btn btn-default col-xs-12 col-sm-9 col-md-9 col-lg-9">
-                            Сохранить
-                        </button>
+                        {% if post.pk %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                Сохранить
+                            </button>
+                        {% elif user_info and user_info.status.can_publish_without_moderation %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9"
+                                    title="Запись будет немедленно опубликована.">
+                                Опубликовать
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9"
+                                    title="Запись будет отправлена на модерацию.">
+                                Предложить к&nbsp;публикации
+                            </button>
+                        {% endif %}
                     </div>
 
                 </div>

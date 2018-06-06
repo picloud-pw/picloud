@@ -50,7 +50,7 @@ nav.navbar {
 }
 
 .post-panel img.post-img, .mem-panel img, .post-img {
-    padding: 5px;
+    margin: 1rem 0;
     width: 100%;
 }
 
