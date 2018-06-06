@@ -43,6 +43,7 @@ urlpatterns = [
 
     path('universities/', views.universities.universities_list, name='universities_list'),
     path('universities/<university_id>/', views.universities.university_page, name='university_page'),
+    path('universities/<university_id>/students', views.universities.students_from_university, name='stud_from_univ'),
     path('universities/<university_id>/delete', views.universities.university_delete, name='university_delete'),
     path('universities/<university_id>/approve', views.universities.university_approve, name='university_approve'),
 

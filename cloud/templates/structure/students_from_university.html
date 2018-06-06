@@ -1,0 +1,26 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Студенты
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/universities.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container-fluid no-margin-padding">
+
+        {% for student in students_info %}
+            <a href="{% url 'user_page' student.user.pk %}" class="university">
+                <img class="university-logo" src="{{ student.avatar.url }}" alt="univer-logo">
+                <h1>{{ student.user.username }}</h1>
+            </a>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

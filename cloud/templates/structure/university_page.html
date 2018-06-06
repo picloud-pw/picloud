@@ -35,7 +35,11 @@
                         <td>{{ stats.views }}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Людей зарегистрировано:</th>
+                        <th scope="row">
+                            <a href="{% url 'stud_from_univ' univer.pk %}">
+                                Людей зарегистрировано:
+                            </a>
+                        </th>
                         <td>{{ stats.persons }}</td>
                     </tr>
                 </table>

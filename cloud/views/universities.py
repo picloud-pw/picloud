@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.models import User
 
 from cloud.forms import NewUniversityForm
 from cloud.models import University, Program, Chair, Department, Post, UserInfo
@@ -35,6 +36,15 @@ def university_page(request, university_id):
             "persons": persons
         }
     })
+
+
+def students_from_university(request, university_id):
+    if request.user.is_authenticated:
+        departments = Department.objects.filter(university_id=university_id)
+        students_info = UserInfo.objects.filter(program__chair__department__in=departments)
+        return render(request, 'structure/students_from_university.html', locals())
+    else:
+        return message(request, msg="Авторизуйтесь, чтобы видеть список студентов.")
 
 
 def new_university(request):
