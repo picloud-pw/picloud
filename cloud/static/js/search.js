@@ -20,6 +20,7 @@ function getCurrentValues() {
     let program_id = getElementValueIfEnabled('id_program');
     let subject_id = getElementValueIfEnabled('id_subject');
     let type_id = getElementValueIfEnabled('id_type');
+    let sort_type = getElementValueIfEnabled('id_sort_type');
     return {
         "university_id": university_id,
         "department_id": department_id,
@@ -27,6 +28,7 @@ function getCurrentValues() {
         "program_id": program_id,
         "subject_id": subject_id,
         "type_id": type_id,
+        "sort_type": sort_type,
     };
 }
 
@@ -52,6 +54,7 @@ function calculateSuffix(data) {
     let components = [];
     if (data.type_id) components.push(`type_id=${data.type_id ? data.type_id : ''}`);
     if (data.subject_id) components.push(`subject_id=${data.subject_id}`);
+    if (data.sort_type) components.push(`sort_type=${data.sort_type}`);
     return components.join('&');
 }
 
@@ -115,11 +118,12 @@ function loadMore() {
         });
 }
 
-function search(subject_id = undefined, type_id = undefined) {
+function search(subject_id = undefined, type_id = undefined, sort_type = undefined) {
     pageNumber = 1;
     let data = {
         subject_id: subject_id,
         type_id: type_id,
+        sort_type: sort_type,
         page: 1,
     };
     baseUrl = `/api/posts/?${calculateSuffix(data)}`;
@@ -173,7 +177,7 @@ function search(subject_id = undefined, type_id = undefined) {
 }
 
 function newSearchRequest(data) {
-    search(data.subject_id, data.type_id);
+    search(data.subject_id, data.type_id, data.sort_type);
 }
 
 function updateImageModalHooks() {
@@ -194,6 +198,7 @@ ready(() => {
     [
         document.getElementById('id_subject'),
         document.getElementById('id_type'),
+        document.getElementById('id_sort_type'),
     ]
         .forEach(element => {
             element.addEventListener('change', function () {

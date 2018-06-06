@@ -28,7 +28,6 @@ def post_list(request, displayed_posts=None):
         user_info = request.user.userinfo
         if user_info.program is not None:
             posts = posts.filter(subject__programs__exact=user_info.program.pk)
-            # TODO: Фильтровать по семестру?
         if displayed_posts is not None:
             # TODO: Возможно, небезопасное использование параметра запроса
             # Может ли пользователь таким образом запросить запрещённый пост?
@@ -162,6 +161,7 @@ def cloud(request):
     chair = ChooseChairForm()
     program = ChooseProgramForm()
     subject = ChooseSubjectForm()
+    sort_type = ChooseSortForm()
     user_info = UserInfo.objects.filter(user=request.user.pk).first()
     return render(request, 'search.html', {
         'university': university,
@@ -170,4 +170,5 @@ def cloud(request):
         'program': program,
         'subject': subject,
         'user_info': user_info,
+        'sort_type': sort_type,
     })

@@ -87,6 +87,24 @@ class ChooseSubjectForm(forms.ModelForm):
         fields = ('subject', 'type',)
 
 
+SORT_TYPE = (
+    ('0', 'По дате (сначала новые)'),
+    ('1', 'По дате (сначала старые)'),
+    ('2', 'По семестру (сначала старшие)'),
+    ('3', 'По семестру (сначала младшие)'),
+    ('4', 'По просмотрам (по убыванию)'),
+    ('5', 'По просмотрам (по возрастанию)'),
+)
+
+
+class ChooseSortForm(forms.Form):
+    sort_type = forms.ChoiceField(
+        label="Сортировка",
+        required=True,
+        choices=SORT_TYPE,
+    )
+
+
 SUBJECT_CHOICES = (
     ('Предложение по улучшению портала', 'Предложение по улучшению портала'),
     ('Жалоба', 'Жалоба'),
