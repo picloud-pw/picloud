@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
     <link rel="stylesheet" href="{% static 'css/universities.css' %}">
 {% endblock %}
 
@@ -27,6 +28,18 @@
                     <h4>Карма - {{ student.karma }}</h4>
                 </div>
             </a>
+        {% empty %}
+            <div class="no-posts">
+                <p>
+                    Никто пока не зарегистрировался из этого вуза.
+                </p>
+                <p>
+                    Вы можете стать первым и рассказать о нас однокурсникам!
+                </p>
+                <p>
+                    <a href="{% url 'signup' %}">Зарегистрироваться</a>.
+                </p>
+            </div>
         {% endfor %}
 
     </div>
