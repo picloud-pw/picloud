@@ -40,6 +40,7 @@ urlpatterns = [
     path('change_password/', views.user.change_password, name='change_password'),
     path('change_avatar/', views.user.change_avatar, name='change_avatar'),
     path('change_user/', views.user.change_user, name='change_user'),
+    path('change_user_name/', views.user.change_user_name, name='change_user_name'),
 
     path('universities/', views.universities.universities_list, name='universities_list'),
     path('universities/<university_id>/', views.universities.university_page, name='university_page'),

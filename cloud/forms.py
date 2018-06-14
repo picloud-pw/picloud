@@ -45,7 +45,7 @@ class UserInfoChangeForm(forms.ModelForm):
         fields = ('program', 'course')
 
 
-class UserChangeForm(forms.ModelForm):
+class UserNameChangeForm(forms.ModelForm):
 
     class Meta:
         model = User

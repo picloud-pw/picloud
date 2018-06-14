@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserChangeForm
+from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserNameChangeForm
 from cloud.models import UserInfo, Post
 from cloud.views.message import message
 from cloud.views.posts import post_list
@@ -50,7 +50,7 @@ def user_not_checked_posts(request, user_id):
 def settings_page(request, msg="", error=""):
     change_avatar_form = AvatarChangeForm()
     change_password_form = PasswordChangeForm(request.user)
-    change_user_form = UserChangeForm(instance=User.objects.get(pk=request.user.pk))
+    change_user_form = UserNameChangeForm(instance=User.objects.get(pk=request.user.pk))
     change_user_info_form = UserInfoChangeForm(instance=UserInfo.objects.get(user=request.user))
     user = User.objects.get(pk=request.user.pk)
     user_info = UserInfo.objects.get(user=user)
@@ -84,13 +84,7 @@ def change_avatar(request):
 
 def change_user(request):
     if request.method == 'POST':
-        user_form = UserChangeForm(request.POST, instance=User.objects.get(pk=request.user.pk))
         user_info_form = UserInfoChangeForm(request.POST, instance=UserInfo.objects.get(user=request.user))
-        if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
-            user_form.save()
-        else:
-            return settings_page(request, error="Ошибка при изменении данных. " +
-                                                "Убедитесь, что длина полей «Имя» и «Фамилия» не превышает 20 символов")
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
 
@@ -102,6 +96,20 @@ def change_user(request):
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
                                                 "Убедитесь, что поля «Программа обучения» и «Курс обучения» заполнены")
+        return settings_page(request, msg="Данные успешно сохранены.")
+    else:
+        # недостижимый участок кода, только если на прямую обратиться по адресу
+        return settings_page(request)
+
+
+def change_user_name(request):
+    if request.method == 'POST':
+        user_form = UserNameChangeForm(request.POST, instance=User.objects.get(pk=request.user.pk))
+        if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
+            user_form.save()
+        else:
+            return settings_page(request, error="Ошибка при изменении данных. " +
+                                                "Убедитесь, что длина полей «Имя» и «Фамилия» не превышает 20 символов")
         return settings_page(request, msg="Данные успешно сохранены.")
     else:
         # недостижимый участок кода, только если на прямую обратиться по адресу
