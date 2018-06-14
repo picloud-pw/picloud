@@ -225,7 +225,6 @@ img.logo {
     line-height: 2rem;
     border-radius: 0.2rem;
     vertical-align: middle;
-    box-shadow: 0 0.15em 0 #888888;
 }
 
 .headline a.button:hover {
@@ -279,7 +278,6 @@ a.button {
     color: #222222;
 
     border-radius: 0.2rem;
-    box-shadow: 0 0.15em 0 #888888;
 }
 
 a.button:hover {
