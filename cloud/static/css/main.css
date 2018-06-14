@@ -117,7 +117,7 @@ a {
  */
 
 h1, h2, h3 {
-    font-family: "Alegreya", sans-serif;
+    font-family: "Lora", serif;
 }
 
 h1 {
@@ -134,7 +134,7 @@ h2 {
 h3 {
     font-size: 1.3rem;
     font-weight: 500;
-    font-style: italic;
+    font-style: normal;
 }
 
 /**
@@ -250,9 +250,9 @@ img.logo {
 }
 
 .heroes .heroine {
-    font-family: 'Alegreya Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-weight: 500;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin: 0.3em 0;
 }
 
