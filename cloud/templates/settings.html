@@ -5,10 +5,6 @@
     Профиль
 {% endblock %}
 
-{% block head %}
-    <link rel="stylesheet" href="{% static 'css/social_buttons.css' %}">
-{% endblock %}
-
 {% block content %}
 
     {# TODO: Убрать это дерьмо #}
@@ -278,7 +274,6 @@
 
                             <hr>
 
-                            <div class="">
                                 {% if user_info.vk_id %}
                                     <a href="{% url "del_vk_id" %}">
                                         <div class="btn btn-primary">Отвязать VK аккаунт (ID - {{ user_info.vk_id }} )</div>
@@ -289,7 +284,6 @@
                                         <div class="btn btn-default">Привязать VK аккаунт</div>
                                     </a>
                                 {% endif %}
-                            </div>
 
                             <hr>
 
