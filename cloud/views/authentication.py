@@ -49,7 +49,6 @@ def vk_auth(request):
           '&client_secret=' + VK_SECRET + \
           '&code=' + code + \
           '&redirect_uri=' + request.get_host() + '/vk_auth/'
-    print(code)
     if request.user.is_authenticated:
         if code is not None:
             data = requests.get(URL).json()
@@ -57,7 +56,6 @@ def vk_auth(request):
             user_info = UserInfo.objects.get(user=request.user)
             user_info.vk_id = vk_id
             user_info.save()
-            print(user_info.vk_id)
             return redirect("cloud")
         else:
             error = request.GET('error_description')
@@ -79,3 +77,13 @@ def vk_auth(request):
         else:
             error = request.GET('error_description')
             return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })
+
+
+def del_vk_id(request):
+    if request.user.is_authenticated:
+        user_info = UserInfo.objects.get(user=request.user)
+        user_info.vk_id = None
+        user_info.save()
+        return redirect("settings")
+    else:
+        return redirect("signin")

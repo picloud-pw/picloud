@@ -280,8 +280,8 @@
 
                             <div class="">
                                 {% if user_info.vk_id %}
-                                    <a href="#">
-                                        <div class="btn btn-default">Отвязать VK аккаунт (ID - {{ user_info.vk_id }} )</div>
+                                    <a href="{% url "del_vk_id" %}">
+                                        <div class="btn btn-primary">Отвязать VK аккаунт (ID - {{ user_info.vk_id }} )</div>
                                     </a>
                                 {% else %}
                                     <a href="https://oauth.vk.com/authorize?client_id=6477166&display=page&redirect_uri=http://{% if host %}{{ host }}{% else %}picloud.pw{% endif %}{% url 'vk_auth' %}&response_type=code&v=5.74">

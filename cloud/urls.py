@@ -14,6 +14,7 @@ urlpatterns = [
     path('auth/signout/', views.authentication.sign_out, name="signout"),
     path('activate/<uid>/<token>/', views.registration.activate, name='activate'),
     path('vk_auth/', views.authentication.vk_auth, name="vk_auth"),
+    path('del_vk_id/', views.authentication.del_vk_id, name="del_vk_id"),
 
     # auth встроенное приложение, сброс пароля, переопределяющие шаблоны в registration
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
