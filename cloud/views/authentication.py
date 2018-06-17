@@ -56,7 +56,7 @@ def vk_auth(request):
             user_info = UserInfo.objects.get(user=request.user)
             user_info.vk_id = vk_id
             user_info.save()
-            return redirect("cloud")
+            return redirect("settings")
         else:
             error = request.GET('error_description')
             return render(request, 'settings.html', {'error': error, 'host': request.get_host() })
