@@ -1,6 +1,8 @@
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
+from django.contrib.auth.models import User
+from cloud.models import UserInfo
 import requests
 
 from cloud.models import UserInfo
@@ -42,16 +44,38 @@ def sign_in(request):
 
 def vk_auth(request):
     code = request.GET["code"]
-    if code is not None:
-        URL = 'https://oauth.vk.com/access_token?' \
-              'client_id=' + VK_ID + \
-              '&client_secret=' + VK_SECRET + \
-              '&code=' + code + \
-              '&redirect_uri=' + request.get_host() + '/vk_auth/'
-        data = requests.get(URL).json()
-        token = data['access_token']
-        user_id = data['user_id']
-        return redirect("cloud")
+    URL = 'https://oauth.vk.com/access_token?' \
+          'client_id=' + VK_ID + \
+          '&client_secret=' + VK_SECRET + \
+          '&code=' + code + \
+          '&redirect_uri=' + request.get_host() + '/vk_auth/'
+    print(code)
+    if request.user.is_authenticated:
+        if code is not None:
+            data = requests.get(URL).json()
+            vk_id = data['user_id']
+            user_info = UserInfo.objects.get(user=request.user)
+            user_info.vk_id = vk_id
+            user_info.save()
+            print(user_info.vk_id)
+            return redirect("cloud")
+        else:
+            error = request.GET('error_description')
+            return render(request, 'settings.html', {'error': error, 'host': request.get_host() })
     else:
-        error = request.GET('error_description')
-        return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })
+        if code is not None:
+            data = requests.get(URL).json()
+            token = data['access_token']
+            vk_id = data['user_id']
+            user_info = UserInfo.objects.get(vk_id=vk_id)
+            if user_info is not None:
+                user = user_info.user
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, user)
+                return redirect("cloud")
+            else:
+                error = "К данной странице не привязан пользователь! Для начала зарегистрируйтесь."
+                return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })
+        else:
+            error = request.GET('error_description')
+            return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })

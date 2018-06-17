@@ -5,6 +5,10 @@
     Профиль
 {% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/social_buttons.css' %}">
+{% endblock %}
+
 {% block content %}
 
     {# TODO: Убрать это дерьмо #}
@@ -133,17 +137,17 @@
                                 <form method="post" action="{% url 'change_user_name' %}" enctype="multipart/form-data">
                                     {% csrf_token %}
 
-                                        <div class="form-group django-control">
-                                            <label class="col-form-label">Имя</label>
-                                            {{ change_user_form.first_name }}
-                                        </div>
+                                    <div class="form-group django-control">
+                                        <label class="col-form-label">Имя</label>
+                                        {{ change_user_form.first_name }}
+                                    </div>
 
-                                        <div class="form-group django-control">
-                                            <label class="col-form-label">Фамилия</label>
-                                            {{ change_user_form.last_name }}
-                                        </div>
+                                    <div class="form-group django-control">
+                                        <label class="col-form-label">Фамилия</label>
+                                        {{ change_user_form.last_name }}
+                                    </div>
 
-                                        <button class="btn btn-primary full-width" type="submit">Сохранить данные</button>
+                                    <button class="btn btn-primary full-width" type="submit">Сохранить данные</button>
 
                                 </form>
                             </div>
@@ -271,6 +275,23 @@
 
 
                         <div id="soc-net" class="tab-pane fade in">
+
+                            <hr>
+
+                            <div class="">
+                                {% if user_info.vk_id %}
+                                    <a href="#">
+                                        <div class="btn btn-default">Отвязать VK аккаунт (ID - {{ user_info.vk_id }} )</div>
+                                    </a>
+                                {% else %}
+                                    <a href="https://oauth.vk.com/authorize?client_id=6477166&display=page&redirect_uri=http://{% if host %}{{ host }}{% else %}picloud.pw{% endif %}{% url 'vk_auth' %}&response_type=code&v=5.74">
+                                        {% comment %}<i class="fa fa-vk fa-2x"></i>{% endcomment %}
+                                        <div class="btn btn-default">Привязать VK аккаунт</div>
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                            <hr>
 
                         </div>
 

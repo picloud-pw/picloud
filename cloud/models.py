@@ -141,6 +141,7 @@ class UserInfo(models.Model):
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
     course = models.PositiveSmallIntegerField(null=True, blank=True)
+    vk_id = models.CharField(max_length=16, null=True, default=None)
 
     def __str__(self):
         return self.user.username

@@ -5,10 +5,6 @@
     Вход
 {% endblock %}
 
-{% block head %}
-    <link rel="stylesheet" href="{% static 'css/social_buttons.css' %}">
-{% endblock %}
-
 {% block content %}
 
     <form method="post" action="{% url 'signin' %}">
@@ -38,16 +34,6 @@
                     <label><a href="{% url 'signup' %}">Регистрация</a></label>
                 </div>
             </div>
-
-        
-            {% comment %}
-            TODO оставлено до лучших времен
-            <div class="social vk">
-                <a href="https://oauth.vk.com/authorize?client_id=6477166&display=page&redirect_uri=http://{% if host %}{{ host }}{% else %}picloud.pw{% endif %}{% url 'vk_auth' %}&response_type=code&v=5.74">
-                    <i class="fa fa-vk fa-2x"></i>
-                </a>
-            </div>
-            {% endcomment %}
 
             <div class="form-group">
                 <input class="btn btn-default col-xs-12" type="submit" value="Войти"/>

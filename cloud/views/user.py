@@ -63,6 +63,7 @@ def settings_page(request, msg="", error=""):
         'change_user_info_form': change_user_info_form,
         'message': msg,
         'error': error,
+        'host': request.get_host(),
     })
 
 
