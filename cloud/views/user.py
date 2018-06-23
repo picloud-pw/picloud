@@ -9,6 +9,8 @@ from cloud.models import UserInfo, Post
 from cloud.views.message import message
 from cloud.views.posts import post_list
 
+from cloud.views.karma import update_carma
+
 
 def user_page(request, user_id):
     if request.user.is_authenticated:
@@ -74,6 +76,7 @@ def change_avatar(request):
                                 instance=UserInfo.objects.get(user=request.user))
         if form.is_valid():
             form.save()
+            update_carma(request.user)
             request.session['user_avatar_url'] = UserInfo.objects.get(user=request.user).avatar.url
             return settings_page(request, msg="Аватар успешно изменен.")
         else:
@@ -88,6 +91,7 @@ def change_user(request):
         user_info_form = UserInfoChangeForm(request.POST, instance=UserInfo.objects.get(user=request.user))
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
+            update_carma(request.user)
 
             program = UserInfo.objects.get(user=request.user).program
             if program is not None:
@@ -108,6 +112,7 @@ def change_user_name(request):
         user_form = UserNameChangeForm(request.POST, instance=User.objects.get(pk=request.user.pk))
         if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
             user_form.save()
+            update_carma(request.user)
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
                                                 "Убедитесь, что длина полей «Имя» и «Фамилия» не превышает 20 символов")

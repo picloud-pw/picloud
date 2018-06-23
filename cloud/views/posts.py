@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from cloud.forms import *
 from cloud.models import UserInfo, Post
+from cloud.views.karma import update_carma
 
 POSTS_PER_PAGE = 12
 
@@ -84,6 +85,7 @@ def post_new(request):
                 post.save()
                 request.session['last_post_subject'] = request.POST["subject"]
                 if user_can_publish:
+                    update_carma(request.user)
                     return redirect('post_detail', pk=post.pk)
                 else:
                     msg = "Спасибо за ваш вклад! Мы уже уведомлены о вашем посте, он будет проверен в ближайшее время."
@@ -113,6 +115,7 @@ def post_edit(request, pk):
                 post.is_approved = user_can_publish
                 post.save()
                 if user_can_publish:
+                    update_carma(request.user)
                     return redirect('post_detail', pk=post.pk)
                 else:
                     msg = "Благодарим за правки! В ближайшее время мы проверим и опубликуем их."
@@ -142,6 +145,7 @@ def post_new_child(request, pk):
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
+        update_carma(post.author)
         post.delete()
     return redirect("cloud")
 
@@ -150,6 +154,7 @@ def post_checked(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
         Post.objects.filter(pk=pk).update(is_approved=True)
+        update_carma(post.author)
         return redirect("moderation")
     else:
         return redirect("cloud")

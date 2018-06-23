@@ -15,9 +15,9 @@ VK_BONUS = 100
 def update_carma(user):
     karma = REGISTRATION_BONUS
 
-    posts = Post.objects.filter(author=user)
+    posts = Post.objects.filter(author=user).filter(is_approved=True)
     for post in posts:
-        if post.text:
+        if post.text != "":
             karma += POST_TEXT_BONUS
         if post.link:
             karma += POST_LINK_BONUS
