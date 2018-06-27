@@ -44,7 +44,9 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Карма:</th>
-                                    <td>{{ user_info.karma }}</td>
+                                    <td>
+                                        <a href="{% url 'karma_info_page' user_id=user.pk %}">{{ user_info.karma }}</a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Статус:</th>

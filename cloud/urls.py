@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('user/<user_id>', views.user.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),
+    path('user/<user_id>/karma', views.karma.info_page, name="karma_info_page"),
     path('user/<user_id>/not_checked_posts', views.user.user_not_checked_posts, name='user_not_checked_posts'),
 
     path('cloud/', views.posts.cloud, name='cloud'),

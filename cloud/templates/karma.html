@@ -1,0 +1,140 @@
+{% extends 'main_template.html' %}
+
+{% block title %}
+    {{ user_info.user.username }} - Карма
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="post-panel panel-settings">
+
+
+                <hr>
+                <label>Суммарная карма</label>
+                <hr>
+
+                <label class="karma" id="karma"
+                       style="font-size: 40px; color: purple">
+                    {{ user_info.karma }}
+                </label>
+
+                <table class="table" style="text-align: left">
+                    <tr>
+                        <td>Общий рейтинг</td>
+                        <td>{{ global_top }}</td>
+                    </tr>
+                    <tr>
+                        <td>Рейтинг по Вузу</td>
+                        <td>{{ univer_top }}</td>
+                    </tr>
+                    <tr>
+                        <td>Рейтинг по Факультету</td>
+                        <td>{{ depart_top }}</td>
+                    </tr>
+                </table>
+
+                <hr>
+                <label>Карма за персональную информацию</label>
+                <hr>
+
+                <table class="table" style="text-align: left">
+                    <tr>
+                        <td>Бонус за регистрацию</td>
+                        <td>{{ rb }}</td>
+                    </tr>
+                    <tr>
+                        <td>Бонус за аватар</td>
+                        <td>
+                            {% if user_info.avatar != dau %}
+                                {{ ab }}
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Бонус за программу обучения</td>
+                        <td>
+                            {% if user_info.program %}
+                                {{ pb }}
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Бонус за курс</td>
+                        <td>
+                            {% if user_info.course %}
+                                {{ cb }}
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Бонус за аккаунт VK</td>
+                        <td>
+                            {% if user_info.vk_id %}
+                                {{ vkb }}
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+                <hr>
+                <label>Карма за посты</label>
+                <hr>
+
+                {% for post in posts %}
+
+                    <a href="{% url 'post_detail' pk=post.pk %}">
+                        {{ post.title | slice:":70" }}
+                    </a>
+
+                    <table class="table" style="text-align: left">
+                        <tr>
+                            <td><b>Картинка - </b></td>
+                            <td>
+                                {% if post.image %}
+                                    {{ pib }}
+                                {% else %}  -  {% endif %}
+                            </td>
+                            <td><b>Описание - </b></td>
+                            <td>
+                                {% if post.text %}
+                                    {{ ptb }}
+                                {% else %}  -  {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Ссылка - </b></td>
+                            <td>
+                                {% if post.link %}
+                                    {{ plb }}
+                                {% else %}  -  {% endif %}
+                            </td>
+                            <td><b>Файл - </b></td>
+                            <td>
+                                {% if post.file %}
+                                    {{ pfb }}
+                                {% else %}  -  {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+
+                {% empty %}
+
+                    <hr>
+                    <label style="color: red">На данные момент вы не сделали ни одной публикации.</label>
+                    <hr>
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+
+    </div>
+
+{% endblock %}
