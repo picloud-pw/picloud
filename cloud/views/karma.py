@@ -63,22 +63,22 @@ def info_page(request, user_id):
         dau = DEFAULT_AVATAR_URL
 
         global_top = None
-        users = UserInfo.objects.all().order_by("karma").reverse()
-        for index, user in enumerate(users):
-            if user.user == request.user:
+        us = UserInfo.objects.all().order_by("karma").reverse()
+        for index, u in enumerate(us):
+            if u.user == request.user:
                 global_top = index
 
         univer_top = None
         departs = Department.objects.filter(university=user_info.program.chair.department.university)
-        users = users.filter(program__chair__department__in=departs)
-        for index, user in enumerate(users):
-            if user.user == request.user:
+        us = us.filter(program__chair__department__in=departs)
+        for index, u in enumerate(us):
+            if u.user == request.user:
                 univer_top = index
 
         depart_top = None
-        users = users.filter(program__chair__department=user_info.program.chair.department)
-        for index, user in enumerate(users):
-            if user.user == request.user:
+        us = us.filter(program__chair__department=user_info.program.chair.department)
+        for index, u in enumerate(us):
+            if u.user == request.user:
                 depart_top = index
 
         return render(request, 'karma.html', locals())
