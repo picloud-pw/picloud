@@ -66,20 +66,20 @@ def info_page(request, user_id):
         us = UserInfo.objects.all().order_by("karma").reverse()
         for index, u in enumerate(us):
             if u.user == request.user:
-                global_top = index
+                global_top = index + 1
 
         univer_top = None
         departs = Department.objects.filter(university=user_info.program.chair.department.university)
         us = us.filter(program__chair__department__in=departs)
         for index, u in enumerate(us):
             if u.user == request.user:
-                univer_top = index
+                univer_top = index + 1
 
         depart_top = None
         us = us.filter(program__chair__department=user_info.program.chair.department)
         for index, u in enumerate(us):
             if u.user == request.user:
-                depart_top = index
+                depart_top = index + 1
 
         return render(request, 'karma.html', locals())
     else:
