@@ -81,6 +81,7 @@ def info_page(request, user_id):
 
         global_top = None
         us = UserInfo.objects.all().order_by("karma").reverse()
+        global_count = us.count()
         for index, u in enumerate(us):
             if u.user == request.user:
                 global_top = index + 1
@@ -88,12 +89,14 @@ def info_page(request, user_id):
         univer_top = None
         departs = Department.objects.filter(university=user_info.program.chair.department.university)
         us = us.filter(program__chair__department__in=departs)
+        univer_count = us.count()
         for index, u in enumerate(us):
             if u.user == request.user:
                 univer_top = index + 1
 
         depart_top = None
         us = us.filter(program__chair__department=user_info.program.chair.department)
+        depart_count = us.count()
         for index, u in enumerate(us):
             if u.user == request.user:
                 depart_top = index + 1
