@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from cloud.models import UserInfo, Post, Department
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -18,6 +19,21 @@ DEFAULT_AVATAR_URL = 'resources/default/user_ava.png'
 def update_carma(user):
     karma = REGISTRATION_BONUS
 
+    user_info = UserInfo.objects.filter(user=user)
+    if user_info.count() == 0:
+        return "Пользователю не сопоставлен user_info"
+    if user_info.count() > 1:
+        return "Одному пользователю сопоставлено несколько user_info"
+    user_info = user_info.first()
+    if user_info.program:
+        karma += PROGRAM_BONUS
+    if user_info.course is not None:
+        karma += COURSE_BONUS
+    if user_info.vk_id:
+        karma += VK_BONUS
+    if user_info.avatar != DEFAULT_AVATAR_URL:
+        karma += AVATAR_BONUS
+
     posts = Post.objects.filter(author=user).filter(is_approved=True)
     for post in posts:
         if post.text != "":
@@ -29,19 +45,20 @@ def update_carma(user):
         if post.image:
             karma += POST_IMAGE_BONUS
 
-    user_info = UserInfo.objects.get(user=user)
-    if user_info.program:
-        karma += PROGRAM_BONUS
-    if user_info.course is not None:
-        karma += COURSE_BONUS
-    if user_info.vk_id:
-        karma += VK_BONUS
-    # TODO вынести в отдельные константы
-    if user_info.avatar != DEFAULT_AVATAR_URL:
-        karma += AVATAR_BONUS
-
     user_info.karma = karma
     user_info.save()
+
+
+def update_karma_for_all_users(request):
+    if request.user.is_superuser:
+        all_users = User.objects.all()
+        for user in all_users:
+            err = update_carma(user)
+            if err:
+                return render(request, "moderation/moderation.html", {"message": err})
+        return render(request, "moderation/moderation.html", {"message": "Карма успешно пересчитана!"})
+    else:
+        return render(request, "message.html", {"message": "У вас нет доступа к этой операции!"})
 
 
 def info_page(request, user_id):

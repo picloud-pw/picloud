@@ -39,6 +39,7 @@ urlpatterns = [
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),
     path('moderation/', views.moderation.moderation, name="moderation"),
+    path('moderation/update_karma', views.karma.update_karma_for_all_users, name="update_karma"),
     path('change_password/', views.user.change_password, name='change_password'),
     path('change_avatar/', views.user.change_avatar, name='change_avatar'),
     path('change_user/', views.user.change_user, name='change_user'),
