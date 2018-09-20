@@ -6,6 +6,7 @@ from django.utils import timezone
 
 from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserNameChangeForm
 from cloud.models import UserInfo, Post
+from cloud.views.authentication import sign_in
 from cloud.views.message import message
 from cloud.views.posts import post_list
 
@@ -18,7 +19,7 @@ def user_page(request, user_id):
         fr_user_info = UserInfo.objects.get(user=fr_user)
         return render(request, 'user.html', locals())
     else:
-        return message(request, msg="Авторизуйтесь, чтобы посещать страницы других пользователей.")
+        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы посещать страницы других пользователей.")
 
 
 def user_posts(request, user_id):
@@ -32,7 +33,7 @@ def user_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=fr_user_posts)
     else:
-        return message(request, msg="Авторизуйтесь, чтобы просматривать посты конкретных пользователей.")
+        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы просматривать посты конкретных пользователей.")
 
 
 def user_not_checked_posts(request, user_id):

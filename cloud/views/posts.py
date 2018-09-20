@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from cloud.forms import *
 from cloud.models import UserInfo, Post
+from cloud.views.authentication import sign_in
 from cloud.views.karma import update_carma
 
 POSTS_PER_PAGE = 12
@@ -99,7 +100,7 @@ def post_new(request):
             user_info = get_object_or_404(UserInfo, user=request.user)
             return render(request, 'cloud/post_edit.html', {'form': form, 'user_info': user_info})
     else:
-        return redirect("signin")
+        return sign_in(request, msg="Пожалуйста, авторизуйтесь для доступа к редактору постов.")
 
 
 def post_edit(request, pk):
