@@ -11,10 +11,22 @@
 
 {% block content %}
 
+
+
     <form method="post" action="{% url 'signin' %}">
         {% csrf_token %}
 
         <div class="container-fluid sign-form">
+
+            {% if msg %}
+                <div class="alert alert-info alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{ msg }}
+                </div>
+            {% endif %}
 
             <div class="form-group">
                 <label for="username" class="col-form-label">Логин</label>

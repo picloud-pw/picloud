@@ -26,7 +26,7 @@ def sign_out(request):
     return redirect("index")
 
 
-def sign_in(request):
+def sign_in(request, msg=None):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -40,10 +40,9 @@ def sign_in(request):
             return redirect('cloud')
         else:
             error = "Неверно введены логин или пароль!"
-            return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(),})
+            return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), 'msg': msg})
     else:
-        error = ""
-        return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(),})
+        return render(request, 'auth/signin.html', {'host': request.get_host(), 'msg': msg})
 
 
 def vk_auth(request):
