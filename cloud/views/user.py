@@ -11,6 +11,7 @@ from cloud.views.message import message
 from cloud.views.posts import post_list
 
 from cloud.views.karma import update_carma
+from cloud.views.vkontakte import vk_get_auth_link
 
 
 def user_page(request, user_id):
@@ -57,17 +58,8 @@ def settings_page(request, msg="", error=""):
     change_user_info_form = UserInfoChangeForm(instance=UserInfo.objects.get(user=request.user))
     user = User.objects.get(pk=request.user.pk)
     user_info = UserInfo.objects.get(user=user)
-    return render(request, 'settings.html', {
-        'user': user,
-        'user_info': user_info,
-        'change_password_form': change_password_form,
-        'change_avatar_form': change_avatar_form,
-        'change_user_form': change_user_form,
-        'change_user_info_form': change_user_info_form,
-        'message': msg,
-        'error': error,
-        'host': request.get_host(),
-    })
+    vk_auth_link = vk_get_auth_link(request)
+    return render(request, 'settings.html', locals())
 
 
 def change_avatar(request):

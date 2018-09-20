@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
-from cloud.vkontakte import fetch_and_sort_memes
+from cloud.views.vkontakte import fetch_and_sort_memes
 from cloud.models import MemeSource, UserInfo
 
 from .authentication import sign_in

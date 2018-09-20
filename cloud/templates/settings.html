@@ -109,12 +109,12 @@
                             {{ error }}
                         </div>
                     {% endif %}
-                    {% if message %}
+                    {% if msg %}
                         <div class="alert alert-info alert-dismissible show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            {{ message }}
+                            {{ msg }}
                         </div>
                     {% endif %}
 
@@ -280,7 +280,7 @@
                                         <div class="btn btn-primary">Отвязать VK аккаунт (ID - {{ user_info.vk_id }} )</div>
                                     </a>
                                 {% else %}
-                                    <a href="https://oauth.vk.com/authorize?client_id=6477166&display=page&redirect_uri=http://{% if host %}{{ host }}{% else %}picloud.pw{% endif %}{% url 'vk_auth' %}&response_type=code&v=5.74">
+                                    <a href="{{ vk_auth_link }}">
                                         {% comment %}<i class="fa fa-vk fa-2x"></i>{% endcomment %}
                                         <div class="btn btn-default">Привязать VK аккаунт</div>
                                     </a>

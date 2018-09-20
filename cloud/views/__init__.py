@@ -1,5 +1,4 @@
-import threading
-from cloud.vkontakte import vk_bot
+from cloud.views.vkontakte import vk_bot
 
 VALID = 0
 NOT_VALID = 1
@@ -11,4 +10,4 @@ NOT_VALID = 1
 # t.start()
 
 from . import api, authentication, chairs, contacts, departments, index, legal, memes, message, moderation, posts, \
-    programs, recaptcha, registration, robots, search, subjects, universities, user, karma
+    programs, recaptcha, registration, robots, search, subjects, universities, user, karma, vkontakte
