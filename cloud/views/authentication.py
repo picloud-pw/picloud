@@ -19,7 +19,7 @@ def sign_out(request):
     return redirect("index")
 
 
-def sign_in(request, msg=None):
+def sign_in(request, msg=None, error=None):
     from cloud.views.vkontakte import vk_get_auth_link
     vk_auth_link = vk_get_auth_link(request)
     if request.method == "POST":

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import login
 from django.core.exceptions import ImproperlyConfigured
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
 import requests
 import vk
@@ -11,11 +11,13 @@ import re
 from django.urls import reverse
 
 from cloud.models import UserInfo
-from cloud.views.authentication import user_info_to_session
+from cloud.views.authentication import user_info_to_session, sign_in
+
 
 VK_API_VERSION = '5.74'
 VK_ID = '6477166'
 VK_SECRET = 'loqcCdT0JDj5fTrQd0ku'
+SCOPE = 4194304  # Email
 
 GLOBAL_TOKEN = getattr(settings, 'VK_GLOBAL_TOKEN', None)
 GROUP_TOKEN = getattr(settings, 'VK_GROUP_TOKEN', None)
@@ -88,6 +90,7 @@ def vk_get_auth_link(request):
            "&display=page" \
            "&redirect_uri=" + REDIRECT_URI + \
            "&response_type=code" \
+           "&scope=" + str(SCOPE) + \
            "&v=" + VK_API_VERSION
 
 
@@ -95,7 +98,7 @@ def vk_auth_callback(request):
     code = request.GET["code"]
 
     REDIRECT_URI = request.build_absolute_uri(reverse('vk_auth_callback'))
-    
+
     URL = 'https://oauth.vk.com/access_token?' \
           'client_id=' + VK_ID + \
           '&client_secret=' + VK_SECRET + \
@@ -103,33 +106,43 @@ def vk_auth_callback(request):
           '&redirect_uri=' + REDIRECT_URI
 
     if request.user.is_authenticated:
+        from cloud.views.user import settings_page
+
         if code is not None:
             data = requests.get(URL).json()
-            vk_id = data['user_id']
+
+            if UserInfo.objects.filter(vk_id=data['user_id']):
+                error = "Данный аккаунт уже привязан к пользователю PiCloud"
+                return settings_page(request, error=error)
             user_info = UserInfo.objects.get(user=request.user)
-            user_info.vk_id = vk_id
+            user = user_info.user
+            user.email = data['email']
+            user_info.vk_id = data['user_id']
+            user.save()
             user_info.save()
             return redirect("settings")
         else:
             error = request.GET('error_description')
-            return render(request, 'settings.html', {'error': error, 'host': request.get_host() })
+            return settings_page(request, error=error)
     else:
         if code is not None:
             data = requests.get(URL).json()
-            vk_id = data['user_id']
-            user_info = UserInfo.objects.filter(vk_id=vk_id)
-            if user_info.count():
+            user_info = UserInfo.objects.filter(vk_id=data['user_id'])
+            if user_info.count() == 1:
                 user = user_info.first().user
                 user.backend = 'django.contrib.auth.backends.ModelBackend'
                 login(request, user)
                 user_info_to_session(request, user)
                 return redirect("cloud")
             else:
-                error = "Ваша ВК старница не привязана ни к одному пользователю PiCloud! Для начала авторизуйтесь."
-                return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })
+                if user_info.count() == 0:
+                    error = "Ваша ВК старница не привязана ни к одному пользователю PiCloud. Для начала авторизуйтесь."
+                else:
+                    error = "Ваша ВК страница привязана более чем к одному пользователю PiCloud. Разлогиньтесь."
+                return sign_in(request, error=error)
         else:
             error = request.GET('error_description')
-            return render(request, 'auth/signin.html', {'error': error, 'host': request.get_host(), })
+            return sign_in(request, error=error)
 
 
 def del_vk_id(request):
