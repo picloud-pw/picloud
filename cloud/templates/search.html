@@ -29,13 +29,11 @@
         </div>
 
         <div id="search-line" class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-            <input class="form-control" type="text"
-                   title="Извините, полнотекстовый поиск временно не работает." disabled
-                   placeholder="Введите запрос">
+            <input class="form-control" type="text" placeholder="Введите запрос"
+                onchange="display_options(this.value)">
         </div>
         <div id="search-button" class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
             <input class="form-control btn btn-primary" type="submit"
-                   title="Извините, полнотекстовый поиск временно не работает." disabled
                    onclick="search_posts()" value="Поиск">
         </div>
     </div>
@@ -67,6 +65,7 @@
     <script src="{% static "js/department_search.js" %}"></script>
     <script src="{% static "js/post_list.js" %}"></script>
     <script src="{% static "js/search.js" %}"></script>
+    <script src="{% static "js/text_search.js" %}"></script>
 
     <script>
         ready(function () {

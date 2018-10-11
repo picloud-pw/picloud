@@ -1,11 +1,66 @@
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.template.loader import render_to_string
-from django.utils import timezone
+import operator
+from functools import reduce
 
-from cloud.models import Post
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
+from cloud.models import Post, University, Department, Chair, Program, Subject
 from .posts import POSTS_PER_PAGE
+
+
+def text_search(request):
+    text_request = request.GET.get('request', None)
+    if text_request is not None:
+        words = text_request.split(" ")
+
+        posts = Post.objects.filter(is_approved=True)
+        posts = posts.filter(reduce(operator.or_, (Q(title__icontains=x) for x in words)))
+        posts = posts.order_by('created_date').reverse()[:100]
+        posts = [p.title for p in posts]
+
+        universities = University.objects.filter(is_approved=True)
+        universities = universities.filter(
+            reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
+        )
+        universities = [u.title for u in universities]
+
+        departments = Department.objects.filter(is_approved=True)
+        departments = departments.filter(
+            reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
+        )
+        departments = [d.title for d in departments]
+
+        chairs = Chair.objects.filter(is_approved=True)
+        chairs = chairs.filter(
+            reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
+        )
+        chairs = [c.title for c in chairs]
+
+        programs = Program.objects.filter(is_approved=True)
+        programs = programs.filter(
+            reduce(operator.or_, (Q(code__icontains=x) | Q(title__icontains=x) for x in words))
+        )
+        programs = [d.title for d in programs]
+
+        subjects = Subject.objects.filter(is_approved=True)
+        subjects = subjects.filter(
+            reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
+        )
+        subjects = [d.title for d in subjects]
+
+        request = {
+            "posts": posts,
+            "universities": universities,
+            "departments": departments,
+            "chairs": chairs,
+            "programs": programs,
+            "subjects": subjects
+        }
+        return JsonResponse(request, safe=False)
+    else:
+        return JsonResponse([], safe=False)
 
 
 def search_posts(request):

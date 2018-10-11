@@ -35,7 +35,7 @@ urlpatterns = [
     path('user/<user_id>/not_checked_posts', views.user.user_not_checked_posts, name='user_not_checked_posts'),
 
     path('cloud/', views.posts.cloud, name='cloud'),
-    path('search/', RedirectView.as_view(pattern_name='cloud'), name='search'),
+    path('search/', views.search.text_search, name='search'),
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),
     path('moderation/', views.moderation.moderation, name="moderation"),
