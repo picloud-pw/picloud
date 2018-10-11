@@ -2,11 +2,14 @@
 {% load static %}
 
 {% block title %}
-    Cloud Поиск
+    Cloud
 {% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
     <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal_image.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -18,36 +21,41 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ chair.chair }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ program.program }}</div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.subject }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.type }}</div>
 
         <hr>
-        <div id="search-line" class="col-xs-12 col-sm-7 col-md-9 col-lg-9">
+        <div id="search-select" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            {{ sort_type.sort_type }}
+        </div>
+
+        <div id="search-line" class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
             <input class="form-control" type="text"
                    title="Извините, полнотекстовый поиск временно не работает." disabled
                    placeholder="Введите запрос">
         </div>
-        <div id="search-type" class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
-            {{ subject.type }}
-        </div>
-        <div id="search-button" class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
+        <div id="search-button" class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
             <input class="form-control btn btn-primary" type="submit"
                    title="Извините, полнотекстовый поиск временно не работает." disabled
                    onclick="search_posts()" value="Поиск">
         </div>
+    </div>
 
+    <div id="modal">
+        <span class="close">&times;</span>
+        {# Загружает GIF-изображение размером 1×1 пиксел. #}
+        <img class="modal-content" id="modalImg" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
+        <a id="show-full-btn" href="#" target="_blank" class="btn btn-primary">
+            Открыть оригинал в новой вкладке
+        </a>
     </div>
 
     <div id="search_results" class="post-list">
-        <article class="post">
-            <div class="post-container">
-                <p>
-                    Здесь будут отображаться результаты поиска.
-                </p>
-                <p>
-                    Введите ваш запрос.
-                </p>
-            </div>
-        </article>
     </div>
+
+    <div id="load-more-panel">
+        <button id="btn-load-more" class="btn btn-default" onclick="loadMore()" disabled>
+            Подождите…
+        </button>
     </div>
 
 {% endblock %}
@@ -61,37 +69,53 @@
     <script src="{% static "js/search.js" %}"></script>
 
     <script>
-
         ready(function () {
             clearAndDisableAllLists();
 
+            {# TODO: Если subject_id предоставлен, подгрузить департаменты #}
+
+            let subject_id = undefined;
+            let type_id = undefined;
+
+            {% if request.GET.subject_id %}
+                subject_id = {{ request.GET.subject_id }};
+                setSubject(subject_id);
+            {% endif %}
+
+            {% if request.GET.type_id %}
+                type_id = {{ request.GET.type_id }};
+                setType(type_id);
+            {% endif %}
+
+            search(subject_id, type_id);
+            updateImageModalHooks();
+
             {% if user_info %}
+                document.getElementById("id_type").options[0].textContent = "Любого типа";
                 loadUniversities()
                     .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
                     .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
                     .then(() => setChair({{ user_info.program.chair.pk }}))
-                    .then(() => setProgram({{ user_info.program.pk }}));
-                document.getElementById("id_type").options[0].textContent = "Любого типа";
+                    .then(() => setProgram({{ user_info.program.pk }}))
+                    {% if request.GET.subject_id %}
+                        .then(() => {
+                            let subject_id = {{ request.GET.subject_id }};
+                            setSubject(subject_id);
+                        })
+                    {% endif %};
             {% else %}
                 loadUniversities().then(() => setUniversity(1));
                 $("#structure").addClass("in");
             {% endif %}
-
-            document.getElementById("id_university").addEventListener("change", () => {
-                setUniversity(document.getElementById("id_university").value);
-            });
-            document.getElementById("id_department").addEventListener("change", () => {
-                setDepartment(document.getElementById("id_department").value);
-            });
-            document.getElementById("id_chair").addEventListener("change", () => {
-                setChair(document.getElementById("id_chair").value);
-            });
-            document.getElementById("id_program").addEventListener("change", () => {
-                setProgram(document.getElementById("id_program").value);
-            });
-            document.getElementById("id_type").options[0].textContent = "Любого типа";
         });
+    </script>
 
+    <script>
+        let modal = document.getElementById('modal');
+        let closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
     </script>
 
 {% endblock %}

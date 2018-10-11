@@ -1,0 +1,44 @@
+{% extends 'moderation/structure/structure_template.html' %}
+
+{% block approve_url %}
+    {% url 'chair_approve' chair_id=chair.pk %}
+{% endblock %}
+
+{% block delete_url %}
+    {% url 'chair_delete' chair_id=chair.pk %}
+{% endblock %}
+
+
+{% block structure_content %}
+
+    <table class="table table-striped">
+
+        <tr>
+            <td><b>Факультет</b></td>
+            <td>{{ chair.department.short_title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Название</b></td>
+            <td>{{ chair.title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Аббривиатура</b></td>
+            <td>{{ chair.short_title }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Ссылка</b></td>
+            <td>{{ chair.link }}</td>
+        </tr>
+
+    </table>
+
+{% endblock %}
+
+
+
+
+
+

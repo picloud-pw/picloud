@@ -45,7 +45,7 @@ class UserInfoChangeForm(forms.ModelForm):
         fields = ('program', 'course')
 
 
-class UserChangeForm(forms.ModelForm):
+class UserNameChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
@@ -87,6 +87,24 @@ class ChooseSubjectForm(forms.ModelForm):
         fields = ('subject', 'type',)
 
 
+SORT_TYPE = (
+    ('0', 'По дате (сначала новые)'),
+    ('1', 'По дате (сначала старые)'),
+    ('2', 'По семестру (сначала старшие)'),
+    ('3', 'По семестру (сначала младшие)'),
+    ('4', 'По просмотрам (по убыванию)'),
+    ('5', 'По просмотрам (по возрастанию)'),
+)
+
+
+class ChooseSortForm(forms.Form):
+    sort_type = forms.ChoiceField(
+        label="Сортировка",
+        required=True,
+        choices=SORT_TYPE,
+    )
+
+
 SUBJECT_CHOICES = (
     ('Предложение по улучшению портала', 'Предложение по улучшению портала'),
     ('Жалоба', 'Жалоба'),
@@ -112,3 +130,38 @@ class ContactForm(forms.Form):
         required=True,
         widget=forms.Textarea(attrs={'style': 'width: 100%; height:150px; resize: none'})
     )
+
+
+class NewUniversityForm(forms.ModelForm):
+
+    class Meta:
+        model = University
+        fields = ('title', 'short_title', 'link', 'logo', )
+
+
+class NewDepartmentForm(forms.ModelForm):
+
+    class Meta:
+        model = Department
+        fields = ('university', 'title', 'short_title', 'link', )
+
+
+class NewChairForm(forms.ModelForm):
+
+    class Meta:
+        model = Chair
+        fields = ('department', 'title', 'short_title', 'link', )
+
+
+class NewProgramForm(forms.ModelForm):
+
+    class Meta:
+        model = Program
+        fields = ('chair', 'title', 'code', 'link', )
+
+
+class NewSubjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Subject
+        fields = ('programs', 'title', 'short_title', 'semester',)

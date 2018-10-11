@@ -1,8 +1,14 @@
 {% extends 'main_template.html' %}
+{% load static %}
 
 {% block title %}
     {{ program.title }}
 {% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/program_page.css' %}">
+{% endblock %}
+
 
 {% block content %}
 
@@ -10,7 +16,7 @@
     <div class="container-fluid no-margin-padding">
         <div class="col-md-3 col-lg-3"></div>
         <div class="col-md-6 col-lg-6">
-            <div class="post-edit-panel">
+            <div class="back-panel">
 
                 {% if program.link != "" %}
                     <a href="{{ program.link }}"><h3> {{ program.title }} </h3></a>
@@ -29,16 +35,21 @@
                 <hr>
 
 
-                {% for semestr in semesters %}
-                    {% if semestr != 0 %}
-                        <h4> Семестр {{ semestr }}:</h4>
+                {% for semester in semesters %}
+                    {% if semester != 0 %}
+                        <h4> Семестр {{ semester }}:</h4>
                     {% else %}
                         <h4> Глобальные материалы:</h4>
                     {% endif %}
 
                     {% for subject in subjects %}
-                        {% if subject.semestr == semestr %}
-                            <a href="/subject/{{ subject.pk }}"><h4>{{ subject.title }}</h4></a>
+                        {% if subject.semester == semester %}
+                            <a class="subject-link" href="{% url 'subject_page' subject.pk%}">
+                                <div class="subject-item full-width">
+                                    <span class="subject-title">{{ subject.title }}</span>
+                                    {% comment %}<span class="subject-label">{{ subject.short_title }}</span>{% endcomment %}
+                                </div>
+                            </a>
                         {% endif %}
                     {% endfor %}
 

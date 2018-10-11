@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    Cloud Регистрация
+    Регистрация
 {% endblock %}
 
 {% block head %}
@@ -16,9 +16,9 @@
 
         <div class="container-fluid no-margin-padding">
 
-            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-2"></div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-4"></div>
 
-            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 no-margin-padding">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 no-margin-padding">
 
                 <div class="container-fluid sign-form">
 
@@ -82,66 +82,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
-                <div class="container-fluid sign-form">
-                    <label>
-                        Вы можете заполнить дополнительную информацию о себе,
-                        которая будет использована для персонализации контента
-                    </label>
-                    <hr>
-
-                    <div class="form-group">
-                        <label for="first-name" class="col-form-label">Имя</label>
-                        <input class="form-control" type="text" name="first-name" id="first-name"
-                               placeholder="Введите имя" pattern="^[А-Яа-яЁё]{2,20}$"
-                               title="(от 3 до 20 символов, без пробелов)">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="last-name" class="col-form-label">Фамилия</label>
-                        <input class="form-control" type="text" name="last-name" id="last-name"
-                               placeholder="Введите фамилию" pattern="^[А-Яа-яЁё]{2,20}$"
-                               title="(от 3 до 20 символов, без пробелов)">
-                    </div>
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Аватар</label>
-                        {{ user_info_form.avatar }}
-                    </div>
-
-                </div>
-
-                <div class="container-fluid sign-form">
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Университет</label>
-                        <select name="university" id="id_university"></select>
-                    </div>
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Факультет</label>
-                        <select name="department" id="id_department"></select>
-                    </div>
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Кафедра</label>
-                        <select name="chair" id="id_chair"></select>
-                    </div>
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Программа обучения</label>
-                        {{ user_info_form.program }}
-                    </div>
-
-                    <div class="form-group django-control">
-                        <label class="col-form-label">Курс обучения</label>
-                        {{ user_info_form.course }}
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-2"></div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-4"></div>
 
         </div>
 
@@ -160,17 +101,17 @@
             clearAndDisableAllLists();
             loadUniversities();
 
-            $("#id_university").change(function () {
-                setUniversity($(this).val())
+            document.getElementById("id_university").addEventListener("change", () => {
+                universityChanged(document.getElementById("id_university").value);
             });
-            $("#id_department").change(function () {
-                setDepartment($(this).val())
+            document.getElementById("id_department").addEventListener("change", () => {
+                departmentChanged(document.getElementById("id_department").value);
             });
-            $("#id_chair").change(function () {
-                setChair($(this).val())
+            document.getElementById("id_chair").addEventListener("change", () => {
+                chairChanged(document.getElementById("id_chair").value);
             });
-            $("#id_program").change(function () {
-                setProgram($(this).val())
+            document.getElementById("id_program").addEventListener("change", () => {
+                programChanged(document.getElementById("id_program").value);
             });
         });
     </script>

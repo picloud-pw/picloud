@@ -19,9 +19,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+Sans:400,400i,500,500i,700,700i">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+SC:400,500">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya:400,400i,500,500i,700,700i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,400i,500,500i,700,700i">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
 
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    
+    <!-- Аутентификация в Яндекс Вебмастер -->
+    <meta name="yandex-verification" content="c3f40ad459bc9654"/>
 </head>
 <body>
 
@@ -63,7 +67,7 @@
             типовики и&nbsp;лабораторые работы&nbsp;—
             всё это есть на&nbsp;<strong>&pi;Cloud</strong>’е.
         </p>
-        <a href="{% url 'post_list' %}" class="button">
+        <a href="{% url 'cloud' %}" class="button">
             Перейти в&nbsp;хранилище
         </a>
     </div>
@@ -74,7 +78,7 @@
             <div class="icon">
                 <i class="fas fa-heart"></i>
             </div>
-            <h3>Сделано студентами для студентов</h3>
+            <h3>Сделано студентами для&nbsp;студентов</h3>
             <p>
                 &pi;Cloud появился, когда нам порядком надоел хаос, порождённый многообразием источников. Мы решили
                 собрать всю информацию в&nbsp;одном месте и&nbsp;сделать так, чтобы к&nbsp;ней можно было легко
@@ -86,7 +90,7 @@
             <div class="icon">
                 <i class="fas fa-sitemap"></i>
             </div>
-            <h3>Грамотная структура</h3>
+            <h3>Грамотная организация материалов</h3>
             <p>
                 Хотя на&nbsp;сайте твоей кафедры, скорее всего, есть иерархия содержимого, мы уверены, что она
                 не&nbsp;выдержит никакого сравнения с&nbsp;нашей. На &pi;Cloud контент распределяется
@@ -130,6 +134,17 @@
                 чтобы сделать тексты проще для&nbsp;восприятия.
             </p>
         </div>
+        <div class="advantage">
+            <div class="icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <h3>Мемчики</h3>
+            <p>
+                Чтобы скрасить бессоную ночь и&nbsp;отвлечься от&nbsp;никак не&nbsp;поддающегося
+                пониманию курсача, зайди в&nbsp;наш раздел с&nbsp;мемами и&nbsp;посмотри на&nbsp;шедевры
+                мемостроителей из&nbsp;избранных сообществ ВКонтакте.
+            </p>
+        </div>
     </div>
 
     <h2>Университеты</h2>
@@ -169,11 +184,36 @@
     <p>
         <a href="{% url 'privacy_policy' %}">Политика конфиденциальности</a>
     </p>
-    <p>
-        Макет и&nbsp;вёрстку страницы с&nbsp;<i class="fas fa-heart" title="любовью"></i> выполнил
-        <a href="https://vk.com/edubenetskiy">Егор Дубенецкий</a>.
-    </p>
 </footer>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter47614906 = new Ya.Metrika({
+                    id:47614906,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/47614906" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 
 </body>
 </html>

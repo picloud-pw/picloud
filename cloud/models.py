@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib import auth
+import os
 
-import markdown
 import bleach
+import markdown
 
 
 class University(models.Model):
@@ -12,6 +14,7 @@ class University(models.Model):
     logo = models.ImageField(upload_to='resources/u_logo/',
                              default='resources/default/u_logo.png',
                              null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -29,6 +32,7 @@ class Department(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -46,6 +50,7 @@ class Chair(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.short_title
@@ -63,9 +68,10 @@ class Program(models.Model):
     title = models.CharField(max_length=256, null=False)
     code = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title + " (" + self.chair.__str__() + ")"
+        return self.title + " (" + str(self.chair) + ")"
 
     def as_dict(self):
         return {
@@ -84,6 +90,7 @@ class Lecturer(models.Model):
     image = models.ImageField(upload_to='resources/lec_avatars/',
                               default='resources/default/lec_avatar.png',
                               null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.surname + " " + self.name + " " + self.patronymic
@@ -94,23 +101,32 @@ class Subject(models.Model):
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
-    semestr = models.PositiveSmallIntegerField(null=True, blank=True)
+    semester = models.PositiveSmallIntegerField(null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.short_title + " (" + self.semestr.__str__() + " семестр)"
+        return self.displayed_title()
+
+    def displayed_title(self):
+        if self.semester != 0:
+            return self.title + " (" + str(self.semester) + " сем.)"
+        else:
+            return self.title
 
     def as_dict(self):
         return {
             "id": self.pk,
-            "title": self.title + " (" + self.semestr.__str__() + " сем.)",
+            "title": self.displayed_title(),
             "short_title": self.short_title,
-            "semestr": self.semestr
+            "semester": self.semester
         }
 
 
 class UserStatus(models.Model):
     title = models.CharField(max_length=256, null=False)
     status_level = models.PositiveSmallIntegerField(default=0, null=False)
+    can_publish_without_moderation = models.BooleanField(default=False, null=False)
+    can_moderate = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         return self.title
@@ -125,12 +141,29 @@ class UserInfo(models.Model):
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
     course = models.PositiveSmallIntegerField(null=True, blank=True)
+    vk_id = models.CharField(max_length=16, null=True, default=None)
 
     def __str__(self):
         return self.user.username
 
 
+class MemeSource(models.Model):
+    link = models.URLField(null=False, blank=True)
+    author = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
+    university = models.ForeignKey('University', on_delete=models.SET_NULL, null=True, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
+    chair = models.ForeignKey('Chair', on_delete=models.SET_NULL, null=True, blank=True)
+    program = models.ForeignKey('Program', on_delete=models.SET_NULL, null=True, blank=True)
+    subject = models.ForeignKey('Subject', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.link
+
+
 class PostType(models.Model):
+    class Meta:
+        ordering = ['title']
+
     title = models.CharField(max_length=256, null=False, unique=True)
     plural = models.CharField(max_length=128, default="")
 
@@ -139,7 +172,9 @@ class PostType(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    author = models.ForeignKey('auth.User', null=True, on_delete=models.SET_NULL)
+    parent_post = models.ForeignKey('Post', on_delete=models.SET_NULL, null=True, blank=True, default=None)
+    last_editor = models.ForeignKey('auth.User', related_name='last_editor', null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=256, null=False)
     text = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -149,7 +184,7 @@ class Post(models.Model):
     link = models.URLField(max_length=512, null=True, blank=True)
     views = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
-    validate_status = models.PositiveSmallIntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     ALLOWED_HTML_TAGS = allowed_html_tags = bleach.ALLOWED_TAGS + [
         u'h1',
@@ -169,9 +204,7 @@ class Post(models.Model):
     ]
 
     def html(self):
-        import bleach
-        import markdown
-        dangerous_html = markdown.markdown(self.text)
+        dangerous_html = markdown.markdown(self.text, extensions=['markdown.extensions.fenced_code'])
         safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
         html_with_hyperlinks = bleach.linkify(safe_html)
         return html_with_hyperlinks
@@ -188,6 +221,22 @@ class Post(models.Model):
             return self.image.url
         else:
             return ""
+
+    def get_image_width(self):
+        if not self.image:
+            return None
+        try:
+            return self.image.width
+        except IOError or FileNotFoundError:
+            return None
+
+    def get_image_height(self):
+        if not self.image:
+            return None
+        try:
+            return self.image.height
+        except IOError or FileNotFoundError:
+            return None
 
     def get_file_url(self):
         if self.file and hasattr(self.file, 'url'):
@@ -211,3 +260,21 @@ class Post(models.Model):
             "image": self.get_image_url(),
             "file": self.get_file_url(),
         }
+
+    def can_be_edited_by(self, user):
+        return self.author == user or \
+               user.userinfo.status.can_moderate or \
+               user.is_staff() or \
+               user.is_superuser()
+
+    def is_parent(self):
+        return self.post_set.count() > 0
+
+    def get_childs(self):
+        return self.post_set
+
+    def file_extension(self):
+        if self.file:
+            return os.path.splitext(self.file.name)[1][1:].upper()
+        else:
+            return None

@@ -7,13 +7,8 @@ Django settings for PiCloud project development.
 
 from .common import *
 
-import random
-
 # In development environment, we generate a random SECRET_KEY at each server startup
-SECRET_KEY = ''.join([
-    random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)')
-    for i in range(50)
-])
+SECRET_KEY = 'Omae Wa Mou Shindeiru'
 
 DEBUG = True
 

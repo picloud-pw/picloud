@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block title %}
-    Cloud Редактирование
+    {% if post.pk %}
+        Редактирование: {{ post.title }}
+    {% else %}
+        Новый пост
+    {% endif %}
 {% endblock %}
 
 {% block head %}
@@ -26,31 +30,68 @@
                         </div>
                     </div>
                     <div id="structure" class="collapse">
+
                         <div class="form-group django-control">
-                            <label class="col-form-label">Университет</label>
-                            <select name="university" id="id_university"></select>
+                            <label for="id_university" class="col-form-label">Университет</label>
+                            <div class="input-group">
+                                <select name="university" id="id_university"></select>
+                                <div class="input-group-btn">
+                                    <a href="{% url 'new_university' %}" class="btn btn-primary ">
+                                        <span class="showopacity glyphicon glyphicon-plus"></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group django-control">
-                            <label class="col-form-label">Факультет</label>
-                            <select name="department" id="id_department"></select>
+                            <label for="id_department" class="col-form-label">Факультет</label>
+                            <div class="input-group">
+                                <select name="department" id="id_department"></select>
+                                <div class="input-group-btn">
+                                    <a href="{% url 'new_department' %}" class="btn btn-primary ">
+                                        <span class="showopacity glyphicon glyphicon-plus"></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group django-control">
-                            <label class="col-form-label">Кафедра</label>
-                            <select name="chair" id="id_chair"></select>
+                            <label for="id_chair" class="col-form-label">Кафедра</label>
+                            <div class="input-group">
+                                <select name="chair" id="id_chair"></select>
+                                <div class="input-group-btn">
+                                    <a href="{% url 'new_chair' %}" class="btn btn-primary ">
+                                        <span class="showopacity glyphicon glyphicon-plus"></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group django-control">
-                            <label class="col-form-label">Программа обучения</label>
-                            <select name="program" id="id_program"></select>
+                            <label for="id_program" class="col-form-label">Программа обучения</label>
+                            <div class="input-group">
+                                <select name="program" id="id_program"></select>
+                                <div class="input-group-btn">
+                                    <a href="{% url 'new_program' %}" class="btn btn-primary ">
+                                        <span class="showopacity glyphicon glyphicon-plus"></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
 
                     <div class="form-group django-control">
                         <label>Предмет</label>
-                        {{ form.subject }}
+
+                        <div class="input-group">
+                            {{ form.subject }}
+                            <div class="input-group-btn">
+                                <a href="{% url 'new_subject' %}" class="btn btn-primary ">
+                                    <span class="showopacity glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group django-control">
@@ -67,6 +108,64 @@
 
             </div>
             <div class="col-md-3 col-lg-3"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-lg-3"></div>
+            <div class="col-md-6 col-lg-6">
+                <div class="post-edit-panel">
+                    <div class="container-fluid no-margin-padding">
+                        <div id="Header_1" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Заголовок первого уровня" onclick="header(1)">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-header"></span>
+                        </div>
+                        <div id="Header_3" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Заголовок второго уровня" onclick="header(3)">
+                            <span style="font-size:12px;" class="showopacity glyphicon glyphicon-header"></span>
+                        </div>
+                        <div id="Header_6" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Заголовок третьего уровня" style="margin-right: 20px" onclick="header(6)">
+                            <span style="font-size:8px;" class="showopacity glyphicon glyphicon-header"></span>
+                        </div>
+
+                        <div id="bold" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Жирный шрифт" onclick="outline('bold')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-bold"></span>
+                        </div>
+                        <div id="italic" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Курсив" style="margin-right: 20px" onclick="outline('italic')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-italic"></span>
+                        </div>
+
+                        <div id="code" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Блок кода" onclick="code_block()">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-barcode"></span>
+                        </div>
+                        <div id="list" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Список" style="margin-right: 20px" onclick="list_item()">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-th-list"></span>
+                        </div>
+
+                        <div id="link" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Ссылка" onclick="link_template('link')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-link"></span>
+                        </div>
+                        <div id="image" class="btn btn-default col-xs-2 col-sm-1 col-md-1 col-lg-1"
+                             title="Картинка" style="margin-right: 20px" onclick="link_template('image')">
+                            <span style="font-size:16px;" class="showopacity glyphicon glyphicon-picture"></span>
+                        </div>
+
+
+                        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
+                            <div id="info" class="btn btn-info col-xs-2 col-sm-1 col-md-1 col-lg-1 pull-right"
+                                 title="Дополнительная информация" style="border-radius: 50px">
+                                <span style="font-size:16px;" class="showopacity glyphicon glyphicon-info-sign"></span>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row">
@@ -93,19 +192,39 @@
             <div class="col-md-6 col-lg-6">
                 <div class="post-edit-panel">
 
-                    <div id="linkInput" class="form-group django-control row link" style="display: none">
+                    <div id="linkInput" class="form-group django-control link" style="display: none">
                         <label class="col-sm-2 text-right">Ссылка: </label>
                         <div class="col-sm-10">{{ form.link }}</div>
+                        <p class="small">
+                            Пожалуйста, прикрепляйте <em>прямые ссылки</em> на&nbsp;материалы
+                            из&nbsp;внешних источников.
+                        </p>
                     </div>
 
-                    <div id="pictureInput" class="form-group django-control row picture" style="display: none">
+                    <div id="pictureInput" class="form-group django-control picture" style="display: none">
                         <label class="col-sm-2 text-right">Картинка: </label>
                         <div class="col-sm-10">{{ form.image }}</div>
+                        <p class="small">
+                            Прикрепите самое качественное изображение из&nbsp;всех имеющихся у&nbsp;вас.
+                            Сюда можно добавить, например, обложку для публикуемого учебного пособия.
+                        </p>
                     </div>
 
-                    <div id="fileInput" class="form-group django-control row file" style="display: none">
+                    <div id="fileInput" class="form-group django-control file" style="display: none">
                         <label class="col-sm-2 text-right">Файл: </label>
                         <div class="col-sm-10">{{ form.file }}</div>
+                        <p class="small">
+                            Пожалуйста, прикрепляйте документы и&nbsp;презентации <em>в&nbsp;формате PDF</em>,
+                            если они не&nbsp;предполагают дальнейшего редактирования. Это упрощает
+                            работу пользователей с&nbsp;материалами. Даже если редактирование предполагается,
+                            старайтесь прикреплять PDF-файл как вложение, а&nbsp;редактируемый оригинал
+                            в&nbsp;отдельном посте или как ссылку в&nbsp;тексте.
+                        </p>
+                        <p class="small">
+                            Настоятельно просим вас прикреплять материалы, которые могут
+                            быть защищены законом об&nbsp;авторском праве, в&nbsp;виде
+                            <em>ссылок на&nbsp;источники</em>, а&nbsp;не&nbsp;копий файлов.
+                        </p>
                     </div>
 
                     <div class="container-fluid no-margin-padding">
@@ -121,9 +240,21 @@
                              onclick="displayInputBlock(this, '#fileInput')">
                             <span style="font-size:16px;" class="showopacity glyphicon glyphicon-open-file"></span>
                         </div>
-                        <button type="submit" class="btn btn-default col-xs-12 col-sm-9 col-md-9 col-lg-9">
-                            Сохранить
-                        </button>
+                        {% if post.pk %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                Сохранить
+                            </button>
+                        {% elif user_info and user_info.status.can_publish_without_moderation %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9"
+                                    title="Запись будет немедленно опубликована.">
+                                Опубликовать
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary col-xs-12 col-sm-9 col-md-9 col-lg-9"
+                                    title="Запись будет отправлена на модерацию.">
+                                Предложить к&nbsp;публикации
+                            </button>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -138,27 +269,30 @@
 {% block js %}
     <script src="{% static 'js/ready.js' %}"></script>
     <script src="{% static 'js/markdown_live_preview.js' %}"></script>
+    <script src="{% static 'js/markdown_editor.js' %}"></script>
     <script src="{% static 'js/department_search.js' %}"></script>
     <script>
         ready(function () {
             $("#id_type option:first").remove();
 
-            $("#id_university").change(function () {
-                setUniversity($(this).val())
+            document.getElementById("id_university").addEventListener("change", () => {
+                universityChanged(document.getElementById("id_university").value);
             });
-            $("#id_department").change(function () {
-                setDepartment($(this).val())
+            document.getElementById("id_department").addEventListener("change", () => {
+                departmentChanged(document.getElementById("id_department").value);
             });
-            $("#id_chair").change(function () {
-                setChair($(this).val())
+            document.getElementById("id_chair").addEventListener("change", () => {
+                chairChanged(document.getElementById("id_chair").value);
             });
-            $("#id_program").change(function () {
-                setProgram($(this).val())
+            document.getElementById("id_program").addEventListener("change", () => {
+                programChanged(document.getElementById("id_program").value);
             });
+
+            clearAndDisableAllLists();
 
             {% if post.pk %}
 
-                // Редактирование поста
+                {# Редактирование поста #}
 
                 loadUniversities()
                     .then(() => setUniversity({{ post.subject.programs.first.chair.department.university.pk }}))
@@ -181,9 +315,9 @@
 
             {% else %}
 
-                // Создание поста
+                {# Создание поста #}
 
-                {% if user_info %}
+                {% if user_info and user_info.program %}
                     loadUniversities()
                         .then(() => setUniversity({{ user_info.program.chair.department.university.pk }}))
                         .then(() => setDepartment({{ user_info.program.chair.department.pk }}))
@@ -206,11 +340,5 @@
                 $(button).removeClass("btn-info").addClass("btn-default");
             }
         }
-
-        function setSubject(id) {
-            setOption('id_subject', id);
-            return Promise.resolve();
-        }
-
     </script>
 {% endblock %}

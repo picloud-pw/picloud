@@ -117,7 +117,7 @@ a {
  */
 
 h1, h2, h3 {
-    font-family: "Alegreya", sans-serif;
+    font-family: "Lora", serif;
 }
 
 h1 {
@@ -134,7 +134,7 @@ h2 {
 h3 {
     font-size: 1.3rem;
     font-weight: 500;
-    font-style: italic;
+    font-style: normal;
 }
 
 /**
@@ -225,7 +225,6 @@ img.logo {
     line-height: 2rem;
     border-radius: 0.2rem;
     vertical-align: middle;
-    box-shadow: 0 0.15em 0 #888888;
 }
 
 .headline a.button:hover {
@@ -250,9 +249,9 @@ img.logo {
 }
 
 .heroes .heroine {
-    font-family: 'Alegreya Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-weight: 500;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin: 0.3em 0;
 }
 
@@ -279,7 +278,6 @@ a.button {
     color: #222222;
 
     border-radius: 0.2rem;
-    box-shadow: 0 0.15em 0 #888888;
 }
 
 a.button:hover {
@@ -453,6 +451,16 @@ footer a {
 
 .clearfix:after {
     clear: both;
+}
+
+@media only screen and (max-width: 30em) {
+    .headline .buttons {
+        float: none;
+    }
+
+    .headline {
+        text-align: center;
+    }
 }
 
 /* ==========================================================================

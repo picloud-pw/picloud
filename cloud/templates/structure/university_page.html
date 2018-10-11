@@ -15,7 +15,10 @@
                 </div>
                 <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
                     <h3 style="word-wrap: break-word">{{ univer.title }}</h3>
-                    <a href="{{ univer.link }}"> официальный сайт </a>
+                    <a href="{{ univer.link }}">
+                        <span aria-hidden="true" class="glyphicon glyphicon-link"></span>
+                        Официальный сайт
+                    </a>
                 </div>
             </div>
 
@@ -32,7 +35,11 @@
                         <td>{{ stats.views }}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Людей зарегистрировано:</th>
+                        <th scope="row">
+                            <a href="{% url 'stud_from_univ' univer.pk %}">
+                                Людей зарегистрировано:
+                            </a>
+                        </th>
                         <td>{{ stats.persons }}</td>
                     </tr>
                 </table>
@@ -63,7 +70,7 @@
                                                     {% for program in programs %}
                                                         {% if program.chair.pk == chair.pk %}
                                                             <a class="list-group-item"
-                                                               href="/program/{{ program.pk }}">{{ program.title }}</a>
+                                                               href="{% url 'program_page' program.pk %}">{{ program.title }}</a>
                                                         {% endif %}
                                                     {% endfor %}
 

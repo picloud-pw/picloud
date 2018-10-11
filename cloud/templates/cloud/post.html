@@ -1,14 +1,45 @@
 <article class="post">
-    <div class="post-container">
+    <div class="post-container" id="post-{{ post.pk }}">
+        {% if editable %}
+            {% if user == post.author or user.userinfo.status.can_moderate or user.is_staff or user.is_superuser %}
+                <nav class="post-moderation btn-group">
+                    <a href="{% url 'post_checked' pk=post.pk %}"
+                       class="btn btn-success">
+                        <span class="showopacity glyphicon glyphicon-ok"></span>
+                        Одобрить
+                    </a>
+                    <a href="{% url 'post_edit' pk=post.pk %}"
+                       class="btn btn-warning"
+                       title="Редактировать"
+                       aria-label="Редактировать">
+                        <span class="showopacity glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <a href="{% url 'post_delete' pk=post.pk %}"
+                       class="btn btn-danger"
+                       title="Удалить"
+                       aria-label="Удалить">
+                        <span class="showopacity glyphicon glyphicon-trash"></span>
+                    </a>
+                </nav>
+                <hr/>
+            {% endif %}
+        {% endif %}
         <header>
             <h1>
                 <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+                {% if post.is_parent %}
+                    <span style="font-size:12px;"
+                          aria-label="Есть дочерние записи"
+                          title="Есть дочерние записи"
+                          class="showopacity glyphicon glyphicon-th-large">
+                    </span>
+                {% endif %}
             </h1>
             <p class="subject">
                 <span class="type">{{ post.type.title }}</span>
                 |
-                <a class="subject"
-                   href="/subject/{{ post.subject.pk }}">{{ post.subject.short_title }}</a>
+                <a class="subject" title="{{ post.subject.displayed_title }}"
+                   href="{% url 'subject_page' post.subject.pk %}">{{ post.subject.short_title }}{% if post.subject.semester > 0 %}<sup>{{ post.subject.semester }}</sup>{% endif %}</a>
             </p>
         </header>
         <hr/>
@@ -16,28 +47,59 @@
             {{ post.html | safe }}
         </div>
         {% if post.image %}
-            <img src="{{ post.image.url }}" class="post-img">
+            {% if post.image.get_image_height %}
+                <img src="{{ post.image.url }}"
+                     ratio="{{ post.get_image_width }}x{{ post.get_image_height }}"
+                     class="post-img">
+            {% else %}
+                <img src="{{ post.image.url }}" class="post-img">
+            {% endif %}
         {% endif %}
         {% if post.link %}
-            <a href="{{ post.link }}" class="btn btn-primary">
+            <a href="{{ post.link }}" class="btn btn-primary btn-follow-link">
                 Перейти по&nbsp;ссылке
             </a>
         {% endif %}
         {% if post.file %}
-            <a href="{{ post.file.url }}" class="btn btn-success">
-                Скачать файл
+            <a href="{{ post.file.url }}" class="btn btn-success btn-download">
+                Скачать файл ({{ post.file_extension }})
             </a>
         {% endif %}
         <hr/>
         <footer>
-            <a href="/user/{{ post.author.pk }}" class="author">{{ post.author }}</a>
-            ({{ post.created_date }})
-            <span style="float: right;">
-                            <span style="font-size:12px;"
-                                  class="showopacity glyphicon glyphicon-eye-open">
-                            </span>
-                                {{ post.views }}
-                        </span>
+            <a class="post-author"
+               title="Автор записи"
+               href="/user/{{ post.author.pk }}">{{ post.author }}</a>
+            <span class="post-created-date" title="Дата и время создания записи">
+                ({{ post.created_date }})
+            </span>
+            <span class="post-footer-badges">
+                    <a class="post-footer-button-create-child-post"
+                       title="Создать дочернюю запись"
+                       href="{% url 'post_new_child' pk=post.pk %}">
+                        <span class="showopacity glyphicon glyphicon-plus"></span>
+                    </a>
+                {% if user == post.author or user.userinfo.status.can_moderate or user.is_staff or user.is_superuser %}
+                    <a class="post-footer-button-delete"
+                       title="Удалить запись"
+                       onclick="return confirm('Удалить запись? После этого действия запись будет невозможно восстановить.')"
+                       href="{% url 'post_delete' pk=post.pk %}">
+                        <span class="showopacity glyphicon glyphicon-remove"></span>
+                    </a>
+                    <a class="post-footer-button-edit"
+                       title="Редактировать запись"
+                       href="{% url 'post_edit' pk=post.pk %}">
+                        <span class="showopacity glyphicon glyphicon-pencil"></span>
+                    </a>
+                {% endif %}
+                <span class="post-views-counter" title="Число просмотров">
+                    <span style="font-size:12px;"
+                          aria-label="Число просмотров"
+                          class="showopacity glyphicon glyphicon-eye-open">
+                    </span>
+                    {{ post.views }}
+                </span>
+            </span>
         </footer>
     </div>
 </article>

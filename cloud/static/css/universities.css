@@ -1,0 +1,47 @@
+
+body {
+    background-color: hsl(208, 100%, 93%);
+}
+
+.university {
+    max-width: 600px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 1rem auto;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.3em 0 #bbbbbb;
+}
+
+.university:hover {
+    background: hsl(208, 100%, 87%);
+    text-decoration: none;
+}
+
+.university h1 {
+    font-size: 2.1rem;
+    margin: 0.5rem;
+}
+
+.university img.university-logo {
+    height: 15rem;
+    margin: 0.5rem;
+    border-radius: 100%;
+    padding: 0.5rem;
+}
+
+.button-add-university {
+    background: white;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.3em 0 #bbbbbb;
+    margin: 1rem auto;
+}
+
+.button-add-university:hover {
+    background: hsl(208, 100%, 80%);
+}

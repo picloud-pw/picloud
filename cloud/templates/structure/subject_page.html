@@ -18,8 +18,8 @@
                 {% if subject.lecturer != none %}
                     <h5>Лектор — {{ subject.lecturer }}</h5>
                 {% endif %}
-                {% if subject.semestr != 0 %}
-                    <h5> Семестр {{ subject.semestr }}</h5>
+                {% if subject.semester != 0 %}
+                    <h5> Семестр {{ subject.semester }}</h5>
                 {% else %}
                     <h5> Глобальные материалы</h5>
                 {% endif %}
@@ -32,7 +32,7 @@
                         <div class="panel-body no-margin-padding">
                             <div class="list-group">
                                 {% for program in subject.programs.all %}
-                                    <a class="list-group-item" href="/program/{{ program.pk }}">{{ program.title }}
+                                    <a class="list-group-item" href="{% url 'program_page' program.pk %}">{{ program.title }}
                                         ({{ program.chair.short_title }})</a>
                                 {% endfor %}
                             </div>
@@ -51,7 +51,7 @@
 
                     {% for post in posts %}
                         {% if  post.type == type %}
-                            <a href="/post/{{ post.pk }}"><h4>{{ post.title }}</h4></a>
+                            <a href="{% url 'post_detail' post.pk %}"><h4>{{ post.title }}</h4></a>
                         {% endif %}
                     {% endfor %}
                     <hr>

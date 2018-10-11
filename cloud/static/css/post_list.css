@@ -6,31 +6,6 @@ body {
     margin-top: 0;
 }
 
-.post-list article {
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    margin: 1rem auto;
-    box-shadow: 0 0.15em 0 #dddddd;
-}
-
-.post-list article .post-container {
-    padding: 1.5rem;
-    box-sizing: border-box;
-}
-
-.post-list article .post-container h1 {;
-    font-size: 2rem;
-}
-
-.post-list article .post-container .text {
-    text-align: left;
-}
-
-.post-list article .post-container footer {
-    text-align: left;
-}
-
 @supports (display: grid) {
     .post-list {
         display: grid;

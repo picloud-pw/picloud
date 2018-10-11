@@ -1,0 +1,198 @@
+{% extends 'cloud/post_list.html' %}
+{% load static %}
+
+{% block title %}
+    Модерация
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/moderation.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container-fluid" style="margin-top: 20px">
+
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+
+            <div class="moderation-container">
+
+                <ul class="nav nav-pills">
+                    <li class="active"><a data-toggle="tab" href="#posts">Посты</a></li>
+                    <li><a data-toggle="tab" href="#universities">Вузы</a></li>
+                    <li><a data-toggle="tab" href="#departments">Факультеты</a></li>
+                    <li><a data-toggle="tab" href="#chairs">Кафедры</a></li>
+                    <li><a data-toggle="tab" href="#programs">Программы</a></li>
+                    <li><a data-toggle="tab" href="#subjects">Предметы</a></li>
+                </ul>
+
+                <div class="tab-content">
+
+                    <div id="posts" class="tab-pane fade in active">
+                        {% with editable=True %}
+                            {{ block.super }}
+                        {% endwith %}
+                    </div>
+
+                    <div id="universities" class="tab-pane fade">
+                        <div class="row" style="margin: 5px">
+                            {% for university in universities %}
+                                {% include "moderation/structure/university.html" %}
+                            {% endfor %}
+                            {% if not universities %}
+                                <div class="post-panel panel-settings">
+                                    <h4>
+                                        <hr>
+                                        Здесь будут появляться еще не проверенные Вузы.
+                                        <hr>
+                                        На данный момент работа отсутствует.
+                                        <hr>
+                                        <a href="{% url 'new_university' %}">Добавить Вуз!</a>
+                                        <hr>
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="departments" class="tab-pane fade">
+                        <div class="row" style="margin: 5px">
+                            {% for department in departments %}
+                                {% include "moderation/structure/department.html" %}
+                            {% endfor %}
+                            {% if not departments %}
+                                <div class="post-panel panel-settings">
+                                    <h4>
+                                        <hr>
+                                        Здесь будут появляться еще не проверенные Факультеты.
+                                        <hr>
+                                        На данный момент работа отсутствует.
+                                        <hr>
+                                        <a href="{% url 'new_department' %}">Добавить Факультет!</a>
+                                        <hr>
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="chairs" class="tab-pane fade">
+                        <div class="row" style="margin: 5px">
+                            {% for chair in chairs %}
+                                {% include "moderation/structure/chair.html" %}
+                            {% endfor %}
+                            {% if not chairs %}
+                                <div class="post-panel panel-settings">
+                                    <h4>
+                                        <hr>
+                                        Здесь будут появляться еще не проверенные Кафедры.
+                                        <hr>
+                                        На данный момент работа отсутствует.
+                                        <hr>
+                                        <a href="{% url 'new_chair' %}">Добавить Кафедру!</a>
+                                        <hr>
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="programs" class="tab-pane fade">
+                        <div class="row" style="margin: 5px">
+                            {% for program in programs %}
+                                {% include "moderation/structure/program.html" %}
+                            {% endfor %}
+                            {% if not programs %}
+                                <div class="post-panel panel-settings">
+                                    <h4>
+                                        <hr>
+                                        Здесь будут появляться еще не проверенные Программы обучения.
+                                        <hr>
+                                        На данный момент работа отсутствует.
+                                        <hr>
+                                        <a href="{% url 'new_program' %}">Добавить Программу!</a>
+                                        <hr>
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="subjects" class="tab-pane fade">
+                        <div class="row" style="margin: 5px">
+                            {% for subject in subjects %}
+                                {% include "moderation/structure/subject.html" %}
+                            {% endfor %}
+                            {% if not subjects %}
+                                <div class="post-panel panel-settings">
+                                    <h4>
+                                        <hr>
+                                        Здесь будут появляться еще не проверенные Предметы.
+                                        <hr>
+                                        На данный момент работа отсутствует.
+                                        <hr>
+                                        <a href="{% url 'new_subject' %}">Добавить Предмет!</a>
+                                        <hr>
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+
+            <div class="post-panel panel-settings">
+
+                {% if message %}
+                    <div class="alert alert-info alert-dismissible show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endif %}
+
+                <hr>
+                {% if user.is_superuser %}
+                    <a href="{% url 'update_karma' %}">
+                        <div class="btn btn-default">Пересчитать карму всем пользователям</div>
+                    </a>
+                {% else %}
+                    <label>У вас нет доступа к дополниительным функциям модерирования</label>
+                {% endif %}
+                <hr>
+
+            </div>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block emptyloop %}
+    <div class="post-panel panel-settings">
+        <h4>
+            <hr>
+            Здесь будут появляться еще не проверенные посты.
+            <hr>
+            На данный момент работа отсутствует.
+            <hr>
+            <a href="{% url 'post_new' %}">Запостить!</a>
+            <hr>
+        </h4>
+    </div>
+{% endblock %}

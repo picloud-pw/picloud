@@ -1,0 +1,39 @@
+{% extends 'structure/new/new_structure_template.html' %}
+
+{% block title %}
+    Новый предмет | PiCloud
+{% endblock %}
+
+{% block structure_form %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="structure" value="subject">
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Программы обучения, в которых присутствует данный
+                предмет</label>
+            {{ new_subject.programs }}
+        </div>
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Полное название</label>
+            {{ new_subject.title }}
+        </div>
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Аббревиатура</label>
+            {{ new_subject.short_title }}
+        </div>
+
+        <div class="form-group django-control">
+            <label class="col-form-label">Семестр</label>
+            {{ new_subject.semester }}
+        </div>
+
+        <hr>
+        <button type="submit" class="btn btn-default" style="width: 100%">Отправить на модерацию
+        </button>
+    </form>
+
+{% endblock %}

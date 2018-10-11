@@ -6,9 +6,8 @@
 {% endblock %}
 
 {% block head %}
-    <!-- Аутентификация в Яндекс Вебмастер -->
-    <meta name="yandex-verification" content="c3f40ad459bc9654"/>
 
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
     <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal_image.css' %}">
 
@@ -16,9 +15,12 @@
 
 {% block content %}
 
+    {% block navigation %}{% endblock %}
+
     <div id="modal">
         <span class="close">&times;</span>
-        <img class="modal-content" id="modalImg" src="#">
+        {# Загружает GIF-изображение размером 1×1 пиксел. #}
+        <img class="modal-content" id="modalImg" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
         <a id="show-full-btn" href="#" target="_blank" class="btn btn-primary">
             Открыть оригинал в новой вкладке
         </a>
@@ -43,7 +45,7 @@
             {% else %}
                 <div class="no-posts">
                     <p>
-                        Здесь будут появляться посты, актуальные для вашего направления.
+                        Здесь будут появляться записи, актуальные для вашего направления.
                     </p>
                     <p>
                         Вы можете внести свой вклад и <a href="{% url 'post_new' %}">запостить что-нибудь</a>.
@@ -110,16 +112,16 @@
         let showFullBtn = document.getElementById("show-full-btn");
 
         for (let img of document.getElementsByClassName('post-img')) {
-            img.onclick = function () {
+            img.addEventListener('click', function () {
                 modal.style.display = "grid";
                 modalImg.src = this.src;
                 showFullBtn.href = this.src;
-            }
+            });
         }
 
         let closeBtn = document.getElementsByClassName("close")[0];
-        closeBtn.onclick = function () {
+        closeBtn.addEventListener('click', () => {
             modal.style.display = "none";
-        }
+        });
     </script>
 {% endblock %}

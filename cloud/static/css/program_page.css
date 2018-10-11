@@ -1,0 +1,30 @@
+.back-panel{
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    text-align: center;
+    margin: 5px auto;
+    padding: 10px;
+}
+
+a.subject-link{
+    text-decoration: none;
+}
+
+.subject-item{
+    padding: 4px;
+}
+
+.subject-item:hover{
+    background: radial-gradient(40% 50%, #BDE0FF, #f8f8f8);
+}
+
+.subject-title{
+    font-size: 18px;
+}
+
+.subject-label{
+    background-color: #ffe09e;
+    padding: 3px;
+    border-radius: 10px;
+}

@@ -1,45 +1,30 @@
 {% extends 'main_template.html' %}
+{% load static %}
 
 {% block title %}
-    Подразделения
+    Вузы
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/universities.css' %}">
 {% endblock %}
 
 {% block content %}
 
+    <style></style>
+
     <div class="container-fluid no-margin-padding">
 
-
-        {% comment %}
-        <a href="#">
-            <div class="universities">
-                <div class="container-fluid">
-
-                    <h1 style="vertical-align: sub">Добавить свой вуз!</h1>
-
-                </div>
-            </div>
-        </a>
-        {% endcomment %}
-
-
-        {% for univer in univer_list %}
-
-            <a href="{{ univer.pk }}/">
-                <div class="universities">
-                    <div class="container-fluid">
-
-                        <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3 no-margin-padding">
-                            <img class="univer-logo" src="{{ univer.logo.url }}" alt="univer-logo">
-                        </div>
-                        <div class="col-xs-7 col-sm-9 col-md-9 col-lg-9">
-                            <h3 style="word-wrap: break-word">{{ univer.title }}</h3>
-                        </div>
-
-                    </div>
-                </div>
+        {% for university in univer_list %}
+            <a href="{{ university.pk }}/" class="university">
+                <img class="university-logo" src="{{ university.logo.url }}" alt="univer-logo">
+                <h1>{{ university.title }}</h1>
             </a>
-
         {% endfor %}
+
+        <a href="{% url 'new_university' %}" class="button-add-university btn btn-default">
+            Добавить вуз
+        </a>
 
     </div>
 

@@ -66,6 +66,7 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -123,4 +124,11 @@ EMAIL_HOST_USER = get_config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = get_config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = get_config('EMAIL_PORT')
 
+VK_GLOBAL_TOKEN = get_config('VK_GLOBAL_TOKEN')
+VK_GROUP_TOKEN = get_config('VK_GROUP_TOKEN')
+VK_GROUP_LIST = get_config('VK_GROUP_LIST')
+
 GOOGLE_RECAPTCHA_SECRET_KEY = get_config('GOOGLE_RECAPTCHA_SECRET_KEY')
+
+# FIXME XXX HACK: Подвергает сайт риску XSS, хотя и позволяет аутентифицироваться через REST
+SESSION_COOKIE_HTTPONLY = False

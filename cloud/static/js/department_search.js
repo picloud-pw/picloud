@@ -13,7 +13,9 @@ function getCookie(name) {
     return cookieValue;
 }
 
-let csrf_token = getCookie('csrftoken');
+function getCsrfToken() {
+    return getCookie('csrftoken');
+}
 
 function clearAndDisableList(element_id, default_option) {
     let element = document.getElementById(element_id);
@@ -21,9 +23,9 @@ function clearAndDisableList(element_id, default_option) {
     clearOptions(element);
     let option = document.createElement('option');
     option.textContent = default_option;
-    element.append(option);
     element.disabled = true;
-    element.style.backgroundColor = 'lightgray';
+    element.style.backgroundColor = '#d3d3d3';
+    element.appendChild(option);
 }
 
 function clearOptions(element) {
@@ -36,7 +38,7 @@ function clearAndDisableAllLists() {
     clearAndDisableList("id_department", "Выберите факультет");
     clearAndDisableList("id_chair", "Выберите кафедру");
     clearAndDisableList("id_program", "Выберите программу обучения");
-    clearAndDisableList("id_subject", "Выберите предмет");
+    clearAndDisableList("id_subject", "Выберите дисциплину");
 }
 
 function loadUniversities() {
@@ -51,7 +53,7 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrf_token,
+            'X-CSRFToken': getCsrfToken(),
         }),
     });
     return fetch(request)
@@ -68,15 +70,37 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
                 let option = document.createElement("option");
                 option.textContent = defaultOptionText;
                 option.value = "";
-                option.disabled = true;
+                option.disabled = (elementId !== 'id_subject');
                 element.appendChild(option);
                 element.value = "";
+
+                let lastSemester = null;
                 jsonArray.forEach(function (item) {
+                    if (elementId === 'id_subject') {
+                        if (lastSemester !== item.semester) {
+                            let lineSplitter = document.createElement("option");
+                            lineSplitter.textContent = "____________________";
+                            lineSplitter.disabled = true;
+                            element.appendChild(lineSplitter);
+
+                            let headingSplitter = document.createElement("option");
+                            headingSplitter.disabled = true;
+                            if (item["semester"] > 0) {
+                                headingSplitter.textContent = `Семестр ${item.semester}`;
+                            } else {
+                                headingSplitter.textContent = "Общие дисциплины";
+                            }
+                            headingSplitter.style.fontFamily = "bold";
+                            element.appendChild(headingSplitter);
+                            lastSemester = item.semester;
+                        }
+                    }
                     let option = document.createElement("option");
-                    option.value = item["id"];
-                    option.textContent = item["title"];
+                    option.value = item.id;
+                    option.textContent = item.title;
                     element.appendChild(option);
                 });
+
                 element.disabled = false;
                 element.style.backgroundColor = 'white';
             } else {
@@ -89,42 +113,80 @@ function loadOptions(elementId, endpointUrl, changedElementValue, defaultOptionT
         });
 }
 
-function setOption(elementId, value) {
+function setOption(elementId, newValue) {
     let element = document.getElementById(elementId);
-    if (element) element.value = value;
+    if (element && element.value.toString() !== (newValue || '').toString()) {
+        element.value = newValue;
+        return true;
+    } else {
+        return false;
+    }
 }
 
-function setUniversity(university_id) {
-    setOption('id_university', university_id);
+/*
+ * Change hooks
+ */
+
+function universityChanged(university_id) {
     return loadOptions("id_department", "/api/departments/", university_id, "Выберите факультет")
         .then(() => {
             clearAndDisableList("id_chair", "Выберите кафедру");
             clearAndDisableList("id_program", "Выберите программу обучения");
-            clearAndDisableList("id_subject", "Выберите предмет");
+            clearAndDisableList("id_subject", "Выберите дисциплину");
             return Promise.resolve();
         });
 }
 
-function setDepartment(department_id) {
-    setOption('id_department', department_id);
+function departmentChanged(department_id) {
     return loadOptions('id_chair', '/api/chairs/', department_id, 'Выберите кафедру')
         .then(() => {
             clearAndDisableList("id_program", 'Выберите программу обучения');
-            clearAndDisableList("id_subject", "Выберите предмет");
+            clearAndDisableList("id_subject", "Выберите дисциплину");
             return Promise.resolve();
         });
+}
+
+function chairChanged(chair_id) {
+    return loadOptions('id_program', '/api/programs/', chair_id, 'Выберите программу обучения')
+        .then(() => {
+            clearAndDisableList('id_subject', 'Выберите дисциплину');
+            return Promise.resolve();
+        });
+}
+
+function programChanged(program_id) {
+    return loadOptions('id_subject', '/api/subjects/', program_id, 'Любая дисциплина');
+}
+
+/*
+ * Setters
+ */
+
+function setUniversity(university_id) {
+    if (setOption('id_university', university_id)) {
+        return universityChanged(university_id);
+    } else return Promise.resolve();
+}
+
+function setDepartment(department_id) {
+    if (setOption('id_department', department_id)) {
+        return departmentChanged(department_id);
+    } else return Promise.resolve();
 }
 
 function setChair(chair_id) {
-    setOption('id_chair', chair_id);
-    return loadOptions('id_program', '/api/programs/', chair_id, 'Выберите программу обучения')
-        .then(() => {
-            clearAndDisableList('id_subject', 'Выберите предмет');
-            return Promise.resolve();
-        });
+    if (setOption('id_chair', chair_id)) {
+        return chairChanged(chair_id);
+    } else return Promise.resolve();
 }
 
 function setProgram(program_id) {
-    setOption('id_program', program_id);
-    return loadOptions('id_subject', '/api/subjects/', program_id, 'Выберите предмет');
+    if (setOption('id_program', program_id)) {
+        return programChanged(program_id);
+    } else return Promise.resolve();
+}
+
+function setSubject(id) {
+    setOption('id_subject', id);
+    return Promise.resolve();
 }
