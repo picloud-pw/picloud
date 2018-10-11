@@ -18,6 +18,6 @@ def get_memes(request):
         memes = fetch_and_sort_memes(sources)
         return render(request, "memes.html", {"memes": memes, "sources": sources})
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь для просмотра мемесов."
-                                    "Если вы укажите место учебы, "
+        return sign_in(request, msg="Пожалуйста, авторизуйтесь для просмотра мемесов. "
+                                    "Если вы укажете место учебы, "
                                     "мемы будут подбираться с учётом локальности!")
