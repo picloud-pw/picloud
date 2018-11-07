@@ -28,14 +28,17 @@
             {{ sort_type.sort_type }}
         </div>
 
-        <div id="search-line" class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-            <input class="form-control" type="text" placeholder="Введите запрос"
-                onchange="display_options(this.value)">
+        <div id="search-line" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class="ui category search" style="padding-right: 15px">
+                <div class="ui icon input fluid">
+                    <input class="prompt" type="text" placeholder="Введите запрос"
+                           onchange="display_options(this.value)">
+                    <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+            </div>
         </div>
-        <div id="search-button" class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-            <input class="form-control btn btn-primary" type="submit"
-                   onclick="search_posts()" value="Поиск">
-        </div>
+
     </div>
 
     <div id="modal">
