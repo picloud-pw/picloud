@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from cloud.models import Post, University, Department, Chair, Program, Subject
 from .posts import POSTS_PER_PAGE
@@ -13,52 +14,77 @@ from .posts import POSTS_PER_PAGE
 def text_search(request):
     text_request = request.GET.get('request', None)
     if text_request is not None:
+        response = {
+            "results": {}
+        }
         words = text_request.split(" ")
 
         posts = Post.objects.filter(is_approved=True)
         posts = posts.filter(reduce(operator.or_, (Q(title__icontains=x) for x in words)))
-        posts = posts.order_by('created_date').reverse()[:100]
-        posts = [p.title for p in posts]
+        posts = posts.order_by('created_date').reverse()[:10]
+        posts = [{
+            "title": p.title,
+            "url": reverse("post_detail", kwargs={'pk': p.pk})
+        } for p in posts]
+        if len(posts):
+            response["results"]["Posts"] = {"name": "Посты", "results": posts}
 
         universities = University.objects.filter(is_approved=True)
         universities = universities.filter(
             reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
         )
-        universities = [u.title for u in universities]
+        universities = [{
+            "title": u.title,
+            "url": reverse("university_page", kwargs={'university_id': u.pk})
+        } for u in universities]
+        if len(posts):
+            response["results"]["University"] = {"name": "Университеты", "results": universities}
 
         departments = Department.objects.filter(is_approved=True)
         departments = departments.filter(
             reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
         )
-        departments = [d.title for d in departments]
+        departments = [{
+            "title": d.title,
+            "url": reverse("university_page", kwargs={'university_id': d.pk})
+        } for d in departments]
+        if len(posts):
+            response["results"]["Department"] = {"name": "Факультеты", "results": departments}
 
         chairs = Chair.objects.filter(is_approved=True)
         chairs = chairs.filter(
             reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
         )
-        chairs = [c.title for c in chairs]
+        chairs = [{
+            "title": c.title,
+            "url": reverse("university_page", kwargs={'university_id': c.pk})
+        } for c in chairs]
+        if len(posts):
+            response["results"]["Chair"] = {"name": "Кафедры", "results": chairs}
 
         programs = Program.objects.filter(is_approved=True)
         programs = programs.filter(
             reduce(operator.or_, (Q(code__icontains=x) | Q(title__icontains=x) for x in words))
         )
-        programs = [d.title for d in programs]
+        programs = [{
+            "title": d.title,
+            "url": reverse("program_page", kwargs={'program_id': d.pk})
+        } for d in programs]
+        if len(posts):
+            response["results"]["Program"] = {"name": "Программы обучения", "results": programs}
 
         subjects = Subject.objects.filter(is_approved=True)
         subjects = subjects.filter(
             reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
         )
-        subjects = [d.title for d in subjects]
+        subjects = [{
+            "title": d.title,
+            "url": reverse("subject_page", kwargs={'subject_id': d.pk})
+        } for d in subjects]
+        if len(posts):
+            response["results"]["Subject"] = {"name": "Предметы", "results": subjects}
 
-        request = {
-            "posts": posts,
-            "universities": universities,
-            "departments": departments,
-            "chairs": chairs,
-            "programs": programs,
-            "subjects": subjects
-        }
-        return JsonResponse(request, safe=False)
+        return JsonResponse(response, safe=False)
     else:
         return JsonResponse([], safe=False)
 

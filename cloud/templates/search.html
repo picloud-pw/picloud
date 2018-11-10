@@ -16,26 +16,28 @@
 
     <div class="search-panel row">
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ university.university }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ department.department }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ chair.chair }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ program.program }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.subject }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.type }}</div>
-
-        <hr>
-        <div id="search-select" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            {{ sort_type.sort_type }}
+        <div class="ui category search fluid">
+            <div class="ui icon input fluid">
+                <input class="prompt" type="text" placeholder="Введите запрос">
+                <i class="inverted circular setting link icon"
+                    data-toggle="collapse" data-target="#search_settings"
+                    aria-expanded="false" aria-controls="search_settings"></i>
+            </div>
+            <div class="results"></div>
         </div>
 
-        <div id="search-line" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            <div class="ui category search" style="padding-right: 15px">
-                <div class="ui icon input fluid">
-                    <input class="prompt" type="text" placeholder="Введите запрос"
-                           onchange="display_options(this.value)">
-                    <i class="search icon"></i>
+        <div class="collapse" id="search_settings" style="padding-top: 15px">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ university.university }}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ department.department }}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ chair.chair }}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ program.program }}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.subject }}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.type }}</div>
+                <hr>
+                <div id="search-select" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    {{ sort_type.sort_type }}
                 </div>
-                <div class="results"></div>
             </div>
         </div>
 
@@ -69,6 +71,21 @@
     <script src="{% static "js/post_list.js" %}"></script>
     <script src="{% static "js/search.js" %}"></script>
     <script src="{% static "js/text_search.js" %}"></script>
+
+    <script>
+
+        $('.ui.search')
+            .search({
+                // change search endpoint to a custom endpoint by manipulating apiSettings
+                apiSettings: {
+                    url: '/search?request={query}'
+                },
+                maxResults: 10,
+                type: 'category'
+            })
+        ;
+
+    </script>
 
     <script>
         ready(function () {
