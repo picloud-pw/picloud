@@ -34,7 +34,7 @@ def user_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=fr_user_posts)
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы просматривать посты конкретных пользователей.")
+        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы просматривать записи конкретных пользователей.")
 
 
 def user_not_checked_posts(request, user_id):
@@ -48,7 +48,7 @@ def user_not_checked_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=not_validate_posts)
     else:
-        return message(request, msg="Вы можете просматривать только проверенные посты этого пользователя.")
+        return message(request, msg="Вы можете просматривать только проверенные записи этого пользователя.")
 
 
 def settings_page(request, msg="", error=""):
