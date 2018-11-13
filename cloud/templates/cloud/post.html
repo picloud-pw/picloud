@@ -67,8 +67,8 @@
         {% endif %}
         {% if post.is_parent %}
 	    <br>
-            <a style="font-size:10px;" href="{% url 'post_detail' pk=post.pk %}">
-	        Есть дочерние записи
+            <a style="font-size:12px;" href="{% url 'post_detail' pk=post.pk %}">
+	        Смотреть дочерние записи
             </a>
         {% endif %}
         <hr/>
