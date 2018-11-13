@@ -65,6 +65,12 @@
                 Скачать файл ({{ post.file_extension }})
             </a>
         {% endif %}
+        {% if post.is_parent %}
+	    <br>
+            <a style="font-size:10px;" href="{% url 'post_detail' pk=post.pk %}">
+	        Есть дочерние записи
+            </a>
+        {% endif %}
         <hr/>
         <footer>
             <a class="post-author"
