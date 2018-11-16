@@ -142,6 +142,11 @@ img.univer-logo {
     margin-bottom: 10px;
 }
 
+.search-select .label {
+    text-align: left;
+    color: gray;
+}
+
 .panel-settings {
     padding: 10px;
     max-width: 600px;

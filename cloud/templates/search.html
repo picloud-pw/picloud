@@ -15,28 +15,16 @@
 {% block content %}
 
     <div class="search-panel row">
-
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ university.university }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ department.department }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ chair.chair }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ program.program }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.subject }}</div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select">{{ subject.type }}</div>
-
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select"><div class="label">Университет:</div>{{ university.university }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select"><div class="label">Факультет:</div>{{ department.department }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select"><div class="label">Кафедра:</div>{{ chair.chair }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select"><div class="label">Программа:</div>{{ program.program }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select"><div class="label">Предмет:</div>{{ subject.subject }}</div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 search-select"><div class="label">Тип материала:</div>{{ subject.type }}</div>
         <hr>
-        <div id="search-select" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div id="search-select" class="col-xs-12 col-sm-12 col-md-4 col-lg-4 search-select">
+        <div class="label">Сортировка:</div>
             {{ sort_type.sort_type }}
-        </div>
-
-        <div id="search-line" class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-            <input class="form-control" type="text"
-                   title="Извините, полнотекстовый поиск временно не работает." disabled
-                   placeholder="Введите запрос">
-        </div>
-        <div id="search-button" class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-            <input class="form-control btn btn-primary" type="submit"
-                   title="Извините, полнотекстовый поиск временно не работает." disabled
-                   onclick="search_posts()" value="Поиск">
         </div>
     </div>
 
