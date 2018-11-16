@@ -35,6 +35,7 @@ urlpatterns = [
     path('user/<user_id>/not_checked_posts', views.user.user_not_checked_posts, name='user_not_checked_posts'),
 
     path('cloud/', views.posts.cloud, name='cloud'),
+    path('feed/', views.posts.cloud, name='feed'),
     path('search/', RedirectView.as_view(pattern_name='cloud'), name='search'),
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),

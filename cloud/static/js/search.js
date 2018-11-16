@@ -203,7 +203,7 @@ ready(() => {
         .forEach(element => {
             element.addEventListener('change', function () {
                 let data = getCurrentValues();
-                history.pushState(data, null, `/cloud/?${calculateSuffix(data)}`);
+                history.pushState(data, null, `/feed/?${calculateSuffix(data)}`);
                 newSearchRequest(data);
             });
         });
