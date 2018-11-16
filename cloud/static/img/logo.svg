@@ -40,6 +40,12 @@
             font-size: 133px;
             fill: #000000;
         }
+        #version {
+            font-family: 'Roboto Slab', serif;
+            font-size: 64px;
+            fill: #606060;
+            text-align: right;
+        }
     </style>
     <defs>
         <mask id="mask" maskUnits="userSpaceOnUse">
@@ -52,4 +58,5 @@
     <circle id="circle" cx="185" cy="215" mask="url(#mask)" r="130"/>
     <text id="cloud" x="331" y="300" xml:space="preserve"><tspan>Cloud</tspan></text>
     <text id="beta" x="985" y="170" style="" xml:space="preserve"><tspan>β</tspan></text>
+    <text id="version" x="980" y="375" text-anchor="end"><tspan>v0.9.37</tspan></text>
 </svg>
