@@ -26,6 +26,17 @@ class University(models.Model):
             "short_title": self.short_title
         }
 
+    def as_hierarchical_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title,
+            "deparments": {
+                d.id: d.as_hierarchical_dict()
+                for d in Department.objects.filter(university=self.pk, is_approved=True)
+            }
+        }
+
 
 class Department(models.Model):
     university = models.ForeignKey('University', on_delete=models.CASCADE)
@@ -42,6 +53,17 @@ class Department(models.Model):
             "id": self.pk,
             "title": self.title,
             "short_title": self.short_title
+        }
+
+    def as_hierarchical_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title,
+            "chairs": {
+                c.id: c.as_hierarchical_dict()
+                for c in Chair.objects.filter(department=self.pk, is_approved=True)
+            }
         }
 
 
@@ -62,6 +84,17 @@ class Chair(models.Model):
             "short_title": self.short_title
         }
 
+    def as_hierarchical_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title,
+            "programs": {
+                p.id: p.as_hierarchical_dict()
+                for p in Program.objects.filter(chair=self.pk, is_approved=True)
+            }
+        }
+
 
 class Program(models.Model):
     chair = models.ForeignKey('Chair', on_delete=models.CASCADE)
@@ -78,6 +111,17 @@ class Program(models.Model):
             "id": self.pk,
             "title": self.title,
             "code": self.code
+        }
+
+    def as_hierarchical_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "code": self.code,
+            "subjects": {
+                s.id: s.as_dict()
+                for s in Subject.objects.filter(programs=self.pk, is_approved=True)
+            }
         }
 
 

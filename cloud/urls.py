@@ -47,6 +47,8 @@ urlpatterns = [
     path('change_user/', views.user.change_user, name='change_user'),
     path('change_user_name/', views.user.change_user_name, name='change_user_name'),
 
+    path('structure/', views.structure.hierarchy_dump, name='structure_hierarchy'),
+
     path('universities/', views.universities.universities_list, name='universities_list'),
     path('universities/<university_id>/', views.universities.university_page, name='university_page'),
     path('universities/<university_id>/students', views.universities.students_from_university, name='stud_from_univ'),

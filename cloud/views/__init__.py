@@ -10,4 +10,4 @@ NOT_VALID = 1
 # t.start()
 
 from . import api, authentication, chairs, contacts, departments, index, legal, memes, message, moderation, posts, \
-    programs, recaptcha, registration, robots, search, subjects, universities, user, karma, vkontakte
+    programs, recaptcha, registration, robots, search, subjects, structure, universities, user, karma, vkontakte
