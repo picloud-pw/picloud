@@ -108,7 +108,7 @@ def search_and_render_posts(request):
     subject_id = request.GET.get('subject_id', None)
     type_id = request.GET.get('type_id', None)
     page_number = request.GET.get('page', 1)
-    sort_type = request.GET.get('sort_type', '0')
+    sort_type = request.GET.get('sort_type', 'newest')
 
     posts = Post.objects.filter(is_approved=True).filter(parent_post=None)
 
@@ -123,17 +123,17 @@ def search_and_render_posts(request):
     if type_id is not None:
         posts = posts.filter(type=type_id)
 
-    if '0' == sort_type:
+    if 'newest' == sort_type:
         posts = posts.order_by('created_date').reverse()
-    if '1' == sort_type:
+    if 'oldest' == sort_type:
         posts = posts.order_by('created_date')
-    if '2' == sort_type:
+    if 'last_semester' == sort_type:
         posts = posts.order_by('subject__semester').reverse()
-    if '3' == sort_type:
+    if 'first_semester' == sort_type:
         posts = posts.order_by('subject__semester')
-    if '4' == sort_type:
+    if 'most_views' == sort_type:
         posts = posts.order_by('views').reverse()
-    if '5' == sort_type:
+    if 'least_views' == sort_type:
         posts = posts.order_by('views')
 
     paginator = Paginator(posts, POSTS_PER_PAGE)
