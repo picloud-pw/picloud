@@ -1,7 +1,8 @@
+from django.contrib import auth
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 
 from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserNameChangeForm
@@ -12,6 +13,8 @@ from cloud.views.posts import post_list
 
 from cloud.views.karma import update_carma
 from cloud.views.vkontakte import vk_get_auth_link
+
+AUTHOR_AFTER_DELETION = 32
 
 
 def user_page(request, user_id):
@@ -139,3 +142,12 @@ def validate_course(course):
 
 def validate_name(first_name, last_name):
     return len(first_name) < 20 and len(last_name) < 20
+
+
+def delete_active_account(request):
+    user = request.user
+    auth.logout(request)
+    Post.objects.filter(author=user.pk).update(author=AUTHOR_AFTER_DELETION)
+    UserInfo.objects.get(user=user.pk).delete()
+    user.delete()
+    return redirect("index")
