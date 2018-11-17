@@ -64,11 +64,12 @@
 
         <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
             <ul class="nav navbar-nav">
+
                 {% if user.is_authenticated %}
                     <li>
                         <a href="{% url 'settings' %}">
                             <div id="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
-                            <h3 style="margin: 0;">{{ user.username }}</h3>
+                            <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: normal;">{{ user.username }}</p>
                         </a>
                     </li>
                 {% endif %}
