@@ -37,7 +37,7 @@ urlpatterns = [
 
     path('cloud/', views.posts.cloud, name='cloud'),
     path('feed/', views.posts.cloud, name='feed'),
-    path('search/', RedirectView.as_view(pattern_name='cloud'), name='search'),
+    path('search/', views.search.text_search, name='search'),
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),
     path('moderation/', views.moderation.moderation, name="moderation"),
