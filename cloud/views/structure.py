@@ -1,5 +1,5 @@
 import hashlib
-from json import dumps
+import json
 
 from django.core.cache import cache
 from django.http import JsonResponse
@@ -33,7 +33,7 @@ def hierarchy_dump(request):
 
 
 def json_md5(obj):
-    dump = dumps(obj).encode('utf-8')
+    dump = json.dumps(obj, sort_keys=True).encode('utf-8')
     hash_sum = hashlib.md5()
     hash_sum.update(dump)
     md5 = hash_sum.hexdigest()
