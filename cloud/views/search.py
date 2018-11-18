@@ -90,7 +90,7 @@ def text_search(request):
         reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
     )
     subjects = [{
-        "title": str(d.title) + "(сем. " + str(d.semester) + ")",
+        "title": str(d.title) + " (сем. " + str(d.semester) + ")",
         "description": str(d.programs.first().chair.department.university.short_title),
         "url": reverse("subject_page", kwargs={'subject_id': d.pk})
     } for d in subjects]
