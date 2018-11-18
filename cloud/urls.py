@@ -47,8 +47,6 @@ urlpatterns = [
     path('change_user/', views.user.change_user, name='change_user'),
     path('change_user_name/', views.user.change_user_name, name='change_user_name'),
 
-    path('structure/', views.structure.hierarchy_dump, name='structure_hierarchy'),
-
     path('universities/', views.universities.universities_list, name='universities_list'),
     path('universities/<university_id>/', views.universities.university_page, name='university_page'),
     path('universities/<university_id>/students', views.universities.students_from_university, name='stud_from_univ'),
@@ -81,6 +79,7 @@ urlpatterns = [
     path('legal/privacy-policy/', views.legal.privacy_policy, name='privacy_policy'),
 
     # TODO: Сделать похожим на RESTful
+    path('api/hierarchy/', views.structure.hierarchy_dump, name='get_structure_hierarchy'),
     path('api/universities/', views.api.get_universities, name='get_universities'),
     path('api/departments/', views.api.get_departments, name='get_departments'),
     path('api/chairs/', views.api.get_chairs, name='get_chairs'),
