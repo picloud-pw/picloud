@@ -5,6 +5,8 @@ body {
 
 nav.navbar {
     border-radius: 0 !important;
+    box-shadow: 0.15rem 0 0 #eeeeee;
+    z-index: 10;
 }
 
 .content-block {
@@ -127,7 +129,6 @@ img.univer-logo {
 
 .search-panel {
     background-color: #f8f8f8;
-    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.5);
     width: 100%;
     margin: 0 -20px 0 0;
     padding: 10px;
