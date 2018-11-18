@@ -30,7 +30,7 @@ def hierarchy_dump(request):
     }
     dump = json.dumps(obj, sort_keys=True).encode('utf-8')
     set_etag(md5(dump))
-    return HttpResponse(dump)
+    return HttpResponse(dump, content_type="application/json")
 
 
 def md5(data):
