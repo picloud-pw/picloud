@@ -20,7 +20,7 @@ def set_etag(tag):
 
 
 @etag(get_etag)
-@cache_page(60 * 15)
+@cache_page(24 * 60 * 60)
 def hierarchy_dump(request):
     obj = {
         'universities': {
