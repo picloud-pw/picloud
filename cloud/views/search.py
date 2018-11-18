@@ -85,17 +85,17 @@ def text_search(request):
     if len(programs):
         response["results"]["Program"] = {"name": "Программы обучения", "results": programs}
 
-    # subjects = Subject.objects.filter(is_approved=True)
-    # subjects = subjects.filter(
-    #     reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
-    # )
-    # subjects = [{
-    #     "title": f"{d.title} (сем. {d.semester})",
-    #     "description": f"{d.programs.first().chair.department.university.short_title}",
-    #     "url": reverse("subject_page", kwargs={'subject_id': d.pk})
-    # } for d in subjects]
-    # if len(subjects):
-    #     response["results"]["Subject"] = {"name": "Предметы", "results": subjects}
+    subjects = Subject.objects.filter(is_approved=True)
+    subjects = subjects.filter(
+        reduce(operator.or_, (Q(short_title__icontains=x) | Q(title__icontains=x) for x in words))
+    )
+    subjects = [{
+        "title": str(d.title) + "(сем. " + str(d.semester) + ")",
+        "description": str(d.programs.first().chair.department.university.short_title),
+        "url": reverse("subject_page", kwargs={'subject_id': d.pk})
+    } for d in subjects]
+    if len(subjects):
+        response["results"]["Subject"] = {"name": "Предметы", "results": subjects}
 
     return JsonResponse(response, safe=False)
 
