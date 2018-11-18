@@ -31,7 +31,7 @@ class University(models.Model):
             "id": self.pk,
             "title": self.title,
             "short_title": self.short_title,
-            "deparments": {
+            "departments": {
                 d.id: d.as_hierarchical_dict()
                 for d in Department.objects.filter(university=self.pk, is_approved=True)
             }
@@ -119,7 +119,7 @@ class Program(models.Model):
             "title": self.title,
             "code": self.code,
             "subjects": {
-                s.id: s.as_dict()
+                s.id: s.as_hierarchical_dict()
                 for s in Subject.objects.filter(programs=self.pk, is_approved=True)
             }
         }
@@ -163,6 +163,14 @@ class Subject(models.Model):
             "title": self.displayed_title(),
             "short_title": self.short_title,
             "semester": self.semester
+        }
+
+    def as_hierarchical_dict(self):
+        return {
+            "id": self.pk,
+            "title": self.title,
+            "short_title": self.short_title,
+            "semester": self.semester,
         }
 
 

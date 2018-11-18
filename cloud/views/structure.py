@@ -2,7 +2,7 @@ import hashlib
 import json
 
 from django.core.cache import cache
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import etag
 
@@ -22,19 +22,19 @@ def set_etag(tag):
 @etag(get_etag)
 @cache_page(60 * 15)
 def hierarchy_dump(request):
-    response_object = {
+    obj = {
         'universities': {
             u.id: u.as_hierarchical_dict()
             for u in University.objects.filter(is_approved=True)
         }
     }
-    set_etag(json_md5(response_object))
-    return JsonResponse(response_object)
-
-
-def json_md5(obj):
     dump = json.dumps(obj, sort_keys=True).encode('utf-8')
+    set_etag(md5(dump))
+    return HttpResponse(dump)
+
+
+def md5(data):
     hash_sum = hashlib.md5()
-    hash_sum.update(dump)
+    hash_sum.update(data)
     md5 = hash_sum.hexdigest()
     return md5
