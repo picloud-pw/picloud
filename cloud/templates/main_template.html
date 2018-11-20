@@ -29,6 +29,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <!-- Font Awesome -- icon font pack -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet"
@@ -79,9 +83,8 @@
                 <li>
                     <a href="{% url 'feed' %}">
                         Облако
-                        <span style="font-size:16px;"
-                              class="pull-right hidden-xs showopacity glyphicon glyphicon-cloud">
-                        </span>
+                        <i style="font-size: 16px; color: #45668e;"
+                           class="pull-right hidden-xs showopacity fas fa-cloud"></i>
                     </a>
                 </li>
 
@@ -89,9 +92,8 @@
                     <li {% block my_program %}{% endblock %}>
                         <a href="{% url 'program_page' program_id=request.session.program_id %}">
                             Моя программа
-                            <span style="font-size:16px;"
-                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-heart">
-                            </span>
+                            <i style="font-size: 16px; color: crimson;"
+                               class="pull-right hidden-xs showopacity fas fa-heart"></i>
                         </a>
                     </li>
                 {% endif %}
@@ -99,9 +101,8 @@
                 <li>
                     <a href="{% url 'post_new' %}">
                         Запостить
-                        <span style="font-size:16px;"
-                              class="pull-right hidden-xs showopacity glyphicon glyphicon-plus">
-                            </span>
+                        <i style="font-size: 16px;"
+                           class="pull-right hidden-xs showopacity fas fa-pen-fancy"></i>
                     </a>
                 </li>
 
@@ -109,9 +110,8 @@
                 <li>
                     <a href="{% url 'memes' %}">
                         Мемесы
-                        <span style="font-size:16px;"
-                              class="pull-right hidden-xs showopacity glyphicon glyphicon-fire">
-                        </span>
+                        <i style="font-size: 16px;"
+                           class="pull-right hidden-xs showopacity fas fa-laugh"></i>
                     </a>
                 </li>
 
@@ -119,17 +119,12 @@
                 <li>
                     <a href="{% url 'universities_list' %}">
                         Вузы
-                        <span style="font-size:16px;"
-                              class="pull-right hidden-xs showopacity glyphicon glyphicon-education">
-                        </span>
-                    </a>
+                        <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-university"></i> </a>
                 </li>
                 <li>
                     <a href="{% url 'contacts' %}">
                         Обратная связь
-                        <span style="font-size:16px;"
-                              class="pull-right hidden-xs showopacity glyphicon glyphicon-earphone">
-                        </span>
+                        <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-comment"></i>
                     </a>
                 </li>
 
@@ -137,10 +132,7 @@
                     <li style="background-color: #F4FF81">
                         <a href="{% url 'moderation' %}">
                             Модерация
-                            <span style="font-size:16px;"
-                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-check">
-                            </span>
-                        </a>
+                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-hammer"></i> </a>
                     </li>
                 {% endif %}
 
@@ -148,9 +140,7 @@
                     <li style="background-color: #DBC6EB">
                         <a href="/admin">
                             Администрирование
-                            <span style="font-size:16px;"
-                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-king">
-                            </span>
+                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-crown"></i>
                         </a>
                     </li>
                 {% endif %}
@@ -159,29 +149,30 @@
                     <li style="background-color: #FFCCCC">
                         <a href="{% url 'signout' %}">
                             Выйти
-                            <span style="font-size:16px;"
-                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out">
-                            </span>
+                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-out"></i>
                         </a>
                     </li>
                 {% else %}
                     <li style="background-color: #CCFFFF">
                         <a href="{% url 'signin' %}">
                             Войти
-                            <span style="font-size:16px;"
-                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-log-in">
-                            </span>
+                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-in-alt"></i>
                         </a>
                     </li>
                     <li style="background-color: #CCFFCC">
                         <a href="{% url 'signup' %}">
                             Регистрация
-                            <span style="font-size:16px;"
-                                  class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil">
-                            </span>
+                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-user-plus"></i>
                         </a>
                     </li>
                 {% endif %}
+
+                <li style="background-color: #45668e">
+                    <a href="https://vk.com/picloudpw" style="color: white;">
+                        Группа VK
+                        <i style="font-size: 16px" class="pull-right hidden-xs showopacity fab fa-vk"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
