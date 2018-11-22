@@ -3,7 +3,9 @@ node_modules/
 resources/
 *.zip
 lib/*
-/static/
+/static
+/media
+/venv
 /PiCloud/settings/secrets.json
 
 ### Python ###
