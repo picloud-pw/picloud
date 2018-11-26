@@ -9,5 +9,26 @@ NOT_VALID = 1
 # t.daemon = True
 # t.start()
 
-from . import api, authentication, chairs, contacts, departments, index, legal, memes, message, moderation, posts, \
-    programs, recaptcha, registration, robots, search, subjects, structure, universities, user, karma, vkontakte
+from . import api
+from . import authentication
+from . import chairs
+from . import contacts
+from . import departments
+from . import index
+from . import legal
+from . import memes
+from . import message
+from . import moderation
+from . import posts
+from . import programs
+from . import recaptcha
+from . import registration
+from . import robots
+from . import search
+from . import subjects
+from . import structure
+from . import universities
+from . import user
+from . import karma
+from . import vkontakte
+from . import comment

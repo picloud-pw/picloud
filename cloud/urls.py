@@ -30,6 +30,10 @@ urlpatterns = [
     path('post/<int:pk>/checked/', views.posts.post_checked, name='post_checked'),
     path('post/<int:pk>/new_child/', views.posts.post_new_child, name='post_new_child'),
 
+    path('post/<int:pk>/new_comment/', views.posts.post_new_child, name='post_new_child'),
+    path('post/<int:pk>/get_comments/', views.posts.post_new_child, name='post_new_child'),
+    path('comment/<int:pk>/delete/', views.comment.delete_comment, name='comment_delete'),
+
     path('user/<user_id>', views.user.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),
     path('user/<user_id>/karma', views.karma.info_page, name="karma_info_page"),

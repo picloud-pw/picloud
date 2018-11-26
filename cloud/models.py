@@ -330,3 +330,27 @@ class Post(models.Model):
             return os.path.splitext(self.file.name)[1][1:].upper()
         else:
             return None
+
+
+class Comment(models.Model):
+    author = models.ForeignKey('auth.User', null=False, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, null=False, blank=True)
+    text = models.TextField(null=True, blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"({self.pk}) {self.post} - {self.author.username} "
+
+    def get_author_avatar_url(self):
+        user_info = UserInfo.objects.get(user=self.author)
+        return user_info.avatar.url
+
+    def as_dict(self):
+        return {
+            "pk": self.pk,
+            "post_id": self.post.pk,
+            "author_username": self.author.username,
+            "author_avatar": self.get_author_avatar_url(),
+            "text": self.text,
+            "created_date": self.created_date,
+        }
