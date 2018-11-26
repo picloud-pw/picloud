@@ -331,6 +331,9 @@ class Post(models.Model):
         else:
             return None
 
+    def get_comment_count(self):
+        return Comment.objects.filter(post=self).count()
+
 
 class Comment(models.Model):
     author = models.ForeignKey('auth.User', null=False, on_delete=models.CASCADE)
