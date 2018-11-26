@@ -342,7 +342,7 @@ class Comment(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"({self.pk}) {self.post} - {self.author.username} "
+        return "(" + self.pk + ") " + self.post.title + " - " + self.author.username
 
     def get_author_avatar_url(self):
         user_info = UserInfo.objects.get(user=self.author)
