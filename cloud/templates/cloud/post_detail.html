@@ -57,8 +57,8 @@
                                     {{ comment.text }}
                                 </div>
                                 <div class="actions">
-                                    {% if comment.author_id == user.pk %}
-                                        <a>
+                                    {% if comment.author_id == user.pk or user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
+                                        <a href="{% url 'comment_delete' comment_pk=comment.pk %}">
                                             <i class="delete icon"></i> delete
                                         </a>
                                     {% endif %}
@@ -70,13 +70,19 @@
                 </div>
 
                 {% if user.is_authenticated %}
-                    <div class="ui icon input fluid">
-                        <input type="text" placeholder="Ваш комментарий...">
-                        <i class="send icon"></i>
-                    </div>
+                    <form action="{% url 'new_comment' post_pk=post.pk %}" method="post">
+
+                        {% csrf_token %}
+
+                        <div class="ui icon input fluid">
+                            <input type="text" name="comment_text" placeholder="Ваш комментарий...">
+                            <i class="send icon"></i>
+                        </div>
+
+                    </form>
                 {% else %}
                     <div class="full-width" style="text-align: center">
-                        <a href="{% url 'signin' %}">Авторизуйтесь</a> для того чтобы оставлять комментарии
+                        <a href="{% url 'signin' %}">Авторизуйтесь</a> для того чтобы оставлять комментарии.
                     </div>
                 {% endif %}
 
