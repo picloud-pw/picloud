@@ -352,6 +352,7 @@ class Comment(models.Model):
         return {
             "pk": self.pk,
             "post_id": self.post.pk,
+            "author_id": self.author.pk,
             "author_username": self.author.username,
             "author_avatar": self.get_author_avatar_url(),
             "text": self.text,

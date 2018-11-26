@@ -62,10 +62,14 @@ def post_detail(request, pk, msg=""):
     if post.views < 99999:
         post.views += 1
         post.save()
+
+    comments = [c.as_dict() for c in Comment.objects.filter(post=post)]
+
     return render(request, 'cloud/post_detail.html', {
         'post': post,
         'child_posts': child_posts,
-        'message': msg
+        'message': msg,
+        'comments': comments,
     })
 
 

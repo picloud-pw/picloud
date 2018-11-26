@@ -1,0 +1,9 @@
+.comments-panel{
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin: 1rem auto;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
