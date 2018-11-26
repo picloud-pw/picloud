@@ -44,7 +44,7 @@
                     {% for comment in comments %}
                         <div class="comment">
                             <a class="avatar" href="{% url 'user_page' user_id=comment.author_id %}">
-                                <img src="{{ comment.author_avatar }}">
+                                <img style="border-radius: 100%" src="{{ comment.author_avatar }}">
                             </a>
                             <div class="content">
                                 <a class="author" href="{% url 'user_page' user_id=comment.author_id %}">
