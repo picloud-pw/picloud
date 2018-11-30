@@ -101,7 +101,9 @@
 
                 <span class="ui" style="color: #999999">
                     <i class="eye icon" title="Число просмотров"></i>{{ post.views }}
-                    <i class="comment icon" title="Число комментариев"></i>{{ post.get_comment_count }}
+                    {% if post.get_comment_count != 0 %}
+                        <i class="comment icon" title="Число комментариев"></i>{{ post.get_comment_count }}
+                    {% endif %}
                 </span>
             </span>
         </footer>
