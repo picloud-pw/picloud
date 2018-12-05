@@ -63,8 +63,8 @@
         {% endif %}
         {% if post.file %}
             <a href="{{ post.file.url }}" class="ui green right labeled icon button btn-download">
+                Скачать файл <strong>{{ post.file_extension }}</strong>
                 <i class="download icon"></i>
-                Скачать файл ({{ post.file_extension }})
             </a>
         {% endif %}
         {% if post.is_parent %}
