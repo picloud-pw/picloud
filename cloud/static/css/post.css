@@ -110,3 +110,7 @@ article.post .btn-follow-link, article.post .btn-download {
     font-family: 'Roboto Slab', serif;
     margin: 1rem 0.5rem;
 }
+
+.comments-counter {
+    text-decoration: none !important;
+}

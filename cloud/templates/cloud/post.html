@@ -100,13 +100,14 @@
                         <span class="showopacity glyphicon glyphicon-pencil"></span>
                     </a>
                 {% endif %}
-
                 <span class="ui" style="color: #999999">
                     <i class="eye icon" title="Число просмотров"></i>{{ post.views }}
-                    {% if post.get_comment_count != 0 %}
-                        <i class="comment icon" title="Число комментариев"></i>{{ post.get_comment_count }}
-                    {% endif %}
                 </span>
+                {% if post.get_comment_count != 0 %}
+                    <a href="{% url 'post_detail' pk=post.pk %}" class="comments-counter">
+                        <i class="comment icon" title="Число комментариев"></i>{{ post.get_comment_count }}
+                    </a>
+                {% endif %}
             </span>
         </footer>
     </div>
