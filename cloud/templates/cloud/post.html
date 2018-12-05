@@ -56,19 +56,21 @@
             {% endif %}
         {% endif %}
         {% if post.link %}
-            <a href="{{ post.link }}" class="btn btn-primary btn-follow-link">
+            <a href="{{ post.link }}" class="ui primary right labeled icon button btn-follow-link">
                 Перейти по&nbsp;ссылке
+                <i class="angle double right icon"></i>
             </a>
         {% endif %}
         {% if post.file %}
-            <a href="{{ post.file.url }}" class="btn btn-success btn-download">
+            <a href="{{ post.file.url }}" class="ui green right labeled icon button btn-download">
+                <i class="download icon"></i>
                 Скачать файл ({{ post.file_extension }})
             </a>
         {% endif %}
         {% if post.is_parent %}
-	    <br>
-            <a style="font-size:12px;" href="{% url 'post_detail' pk=post.pk %}">
-	        Смотреть дочерние записи
+            <br>
+            <a class="ui button" href="{% url 'post_detail' pk=post.pk %}">
+                Смотреть дочерние записи
             </a>
         {% endif %}
         <hr/>

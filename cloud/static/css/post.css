@@ -105,5 +105,8 @@ article.post .post-footer-button-create-child-post:hover {
 }
 
 article.post .btn-follow-link, article.post .btn-download {
+    font-size: 14px;
+    font-weight: normal;
+    font-family: 'Roboto Slab', serif;
     margin: 1rem 0.5rem;
 }
