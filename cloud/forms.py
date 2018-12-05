@@ -119,7 +119,7 @@ SUBJECT_CHOICES = (
 
 class ContactForm(forms.Form):
     contact_name = forms.CharField(label="Ваше имя", required=True)
-    contact_email = forms.EmailField(label="Ваш email", required=True)
+    contact_email = forms.EmailField(label="Ваш адрес электронной почты", required=True)
     subject = forms.ChoiceField(
         label="Тема обращения",
         required=True,

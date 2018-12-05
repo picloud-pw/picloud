@@ -24,7 +24,7 @@ def create_comment(request, post_pk):
 
 def delete_comment(request, comment_pk):
     if not request.user.is_authenticated:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь для удвления комментариев.")
+        return sign_in(request, msg="Пожалуйста, авторизуйтесь для удаления комментариев.")
 
     comment = get_object_or_404(Comment, pk=comment_pk)
     post_pk = comment.post.pk
