@@ -353,7 +353,7 @@ class Post(models.Model):
         if today - date.date() < datetime.timedelta(days=5):
             return date.strftime("%A ").lower() + date.strftime("%H:%M")
         if date.year == today.year:
-            return date.strftime("%d %b в %H:%M")
+            return date.strftime("%d %b %H:%M")
         return date.strftime("%d %b %Y %H:%M")
 
 
