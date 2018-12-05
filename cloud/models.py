@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.utils import timezone
 from django.contrib import auth
@@ -334,6 +336,25 @@ class Post(models.Model):
     def get_comment_count(self):
         return Comment.objects.filter(post=self).count()
 
+    def created_date_human(self):
+        import datetime
+        import locale
+        import pytz
+        locale.setlocale(locale.LC_TIME, "ru_RU.utf8")
+        timezone = pytz.timezone('Europe/Moscow')
+        date = self.created_date.astimezone(timezone)
+        today = datetime.date.today()
+        if datetime.datetime.now(tz=timezone) - date < datetime.timedelta(minutes=1):
+            return "Только что"
+        if date.date() == today:
+            return date.strftime("Сегодня %H:%M")
+        if date.date() == today - datetime.timedelta(days=1):
+            return date.strftime("Вчера %H:%M")
+        if today - date.date() < datetime.timedelta(days=5):
+            return date.strftime("%A ").capitalize() + date.strftime("%H:%M")
+        if date.year == today.year:
+            return date.strftime("%d %B %H:%M")
+        return date.strftime("%d %b %Y %H:%M")
 
 class Comment(models.Model):
     author = models.ForeignKey('auth.User', null=False, on_delete=models.CASCADE)
