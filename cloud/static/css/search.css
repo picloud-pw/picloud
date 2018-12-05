@@ -3,6 +3,8 @@
 }
 
 #btn-load-more {
+    font-weight: normal;
+    font-family: 'Roboto Slab', serif;
     font-size: 1.5rem;
 }
 
