@@ -72,6 +72,10 @@ nav.navbar {
     padding: 20px;
 }
 
+.sign-form * {
+    font-size: 14px;
+}
+
 .meme {
     background-color: white;
     margin: 2rem auto;

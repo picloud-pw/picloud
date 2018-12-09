@@ -11,57 +11,57 @@
 
 {% block content %}
 
-    <div class="container-fluid sign-form">
-
-        <form method="post" action="{% url 'signin' %}">
+    <div class="sign-form">
+        <form method="post" class="ui form {% if error %} error {% endif %}" action="{% url 'signin' %}">
             {% csrf_token %}
 
             {% if msg %}
-                <div class="alert alert-info alert-dismissable" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    {{ msg }}
+                <div class="ui icon message" role="alert">
+                    <i class="sign-in icon"></i>
+                    <div class="content">
+                        {{ msg }}
+                    </div>
                 </div>
             {% endif %}
 
-            <div class="form-group">
-                <label for="username" class="col-form-label">Логин</label>
-                <input class="form-control" type="text" name="username" id="username" placeholder="Введите логин">
-            </div>
-
-            <div class="form-group">
-                <label for="password" class="col-form-label">Пароль</label>
-                <input class="form-control" type="password" name="password" id="password" placeholder="Введите пароль">
-            </div>
-
-            <div class="error">
-                {% if error %} <p>{{ error }}</p> {% endif %}
-            </div>
-
-            <div class="form-group row">
-                <div class="col-xs-6" style="text-align: left">
-                    <label><a href="{% url 'password_reset' %}">Восстановить пароль</a></label>
+            {% if error %}
+                <div class="ui icon error message">
+                    <i class="exclamation icon"></i>
+                    <div class="content">
+                        {{ error }}
+                    </div>
                 </div>
-                <div class="col-xs-6" style="text-align: right; word-wrap: break-word;">
-                    <label><a href="{% url 'signup' %}">Регистрация</a></label>
+            {% endif %}
+
+            <div class="field">
+                <label for="username">Логин</label>
+                <div class="ui left icon input">
+                    <input type="text" name="username" id="username" placeholder="Введите логин" autofocus>
+                    <i class="user icon"></i>
                 </div>
             </div>
 
-            <div class="form-group">
-                <input class="btn btn-default col-xs-12" type="submit" value="Войти"/>
+            <div class="field">
+                <label for="password">Пароль</label>
+                <div class="ui left icon input">
+                    <input type="password" name="password" id="password" placeholder="Введите пароль">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+
+            <div class="ui buttons">
+                <input class="ui button" style="font-size: 20px;" type="submit" value="Войти"/>
+                <a href="{{ vk_auth_link }}" style="font-size: 20px;" class="ui vk icon button"><i class="vk icon"></i></a>
+            </div>
+
+            <hr>
+
+            <div class="ui basic buttons">
+                <a class="ui button" href="{% url 'password_reset' %}">Восстановить пароль</a>
+                <a class="ui button" href="{% url 'signup' %}">Регистрация</a>
             </div>
 
         </form>
-
-        <br><br><hr>
-
-        <div class="social vk">
-            <a href="{{ vk_auth_link }}">
-                <i class="fa fa-vk fa-2x"></i>
-            </a>
-        </div>
 
     </div>
 
