@@ -136,7 +136,6 @@ function search(subject_id = undefined, type_id = undefined, sort_type = undefin
     }
 
     loadMoreButton.className = 'ui loading primary button';
-    loadMoreButton.textContent = "Подождите…";
     loadMoreButton.disabled = true;
 
     let request = new Request(baseUrl, {
