@@ -71,7 +71,7 @@ function loadMore() {
     if (loading) return;
 
     loading = true;
-    loadMoreButton.textContent = 'Загрузка…';
+    loadMoreButton.className = 'ui loading primary button';
     loadMoreButton.disabled = true;
 
     pageNumber++;
@@ -96,12 +96,13 @@ function loadMore() {
 
             assignOnImageLoadedHooks();
 
+            loadMoreButton.className = 'ui primary button';
             if (json['has_next']) {
                 loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
                 nothingLeft = false;
             } else {
-                loadMoreButton.textContent = "Больше ничего нет.";
+                loadMoreButton.textContent = 'Больше ничего нет.';
                 loadMoreButton.disabled = true;
                 nothingLeft = true;
             }
@@ -110,6 +111,7 @@ function loadMore() {
             updateImageModalHooks();
         })
         .catch(() => {
+            loadMoreButton.className = 'ui primary button';
             loadMoreButton.textContent = "Не удалось загрузить результаты.";
             loadMoreButton.disabled = true;
         })
@@ -133,6 +135,7 @@ function search(subject_id = undefined, type_id = undefined, sort_type = undefin
         searchResults.removeChild(searchResults.lastChild);
     }
 
+    loadMoreButton.className = 'ui loading primary button';
     loadMoreButton.textContent = "Подождите…";
     loadMoreButton.disabled = true;
 
@@ -152,6 +155,7 @@ function search(subject_id = undefined, type_id = undefined, sort_type = undefin
                 imagesLoaded(post, resizePostWithImagesLoaded);
             });
 
+            loadMoreButton.className = 'ui primary button';
             if (json['has_next']) {
                 loadMoreButton.textContent = `Загрузить ещё`;
                 loadMoreButton.disabled = false;
@@ -168,6 +172,7 @@ function search(subject_id = undefined, type_id = undefined, sort_type = undefin
             updateImageModalHooks();
         })
         .catch(() => {
+            loadMoreButton.className = 'ui primary button';
             loadMoreButton.textContent = "Не удалось загрузить результаты.";
             loadMoreButton.disabled = true;
         })
