@@ -164,7 +164,7 @@
                 <hr>
                 {% if user.is_superuser %}
                     <a href="{% url 'update_karma' %}">
-                        <div class="btn btn-default">Пересчитать карму всем пользователям</div>
+                        <div class="ui button">Пересчитать карму всем пользователям</div>
                     </a>
                 {% else %}
                     <label>У вас нет доступа к дополниительным функциям модерирования</label>

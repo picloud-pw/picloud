@@ -4,18 +4,18 @@
             {% if user == post.author or user.userinfo.status.can_moderate or user.is_staff or user.is_superuser %}
                 <nav class="post-moderation btn-group">
                     <a href="{% url 'post_checked' pk=post.pk %}"
-                       class="btn btn-success">
+                       class="ui positive button">
                         <span class="showopacity glyphicon glyphicon-ok"></span>
                         Одобрить
                     </a>
                     <a href="{% url 'post_edit' pk=post.pk %}"
-                       class="btn btn-warning"
+                       class="ui orange button"
                        title="Редактировать"
                        aria-label="Редактировать">
                         <span class="showopacity glyphicon glyphicon-pencil"></span>
                     </a>
                     <a href="{% url 'post_delete' pk=post.pk %}"
-                       class="btn btn-danger"
+                       class="ui negative button"
                        title="Удалить"
                        aria-label="Удалить">
                         <span class="showopacity glyphicon glyphicon-trash"></span>
