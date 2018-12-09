@@ -258,5 +258,5 @@ textarea {
 .ui.button {
     font-family: 'Roboto Slab', serif;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 14px !important;
 }
