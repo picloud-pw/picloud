@@ -86,6 +86,9 @@ def info_page(request, user_id):
             if u.user == request.user:
                 global_top = index + 1
 
+        if not user_info.program:
+            return render(request, 'karma.html', locals())
+
         univer_top = None
         departs = Department.objects.filter(university=user_info.program.chair.department.university)
         us = us.filter(program__chair__department__in=departs)
