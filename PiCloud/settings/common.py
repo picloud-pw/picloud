@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloud',
     'django.contrib.admin',
     'django.contrib.auth',
+    'cloud',
+    'hierarchy',
 ]
 
 ROOT_URLCONF = 'PiCloud.urls'
