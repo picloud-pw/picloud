@@ -65,3 +65,11 @@ class Subject(models.Model):
 
     def __str__(self):
         return f"{self.department} - {self.short_name}"
+
+    def as_dict(self):
+        return {
+            "department_id": None if self.department is None else self.department.pk,
+            "name": self.name,
+            "short_name": self.short_name,
+            "semester": None if not self.semester else self.semester,
+        }
