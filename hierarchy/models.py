@@ -9,8 +9,8 @@ class DepartmentType(models.Model):
 
 
 class Department(models.Model):
-    department_type = models.ForeignKey(DepartmentType, on_delete=models.SET_NULL)
-    parent_department = models.ForeignKey('self', on_delete=models.SET_NULL)
+    department_type = models.ForeignKey(DepartmentType, null=True, blank=True, on_delete=models.SET_NULL)
+    parent_department = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=256, null=False)
     short_name = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(null=True, blank=True)
@@ -25,9 +25,20 @@ class Department(models.Model):
     def __str__(self):
         return f"{self.short_name}"
 
+    def as_dict(self):
+        return {
+            "type": None if self.department_type is None else self.department_type.name,
+            "parent_id": None if self.parent_department is None else self.parent_department.pk,
+            "name": self.name,
+            "short_name": self.short_name,
+            "link": self.link,
+            "logo": self.logo.url,
+            "is_approved": self.is_approved,
+        }
+
 
 class Lecturer(models.Model):
-    department = models.ForeignKey('Department', on_delete=models.SET_NULL)
+    department = models.ForeignKey('Department', null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=64, null=False)
     surname = models.CharField(max_length=64, null=False)
     patronymic = models.CharField(max_length=64, null=True, blank=True)
@@ -45,8 +56,8 @@ class Lecturer(models.Model):
 
 
 class Subject(models.Model):
-    department = models.ForeignKey('Department', on_delete=models.SET_NULL)
-    lecturer = models.ForeignKey('Lecturer', on_delete=models.SET_NULL, null=True, blank=True)
+    department = models.ForeignKey('Department', null=True, blank=True, on_delete=models.SET_NULL)
+    lecturer = models.ForeignKey('Lecturer', null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=256, null=False)
     short_name = models.CharField(max_length=16, null=True, blank=True)
     semester = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
