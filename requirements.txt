@@ -1,4 +1,4 @@
-Django
+Django==2.0.2
 feedparser
 Pillow
 psycopg2-binary
