@@ -37,6 +37,8 @@ def get_config(setting, config=json_config):
 
 # Application definition
 
+ALLOWED_HOSTS = get_config('ALLOWED_HOSTS')
+
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
