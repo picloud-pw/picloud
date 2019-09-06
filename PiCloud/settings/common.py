@@ -39,6 +39,14 @@ def get_config(setting, config=json_config):
 
 ALLOWED_HOSTS = get_config('ALLOWED_HOSTS')
 
+SECRET_KEY = get_config('SECRET_KEY')
+
+DEBUG = get_config('DEBUG')
+
+DATABASES = {
+    'default': get_config('DEFAULT_DATABASE')
+}
+
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
