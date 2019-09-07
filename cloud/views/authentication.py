@@ -40,3 +40,11 @@ def sign_in(request, msg=None, error=None):
             return render(request, 'auth/signin.html', locals())
     else:
         return render(request, 'auth/signin.html', locals())
+
+
+def after_login(request):
+    next_page = request.GET.get("next")
+    if next_page is not None:
+        return redirect(next_page)
+    else:
+        return redirect('index')

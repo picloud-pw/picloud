@@ -12,6 +12,7 @@ urlpatterns = [
     path('auth/signup/', views.registration.sign_up, name="signup"),
     path('auth/signin/', views.authentication.sign_in, name="signin"),
     path('auth/signout/', views.authentication.sign_out, name="signout"),
+    path('after_login', views.authentication.after_login, name="after_login"),
     path('activate/<uid>/<token>/', views.registration.activate, name='activate'),
     path('vk_auth_callback/', views.vkontakte.vk_auth_callback, name="vk_auth_callback"),
     path('del_vk_id/', views.vkontakte.del_vk_id, name="del_vk_id"),
