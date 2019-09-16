@@ -94,6 +94,7 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.vk.VKOAuth2',
 )
 
 SOCIAL_AUTH_PIPELINE = (
@@ -117,6 +118,11 @@ LOGOUT_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_config("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_config("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = get_config("SOCIAL_AUTH_VK_OAUTH2_KEY")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = get_config("SOCIAL_AUTH_VK_OAUTH2_SECRET")
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/after_login"
 
 # Password validation

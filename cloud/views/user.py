@@ -12,7 +12,6 @@ from cloud.views.message import message
 from cloud.views.posts import post_list
 
 from cloud.views.karma import update_carma
-from cloud.views.vkontakte import vk_get_auth_link
 
 AUTHOR_AFTER_DELETION = 32
 
@@ -61,7 +60,6 @@ def settings_page(request, msg="", error=""):
     change_user_info_form = UserInfoChangeForm(instance=UserInfo.objects.get(user=request.user))
     user = User.objects.get(pk=request.user.pk)
     user_info = UserInfo.objects.get(user=user)
-    vk_auth_link = vk_get_auth_link(request)
     return render(request, 'settings.html', locals())
 
 

@@ -51,8 +51,8 @@
 
             <div class="ui buttons">
                 <input class="ui button" style="font-size: 20px;" type="submit" value="Войти"/>
-                <a class="ui vk icon button" title="Sign in with Google" style="font-size: 20px;"
-                   href="{{ vk_auth_link }}">
+                <a class="ui vk icon button" title="Sign in with VK" style="font-size: 20px;"
+                   href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.GET.next|urlencode }}">
                     <i class="vk icon"></i>
                 </a>
                 <a class="ui google plus icon button" title="Sign in with Google" style="font-size: 20px;"

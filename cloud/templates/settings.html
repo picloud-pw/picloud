@@ -275,25 +275,11 @@
 
                         <hr>
 
-                        {% if user_info.vk_id %}
-                            <p>Привязан <a href="https://vk.com/id{{ user_info.vk_id }}">профиль VK</a>
-                                с&nbsp;ID {{ user_info.vk_id }}.</p>
-                            <a href="{% url "del_vk_id" %}">
-                                <div class="negative ui button">Отвязать аккаунт VK</div>
-                            </a>
-                        {% else %}
-                            <a href="{{ vk_auth_link }}">
-                                {% comment %}<i class="fa fa-vk fa-2x"></i>{% endcomment %}
-                                <div class="ui button">Привязать аккаунт VK</div>
-                            </a>
-                        {% endif %}
-
-                        <hr>
-
                         <a href="{% url 'account_delete_active' %}"
                            onclick="return confirm('Удалить аккаунт? После этого действия его невозможно будет восстановить.')">
                             <div class="negative ui button">Удалить мой аккаунт PiCloud</div>
                         </a>
+
                         <hr>
 
                     </div>
