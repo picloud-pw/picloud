@@ -95,6 +95,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.github.GithubOAuth2',
 )
 
 SOCIAL_AUTH_PIPELINE = (
@@ -122,6 +123,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_config("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"
 SOCIAL_AUTH_VK_OAUTH2_KEY = get_config("SOCIAL_AUTH_VK_OAUTH2_KEY")
 SOCIAL_AUTH_VK_OAUTH2_SECRET = get_config("SOCIAL_AUTH_VK_OAUTH2_SECRET")
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_GITHUB_KEY = get_config("SOCIAL_AUTH_GITHUB_KEY")
+SOCIAL_AUTH_GITHUB_SECRET = get_config("SOCIAL_AUTH_GITHUB_SECRET")
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/after_login"
 

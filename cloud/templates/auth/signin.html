@@ -59,6 +59,10 @@
                    href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|urlencode }}">
                     <i class="google icon"></i>
                 </a>
+                <a class="ui github icon button" title="Sign in with GitHub" style="font-size: 20px; background-color: #23292d"
+                   href="{% url 'social:begin' 'github' %}?next={{ request.GET.next|urlencode }}">
+                    <i class="github icon" style="color: #ffffff"></i>
+                </a>
             </div>
 
             <hr>
