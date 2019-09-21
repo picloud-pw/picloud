@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 
     'cloud',
     'hierarchy',
+    'memes',
 ]
 
 ROOT_URLCONF = 'PiCloud.urls'
@@ -180,7 +181,6 @@ EMAIL_PORT = get_config('EMAIL_PORT')
 
 VK_GLOBAL_TOKEN = get_config('VK_GLOBAL_TOKEN')
 VK_GROUP_TOKEN = get_config('VK_GROUP_TOKEN')
-VK_GROUP_LIST = get_config('VK_GROUP_LIST')
 
 GOOGLE_RECAPTCHA_SECRET_KEY = get_config('GOOGLE_RECAPTCHA_SECRET_KEY')
 
