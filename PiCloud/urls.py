@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('', include('social_django.urls', namespace='social')),
     path('admin/', admin.site.urls, name='admin'),
     path('', include('cloud.urls')),
     path('hierarchy/', include('hierarchy.urls')),

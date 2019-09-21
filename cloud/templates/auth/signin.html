@@ -51,7 +51,18 @@
 
             <div class="ui buttons">
                 <input class="ui button" style="font-size: 20px;" type="submit" value="Войти"/>
-                <a href="{{ vk_auth_link }}" style="font-size: 20px;" class="ui vk icon button"><i class="vk icon"></i></a>
+                <a class="ui vk icon button" title="Sign in with VK" style="font-size: 20px;"
+                   href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.GET.next|urlencode }}">
+                    <i class="vk icon"></i>
+                </a>
+                <a class="ui google plus icon button" title="Sign in with Google" style="font-size: 20px;"
+                   href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|urlencode }}">
+                    <i class="google icon"></i>
+                </a>
+                <a class="ui github icon button" title="Sign in with GitHub" style="font-size: 20px; background-color: #23292d"
+                   href="{% url 'social:begin' 'github' %}?next={{ request.GET.next|urlencode }}">
+                    <i class="github icon" style="color: #ffffff"></i>
+                </a>
             </div>
 
             <hr>

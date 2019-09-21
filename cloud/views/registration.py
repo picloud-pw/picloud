@@ -2,14 +2,23 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
-from cloud.forms import UserInfoForm, UserStatus
+from cloud.forms import UserStatus
 from cloud.models import UserInfo
 from cloud.tokens import account_activation_token
 from cloud.views.recaptcha import recaptcha_is_valid
-from cloud.views.user import validate_name, validate_course
+
+
+@receiver(post_save, sender=User)
+def create_user_settings(sender, instance, created, **kwargs):
+    if created:
+        user_info = UserInfo(user=instance)
+        user_info.status = UserStatus.objects.get(title="Рядовой студент")
+        user_info.save()
 
 
 def sign_up(request):
@@ -28,10 +37,6 @@ def sign_up(request):
                     user = User.objects.create_user(username, email, password)
                     user.is_active = False
                     user.save()
-                    
-                    user_info = UserInfo(user=user)
-                    user_info.status = UserStatus.objects.get(title="Рядовой студент")
-                    user_info.save()
 
                     if send_acc_activate_letter(request, user, email):
                         msg = 'Пожалуйста, подтвердите адрес электронной почты для завершения регистрации.'

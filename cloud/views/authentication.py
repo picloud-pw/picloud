@@ -20,8 +20,6 @@ def sign_out(request):
 
 
 def sign_in(request, msg=None, error=None):
-    from cloud.views.vkontakte import vk_get_auth_link
-    vk_auth_link = vk_get_auth_link(request)
     if request.method == "POST":
         user = authenticate(
             request,
@@ -40,3 +38,11 @@ def sign_in(request, msg=None, error=None):
             return render(request, 'auth/signin.html', locals())
     else:
         return render(request, 'auth/signin.html', locals())
+
+
+def after_login(request):
+    next_page = request.GET.get("next")
+    if next_page is not None:
+        return redirect(next_page)
+    else:
+        return redirect('index')
