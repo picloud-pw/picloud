@@ -29,8 +29,6 @@ def update_carma(user):
         karma += PROGRAM_BONUS
     if user_info.course is not None:
         karma += COURSE_BONUS
-    if user_info.vk_id:
-        karma += VK_BONUS
     if user_info.avatar != DEFAULT_AVATAR_URL:
         karma += AVATAR_BONUS
 
