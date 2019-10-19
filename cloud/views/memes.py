@@ -13,7 +13,7 @@ def get_memes(request):
         if user_info.program is not None:
             # TODO сделать нормальную подборку мемов по всем полям
             sources = MemeSource.objects.filter(university=user_info.program.chair.department.university)
-            if not sources:
+            if not len(sources):
                 sources = MemeSource.objects.all()[:10]
         memes = fetch_and_sort_memes(sources)
         return render(request, "memes.html", {"memes": memes, "sources": sources})

@@ -5,6 +5,7 @@ import vk
 import time
 import re
 
+from vk.exceptions import VkAPIError
 
 VK_API_VERSION = '5.74'
 SCOPE = 4194304  # Email
@@ -18,31 +19,31 @@ POSTS_COUNT = 10
 BOT_LOOP_TIMEOUT = 1
 
 
-def fetch_memes_for_group(vk_api, group_uri):
+def fetch_memes_for_group(group_uri: str) -> list:
+    session = vk.Session(access_token=GLOBAL_TOKEN)
+    vk_api = vk.API(session)
+    kwargs = {
+        'count': POSTS_COUNT,
+        'v': VK_API_VERSION
+    }
     match = re.match('^club(\d)+$', group_uri)
     if match:
-        group_id = int(match.group(1))
-        return vk_api.wall.get(owner_id=-group_id,
-                               count=POSTS_COUNT,
-                               v=VK_API_VERSION)["items"]
+        kwargs['owner_id'] = -int(match.group(1))
     else:
-        return vk_api.wall.get(domain=group_uri,
-                               count=POSTS_COUNT,
-                               v=VK_API_VERSION)["items"]
+        kwargs['domain'] = group_uri
+    try:
+        return vk_api.wall.get(**kwargs)["items"]
+    except VkAPIError as e:
+        return list()
 
 
 def fetch_and_sort_memes(sources):
-    session = vk.Session(access_token=GLOBAL_TOKEN)
-    vk_api = vk.API(session)
-
-    memes = [meme
-             for source in sources
-             for meme in fetch_memes_for_group(vk_api, source.link.split('/')[-1])]
-
-    def sort_by_date(post):
-        return post["date"]
-
-    memes.sort(key=sort_by_date, reverse=True)
+    memes = list()
+    for source in sources:
+        memes.extend(
+            fetch_memes_for_group(source.link.split('/')[-1])
+        )
+    memes.sort(key=lambda post: post['date'], reverse=True)
     return memes
 
 
