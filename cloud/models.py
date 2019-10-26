@@ -6,6 +6,98 @@ import bleach
 import markdown
 
 
+class HierarchyLevel(models.Model):
+    name = models.CharField(max_length=32, null=False, unique=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Hierarchy(models.Model):
+    level = models.ForeignKey(HierarchyLevel, null=True, blank=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=256, null=False, blank=True)
+    short_name = models.CharField(max_length=64, null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    logo = models.ImageField(
+        upload_to="resources/logo/",
+        default="resources/default/department.png",
+        null=True,
+        blank=True,
+    )
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.level.name if self.level else ''} - {self.name}"
+
+    def as_dict(self):
+        return {
+            "level": None if self.level is None else self.level.name,
+            "parent_id": None if self.parent is None else self.parent.pk,
+            "name": self.name,
+            "short_name": self.short_name,
+            "link": self.link,
+            "logo": self.logo.url,
+            "is_approved": self.is_approved,
+        }
+
+
+def migrate():
+    university_l, created = HierarchyLevel.objects.get_or_create(name='university')
+    department_l, created = HierarchyLevel.objects.get_or_create(name='faculty')
+    chair_l, created = HierarchyLevel.objects.get_or_create(name='chair')
+    program_l, created = HierarchyLevel.objects.get_or_create(name='program')
+    for u in University.objects.all():
+        university_obj, _ = Hierarchy.objects.get_or_create(
+            level=university_l,
+            parent=None,
+            name=u.title,
+            short_name=u.short_title,
+            link=u.link,
+            logo=u.logo,
+            is_approved=u.is_approved
+        )
+        for d in Department.objects.filter(university=u):
+            department_obj, _ = Hierarchy.objects.get_or_create(
+                level=department_l,
+                parent=university_obj,
+                name=d.title,
+                short_name=d.short_title,
+                link=d.link,
+                logo=None,
+                is_approved=d.is_approved
+            )
+            for lec in Lecturer.objects.filter(department=d):
+                lec.hierarchy = department_obj
+                lec.save()
+            for c in Chair.objects.filter(department=d):
+                chair_obj, _ = Hierarchy.objects.get_or_create(
+                    level=chair_l,
+                    parent=department_obj,
+                    name=c.title,
+                    short_name=c.short_title,
+                    link=c.link,
+                    logo=None,
+                    is_approved=c.is_approved
+                )
+                for p in Program.objects.filter(chair=c):
+                    program_obj, _ = Hierarchy.objects.get_or_create(
+                        level=program_l,
+                        parent=chair_obj,
+                        name=p.title,
+                        short_name=p.code,
+                        link=p.link,
+                        logo=None,
+                        is_approved=p.is_approved
+                    )
+                    for s in Subject.objects.filter(programs__in=[p]):
+                        s.hierarchy.add(program_obj)
+                        s.save()
+                    for usr in UserInfo.objects.filter(program=p):
+                        usr.hierarchy = program_obj
+                        usr.save()
+
+
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=64, null=True, blank=True)
@@ -126,6 +218,7 @@ class Program(models.Model):
 
 class Lecturer(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE, null=True, blank=True)
+    hierarchy = models.ForeignKey(Hierarchy, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=64, null=False)
     surname = models.CharField(max_length=64, null=False)
     patronymic = models.CharField(max_length=64, null=True, blank=True)
@@ -141,6 +234,7 @@ class Lecturer(models.Model):
 
 class Subject(models.Model):
     programs = models.ManyToManyField("Program")
+    hierarchy = models.ManyToManyField(Hierarchy)
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
@@ -190,6 +284,7 @@ class UserInfo(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     status = models.ForeignKey('UserStatus', on_delete=models.CASCADE)
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
+    hierarchy = models.ForeignKey(Hierarchy, on_delete=models.SET_NULL, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
     course = models.PositiveSmallIntegerField(null=True, blank=True)
 
@@ -200,6 +295,7 @@ class UserInfo(models.Model):
 class MemeSource(models.Model):
     link = models.URLField(null=False, blank=True)
     author = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
+    hierarchy = models.ForeignKey(Hierarchy, on_delete=models.SET_NULL, null=True, blank=True)
     university = models.ForeignKey('University', on_delete=models.SET_NULL, null=True, blank=True)
     department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
     chair = models.ForeignKey('Chair', on_delete=models.SET_NULL, null=True, blank=True)
