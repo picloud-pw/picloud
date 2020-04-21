@@ -28,7 +28,8 @@ body {
 }
 
 .university img.university-logo {
-    height: 15rem;
+    max-height: 15rem;
+    max-width: 15rem;
     margin: 0.5rem;
     border-radius: 100%;
     padding: 0.5rem;
