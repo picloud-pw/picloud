@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 
     'cloud',
     'hierarchy',
+    'posts',
     'memes',
 ]
 
