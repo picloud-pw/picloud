@@ -67,7 +67,6 @@ urlpatterns = [
     path('subjects/<subject_id>/approve', views.subjects.subject_approve, name='subject_approve'),
     path('subjects/<subject_id>/delete', views.subjects.subject_delete, name='subject_delete'),
 
-    path('contacts/', views.contacts.contacts, name='contacts'),
     path('memes/', views.memes.get_memes, name='memes'),
 
     path('submit/university/', views.universities.new_university, name='new_university'),

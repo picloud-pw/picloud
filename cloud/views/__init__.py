@@ -13,7 +13,6 @@ from . import (
     api,
     authentication,
     chairs,
-    contacts,
     departments,
     memes,
     message,

@@ -73,12 +73,6 @@
                         Вузы
                         <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-university"></i> </a>
                 </li>
-                <li>
-                    <a href="{% url 'contacts' %}">
-                        Обратная связь
-                        <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-comment"></i>
-                    </a>
-                </li>
 
                 {% if user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
                     <li style="background-color: #F4FF81">
@@ -90,7 +84,7 @@
 
                 {% if user.is_superuser %}
                     <li style="background-color: #DBC6EB">
-                        <a href="{% url 'admin' %}">
+                        <a href="/admin">
                             Админ панель
                             <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-crown"></i>
                         </a>
