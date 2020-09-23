@@ -40,3 +40,86 @@ def update_hierarchy():
                     short_name=chair['id'],
                     name=chair['title']
                 )
+
+
+migrate_rules = {
+    'ВТ': '1102',
+    'ИПМ': '1762',
+    'ГТ': '1771',
+    'КОТ': '1776739',
+    'ФиК': '1611',
+    'ИС': '1750',
+    'ИТГС': '1780',
+    'КТ': '1748',
+    'ИТТЭК': '1871415',
+    'ПБКС': '1758',
+    'ИКС': '1937284',
+    'СУиИ': '9412',
+    'нет': '1713080',
+}
+
+
+def migrate_hierarchy():
+    p_level, created = DepartmentType.objects.get_or_create(name='Program')
+    for chair in Chair.objects.all():
+        try:
+            rule = migrate_rules[chair.short_title]
+            c_department = Department.objects.get(
+                department_type__name='Chair',
+                short_name=rule
+            )
+        except Exception as e:
+            print(e)
+            continue
+        for program in Program.objects.filter(chair=chair):
+            p_department, created = Department.objects.get_or_create(
+                department_type=p_level,
+                parent_department=c_department,
+                name=program.title,
+                short_name=program.code,
+                link=program.link,
+            )
+            for subject in Subject.objects.filter(programs=program):
+                new_subject, created = NewSubject.objects.get_or_create(
+                    name=subject.title,
+                    short_name=subject.short_title,
+                    semester=subject.semester,
+                    is_approved=subject.is_approved,
+                )
+                new_subject.departments.add(p_department)
+
+                for post in Post.objects.filter(subject=subject):
+                    _migrate_post(post)
+
+
+def _migrate_post(post: Post):
+    if post.parent_post is not None:
+        parent_post = _migrate_post(post.parent_post)
+    else:
+        parent_post = None
+    new_post_type, created = NewPostType.objects.get_or_create(
+        title=post.type.title,
+        plural=post.type.plural,
+    )
+    new_post, created = NewPost.objects.get_or_create(
+        type=new_post_type,
+        author=post.author,
+        parent_post=parent_post,
+        last_editor=post.last_editor,
+        title=post.title,
+        text=post.text,
+        created_date=post.created_date,
+        image=post.image,
+        link=post.link,
+        views=post.views,
+        file=post.file,
+        is_approved=post.is_approved,
+    )
+    for comment in Comment.objects.filter(post=post):
+        new_comment, created = NewComment.objects.get_or_create(
+            author=comment.author,
+            post=new_post,
+            text=comment.text,
+            created_date=comment.created_date,
+        )
+    return new_post
