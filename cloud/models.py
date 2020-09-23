@@ -6,8 +6,6 @@ import os
 import bleach
 import markdown
 
-from hierarchy.models import Department as NewDepartment
-
 
 class University(models.Model):
     title = models.CharField(max_length=256, null=False)
@@ -190,10 +188,9 @@ class UserInfo(models.Model):
     avatar = models.ImageField(upload_to='resources/user_avatars/',
                                default='resources/default/user_ava.png',
                                null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    status = models.ForeignKey(UserStatus, on_delete=models.CASCADE)
-    program = models.ForeignKey(Program, on_delete=models.SET_NULL, null=True, blank=True)
-    department = models.ForeignKey(NewDepartment, on_delete=models.SET_NULL, null=True, blank=True, default=None)
+    user = models.OneToOneField(User, related_name="legacy_user", on_delete=models.CASCADE)
+    status = models.ForeignKey(UserStatus, related_name="legacy_status", on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name="legacy_program", on_delete=models.SET_NULL, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
     course = models.PositiveSmallIntegerField(null=True, blank=True)
 
