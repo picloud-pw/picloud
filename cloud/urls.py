@@ -5,9 +5,6 @@ from django.views.generic import RedirectView
 from cloud import views
 
 urlpatterns = [
-    path('', views.index.index, name='index'),
-    path('about/', views.index.about, name='about'),
-    path('robots.txt', views.robots.robots, name='robots'),
 
     path('auth/signup/', views.registration.sign_up, name="signup"),
     path('auth/signin/', views.authentication.sign_in, name="signin"),
@@ -78,8 +75,6 @@ urlpatterns = [
     path('submit/chair/', views.chairs.new_chair, name='new_chair'),
     path('submit/program/', views.programs.new_program, name='new_program'),
     path('submit/subject/', views.subjects.new_subject, name='new_subject'),
-
-    path('legal/privacy-policy/', views.legal.privacy_policy, name='privacy_policy'),
 
     # TODO: Сделать похожим на RESTful
     path('api/hierarchy/', views.structure.hierarchy_dump, name='get_structure_hierarchy'),

@@ -17,14 +17,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import RedirectView
 
 urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
-    path('admin/', admin.site.urls, name='admin'),
     path('', include('cloud.urls')),
-    path('hierarchy/', include('hierarchy.urls')),
-    path('memes/', include('memes.urls')),
-    path('favicon.ico/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
-    path('favicon.png/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
+    path('', include('website.urls')),
+    path('admin/', admin.site.urls, name='admin'),
+    path('hierarchy/', include('hierarchy.urls', namespace='hierarchy')),
+    path('memes/', include('memes.urls', namespace='memes')),
+    path('posts/', include('posts.urls', namespace='posts')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
