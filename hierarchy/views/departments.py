@@ -4,9 +4,7 @@ from hierarchy.models import Department, Subject
 
 
 def get_all_departments(request):
-
     departments = [d.as_dict() for d in Department.objects.all()]
-
     return JsonResponse({
         "departments": departments,
     })
@@ -97,7 +95,7 @@ def get_subjects_by_department(request, department_id):
         }, status=404)
     department = department.first()
 
-    subjects = [s.as_dict() for s in Subject.objects.filter(department=department) if s.is_approved]
+    subjects = [s.as_dict() for s in Subject.objects.filter(departments=department) if s.is_approved]
 
     return JsonResponse({
         "department_id": department.pk,
