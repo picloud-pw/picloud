@@ -53,8 +53,8 @@ def update_karma_for_all_users(request):
         for user in all_users:
             err = update_carma(user)
             if err:
-                return render(request, "moderation/moderation.html", {"message": err})
-        return render(request, "moderation/moderation.html", {"message": "Карма успешно пересчитана!"})
+                return render(request, "moderation.html", {"message": err})
+        return render(request, "moderation.html", {"message": "Карма успешно пересчитана!"})
     else:
         return render(request, "message.html", {"message": "У вас нет доступа к этой операции!"})
 

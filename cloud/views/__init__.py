@@ -16,7 +16,6 @@ from . import (
     departments,
     memes,
     message,
-    moderation,
     posts,
     programs,
     recaptcha,
