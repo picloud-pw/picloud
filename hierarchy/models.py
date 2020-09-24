@@ -7,6 +7,12 @@ class DepartmentType(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "name": self.name,
+        }
+
 
 class Department(models.Model):
     department_type = models.ForeignKey(DepartmentType, null=True, blank=True, on_delete=models.SET_NULL)
@@ -27,7 +33,8 @@ class Department(models.Model):
 
     def as_dict(self):
         return {
-            "type": None if self.department_type is None else self.department_type.name,
+            "id": self.pk,
+            "type": None if self.department_type is None else self.department_type.as_dict(),
             "parent_id": None if self.parent_department is None else self.parent_department.pk,
             "name": self.name,
             "short_name": self.short_name,
@@ -48,12 +55,14 @@ class Subject(models.Model):
         return self.displayed_title()
 
     def displayed_title(self):
-        return f"{self.name} ({self.semester} сем.)" if self.semester != 0 else self.name
+        return f"{self.name} ({self.semester} sem.)" if self.semester != 0 else self.name
 
     def as_dict(self):
         return {
-            "department_id": None if self.departments is None else self.departments.pk,
+            "id": self.pk,
+            "departments": [d.as_dict() for d in self.departments.all()],
             "name": self.name,
             "short_name": self.short_name,
             "semester": None if not self.semester else self.semester,
+            "is_approved": self.is_approved,
         }

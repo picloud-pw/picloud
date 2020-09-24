@@ -1,103 +1,42 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 
-from hierarchy.models import Department, Subject
+from hierarchy.models import Department, DepartmentType
 
 
-def get_all_departments(request):
-    departments = [d.as_dict() for d in Department.objects.all()]
-    return JsonResponse({
-        "departments": departments,
-    })
+def get_department_types(request):
+    return JsonResponse([
+        d.as_dict() for d in DepartmentType.objects.all()
+    ], safe=False)
 
 
-def get_department(request, department_id):
+def search_departments(request):
+    query = request.GET.get('q')
+    department_type_id = request.GET.get('department_type_id')
+    parent_department_id = request.GET.get('department_id')
+    is_approved = request.GET.get('is_approved') in ['True', None]
 
-    if not request.user.is_authenticated:
-        return JsonResponse({
-            "message": {
-                "text": "User is not authenticated.",
-                "type": "error",
-            }
-        }, status=401)
+    departments = Department.objects.all()
 
-    department = Department.objects.filter(pk=department_id)
-    if len(department) != 1:
-        return JsonResponse({
-            "message": {
-                "text": "Department not found.",
-                "type": "error",
-            }
-        }, status=404)
-    department = department.first()
+    if query is not None:
+        departments = departments.filter(name__icontains=query)
+    if parent_department_id is not None:
+        try:
+            department = Department.objects.get(id=parent_department_id)
+            departments = departments.filter(parent_department=department)
+        except ObjectDoesNotExist:
+            return JsonResponse({
+                'error': f'DepartmentType with id={department_type_id} does not exist'
+            })
+    if parent_department_id is not None:
+        try:
+            department = Department.objects.get(id=parent_department_id)
+            departments = departments.filter(parent_department=department)
+        except ObjectDoesNotExist:
+            return JsonResponse({
+                'error': f'Department with id={parent_department_id} does not exist'
+            })
+    if is_approved or (not is_approved and request.user.is_superuser):
+        departments = departments.filter(is_approved=is_approved)
 
-    return JsonResponse({"department": department.as_dict()})
-
-
-def approve_department(request, department_id):
-    department = Department.objects.filter(pk=department_id)
-    if len(department) != 1:
-        return JsonResponse({
-            "message": {
-                "text": "Department not found.",
-                "type": "error",
-            }
-        }, status=404)
-    department = department.first()
-
-    department.is_approved = True
-    department.save()
-
-    return JsonResponse({
-        "message": {
-            "text": "Department approved.",
-            "type": "success",
-        }
-    })
-
-
-def delete_department(request, department_id):
-    if not request.user.is_staff and not request.user.is_superuser:
-        return JsonResponse({
-            "message": {
-                "text": "To perform the operation, you must be staff or superuser.",
-                "type": "error",
-            }
-        }, status=403)
-
-    department = Department.objects.filter(pk=department_id)
-    if len(department) != 1:
-        return JsonResponse({
-            "message": {
-                "text": "Department not found.",
-                "type": "error",
-            }
-        }, status=404)
-    department = department.first()
-
-    department.delete()
-
-    return JsonResponse({
-        "message": {
-            "text": "Department deleted.",
-            "type": "success",
-        }
-    })
-
-
-def get_subjects_by_department(request, department_id):
-    department = Department.objects.filter(pk=department_id)
-    if len(department) != 1:
-        return JsonResponse({
-            "message": {
-                "text": "Department not found.",
-                "type": "error",
-            }
-        }, status=404)
-    department = department.first()
-
-    subjects = [s.as_dict() for s in Subject.objects.filter(departments=department) if s.is_approved]
-
-    return JsonResponse({
-        "department_id": department.pk,
-        "subjects": subjects,
-    })
+    return JsonResponse([d.as_dict() for d in departments], safe=False)
