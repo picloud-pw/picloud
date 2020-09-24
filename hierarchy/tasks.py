@@ -26,7 +26,8 @@ def update_hierarchy():
                 department_type=f_level,
                 parent_department=university,
                 short_name=faculty['id'],
-                name=faculty['title']
+                name=faculty['title'],
+                is_approved=True,
             )
             chairs = vk_api.database.getChairs(
                 faculty_id=faculty['id'],
@@ -38,7 +39,8 @@ def update_hierarchy():
                     department_type=c_level,
                     parent_department=faculty_in_db,
                     short_name=chair['id'],
-                    name=chair['title']
+                    name=chair['title'],
+                    is_approved=True,
                 )
 
 
@@ -78,6 +80,7 @@ def migrate_hierarchy():
                 name=program.title,
                 short_name=program.code,
                 link=program.link,
+                is_approved=program.is_approved,
             )
             for subject in Subject.objects.filter(programs=program):
                 new_subject, created = NewSubject.objects.get_or_create(
