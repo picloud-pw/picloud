@@ -14,24 +14,41 @@ function init_moderation_table() {
         axios.get('/hierarchy/subjects/search?is_approved=False'),
     ])
         .then((response) => {
-            console.log(response);
-            let posts = response[0].data;
-            let departments = response[1].data;
-            let subjects = response[2].data;
+            let data = [];
+            for (let post of response[0].data) {
+                data.push([
+                    'Post',
+                    post['title'],
+                    '',
+                ]);
+            }
+            for (let department of response[1].data) {
+                data.push([
+                    'Department',
+                    `[${department['type']['name']}] ${department['name']}`,
+                    '',
+                ]);
+            }
+            for (let subject of response[2].data) {
+                data.push([
+                    'Subject',
+                    subject['name'],
+                    '',
+                ]);
+            }
 
             let table_id = random_ID();
-            container.innerHTML = `<table class="ui celled table" id="${table_id}"></table>`;
+            container.innerHTML = `<table class="ui selectable celled table" id="${table_id}"></table>`;
             let table = $(`#${table_id}`).DataTable({
                 responsive: true,
                 bAutoWidth: false,
                 paging: false,
-                ordering: false,
                 info: false,
-                data: [],
+                data: data,
                 columns: [
-                    {title: "Type"},
-                    {title: "Name"},
-                    {title: "Action"},
+                    {title: "Type", width: "20%"},
+                    {title: "Title", width: "60%"},
+                    {title: "Action", width: "20%"},
                 ]
             });
             table.order([1, 'desc']).draw();
