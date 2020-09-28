@@ -8,4 +8,6 @@ urlpatterns = [
 
     path('search', views.search_posts,),
 
+    path('new', views.new_post, )
+
 ]

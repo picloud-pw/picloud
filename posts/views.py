@@ -14,3 +14,7 @@ def search_posts(request):
     return JsonResponse([
         post.as_dict() for post in posts
     ], safe=False)
+
+
+def new_post(request):
+    pass
