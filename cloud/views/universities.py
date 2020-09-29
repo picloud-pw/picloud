@@ -4,7 +4,7 @@ from cloud.forms import NewUniversityForm
 from cloud.models import University, Program, Chair, Department, Post, UserInfo
 from cloud.views.authentication import sign_in
 from cloud.views.message import message
-from cloud.views.posts import can_user_publish_instantly
+from posts.views.posts import can_user_publish_instantly
 
 
 def universities_list(request):

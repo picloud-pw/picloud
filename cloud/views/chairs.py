@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from cloud.forms import NewChairForm
 from cloud.models import Chair
 from cloud.views.message import message
-from cloud.views.posts import can_user_publish_instantly
+from posts.views.posts import can_user_publish_instantly
 
 
 def new_chair(request):

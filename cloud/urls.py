@@ -19,17 +19,6 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
-    path('post/new/', views.posts.post_new, name='post_new'),
-    path('post/<int:pk>/', views.posts.post_detail, name='post_detail'),
-    path('post/<int:pk>/edit/', views.posts.post_edit, name='post_edit'),
-    path('post/<int:pk>/delete/', views.posts.post_delete, name='post_delete'),
-    path('post/<int:pk>/checked/', views.posts.post_checked, name='post_checked'),
-    path('post/<int:pk>/new_child/', views.posts.post_new_child, name='post_new_child'),
-
-    path('post/<int:post_pk>/new_comment/', views.comment.create_comment, name='new_comment'),
-    path('post/<int:post_pk>/get_comments/', views.comment.get_comments, name='get_comments'),
-    path('comment/<int:comment_pk>/delete/', views.comment.delete_comment, name='comment_delete'),
-
     path('user/<user_id>', views.user.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),
     path('user/<user_id>/karma', views.karma.info_page, name="karma_info_page"),

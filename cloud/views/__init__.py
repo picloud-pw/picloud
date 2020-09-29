@@ -27,5 +27,4 @@ from . import (
     user,
     karma,
     vkontakte,
-    comment,
 )

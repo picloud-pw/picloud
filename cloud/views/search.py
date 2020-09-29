@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from cloud.models import Post, University, Department, Chair, Program, Subject, UserInfo
-from .posts import POSTS_PER_PAGE
+from posts.views.posts import POSTS_PER_PAGE
 
 
 def text_search(request):

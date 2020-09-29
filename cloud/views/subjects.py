@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from cloud.forms import NewSubjectForm
 from cloud.models import Subject, Post
 from cloud.views.message import message
-from cloud.views.posts import can_user_publish_instantly
+from posts.views.posts import can_user_publish_instantly
 
 
 def subject_page(request, subject_id):
