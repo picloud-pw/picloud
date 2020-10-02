@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('feed')
+        return redirect('cloud')
     else:
         return redirect('about')
 
@@ -22,3 +22,7 @@ def privacy_policy(request):
 
 def moderation_page(request):
     return render(request, 'moderation.html')
+
+
+def cloud_page(request):
+    return render(request, 'cloud.html')

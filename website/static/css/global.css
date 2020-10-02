@@ -12,7 +12,6 @@ nav.navbar {
 .content-block {
     text-align: center;
     vertical-align: middle;
-    margin-top: 20px;
 }
 
 .no-margin-padding {
@@ -259,4 +258,12 @@ textarea {
     font-family: 'Roboto Slab', serif;
     font-weight: normal;
     font-size: 14px;
+}
+
+.search.results {
+    min-width: 500px;
+}
+
+input.prompt {
+    min-width: 500px;
 }

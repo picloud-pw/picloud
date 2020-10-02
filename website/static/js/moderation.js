@@ -15,7 +15,7 @@ function init_moderation_table() {
     ])
         .then((response) => {
             let data = [];
-            for (let post of response[0].data) {
+            for (let post of response[0].data['posts']) {
                 data.push([
                     'Post',
                     post['title'],

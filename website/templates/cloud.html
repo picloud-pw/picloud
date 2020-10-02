@@ -1,0 +1,47 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Cloud
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'cloud/css/main.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded grid">
+        <div class="no-margin-padding column">
+            <div class="ui segment" id="search_container" style="height: 70px; text-align: left">
+                <div class="ui loading search">
+                    <div class="ui input">
+                        <input class="prompt" id="search" type="text" placeholder="Enter search query"
+                               style="border-radius: 50px;">
+                    </div>
+                    <div class="search results"></div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'cloud/js/main.js' %}"></script>
+
+    <!--  Multi select input -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/search.min.js"
+            integrity="sha256-gkqnhj5TvM/vwvHKAb4zBC7uL6mndcAlK6CEv5iEUwg=" crossorigin="anonymous"></script>
+
+{% endblock %}

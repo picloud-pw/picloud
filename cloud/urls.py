@@ -24,8 +24,6 @@ urlpatterns = [
     path('user/<user_id>/karma', views.karma.info_page, name="karma_info_page"),
     path('user/<user_id>/not_checked_posts', views.user.user_not_checked_posts, name='user_not_checked_posts'),
 
-    path('cloud/', RedirectView.as_view(pattern_name='feed', permanent=False), name='cloud'),
-    path('feed/', views.posts.cloud, name='feed'),
     path('search/', views.search.text_search, name='search'),
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),

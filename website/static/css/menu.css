@@ -42,6 +42,7 @@ nav.sidebar, .main {
 
 .navbar {
     text-align: center;
+    margin: 0;
 }
 
 @media (min-width: 765px) {
