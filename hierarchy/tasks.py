@@ -92,12 +92,12 @@ def migrate_hierarchy():
                 new_subject.departments.add(p_department)
 
                 for post in Post.objects.filter(subject=subject):
-                    _migrate_post(post)
+                    _migrate_post(post, new_subject)
 
 
-def _migrate_post(post: Post):
+def _migrate_post(post: Post, subject: NewSubject):
     if post.parent_post is not None:
-        parent_post = _migrate_post(post.parent_post)
+        parent_post = _migrate_post(post.parent_post, subject)
     else:
         parent_post = None
     new_post_type, created = NewPostType.objects.get_or_create(
@@ -105,6 +105,7 @@ def _migrate_post(post: Post):
         plural=post.type.plural,
     )
     new_post, created = NewPost.objects.get_or_create(
+        subject=subject,
         type=new_post_type,
         author=post.author,
         parent_post=parent_post,
