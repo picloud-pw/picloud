@@ -8,6 +8,11 @@
 {% block head %}
 
     <link rel="stylesheet" href="{% static 'cloud/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/comments.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/modal_image.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/post_list.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/search.css' %}">
 
 {% endblock %}
 
@@ -16,7 +21,7 @@
 
     <div class="ui padded grid">
         <div class="no-margin-padding column">
-            <div class="ui segment" id="search_container" style="height: 70px; text-align: left">
+            <div class="ui segment" id="search_container" style="height: 70px; text-align: left;">
                 <div class="ui loading search">
                     <div class="ui input">
                         <input class="prompt" id="search" type="text" placeholder="Enter search query"
@@ -26,7 +31,8 @@
                 </div>
             </div>
 
-
+            <div id="modal"></div>
+            <div id="posts_container"></div>
         </div>
     </div>
 

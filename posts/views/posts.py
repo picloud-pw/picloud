@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse, HttpResponse
 
 from decorators import auth_required
@@ -18,6 +19,8 @@ def can_user_publish_instantly(user):
 
 def search(request):
     q = request.GET.get('q')
+    pk = request.GET.get('id')
+    page = request.GET.get('page', 1)
     is_approved = request.GET.get('is_approved') in ['True', None]
 
     posts = Post.objects.all()
@@ -25,11 +28,24 @@ def search(request):
     if is_approved or (not is_approved and request.user.is_superuser):
         posts = posts.filter(is_approved=is_approved)
 
+    if pk is not None:
+        posts = posts.filter(id=pk)
+
     if q is not None:
         posts = posts.filter(title__icontains=q)
 
+    posts = posts.order_by('-created_date')
+
+    paginator = Paginator(posts, POSTS_PER_PAGE)
+    try:
+        posts_page = paginator.page(page)
+    except PageNotAnInteger:
+        posts_page = paginator.page(1)
+    except EmptyPage:
+        posts_page = paginator.page(paginator.num_pages)
+
     return JsonResponse({'posts': [
-        post.as_dict() for post in posts
+        post.as_dict() for post in posts_page
     ]})
 
 

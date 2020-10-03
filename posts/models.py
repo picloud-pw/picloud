@@ -20,6 +20,12 @@ class PostType(models.Model):
     def __str__(self):
         return self.title
 
+    def as_dict(self):
+        return {
+            'title': self.title,
+            'plural': self.plural,
+        }
+
 
 class Post(models.Model):
     subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.SET_NULL)
@@ -40,6 +46,9 @@ class Post(models.Model):
         u'h1', u'h2', u'h3', u'h4', u'p', u'a', u'li', u'ul', u'ol', u'pre', u'code', u'hr', u'br', u'strong',
     ]
 
+    def __str__(self):
+        return self.title
+
     def html(self):
         dangerous_html = markdown.markdown(self.text, extensions=['markdown.extensions.fenced_code'])
         safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
@@ -49,9 +58,6 @@ class Post(models.Model):
     def publish(self):
         self.created_date = timezone.now()
         self.save()
-
-    def __str__(self):
-        return self.title
 
     def get_image_url(self):
         if self.image and hasattr(self.image, 'url'):
@@ -80,22 +86,6 @@ class Post(models.Model):
             return self.file.url
         else:
             return ""
-
-    def as_dict(self):
-        return {
-            "id": self.pk,
-            "author_username": self.author.username,
-            "author_id": self.author.pk,
-            "title": self.title,
-            "text": self.text,
-            "created_date": self.created_date,
-            "subject": self.subject.as_dict() if self.subject is not None else None,
-            "type_title": self.type.title,
-            "link": self.link,
-            "views": self.views,
-            "image": self.get_image_url(),
-            "file": self.get_file_url(),
-        }
 
     def can_be_edited_by(self, user):
         return self.author == user or \
@@ -142,6 +132,37 @@ class Post(models.Model):
             return date.strftime("%d %b %H:%M")
         return date.strftime("%d %b %Y %H:%M")
 
+    def as_dict(self):
+        return {
+            "id": self.pk,
+            "parent_post": self.parent_post.id if self.parent_post is not None else None,
+            "is_parent": self.is_parent(),
+            "author": {
+                "id": self.author.id,
+                "username": self.author.username,
+            },
+            "author_id": self.author.pk,
+            "title": self.title,
+            "text": self.text,
+            "html": self.html(),
+            "created_date": self.created_date,
+            "created_date_human": self.created_date_human(),
+            "subject": self.subject.as_dict() if self.subject is not None else None,
+            "type": self.type.as_dict(),
+            "link": self.link,
+            "image": {
+                "url": self.get_image_url(),
+                "width": self.get_image_width(),
+                "height": self.get_image_height(),
+            },
+            "file": {
+                "url": self.get_file_url(),
+                "extension": self.file_extension(),
+            },
+            "views": self.views,
+            "comments": self.get_comment_count(),
+        }
+
 
 class Comment(models.Model):
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
@@ -160,9 +181,11 @@ class Comment(models.Model):
         return {
             "pk": self.pk,
             "post_id": self.post.pk,
-            "author_id": self.author.pk,
-            "author_username": self.author.username,
-            "author_avatar": self.get_author_avatar_url(),
+            "author": {
+                "id": self.author.pk,
+                "username": self.author.username,
+                "avatar": self.get_author_avatar_url(),
+            },
             "text": self.text,
             "created_date": self.created_date,
         }

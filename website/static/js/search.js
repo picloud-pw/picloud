@@ -1,13 +1,3 @@
-function postToHtml(post) {
-    let request = new XMLHttpRequest();
-    request.open('GET', '/post/' + post.id + '/render/', false);
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('X-CSRFToken', getCsrfToken());
-    request.send();
-    let html = request.responseText;
-    return new DOMParser().parseFromString(html, 'text/xml');
-}
-
 function getElementValueIfEnabled(element_id) {
     let subject_elem = document.getElementById(element_id);
     return subject_elem.disabled === false ? subject_elem.value : null;
