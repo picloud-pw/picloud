@@ -6,18 +6,7 @@ from cloud import views
 
 urlpatterns = [
 
-    path('auth/signup/', views.registration.sign_up, name="signup"),
-    path('auth/signin/', views.authentication.sign_in, name="signin"),
-    path('auth/signout/', views.authentication.sign_out, name="signout"),
-    path('after_login', views.authentication.after_login, name="after_login"),
-    path('activate/<uid>/<token>/', views.registration.activate, name='activate'),
     path('auth/delete-me/', views.user.delete_active_account, name='account_delete_active'),
-
-    # auth встроенное приложение, сброс пароля, переопределяющие шаблоны в registration
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
     path('user/<user_id>', views.user.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),

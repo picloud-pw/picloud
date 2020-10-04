@@ -11,7 +11,6 @@ NOT_VALID = 1
 
 from . import (
     api,
-    authentication,
     chairs,
     departments,
     memes,
@@ -19,7 +18,6 @@ from . import (
     posts,
     programs,
     recaptcha,
-    registration,
     search,
     subjects,
     structure,

@@ -2,8 +2,7 @@ from django.shortcuts import render
 
 from cloud.views.vkontakte import fetch_and_sort_memes
 from cloud.models import MemeSource, UserInfo
-
-from .authentication import sign_in
+from website.views.auth import sign_in
 
 
 def get_memes(request):
@@ -18,6 +17,4 @@ def get_memes(request):
         memes = fetch_and_sort_memes(sources)
         return render(request, "memes.html", {"memes": memes, "sources": sources})
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь для просмотра мемесов. "
-                                    "Если вы укажете место учебы, "
-                                    "мемы будут подбираться с учётом локальности!")
+        return sign_in(request)

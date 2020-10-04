@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from cloud.forms import NewUniversityForm
 from cloud.models import University, Program, Chair, Department, Post, UserInfo
-from cloud.views.authentication import sign_in
 from cloud.views.message import message
 from posts.views.posts import can_user_publish_instantly
+from website.views.auth import sign_in
 
 
 def universities_list(request):
@@ -44,7 +44,7 @@ def students_from_university(request, university_id):
         students_info = UserInfo.objects.filter(program__chair__department__in=departments)
         return render(request, 'structure/students_from_university.html', locals())
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы видеть список студентов.")
+        return sign_in(request)
 
 
 def new_university(request):

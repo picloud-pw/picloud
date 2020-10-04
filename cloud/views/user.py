@@ -7,11 +7,11 @@ from django.utils import timezone
 
 from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserNameChangeForm
 from cloud.models import UserInfo, Post
-from cloud.views.authentication import sign_in
 from cloud.views.message import message
 from cloud.views.posts import post_list
 
 from cloud.views.karma import update_carma
+from website.views.auth import sign_in
 
 AUTHOR_AFTER_DELETION = 32
 
@@ -22,7 +22,7 @@ def user_page(request, user_id):
         fr_user_info = UserInfo.objects.get(user=fr_user)
         return render(request, 'user.html', locals())
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы посещать страницы других пользователей.")
+        return sign_in(request)
 
 
 def user_posts(request, user_id):
@@ -36,7 +36,7 @@ def user_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=fr_user_posts)
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы просматривать записи конкретных пользователей.")
+        return sign_in(request)
 
 
 def user_not_checked_posts(request, user_id):
@@ -50,7 +50,7 @@ def user_not_checked_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=not_validate_posts)
     else:
-        return message(request, msg="Вы можете просматривать только проверенные записи этого пользователя.")
+        return message(request)
 
 
 def settings_page(request, msg="", error=""):

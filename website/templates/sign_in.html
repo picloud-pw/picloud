@@ -1,0 +1,36 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Sign in
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/social_buttons.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    {% if msg %}
+        <div class="ui icon message" role="alert">
+            <i class="sign-in icon"></i>
+            <div class="content">
+                {{ msg }}
+            </div>
+        </div>
+    {% endif %}
+
+        <a class="ui vk button" title="Sign in with VK" style="font-size: 20px;"
+           href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.GET.next|urlencode }}">
+            <i class="vk icon"></i> Vkontakte
+        </a>
+        <a class="ui google plus button" title="Sign in with Google" style="font-size: 20px;"
+           href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|urlencode }}">
+            <i class="google icon"></i> Google
+        </a>
+        <a class="ui button" title="Sign in with GitHub" style="font-size: 20px; background-color: #23292d"
+           href="{% url 'social:begin' 'github' %}?next={{ request.GET.next|urlencode }}">
+            <i class="github icon" style="color: #ffffff; text-decoration-color: #bbbbbb"></i> GitHub
+        </a>
+
+{% endblock %}

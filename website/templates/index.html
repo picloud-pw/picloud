@@ -43,7 +43,6 @@
             <img class="logo" src="{% static 'img/logo-white.png' %}"/>
         </a>
         <div class="buttons">
-            <a class="" href="{% url 'signup' %}">Регистрация</a>
             <a class="button" href="{% url 'signin' %}">Вход</a>
         </div>
     </div>
@@ -67,7 +66,7 @@
             типовики и&nbsp;лабораторые работы&nbsp;—
             всё это есть на&nbsp;<strong>&pi;Cloud</strong>’е.
         </p>
-        <a href="{% url 'feed' %}" class="button">
+        <a href="{% url 'cloud' %}" class="button">
             Перейти в&nbsp;хранилище
         </a>
     </div>
@@ -168,9 +167,6 @@
     <div class="heroes">
         <p class="hero">&pi;Cloud&nbsp;— лучше, чем файлообменник.</p>
         <p class="heroine">И&nbsp;гораздо лучше, чем сайт кафедры.</p>
-        <a href="{% url 'signup' %}" class="button">
-            Зарегистрироваться
-        </a>
         <p>
             <a href="{% url 'signin' %}">Войти в&nbsp;систему</a>
         </p>

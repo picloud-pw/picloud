@@ -14,6 +14,9 @@ urlpatterns = [
     path('favicon.ico/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
     path('favicon.png/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
 
+    path('signin/', auth.sign_in, name="signin"),
+    path('signout/', auth.sign_out, name="signout"),
+
     path('cloud/', index.cloud_page, name="cloud"),
     path('moderation/', index.moderation_page, name="moderation"),
 

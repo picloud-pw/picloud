@@ -3,8 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 
 from cloud.models import Post, Comment
-from cloud.views.authentication import sign_in
 from decorators import auth_required
+from website.views.auth import sign_in
 
 
 @auth_required
@@ -41,7 +41,7 @@ def get(request, post_id):
 @auth_required
 def delete(request, post_id, comment_id):
     if not request.user.is_authenticated:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь для удаления комментариев.")
+        return sign_in(request)
 
     comment = get_object_or_404(Comment, pk=comment_id)
     post_pk = comment.post.pk
