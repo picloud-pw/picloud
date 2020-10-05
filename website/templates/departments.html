@@ -1,0 +1,44 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Departments
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'departments/css/main.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded grid">
+        <div class="no-margin-padding column">
+            <div class="ui segment" id="search_container" style="height: 70px; text-align: left;">
+                <div class="ui loading search">
+                    <div class="ui input">
+                        <input class="prompt" id="search" type="text" placeholder="Enter search query"
+                               style="border-radius: 50px;">
+                    </div>
+                    <div class="search results"></div>
+                </div>
+            </div>
+
+            <div id="modal"></div>
+            <div class="ui massive middle aligned divided animated list"
+                 id="departments_container"
+                 style="margin: 40px; text-align: left">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'departments/js/main.js' %}"></script>
+
+{% endblock %}

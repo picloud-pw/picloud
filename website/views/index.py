@@ -26,3 +26,7 @@ def moderation_page(request):
 
 def cloud_page(request):
     return render(request, 'cloud.html')
+
+
+def departments_page(request):
+    return render(request, 'departments.html')
