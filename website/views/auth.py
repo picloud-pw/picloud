@@ -19,8 +19,6 @@ def create_user_settings(sender, instance, created, **kwargs):
 @receiver(user_logged_in)
 def user_info_to_session(sender, user, request, **kwargs):
     request.session['user_avatar_url'] = UserInfo.objects.get(user=user).avatar.url
-    program = UserInfo.objects.get(user=user).program
-    request.session['program_id'] = program.pk if program is not None else ""
 
 
 def sign_in(request):

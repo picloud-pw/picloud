@@ -39,36 +39,26 @@
                     </a>
                 </li>
 
-                {% if user.is_authenticated and request.session.program_id %}
-                    <li {% block my_program %}{% endblock %}>
-                        <a href="{% url 'program_page' program_id=request.session.program_id %}">
-                            Моя программа
-                            <i style="font-size: 16px; color: crimson;"
-                               class="pull-right hidden-xs showopacity fas fa-heart"></i>
-                        </a>
-                    </li>
-                {% endif %}
+                <li>
+                    <a href="{% url 'universities_list' %}">
+                        Departments
+                        <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-university"></i> </a>
+                </li>
 
 
                 <li>
                     <a href="{% url 'memes' %}">
-                        Мемесы
+                        Memes
                         <i style="font-size: 16px;"
                            class="pull-right hidden-xs showopacity fas fa-laugh"></i>
                     </a>
                 </li>
 
 
-                <li>
-                    <a href="{% url 'universities_list' %}">
-                        Вузы
-                        <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-university"></i> </a>
-                </li>
-
                 {% if user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
                     <li style="background-color: #F4FF81">
                         <a href="{% url 'moderation' %}">
-                            Модерация
+                            Moderation
                             <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-hammer"></i> </a>
                     </li>
                 {% endif %}
@@ -76,7 +66,7 @@
                 {% if user.is_superuser %}
                     <li style="background-color: #DBC6EB">
                         <a href="/admin">
-                            Админ панель
+                            Admin
                             <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-crown"></i>
                         </a>
                     </li>
@@ -85,14 +75,14 @@
                 {% if user.is_authenticated %}
                     <li style="background-color: #FFCCCC">
                         <a href="{% url 'signout' %}">
-                            Выйти
-                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-out"></i>
+                            Sign out
+                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-out-alt"></i>
                         </a>
                     </li>
                 {% else %}
                     <li style="background-color: #CCFFFF">
                         <a href="{% url 'signin' %}">
-                            Войти
+                            Sign in
                             <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-in-alt"></i>
                         </a>
                     </li>
@@ -100,7 +90,7 @@
 
                 <li style="background-color: #45668e">
                     <a href="https://vk.com/picloudpw" style="color: white;">
-                        Группа VK
+                        VK group
                         <i style="font-size: 16px" class="pull-right hidden-xs showopacity fab fa-vk"></i>
                     </a>
                 </li>

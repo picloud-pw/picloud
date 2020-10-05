@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('signin/', auth.sign_in, name="signin"),
     path('signout/', auth.sign_out, name="signout"),
+    path('after_login/', auth.after_login, name="after_login"),
 
     path('cloud/', index.cloud_page, name="cloud"),
     path('moderation/', index.moderation_page, name="moderation"),
