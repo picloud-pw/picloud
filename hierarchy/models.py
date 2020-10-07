@@ -31,6 +31,13 @@ class Department(models.Model):
     def __str__(self):
         return f"({self.short_name}) {self.name}"
 
+    def get_hierarchy(self):
+        parent_department = None if self.parent_department is None \
+            else self.parent_department.as_dict()
+        if parent_department is not None:
+            parent_department.update({'parent': self.parent_department.get_hierarchy()})
+        return parent_department
+
     def as_dict(self):
         return {
             "id": self.pk,

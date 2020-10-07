@@ -11,13 +11,13 @@ def get_department_types(request):
 
 
 def get_department(request):
-    department_id = request.GET.get('department_type_id')
+    department_id = request.GET.get('id')
 
     department = Department.objects.get(id=department_id)
 
     return JsonResponse({
         'department': department.as_dict(),
-        'hierarchy': {},
+        'hierarchy': department.get_hierarchy(),
         'statistics': {},
     })
 
