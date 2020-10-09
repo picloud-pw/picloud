@@ -13,6 +13,14 @@ class UserStatus(models.Model):
     def __str__(self):
         return self.title
 
+    def as_dict(self):
+        return {
+            'title': self.title,
+            'level': self.status_level,
+            'can_publish_without_moderation': self.can_publish_without_moderation,
+            'can_moderate': self.can_moderate,
+        }
+
 
 class UserInfo(models.Model):
     avatar = models.ImageField(
@@ -28,3 +36,20 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def as_dict(self):
+        return {
+            'user': {
+                'username': self.user.username,
+                'first_name': self.user.first_name,
+                'last_name': self.user.last_name,
+                'email': self.user.email,
+                'last_login': self.user.last_login,
+                'date_joined': self.user.date_joined,
+            },
+            'avatar': self.avatar.url,
+            'status': self.status.as_dict(),
+            'karma': self.karma,
+            'course': self.course,
+            'department': self.department,
+        }

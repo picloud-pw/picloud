@@ -3,8 +3,10 @@ from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
+from decorators import auth_required
 from website.models import UserInfo, UserStatus
 
 
@@ -37,3 +39,8 @@ def after_login(request):
     else:
         return redirect('index')
 
+
+@auth_required
+def me(request):
+    user_info = UserInfo.objects.get(user=request.user)
+    return JsonResponse(user_info.as_dict())
