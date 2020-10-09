@@ -51,5 +51,5 @@ class UserInfo(models.Model):
             'status': self.status.as_dict(),
             'karma': self.karma,
             'course': self.course,
-            'department': self.department,
+            'department': self.department.as_dict() if self.department is not None else None,
         }
