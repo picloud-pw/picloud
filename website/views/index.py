@@ -20,6 +20,10 @@ def privacy_policy(request):
     return render(request, 'privacy_policy.html')
 
 
+def profile_page(request):
+    return render(request, 'profile.html')
+
+
 def moderation_page(request):
     return render(request, 'moderation.html')
 

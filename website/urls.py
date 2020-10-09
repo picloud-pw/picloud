@@ -23,4 +23,6 @@ urlpatterns = [
     path('departments/', index.departments_page, name="departments"),
     path('moderation/', index.moderation_page, name="moderation"),
 
+    path('profile/', index.profile_page, name="profile"),
+
 ]
