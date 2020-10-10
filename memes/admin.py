@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from memes.models import *
+
+admin.site.register(MemesSource)

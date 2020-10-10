@@ -13,3 +13,16 @@ class MemesSource(models.Model):
 
     def __str__(self):
         return self.source
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'source': self.source,
+            'author': None if self.author is None else {
+                'user_id': self.author.id,
+                'username': self.author.username,
+            },
+            'department': self.department.as_dict() if self.department is not None else None,
+            'is_public': self.is_public,
+            'is_approved': self.is_approved
+        }
