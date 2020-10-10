@@ -1,6 +1,4 @@
-from django.contrib.auth import views as auth_views
 from django.urls import path
-from django.views.generic import RedirectView
 
 from cloud import views
 
@@ -41,8 +39,6 @@ urlpatterns = [
     path('subjects/<subject_id>', views.subjects.subject_page, name='subject_page'),
     path('subjects/<subject_id>/approve', views.subjects.subject_approve, name='subject_approve'),
     path('subjects/<subject_id>/delete', views.subjects.subject_delete, name='subject_delete'),
-
-    path('memes/', views.memes.get_memes, name='memes'),
 
     path('submit/university/', views.universities.new_university, name='new_university'),
     path('submit/department/', views.departments.new_department, name='new_department'),
