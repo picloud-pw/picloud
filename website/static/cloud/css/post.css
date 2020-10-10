@@ -2,7 +2,7 @@ article.post {
     background-color: white;
     border-radius: 0.5rem;
     overflow: hidden;
-    margin: 1rem auto;
+    margin: 0 auto 1rem;
     box-shadow: 0 0.15em 0 #dddddd;
 }
 
@@ -117,38 +117,59 @@ article.post .btn-follow-link, article.post .btn-download {
 
 .post-size-reference,
 .post {
-    width: calc(96% / var(--columns-count));
+    width: 100%;
 }
 
 .post-grid-gutter-size-reference {
-    width: calc(4% / var(--gutters-count));
-}
-
-:root {
-    --columns-count: 1;
-    --gutters-count: calc(var(--columns-count) - 1);
+    width: 0;
 }
 
 @media screen and (min-width: 800px) {
     :root {
-        --columns-count: 2;
+        --columnsCount: 2;
+        --guttersCount: calc(var(--columnsCount) - 1);
+        --gutterWidth: 1rem;
+        --totalGuttersWidth: calc(var(--guttersCount) * var(--gutterWidth));
+        --totalColumnsWidth: calc(100% - var(--totalGuttersWidth));
+        --columnWidth: calc(var(--totalColumnsWidth) / var(--columnsCount));
+    }
+
+    .post-size-reference,
+    .post {
+        width: var(--columnWidth);
+    }
+
+    .post-grid-gutter-size-reference {
+        width: var(--gutterWidth);
     }
 }
 
 @media screen and (min-width: 1200px) {
     :root {
-        --columns-count: 3;
+        --columnsCount: 3;
     }
 }
 
 @media screen and (min-width: 1600px) {
     :root {
-        --columns-count: 4;
+        --columnsCount: 4;
     }
 }
 
 @media screen and (min-width: 2000px) {
     :root {
-        --columns-count: 5;
+        --columnsCount: 5;
+    }
+}
+
+@media screen and (min-width: 2400px) {
+    :root {
+        --columnsCount: 6;
+    }
+}
+
+@media screen and (min-width: 2800px) {
+    :root {
+        --columnsCount: 7;
     }
 }
