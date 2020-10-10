@@ -41,7 +41,7 @@ def fetch_and_sort_memes(sources):
     memes = list()
     for source in sources:
         memes.extend(
-            fetch_memes_for_group(source.link.split('/')[-1])
+            fetch_memes_for_group(source.source.split('/')[-1])
         )
     memes.sort(key=lambda post: post['date'], reverse=True)
     return memes
