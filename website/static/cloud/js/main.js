@@ -38,9 +38,7 @@ function load_posts_list() {
         .then((response) => {
             let posts = response.data['posts'];
             for (let post of posts) {
-                let postElement = render_post(post);
-                container.appendChild(postElement);
-                masonry.appended(postElement);
+                appendPost(post, container);
             }
         })
         .finally(() => {
@@ -117,14 +115,27 @@ function display_post(post_id) {
     let postsGrid = document.getElementById("posts_container");
     axios.get(`/posts/search?id=${post_id}`)
         .then((response) => {
-            let post = response.data['posts'][0];
-            let postElement = render_post(post);
-            postsGrid.innerHTML = '';
-            let masonrySizer = document.createElement("div");
-            masonrySizer.classList.add("post-size-reference");
-            postsGrid.appendChild(masonrySizer);
-            postsGrid.appendChild(postElement);
-            masonry.layout();
+            let posts = response.data['posts'];
+            clearPostsContainer(postsGrid);
+            for (let post of posts) {
+                appendPost(post, container);
+            }
         })
 
+}
+
+function clearPostsContainer(postsGrid) {
+    postsGrid.innerHTML = '';
+    let masonrySizer = document.createElement("div");
+    masonrySizer.classList.add("post-size-reference");
+    postsGrid.appendChild(masonrySizer);
+}
+
+function appendPost(post, postsContainer) {
+    let postElement = render_post(post);
+    postsContainer.appendChild(postElement);
+    masonry.appended(postElement);
+    imagesLoaded(postElement).on('progress', () => {
+        masonry.layout();
+    });
 }

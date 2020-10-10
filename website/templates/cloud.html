@@ -54,6 +54,7 @@
             integrity="sha256-gkqnhj5TvM/vwvHKAb4zBC7uL6mndcAlK6CEv5iEUwg=" crossorigin="anonymous"></script>
 
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
     <script>
         const grid = document.querySelector('#posts_container');
@@ -62,6 +63,9 @@
             columnWidth: ".post-size-reference",
             gutter: 20,
             fitWidth: true,
+        });
+        imagesLoaded(grid).on('progress', () => {
+            masonry.layout();
         });
     </script>
 {% endblock %}
