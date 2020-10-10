@@ -38,7 +38,9 @@ function load_posts_list() {
         .then((response) => {
             let posts = response.data['posts'];
             for (let post of posts) {
-                container.innerHTML += render_post(post);
+                let postElement = render_post(post);
+                container.appendChild(postElement);
+                masonry.appended(postElement);
             }
         })
         .finally(() => {
@@ -47,8 +49,9 @@ function load_posts_list() {
 }
 
 function render_post(post) {
-    return `
-        <article class="post" style="max-width: 700px">
+    let element = document.createElement("article");
+    element.classList.add("post");
+    element.innerHTML = `
             <div class="post-container" id="post-${post['id']}">
                 <header>
                     <h1>
@@ -106,16 +109,22 @@ function render_post(post) {
                     </span>
                 </footer>
             </div>
-        </article>
     `;
+    return element;
 }
 
 function display_post(post_id) {
-    let container = document.getElementById("posts_container");
+    let postsGrid = document.getElementById("posts_container");
     axios.get(`/posts/search?id=${post_id}`)
         .then((response) => {
             let post = response.data['posts'][0];
-            container.innerHTML = render_post(post);
+            let postElement = render_post(post);
+            postsGrid.innerHTML = '';
+            let masonrySizer = document.createElement("div");
+            masonrySizer.classList.add("post-size-reference");
+            postsGrid.appendChild(masonrySizer);
+            postsGrid.appendChild(postElement);
+            masonry.layout();
         })
 
 }

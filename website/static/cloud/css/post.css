@@ -114,3 +114,8 @@ article.post .btn-follow-link, article.post .btn-download {
 .comments-counter {
     text-decoration: none !important;
 }
+
+.post-size-reference,
+.post {
+    width: 500px;
+}
