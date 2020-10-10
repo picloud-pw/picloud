@@ -33,12 +33,16 @@ function init_search() {
 
 function load_posts_list() {
     let container = document.getElementById('posts_container');
+    container.classList.add('loading');
     axios.get('/posts/search')
         .then((response) => {
             let posts = response.data['posts'];
             for (let post of posts) {
                 container.innerHTML += render_post(post);
             }
+        })
+        .finally(() => {
+            container.classList.remove('loading');
         })
 }
 
