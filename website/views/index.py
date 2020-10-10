@@ -34,3 +34,7 @@ def cloud_page(request):
 
 def departments_page(request):
     return render(request, 'departments.html')
+
+
+def memes_page(request):
+    return render(request, 'memes.html')

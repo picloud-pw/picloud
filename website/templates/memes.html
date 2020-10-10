@@ -1,0 +1,31 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Memes
+{% endblock %}
+
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'memes/css/main.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded centered grid">
+        <div class="eight wide column">
+            <div class="ui basic segment" id="memes_container" style="min-height: 100px"></div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'memes/js/main.js' %}"></script>
+
+{% endblock %}

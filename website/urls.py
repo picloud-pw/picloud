@@ -22,6 +22,7 @@ urlpatterns = [
     path('cloud/', index.cloud_page, name="cloud"),
     path('departments/', index.departments_page, name="departments"),
     path('moderation/', index.moderation_page, name="moderation"),
+    path('memes/', index.memes_page, name="memes"),
 
     path('profile/', index.profile_page, name="profile"),
 
