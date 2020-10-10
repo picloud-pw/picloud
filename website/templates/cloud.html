@@ -34,7 +34,6 @@
             <div id="modal"></div>
             <div id="posts_container" class="ui basic segment"
                  style="min-height: 100px; margin-left: auto; margin-right: auto;">
-                <div class="post-size-reference" aria-hidden="true"></div>
             </div>
         </div>
     </div>
@@ -58,11 +57,12 @@
 
     <script>
         const grid = document.querySelector('#posts_container');
+        clearPostsContainer(grid);
         const masonry = new Masonry(grid, {
             itemSelector: ".post",
             columnWidth: ".post-size-reference",
-            gutter: 20,
-            fitWidth: true,
+            gutter: ".post-grid-gutter-size-reference",
+            percentPosition: true,
         });
         imagesLoaded(grid).on('progress', () => {
             masonry.layout();

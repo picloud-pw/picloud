@@ -117,5 +117,38 @@ article.post .btn-follow-link, article.post .btn-download {
 
 .post-size-reference,
 .post {
-    width: 500px;
+    width: calc(96% / var(--columns-count));
+}
+
+.post-grid-gutter-size-reference {
+    width: calc(4% / var(--gutters-count));
+}
+
+:root {
+    --columns-count: 1;
+    --gutters-count: calc(var(--columns-count) - 1);
+}
+
+@media screen and (min-width: 800px) {
+    :root {
+        --columns-count: 2;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    :root {
+        --columns-count: 3;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    :root {
+        --columns-count: 4;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    :root {
+        --columns-count: 5;
+    }
 }

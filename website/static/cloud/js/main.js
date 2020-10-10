@@ -126,9 +126,14 @@ function display_post(post_id) {
 
 function clearPostsContainer(postsGrid) {
     postsGrid.innerHTML = '';
+
     let masonrySizer = document.createElement("div");
     masonrySizer.classList.add("post-size-reference");
     postsGrid.appendChild(masonrySizer);
+
+    let gutterSizer = document.createElement("div");
+    gutterSizer.classList.add("post-grid-gutter-size-reference");
+    postsGrid.appendChild(gutterSizer);
 }
 
 function appendPost(post, postsContainer) {
