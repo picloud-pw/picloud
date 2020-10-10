@@ -24,4 +24,6 @@ def search_subjects(request):
     if is_approved or (not is_approved and request.user.is_superuser):
         subjects = subjects.filter(is_approved=is_approved)
 
-    return JsonResponse([s.as_dict() for s in subjects], safe=False)
+    return JsonResponse({'subjects': [
+        s.as_dict() for s in subjects
+    ]})

@@ -22,14 +22,14 @@ function init_moderation_table() {
                     '',
                 ]);
             }
-            for (let department of response[1].data) {
+            for (let department of response[1].data['departments']) {
                 data.push([
                     'Department',
                     `[${department['type']['name']}] ${department['name']}`,
                     '',
                 ]);
             }
-            for (let subject of response[2].data) {
+            for (let subject of response[2].data['subjects']) {
                 data.push([
                     'Subject',
                     subject['name'],
