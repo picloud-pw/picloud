@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 
@@ -20,6 +21,7 @@ def privacy_policy(request):
     return render(request, 'privacy_policy.html')
 
 
+@login_required(login_url='/signin/')
 def profile_page(request):
     return render(request, 'profile.html')
 
@@ -35,6 +37,6 @@ def cloud_page(request):
 def departments_page(request):
     return render(request, 'departments.html')
 
-
+@login_required(login_url='/signin/')
 def memes_page(request):
     return render(request, 'memes.html')
