@@ -67,10 +67,10 @@ function render_post(post) {
     element.innerHTML = `
             <div class="post-container" id="post-${post['id']}">
                 <header>
-                    <h1>
-                        <a href="">${post['title']}</a>
+                    <h2>
+                        <a onclick="display_post('${post['id']}')" style="cursor: pointer;">${post['title']}</a>
                         ${post['parent_post'] ? '<i class="ui archive icon" title="There is parent post"></i>' : ''}
-                    </h1>
+                    </h2>
                     <p class="subject">
                         <span class="type">${post['type']['title']}</span>
                         |
