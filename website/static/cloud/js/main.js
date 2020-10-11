@@ -1,7 +1,22 @@
+let MASONRY = null;
+
 document.addEventListener("DOMContentLoaded", function () {
+
+    const grid = document.querySelector('#posts_container');
+    clear_posts_container(grid);
+    MASONRY = new Masonry(grid, {
+        itemSelector: ".post",
+        columnWidth: ".post-size-reference",
+        gutter: ".post-grid-gutter-size-reference",
+        percentPosition: true,
+    });
+    imagesLoaded(grid).on('progress', () => {
+        MASONRY.layout();
+    });
 
     init_search();
     load_posts_list();
+
 
 });
 
@@ -38,7 +53,7 @@ function load_posts_list() {
         .then((response) => {
             let posts = response.data['posts'];
             for (let post of posts) {
-                appendPost(post, container);
+                append_post(post, container);
             }
         })
         .finally(() => {
@@ -116,15 +131,15 @@ function display_post(post_id) {
     axios.get(`/posts/search?id=${post_id}`)
         .then((response) => {
             let posts = response.data['posts'];
-            clearPostsContainer(postsGrid);
+            clear_posts_container(postsGrid);
             for (let post of posts) {
-                appendPost(post, container);
+                append_post(post, postsGrid);
             }
         })
 
 }
 
-function clearPostsContainer(postsGrid) {
+function clear_posts_container(postsGrid) {
     postsGrid.innerHTML = '';
 
     let masonrySizer = document.createElement("div");
@@ -136,11 +151,11 @@ function clearPostsContainer(postsGrid) {
     postsGrid.appendChild(gutterSizer);
 }
 
-function appendPost(post, postsContainer) {
+function append_post(post, postsContainer) {
     let postElement = render_post(post);
     postsContainer.appendChild(postElement);
-    masonry.appended(postElement);
+    MASONRY.appended(postElement);
     imagesLoaded(postElement).on('progress', () => {
-        masonry.layout();
+        MASONRY.layout();
     });
 }

@@ -33,8 +33,7 @@
 
             <div id="modal"></div>
             <div class="ui basic segment" style="min-height: 100px; margin-top: 0;">
-                <div id="posts_container">
-                </div>
+                <div id="posts_container"></div>
             </div>
         </div>
     </div>
@@ -43,8 +42,6 @@
 
 
 {% block js %}
-
-    <script type="text/javascript" src="{% static 'cloud/js/main.js' %}"></script>
 
     <!--  Multi select input -->
     <script type="text/javascript"
@@ -56,17 +53,6 @@
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
-    <script>
-        const grid = document.querySelector('#posts_container');
-        clearPostsContainer(grid);
-        const masonry = new Masonry(grid, {
-            itemSelector: ".post",
-            columnWidth: ".post-size-reference",
-            gutter: ".post-grid-gutter-size-reference",
-            percentPosition: true,
-        });
-        imagesLoaded(grid).on('progress', () => {
-            masonry.layout();
-        });
-    </script>
+    <script type="text/javascript" src="{% static 'cloud/js/main.js' %}"></script>
+
 {% endblock %}
