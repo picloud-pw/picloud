@@ -26,4 +26,5 @@ urlpatterns = [
     path('hierarchy/', include('hierarchy.urls', namespace='hierarchy')),
     path('memes/', include('memes.urls', namespace='memes')),
     path('posts/', include('posts.urls', namespace='posts')),
+    path('students/', include('students.urls', namespace='students')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'hierarchy',
     'posts',
     'memes',
+    'students',
 ]
 
 ROOT_URLCONF = 'PiCloud.urls'
