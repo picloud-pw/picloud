@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
-from cloud.models import UserInfo
 from hierarchy.models import Subject
+from students.models import StudentInfo
 
 
 class PostType(models.Model):
@@ -174,7 +174,7 @@ class Comment(models.Model):
         return f"{self.author.username} - {self.text}"
 
     def get_author_avatar_url(self):
-        user_info = UserInfo.objects.get(user=self.author)
+        user_info = StudentInfo.objects.get(user=self.author)
         return user_info.avatar.url
 
     def as_dict(self):

@@ -8,7 +8,7 @@ function init_personal_info() {
     let container = document.getElementById('personal_info_container');
     container.classList.add('loading');
 
-    axios.get('/me')
+    axios.get('/students/me')
         .then((response) => {
             let me = response.data;
 
