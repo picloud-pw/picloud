@@ -37,6 +37,12 @@ def cloud_page(request):
 def departments_page(request):
     return render(request, 'departments.html')
 
+
+@login_required(login_url='/signin/')
+def students_page(request):
+    return render(request, 'students.html')
+
+
 @login_required(login_url='/signin/')
 def memes_page(request):
     return render(request, 'memes.html')
