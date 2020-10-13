@@ -10,10 +10,13 @@ from students.models import StudentInfo, StudentStatus
 
 @receiver(post_save, sender=User)
 def create_user_settings(sender, instance, created, **kwargs):
-    if created:
-        user_info = StudentInfo(user=instance)
-        user_info.status = StudentStatus.objects.get(title="Рядовой студент")
-        user_info.save()
+    default_student_status = StudentStatus.objects.get(title="Рядовой студент")
+    StudentInfo.objects.get_or_create(
+        user=instance,
+        defaults={
+            'status': default_student_status,
+        }
+    )
 
 
 @receiver(user_logged_in)
