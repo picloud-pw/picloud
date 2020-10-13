@@ -1,14 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    load_students_list();
+    init_students_list();
 
 });
 
-function load_students_list() {
-    let container = document.getElementById('students_container');
+let PAGE = 1;
 
-    container.classList.add('loading');
-    axios.get(`/students/search`)
+function init_students_list() {
+    PAGE = 1;
+
+    let rc = document.getElementById("students_container");
+    rc.addEventListener('scroll', function () {
+        if (rc.scrollHeight - rc.scrollTop <= rc.clientHeight) {
+            load_students();
+        }
+    });
+
+    load_students();
+
+}
+
+function load_students() {
+    let container = document.getElementById('students_container');
+    let load_button = document.getElementById('load_button');
+    load_button.classList.add('loading');
+    axios.get(`/students/search?p=${PAGE}`)
         .then((response) => {
             let students = response.data['students'];
             for (let student of students) {
@@ -26,8 +42,9 @@ function load_students_list() {
                     </div>
                 `;
             }
+            PAGE += 1;
         })
         .finally(() => {
-            container.classList.remove('loading');
+            load_button.classList.remove('loading');
         })
 }
