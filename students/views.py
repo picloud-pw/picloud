@@ -13,8 +13,8 @@ def me(request):
 
 @auth_required
 def search(request):
-    page = request.GET.get('page', 1)
-    page_size = request.GET.get('page', 15)
+    page = request.GET.get('p', 1)
+    page_size = request.GET.get('ps', 15)
 
     students = StudentInfo.objects.all()
 
