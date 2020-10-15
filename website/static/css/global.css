@@ -267,3 +267,7 @@ textarea {
 input.prompt {
     min-width: 500px;
 }
+
+.modal {
+    position: relative !important;
+}
