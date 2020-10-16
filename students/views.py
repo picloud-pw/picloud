@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 
@@ -23,16 +25,37 @@ def me_edit(request):
     department_id = request.POST.get('department_id')
 
     if username is not None:
+        if User.objects.filter(username=username).count():
+            return JsonResponse({
+                'status': 'warning',
+                'message': 'This username is already taken',
+            })
         user_info.user.username = username
 
     if first_name is not None:
+        if 30 < first_name:
+            return JsonResponse({
+                'status': 'warning',
+                'message': 'Length must be up to 30 characters.',
+            })
         user_info.user.first_name = first_name
 
     if last_name is not None:
+        if 30 < last_name:
+            return JsonResponse({
+                'status': 'warning',
+                'message': 'Length must be up to 30 characters.',
+            })
         user_info.user.last_name = last_name
 
     if department_id is not None:
-        department = Department.objects.get(id=department_id)
+        try:
+            department = Department.objects.get(id=department_id)
+        except ObjectDoesNotExist:
+            return JsonResponse({
+                'status': 'warning',
+                'message': 'Department_id is incorrect.',
+            })
         user_info.department = department
 
     user_info.user.save()
