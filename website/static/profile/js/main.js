@@ -32,7 +32,15 @@ function init_personal_info() {
                     </div>
                 `;
             } else {
-                display_department_hierarchy(department_container, me['department']['id']);
+                department_container.innerHTML += `
+                    <div id="hierarchy_container"></div>
+                    <div class="ui divider"></div>
+                    <div class="ui basic button" onclick="init_edit_form('department')">Change department</div>
+                `;
+                display_department_hierarchy(
+                    document.getElementById('hierarchy_container'),
+                    me['department']['id']
+                );
             }
 
             container.innerHTML = `
@@ -93,21 +101,26 @@ function init_personal_info() {
 
 
 function display_department_hierarchy(container, department_id) {
+
+    function format_item(department) {
+        return `
+            <div class="ui list">
+                <div class="item">
+                    <i class="university icon"></i>
+                    <div class="content">
+                      <div class="header">${department['name']}</div>
+                      <div class="description">${department['type']['name']}</div>
+                      ${department['child'] ? format_item(department['child']) : ''}
+                </div>
+            </div>
+        `;
+    }
+
     container.classList.add('loading');
     axios.get(`/hierarchy/departments/get?id=${department_id}`)
         .then((response) => {
-            let department = response.data['department'];
-            container.innerHTML += `
-            <div class="ui fluid items">
-                <div class="ui item">
-                    <div class="middle aligned content">
-                      <div class="header">${department['name']}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui divider"></div>
-            
-        `;
+            let department = response.data['hierarchy'];
+            container.innerHTML = format_item(department);
         })
         .finally(() => {
             container.classList.remove('loading');
@@ -160,14 +173,13 @@ function init_edit_form(field) {
             <div class="field">
                 <label>Department</label>
                 <div class="ui loading search">
-                    <div class="ui input">
-                        <input class="prompt" name="department_name" type="text" placeholder="Enter search query"
-                               style="border-radius: 50px;">
+                    <div class="ui fluid input">
+                        <input class="prompt" name="department_name" type="text" placeholder="Enter search query">
                     </div>
                     <input name="department_id" type="hidden">
                     <div class="search results"></div>
                 </div>
-                <div id="search_department_hierarchy"></div>
+                <div id="search_department_hierarchy" style="margin-top: 20px"></div>
             </div>
         `;
         init_departments_search((result, response) => {
