@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let USER_INFO = {};
 
+
 function init_personal_info() {
     let container = document.getElementById('personal_info_container');
     container.classList.add('loading');
@@ -15,14 +16,38 @@ function init_personal_info() {
             let me = response.data;
             USER_INFO = me;
 
-            init_user_department(me['department']);
+            let department_container = document.getElementById('user_department_container');
+            department_container.innerHTML = `
+                <div class="ui dividing header">Department</div>
+            `;
+
+            if (!me['department']) {
+                department_container.innerHTML += `
+                    <div class="ui basic placeholder segment">
+                      <div class="ui icon header">
+                        <i class="university icon"></i>
+                        You haven't chosen a department yet.
+                      </div>
+                      <div class="ui basic button" onclick="init_edit_form('department')">Choose department</div>
+                    </div>
+                `;
+            } else {
+                display_department_hierarchy(department_container, me['department']['id']);
+            }
+
             container.innerHTML = `
               <div class="ui fluid info card" style="padding: 20px">
                 <div class="blurring dimmable image">
                     <div class="ui dimmer">
                       <div class="content">
                         <div class="center">
-                          <div class="ui inverted button">Update avatar</div>
+                          <div class="ui inverted button" style="width:150px" onclick="init_edit_form('update_avatar')">
+                            Update avatar
+                          </div>
+                          <div class="ui divider"></div>
+                          <div class="ui inverted button" style="width:150px" onclick="init_edit_form('delete_avatar')">
+                            Delete avatar
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -66,29 +91,12 @@ function init_personal_info() {
         });
 }
 
-function init_user_department(department) {
-    let container = document.getElementById('user_department_container');
-    container.innerHTML = `
-        <div class="ui dividing header">Department</div>
-    `;
 
-    if (!department) {
-        container.innerHTML += `
-            <div class="ui basic placeholder segment">
-              <div class="ui icon header">
-                <i class="university icon"></i>
-                You haven't chosen a department yet.
-              </div>
-              <div class="ui basic button" onclick="init_edit_form('department')">Choose department</div>
-            </div>
-        `;
-        return;
-    }
-
+function display_department_hierarchy(container, department_id) {
     container.classList.add('loading');
-    axios.get(`/hierarchy/departments/get?id=${department['id']}`)
+    axios.get(`/hierarchy/departments/get?id=${department_id}`)
         .then((response) => {
-            department = response.data['department'];
+            let department = response.data['department'];
             container.innerHTML += `
             <div class="ui fluid items">
                 <div class="ui item">
@@ -104,15 +112,29 @@ function init_user_department(department) {
         .finally(() => {
             container.classList.remove('loading');
         });
-
 }
 
 
 function init_edit_form(field) {
-    let fields = '';
+    let container = document.getElementById('edit_form_modal_container');
+    container.innerHTML = `
+        <div class="ui tiny modal" id="edit_form_modal">
+          <i class="close icon"></i>
+          <div class="header">Edit personal information</div>
+          <div class="content">
+            <form class="ui form" id="edit_form"></form>
+          </div>
+          <div class="actions">
+            <div class="ui black deny button">Cancel</div>
+            <div class="ui positive right labeled icon button"> Save <i class="checkmark icon"></i> </div>
+          </div>
+        </div>
+    `;
+
+    let fields_container = document.getElementById('edit_form');
 
     if (field === 'name') {
-        fields = `
+        fields_container.innerHTML = `
             <div class="field">
                 <label>First name</label>
                 <input class="ui fluid input" name="first_name" value="${USER_INFO['user']['first_name']}"/>
@@ -125,7 +147,7 @@ function init_edit_form(field) {
     }
 
     if (field === 'username') {
-        fields = `
+        fields_container.innerHTML = `
             <div class="field">
                 <label>Username</label>
                 <input class="ui fluid input" name="username" value="${USER_INFO['user']['username']}"/>
@@ -133,22 +155,40 @@ function init_edit_form(field) {
         `;
     }
 
-    let container = document.getElementById('edit_form_modal_container');
-    container.innerHTML = `
-        <div class="ui tiny modal" id="edit_form_modal">
-          <i class="close icon"></i>
-          <div class="header">Edit personal information</div>
-          <div class="content">
-            <form class="ui form" id="edit_form">
-                ${fields}
-            </form>
-          </div>
-          <div class="actions">
-            <div class="ui black deny button">Cancel</div>
-            <div class="ui positive right labeled icon button"> Save <i class="checkmark icon"></i> </div>
-          </div>
-        </div>
-    `;
+    if (field === 'department') {
+        fields_container.innerHTML = `
+            <div class="field">
+                <label>Department</label>
+                <div class="ui loading search">
+                    <div class="ui input">
+                        <input class="prompt" name="department_name" type="text" placeholder="Enter search query"
+                               style="border-radius: 50px;">
+                    </div>
+                    <input name="department_id" type="hidden">
+                    <div class="search results"></div>
+                </div>
+                <div id="search_department_hierarchy"></div>
+            </div>
+        `;
+        init_departments_search((result, response) => {
+            $("input[name='department_id']").val(result['department_id']);
+            display_department_hierarchy(
+                document.getElementById('search_department_hierarchy'),
+                result['department_id']
+            );
+        })
+    }
+
+    if (!fields_container.innerHTML) {
+        fields_container.innerHTML = `
+            <div class="ui basic placeholder segment">
+              <div class="ui icon header">
+                <i class="search icon"></i>
+                This fields has not been implemented yet.
+              </div>
+            </div>
+        `
+    }
 
     $('#edit_form_modal')
         .modal({
