@@ -1,37 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_search();
+    init_departments_search((result, response) => {
+        init_child_department_list(result['department_id']);
+    });
     init_root_departments_list();
 
 });
 
 const departments_container = document.getElementById('departments_container');
 const breadcrumbs_container = document.getElementById('breadcrumbs_container');
-
-function init_search() {
-    $('.ui.search').search({
-        apiSettings: {
-            url: "/hierarchy/departments/search?q={query}",
-            onResponse: (response) => {
-                let departments = response['departments'];
-                let modified_response = [];
-                for (let department of departments) {
-                    modified_response.push({
-                        department_id: department['id'],
-                        title: department['name'],
-                        price: `[${department['type']['name']}]`,
-                    })
-                }
-                return {results: modified_response}
-            },
-        },
-        onSelect: (result, response) => {
-            init_child_department_list(result['department_id']);
-        },
-        maxResults: 10,
-        minCharacters: 2,
-    });
-}
 
 function init_root_departments_list() {
     departments_container.classList.add('loading');

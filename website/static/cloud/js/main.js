@@ -14,37 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
         MASONRY.layout();
     });
 
-    init_search();
+    init_posts_search((result, response) => {
+        display_post(result['post_id']);
+    });
     load_posts_list();
 
 
 });
-
-function init_search() {
-    $('.ui.search').search({
-        apiSettings: {
-            url: "/posts/search?q={query}",
-            onResponse: (response) => {
-                let posts = response['posts'];
-                let modified_response = [];
-                for (let post of posts) {
-                    modified_response.push({
-                        post_id: post['id'],
-                        title: post['title'],
-                        price: post['author']['username'],
-                        description: `[${post['created_date_human']}] ${post['subject']['name']}`,
-                    })
-                }
-                return {results: modified_response}
-            },
-        },
-        onSelect: (result, response) => {
-            display_post(result['post_id']);
-        },
-        maxResults: 10,
-        minCharacters: 2,
-    });
-}
 
 function load_posts_list() {
     let container = document.getElementById('posts_container');
