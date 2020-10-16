@@ -32,11 +32,14 @@ class Department(models.Model):
         return f"({self.short_name}) {self.name}"
 
     def get_hierarchy(self):
-        parent_department = None if self.parent_department is None \
-            else self.parent_department.as_dict()
-        if parent_department is not None:
-            parent_department.update({'parent': self.parent_department.get_hierarchy()})
-        return parent_department
+        if self.parent_department is None:
+            return self.as_dict()
+        else:
+            node = hierarchy = self.parent_department.get_hierarchy()
+            while 'child' in node:
+                node = node['child']
+            node.update({'child': self.as_dict()})
+            return hierarchy
 
     def as_dict(self):
         return {
