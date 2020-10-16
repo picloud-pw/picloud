@@ -62,28 +62,27 @@ function init_child_department_list(parent_department_id) {
 
 function init_breadcrumbs(department_id) {
 
-    function shift_breadcrumb(container, node, is_last=false) {
-        container.innerHTML = `
+    function format_breadcrumbs(container, node) {
+        container.innerHTML += `
             <a class="section" title="${node['name']}"
                 onclick="init_child_department_list('${node['id']}')">
                 ${node['name'].length > 30 ? node['name'].substr(0, 30) + '...' : node['name']}
             </a>
-            ${is_last ? '' : '<i class="right chevron icon divider"></i>'}
-        ` + container.innerHTML;
+            ${node['child'] ? '<i class="right chevron icon divider"></i>' : ''}
+        `;
+        if (node['child']) {
+            format_breadcrumbs(container, node['child']);
+        }
     }
 
     breadcrumbs_container.innerHTML = `<div class="ui huge breadcrumb" id="breadcrumbs"></div>`;
     let container = document.getElementById('breadcrumbs');
+    container.innerText = "";
 
     axios.get(`/hierarchy/departments/get?id=${department_id}`)
         .then((response) => {
-            let department = response.data['department'];
-            let parent = response.data['hierarchy'];
-            shift_breadcrumb(container, department, true);
-            while (parent) {
-                shift_breadcrumb(container, parent);
-                parent = parent['parent'];
-            }
+            let hierarchy = response.data['hierarchy'];
+            format_breadcrumbs(container, hierarchy);
             $("a.section").popup({position: 'bottom center'});
         });
 }
