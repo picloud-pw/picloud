@@ -92,9 +92,11 @@ function render_post(post) {
                         <span class="ui" style="color: #999999" title="Views count">
                             <i class="eye icon"></i>${post['views']}
                         </span>
-                        <a class="comments-counter" href="">
-                            <i class="comment icon" title="Comments count"></i> ${post['comments']}
-                        </a>
+                        ${post['comments'] ? `
+                            <a class="comments-counter" href="">
+                                <i class="comment icon" title="Comments count"></i> ${post['comments']}
+                            </a>
+                        ` : ''}
                     </span>
                 </footer>
             </div>
