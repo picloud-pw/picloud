@@ -271,3 +271,9 @@ input.prompt {
 .modal {
     position: relative !important;
 }
+
+#search_container {
+    min-height: 70px;
+    margin-bottom: 0;
+    text-align: left;"
+}

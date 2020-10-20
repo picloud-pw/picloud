@@ -14,9 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
         MASONRY.layout();
     });
 
-    init_posts_search((result, response) => {
-        display_post(result['post_id']);
-    });
+    init_search(
+        document.getElementById('search_container'),
+        'posts',
+        (result, response) => {
+            display_post(result['post_id']);
+        });
+
     load_posts_list();
 
 

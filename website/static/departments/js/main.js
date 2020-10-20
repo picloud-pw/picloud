@@ -1,8 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_departments_search((result, response) => {
-        init_child_department_list(result['department_id']);
+    init_search(
+        document.getElementById('search_container'),
+        'departments',
+        (result, response) => {
+            init_child_department_list(result['department_id']);
     });
+
     init_root_departments_list();
 
 });
