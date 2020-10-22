@@ -77,7 +77,22 @@ function get_settings(search_type) {
     }
 
     if (search_type === 'students') {
-        settings = { }
+        settings = {
+            url: "/students/search?q={query}",
+            onResponse: (response) => {
+                let students = response['students'];
+                let modified_response = [];
+                for (let student of students) {
+                    modified_response.push({
+                        id: student['id'],
+                        title: student['user']['username'],
+                        description: student['status']['title'],
+                        price: `[${student['karma']}]`,
+                    })
+                }
+                return {results: modified_response}
+            },
+        }
     }
 
     return settings;

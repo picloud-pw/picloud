@@ -68,10 +68,14 @@ def me_edit(request):
 
 @auth_required
 def search(request):
+    query = request.GET.get('q')
     page = request.GET.get('p', 1)
     page_size = request.GET.get('ps', 15)
 
     students = StudentInfo.objects.all()
+
+    if query is not None:
+        students = students.filter(user__username__icontains=query)
 
     paginator = Paginator(students, page_size)
     try:

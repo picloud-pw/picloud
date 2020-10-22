@@ -39,6 +39,7 @@ class StudentInfo(models.Model):
 
     def as_dict(self):
         return {
+            'id': self.id,
             'user': {
                 'username': self.user.username,
                 'first_name': self.user.first_name,

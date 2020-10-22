@@ -1,10 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    init_search(
+        document.getElementById('search_container'),
+        'students',
+        (result, response) => {
+            display_student_info(result['id']);
+    });
     init_students_list();
 
 });
 
 let PAGE = 1;
+
+function display_student_info(student_id) {
+    console.log(student_id);
+}
 
 function init_students_list() {
     PAGE = 1;
@@ -34,7 +44,9 @@ function load_students() {
                           <img class="avatar" src="${student['avatar']}" alt="${student['user']['username']} avatar">
                         </div>
                         <div class="middle aligned content">
-                          <a class="header">${student['user']['username']}</a>
+                          <a class="header" onclick="display_student_info('${student['id']}')">
+                            ${student['user']['username']}
+                          </a>
                           <div class="meta">
                             <span>${student['status']['title']}</span>
                           </div>
