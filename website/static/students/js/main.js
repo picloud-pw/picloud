@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_search(
-        document.getElementById('search_container'),
-        'students',
+    init_students_search(
         (result, response) => {
             display_student_info(result['id']);
     });

@@ -21,7 +21,7 @@
 
     <div class="ui padded grid">
         <div class="no-margin-padding column">
-            <div class="ui segment" id="search_container"></div>
+            {% include 'search.html' %}
             <div id="modal"></div>
             <div class="ui basic segment" style="min-height: 100px; margin-top: 0;">
                 <div id="posts_container"></div>
@@ -44,7 +44,7 @@
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
-    <script type="text/javascript" src="{% static 'website/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'cloud/js/search.js' %}"></script>
     <script type="text/javascript" src="{% static 'cloud/js/main.js' %}"></script>
 
 {% endblock %}

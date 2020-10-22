@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_search(
-        document.getElementById('search_container'),
-        'departments',
+    init_departments_search(
         (result, response) => {
             init_child_department_list(result['department_id']);
     });

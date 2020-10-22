@@ -16,7 +16,7 @@
 
     <div class="ui padded grid">
         <div class="no-margin-padding column">
-            <div class="ui segment" id="search_container"></div>
+            {% include 'search.html' %}
             <div class="ui segment" id="breadcrumbs_container"
                  style="height: 71px; text-align: left; margin-top: -15px;">
             </div>
@@ -34,7 +34,7 @@
 
 {% block js %}
 
-    <script type="text/javascript" src="{% static 'website/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
     <script type="text/javascript" src="{% static 'departments/js/main.js' %}"></script>
 
 {% endblock %}
