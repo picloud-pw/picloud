@@ -11,5 +11,4 @@ from . import (
     structure,
     universities,
     user,
-    karma,
 )

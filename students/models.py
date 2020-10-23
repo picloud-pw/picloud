@@ -37,6 +37,23 @@ class StudentInfo(models.Model):
     def __str__(self):
         return self.user.username
 
+    def calculate_karma(self):
+        from posts.models import Post, Comment
+
+        karma = 0
+
+        if self.department is not None:
+            karma += 50
+        if self.course is not None:
+            karma += 30
+        if self.avatar != StudentInfo._meta.get_field('avatar').get_default():
+            karma += 50
+
+        karma += 15 * Post.objects.filter(author=self.user).count()
+        karma += 5 * Comment.objects.filter(author=self.user).count()
+
+        return karma
+
     def as_dict(self):
         return {
             'id': self.id,
@@ -50,7 +67,7 @@ class StudentInfo(models.Model):
             },
             'avatar': self.avatar.url,
             'status': self.status.as_dict(),
-            'karma': self.karma,
+            'karma': self.calculate_karma(),
             'course': self.course,
             'department': self.department.as_dict() if self.department is not None else None,
         }

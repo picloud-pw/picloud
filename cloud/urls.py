@@ -8,13 +8,11 @@ urlpatterns = [
 
     path('user/<user_id>', views.user.user_page, name='user_page'),
     path('user/<user_id>/posts', views.user.user_posts, name='user_posts'),
-    path('user/<user_id>/karma', views.karma.info_page, name="karma_info_page"),
     path('user/<user_id>/not_checked_posts', views.user.user_not_checked_posts, name='user_not_checked_posts'),
 
     path('search/', views.search.text_search, name='search'),
     path('settings/', views.user.settings_page, name="settings"),
     path('message/', views.message.message, name="message"),
-    path('moderation/update_karma', views.karma.update_karma_for_all_users, name="update_karma"),
     path('change_password/', views.user.change_password, name='change_password'),
     path('change_avatar/', views.user.change_avatar, name='change_avatar'),
     path('change_user/', views.user.change_user, name='change_user'),
