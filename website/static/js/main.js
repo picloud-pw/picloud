@@ -29,3 +29,17 @@ Date.prototype.toYYYYMMDD = function () {
         (dd > 9 ? '' : '0') + dd,
     ].join('-');
 };
+
+function push_state(dict) {
+    let kvp = [];
+
+    for (let i in Object.keys(dict)) {
+        let key = Object.keys(dict)[i];
+        let value = encodeURI(dict[key]);
+        key = encodeURI(key);
+        kvp.push([key, value].join('='));
+    }
+
+    let new_search = "?" + kvp.join('&');
+    history.pushState(null, null, new_search);
+}
