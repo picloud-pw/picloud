@@ -13,7 +13,7 @@ let PAGE = 1;
 function display_student_info(student_id) {
     let container = document.getElementById("students_container");
     container.innerHTML = `
-        ${student_id}
+       
     `;
 }
 

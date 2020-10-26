@@ -67,6 +67,15 @@ def me_edit(request):
 
 
 @auth_required
+def get(request):
+    student_id = request.GET.get('id')
+
+    student = StudentInfo.objects.get(id=student_id)
+
+    return JsonResponse(student.as_dict())
+
+
+@auth_required
 def search(request):
     query = request.GET.get('q')
     page = request.GET.get('p', 1)
