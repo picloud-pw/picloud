@@ -133,14 +133,12 @@ class Post(models.Model):
         return date.strftime("%d %b %Y %H:%M")
 
     def as_dict(self):
+        student_info = StudentInfo.objects.get(user=self.author)
         return {
             "id": self.pk,
             "parent_post": self.parent_post.id if self.parent_post is not None else None,
             "is_parent": self.is_parent(),
-            "author": {
-                "id": self.author.id,
-                "username": self.author.username,
-            },
+            "author": student_info.as_dict(),
             "author_id": self.author.pk,
             "title": self.title,
             "text": self.text,

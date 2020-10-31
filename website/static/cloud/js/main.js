@@ -86,7 +86,9 @@ function render_post(post) {
                 
                 <hr/>
                 <footer>
-                    <a class="post-author" title="Author" href="">${post['author']['username']}</a>
+                    <a class="post-author" title="Author" href="/students?id=${post['author']['id']}">
+                        ${post['author']['user']['username']}
+                    </a>
                     <span class="post-created-date">
                         • <span title="Created date and time">${post['created_date_human']}</span>
                     </span>
