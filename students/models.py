@@ -15,6 +15,7 @@ class StudentStatus(models.Model):
 
     def as_dict(self):
         return {
+            'id': self.id,
             'title': self.title,
             'level': self.status_level,
             'can_publish_without_moderation': self.can_publish_without_moderation,

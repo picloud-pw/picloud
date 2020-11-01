@@ -12,4 +12,6 @@ urlpatterns = [
     path('get', get,),
     path('search', search,),
 
+    path('statuses', get_statuses)
+
 ]

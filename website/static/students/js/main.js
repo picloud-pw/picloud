@@ -134,15 +134,27 @@ function init_students_list() {
     let rc = document.getElementById("students_container");
     rc.innerHTML = `
         <div class="ui centered grid">
-            <div class="ui ten wide column" style="text-align: center">
-                <div class="ui basic segment divided items" id="students_list"></div>
-                <div class="ui button" id="load_button">
-                    Load more
+            <div class="four wide column">
+                <div class="ui segment">
+                    <div class="ui dividing header">Filters</div>
+                    <div id="filters_container"></div>
+                </div>
+            </div>
+            <div class="six wide column">
+                <div class="ui segment">
+                    <div class="ui dividing header">Students</div>
+                    <div class="ui basic segment divided items" id="students_list"></div>
+                    <div class="ui button" id="load_button">
+                        Load more
+                    </div>
                 </div>
             </div>
         </div>
     `;
     let students_list_container = document.getElementById('students_list');
+    let filters_container = document.getElementById('filters_container');
+
+    init_filters(filters_container);
 
     rc.addEventListener('scroll', function () {
         if (rc.scrollHeight - rc.scrollTop <= rc.clientHeight) {
@@ -185,4 +197,39 @@ function load_students(container) {
         .finally(() => {
             load_button.classList.remove('loading');
         })
+}
+
+function init_filters(container) {
+    container.innerHTML = `
+        <div class="ui form" id="filters_form">
+          <div class="field">
+            <label>Student status</label>
+            <select class="ui dropdown" id="student_status">
+                <option value="any" selected>Any</option>
+            </select>
+          </div>
+          <div class="ui divider"></div>
+          <div class="inline field">
+            <div class="ui slider checkbox" id="custom_avatar">
+              <input type="checkbox" tabindex="0" class="hidden">
+              <label>Custom avatar</label>
+            </div>
+          </div>
+          <div class="ui divider"></div>
+        </div>
+    `;
+    $('.ui.checkbox').checkbox();
+
+    axios.get('/students/statuses')
+        .then((response) => {
+            let statuses = response.data['statuses'];
+            let container = document.getElementById('student_status');
+            for (let s of statuses) {
+                container.innerHTML += `
+                    <option value="${s['id']}">${s['title']}</option>
+                `;
+            }
+            $('#student_status').dropdown()
+        })
+
 }

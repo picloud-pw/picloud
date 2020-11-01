@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 from decorators import auth_required
 from hierarchy.models import Department
-from .models import StudentInfo
+from .models import StudentInfo, StudentStatus
 
 
 @auth_required
@@ -96,4 +96,12 @@ def search(request):
 
     return JsonResponse({'students': [
         student.as_dict() for student in students_page
+    ]})
+
+
+@auth_required
+def get_statuses(request):
+    statuses = StudentStatus.objects.all()
+    return JsonResponse({'statuses': [
+        status.as_dict() for status in statuses
     ]})
