@@ -108,7 +108,9 @@ function display_department_hierarchy(container, department_id) {
                 <div class="item">
                     <i class="university icon"></i>
                     <div class="content">
-                      <div class="header">${department['name']}</div>
+                      <a class="header" href="/departments?id=${department['id']}" target="_blank">
+                        ${department['name']}
+                      </a>
                       <div class="description">${department['type']['name']}</div>
                       ${department['child'] ? format_item(department['child']) : ''}
                 </div>
