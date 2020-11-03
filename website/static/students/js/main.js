@@ -42,7 +42,13 @@ function display_student_page(student_id) {
     container.innerHTML = `
         <div class="ui centered stackable grid">
             <div class="ui four wide column" id="student_info"></div>
-            <div class="ui six wide column" id="students_posts"></div>
+            <div class="ui six wide column">
+                <div class="ui segment">
+                    <div class="ui dividing header">Department</div>
+                    <div id="student_department"></div>
+                </div>
+                <div id="students_posts"></div>
+            </div>
         </div>
     `;
     display_student_card(
@@ -53,8 +59,6 @@ function display_student_page(student_id) {
         document.getElementById('students_posts'),
         student_id
     );
-
-
 
 }
 
@@ -84,9 +88,31 @@ function display_student_card(container, student_id){
                   </div>
                 </div>
             `;
+
+            display_student_department(user['department'] ? user['department']['id'] : null);
         }).finally(() => {
             container.classList.remove('loading');
         })
+}
+
+function display_student_department(department_id){
+    let container = document.getElementById('student_department');
+    if (department_id) {
+        display_department_hierarchy(
+            container,
+            department_id,
+        )
+    } else {
+        container.innerHTML = `
+            <div class="ui basic placeholder segment">
+                <div class="ui icon header">
+                    <i class="university icon"></i>
+                    Student hasn't chosen a department yet.
+                </div>
+            </div>
+        `;
+    }
+
 }
 
 function display_students_posts(container, student_id){
@@ -114,7 +140,7 @@ function display_students_posts(container, student_id){
             }
             if (!posts.length) {
                 container.innerHTML = `
-                    <div class="ui placeholder segment">
+                    <div class="ui basic placeholder segment">
                       <div class="ui icon header">
                         <i class="sticky note outline icon"></i>
                         No posts are listed for this student.
