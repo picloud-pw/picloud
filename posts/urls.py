@@ -9,13 +9,13 @@ urlpatterns = [
     path('new', posts.new, ),
     path('search', posts.search, ),
 
-    path('<int:post_id>/', posts.get, ),
-    path('<int:post_id>/edit/', posts.edit, ),
-    path('<int:post_id>/delete/', posts.delete, ),
-    path('<int:post_id>/approve/', posts.approve, ),
+    path('get', posts.get, ),
+    path('edit', posts.edit, ),
+    path('delete', posts.delete, ),
+    path('approve', posts.approve, ),
 
-    path('<int:post_id>/comments/', comments.get, ),
-    path('<int:post_id>/comments/add', comments.add, ),
-    path('<int:post_id>/comments/<int:comment_id>/delete', comments.delete, ),
+    path('comments/get', comments.get, ),
+    path('comments/add', comments.add, ),
+    path('comments/delete', comments.delete, ),
 
 ]
