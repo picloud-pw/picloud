@@ -1,8 +1,18 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 
-from cloud.models import Post, Comment
+from posts.models import Post, Comment
 from decorators import auth_required
+
+
+def get(request):
+    post_id = request.GET.get('post_id')
+    return JsonResponse({
+        "comments": [
+            comment.as_dict() for comment in
+            Comment.objects.filter(post_id=post_id).order_by("created_date")
+        ]
+    })
 
 
 @auth_required
@@ -23,17 +33,6 @@ def add(request):
     except ObjectDoesNotExist as e:
         return JsonResponse({'error': e})
     return HttpResponse(status=200)
-
-
-@auth_required
-def get(request):
-    post_id = request.GET.get('post_id')
-    return JsonResponse({
-        "comments": [
-            comment.as_dict() for comment in
-            Comment.objects.filter(post_id=post_id).order_by("created_date")
-        ]
-    })
 
 
 @auth_required

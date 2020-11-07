@@ -177,10 +177,10 @@ class Comment(models.Model):
 
     def as_dict(self):
         return {
-            "pk": self.pk,
+            "id": self.pk,
             "post_id": self.post.pk,
             "author": {
-                "id": self.author.pk,
+                "id": StudentInfo.objects.get(user=self.author).pk,
                 "username": self.author.username,
                 "avatar": self.get_author_avatar_url(),
             },

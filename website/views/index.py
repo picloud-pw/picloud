@@ -30,8 +30,8 @@ def moderation_page(request):
     return render(request, 'moderation.html')
 
 
-def cloud_page(request):
-    return render(request, 'cloud.html')
+def post_page(request):
+    return render(request, 'posts.html')
 
 
 def departments_page(request):

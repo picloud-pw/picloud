@@ -19,6 +19,7 @@ urlpatterns = [
     path('after_login/', auth.after_login, name="after_login"),
 
     path('cloud/', index.cloud_page, name="cloud"),
+    path('posts/', index.post_page, name="posts"),
     path('departments/', index.departments_page, name="departments"),
     path('students/', index.students_page, name="students"),
     path('moderation/', index.moderation_page, name="moderation"),
