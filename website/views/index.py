@@ -21,13 +21,12 @@ def privacy_policy(request):
     return render(request, 'privacy_policy.html')
 
 
-@login_required(login_url='/signin/')
-def profile_page(request):
-    return render(request, 'profile.html')
+def subject_page(request):
+    return render(request, 'subjects.html')
 
 
-def moderation_page(request):
-    return render(request, 'moderation.html')
+def cloud_page(request):
+    return render(request, 'cloud.html')
 
 
 def post_page(request):
@@ -36,6 +35,16 @@ def post_page(request):
 
 def departments_page(request):
     return render(request, 'departments.html')
+
+
+@login_required()
+def moderation_page(request):
+    return render(request, 'moderation.html')
+
+
+@login_required(login_url='/signin/')
+def profile_page(request):
+    return render(request, 'profile.html')
 
 
 @login_required(login_url='/signin/')

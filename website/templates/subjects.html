@@ -7,32 +7,21 @@
 
 {% block head %}
 
-    <link rel="stylesheet" href="{% static 'departments/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'subjects/css/main.css' %}">
 
 {% endblock %}
 
 
 {% block content %}
 
-    <div class="ui padded grid">
-        <div class="no-margin-padding column">
-            {% include 'search.html' %}
-            <div class="ui segment" id="breadcrumbs_container"
-                 style="height: 71px; text-align: left; margin-top: 0"></div>
-
-            <div id="modal"></div>
-
-            <div class="ui centered stackable grid" id="departments_container"></div>
-
-        </div>
-    </div>
+    <div class="ui centered stackable padded grid" id="subjects_container"></div>
 
 {% endblock %}
 
 
 {% block js %}
 
-    <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
-    <script type="text/javascript" src="{% static 'departments/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'subjects/js/main.js' %}"></script>
 
 {% endblock %}
