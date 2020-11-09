@@ -7,10 +7,9 @@
 
 {% block head %}
 
+    <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
     <link rel="stylesheet" href="{% static 'cloud/css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'cloud/css/comments.css' %}">
     <link rel="stylesheet" href="{% static 'cloud/css/modal_image.css' %}">
-    <link rel="stylesheet" href="{% static 'cloud/css/post.css' %}">
     <link rel="stylesheet" href="{% static 'cloud/css/post_list.css' %}">
     <link rel="stylesheet" href="{% static 'cloud/css/search.css' %}">
 
@@ -44,6 +43,7 @@
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
+    <script type="text/javascript" src="{% static 'posts/js/post.js' %}"></script>
     <script type="text/javascript" src="{% static 'cloud/js/search.js' %}"></script>
     <script type="text/javascript" src="{% static 'cloud/js/main.js' %}"></script>
 
