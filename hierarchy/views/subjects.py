@@ -27,3 +27,9 @@ def search_subjects(request):
     return JsonResponse({'subjects': [
         s.as_dict() for s in subjects
     ]})
+
+
+def get_subject(request):
+    subject_id = request.GET.get('id')
+    subject = Subject.objects.get(id=subject_id)
+    return JsonResponse({'subject': subject.as_dict()})

@@ -10,5 +10,6 @@ urlpatterns = [
     path('departments/get', views.departments.get_department,),
 
     path('subjects/search', views.subjects.search_subjects, ),
+    path('subjects/get', views.subjects.get_subject, ),
 
 ]
