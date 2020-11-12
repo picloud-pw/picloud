@@ -22,6 +22,7 @@ def search(request):
     q = request.GET.get('q')
     pk = request.GET.get('id')
     author_id = request.GET.get('author_id')
+    subject_id = request.GET.get('subject_id')
     page = request.GET.get('page', 1)
     is_approved = request.GET.get('is_approved') in ['True', None]
 
@@ -33,6 +34,9 @@ def search(request):
     if author_id is not None:
         student_info = StudentInfo.objects.get(id=author_id)
         posts = posts.filter(author_id=student_info.user.pk)
+
+    if subject_id is not None:
+        posts = posts.filter(subject_id=subject_id)
 
     if pk is not None:
         posts = posts.filter(id=pk)

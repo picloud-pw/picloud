@@ -35,9 +35,11 @@ function init_page() {
         <div class="seven wide column">
             <div class="ui segment" id="hierarchy" style="min-height: 80px"></div>
             <div class="ui segment" id="subject" style="min-height: 80px"></div>
+            <div class="ui segment" id="posts" style="min-height: 80px"></div>
         </div>
     `;
     display_subject(document.getElementById('subject'));
+    display_posts(document.getElementById('posts'));
 }
 
 function display_subject(container) {
@@ -52,6 +54,23 @@ function display_subject(container) {
                 document.getElementById('hierarchy'),
                 subject['departments'][0]['id']
             )
+        })
+        .finally(()=>{
+            container.classList.remove('loading');
+        })
+}
+
+function display_posts(container) {
+    container.classList.add('loading');
+    axios.get(`/posts/search?subject_id=${SUBJECT_ID}`)
+        .then((response) => {
+            let posts = response.data['posts'];
+            for (let post of posts) {
+                container.innerHTML += `
+                    <a href="/posts?id=${post['id']}">${post['title']}</a>
+                    <div class="ui divider"></div>
+                `;
+            }
         })
         .finally(()=>{
             container.classList.remove('loading');
