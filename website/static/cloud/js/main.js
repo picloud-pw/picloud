@@ -1,4 +1,5 @@
 let MASONRY = null;
+let PAGE = 1;
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -17,17 +18,19 @@ document.addEventListener("DOMContentLoaded", function () {
     init_posts_search(
         (result, response) => {
             window.location.href = `/posts?id=${result['post_id']}`;
-        });
+        }
+    );
 
     load_posts_list();
-
 
 });
 
 function load_posts_list() {
+    let btn = document.getElementById('load_more_btn');
+    btn.classList.add('loading');
     let container = document.getElementById('posts_container');
     container.classList.add('loading');
-    axios.get('/posts/search')
+    axios.get(`/posts/search?page=${PAGE}`)
         .then((response) => {
             let posts = response.data['posts'];
             for (let post of posts) {
@@ -36,18 +39,8 @@ function load_posts_list() {
         })
         .finally(() => {
             container.classList.remove('loading');
-        })
-}
-
-function display_post(post_id) {
-    let postsGrid = document.getElementById("posts_container");
-    axios.get(`/posts/search?id=${post_id}`)
-        .then((response) => {
-            let posts = response.data['posts'];
-            clear_posts_container(postsGrid);
-            for (let post of posts) {
-                append_post(post, postsGrid);
-            }
+            btn.classList.remove('loading');
+            PAGE += 1;
         })
 }
 
