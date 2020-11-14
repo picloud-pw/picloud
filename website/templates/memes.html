@@ -8,6 +8,7 @@
 
 {% block head %}
 
+    <link rel="stylesheet" href="{% static 'cloud/css/main.css' %}">
     <link rel="stylesheet" href="{% static 'memes/css/main.css' %}">
 
 {% endblock %}
@@ -15,16 +16,15 @@
 
 {% block content %}
 
-    <div class="ui padded centered grid">
-        <div class="eight wide column">
-            <div class="ui basic segment" id="memes_container" style="min-height: 100px"></div>
-        </div>
-    </div>
+    <div class="ui basic segment" id="memes_container" style="min-height: 100px"></div>
 
 {% endblock %}
 
 
 {% block js %}
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
     <script type="text/javascript" src="{% static 'memes/js/main.js' %}"></script>
 

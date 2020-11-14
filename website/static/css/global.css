@@ -41,81 +41,9 @@ nav.navbar {
     border-radius: 50%;
 }
 
-.post-panel, .sign-form, .universities, .search-post-panel, .post-edit-panel,
-.message-panel, .password-reset-panel, .meme {
-    background-color: #f8f8f8;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    text-align: center;
-    margin: 5px auto;
-}
-
 .post-panel img.post-img, .mem-panel img, .post-img {
     margin: 1rem 0;
     width: 100%;
-}
-
-.post-text {
-    text-align: left;
-    padding: 0 20px;
-}
-
-.post-edit-panel {
-    padding: 10px;
-    margin: 10px;
-}
-
-.sign-form {
-    max-width: 600px;
-    margin-bottom: 20px;
-    padding: 20px;
-}
-
-.sign-form * {
-    font-size: 14px;
-}
-
-.meme {
-    background-color: white;
-    margin: 2rem auto;
-    padding: 1rem;
-    border-radius: 1rem;
-}
-
-.meme .meme-source {
-    text-align: right;
-    font-size: 14px;
-    color: hsl(0, 0%, 67%);
-    margin: 0.5rem auto;
-}
-
-.meme .meme-source a {
-    color: hsl(0, 0%, 67%);
-    text-decoration: none;
-}
-
-.meme .meme-source a:hover {
-    color: hsl(0, 0%, 33%);
-    text-decoration: none;
-    border-bottom: solid hsl(0, 0%, 33%) 1px;
-}
-
-.meme hr {
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.meme img {
-    width: 100%;
-    margin: 1rem auto;
-}
-
-.meme .meme-text {
-    font-family: 'Alegreya', serif;
-    font-size: 17px;
-    text-align: left;
-    white-space: pre-line;
-    margin: 1rem auto;
 }
 
 .universities {

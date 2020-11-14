@@ -2,6 +2,12 @@
     width: 0;
 }
 
+.post-size-reference,
+.post,
+.meme {
+    width: 100%;
+}
+
 @media screen and (min-width: 800px) {
     :root {
         --columnsCount: 2;
@@ -13,7 +19,8 @@
     }
 
     .post-size-reference,
-    .post {
+    .post,
+    .meme {
         width: var(--columnWidth);
     }
 

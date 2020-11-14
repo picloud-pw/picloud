@@ -29,7 +29,6 @@ function load_posts_list() {
     let btn = document.getElementById('load_more_btn');
     btn.classList.add('loading');
     let container = document.getElementById('posts_container');
-    container.classList.add('loading');
     axios.get(`/posts/search?page=${PAGE}`)
         .then((response) => {
             let posts = response.data['posts'];
@@ -38,7 +37,6 @@ function load_posts_list() {
             }
         })
         .finally(() => {
-            container.classList.remove('loading');
             btn.classList.remove('loading');
             PAGE += 1;
         })
