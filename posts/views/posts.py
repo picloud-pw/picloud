@@ -60,7 +60,7 @@ def search(request):
 
 
 @auth_required
-def new(request, post_id):
+def new(request):
     form = PostForm(request.POST, request.FILES)
     user_can_publish = can_user_publish_instantly(request.user)
     parent_post_id = request.GET.get("parent_post_id")
@@ -83,12 +83,18 @@ def new(request, post_id):
     return HttpResponse(status=201)
 
 
-def get(request, post_id):
-    pass
+def get(request):
+    post_id = request.GET.get('id')
+    if post_id is not None:
+        return JsonResponse(
+            Post.objects.get(id=post_id).as_dict()
+        )
+    else:
+        return HttpResponse(status=404)
 
 
 @auth_required
-def edit(request, post_id):
+def edit(request):
     post = get_object_or_404(Post, pk=pk)
     if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
         if request.method == "POST":
@@ -125,20 +131,24 @@ def edit(request, post_id):
 
 
 @auth_required
-def delete(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
-        update_carma(post.author)
+def delete(request):
+    post_id = request.GET.get('id')
+    if post_id is None:
+        return HttpResponse(status=404)
+    post = Post.objects.get(id=post_id)
+    if (request.user.is_authenticated and request.user.is_staff) \
+            or request.user.pk == post.author.pk:
         post.delete()
-    return redirect("cloud")
+    return HttpResponse(status=200)
 
 
 @auth_required
-def approve(request, post_id):
-    post = get_object_or_404(Post, pk=pk)
-    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
-        Post.objects.filter(pk=pk).update(is_approved=True)
-        update_carma(post.author)
-        return redirect("moderation")
-    else:
-        return redirect("cloud")
+def approve(request):
+    post_id = request.GET.get('id')
+    if post_id is None:
+        return HttpResponse(status=404)
+    post = Post.objects.get(id=post_id)
+    if request.user.is_authenticated and \
+            (request.user.is_staff or request.user.is_superuser):
+        post.update(is_approved=True)
+    return HttpResponse(status=200)
