@@ -14,6 +14,8 @@ urlpatterns = [
     path('delete', posts.delete, ),
     path('approve', posts.approve, ),
 
+    path('types/get', types.get, ),
+
     path('comments/get', comments.get, ),
     path('comments/add', comments.add, ),
     path('comments/delete', comments.delete, ),
