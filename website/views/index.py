@@ -37,9 +37,14 @@ def departments_page(request):
     return render(request, 'departments.html')
 
 
-@login_required()
+@login_required(login_url='/signin/')
 def moderation_page(request):
     return render(request, 'moderation.html')
+
+
+@login_required(login_url='/signin/')
+def new_post_page(request):
+    return render(request, 'new_post_page.html')
 
 
 @login_required(login_url='/signin/')

@@ -1,0 +1,49 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    New Post
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded grid" align="left">
+        <div class="four wide left floated column">
+            <div class="ui segment">
+                <form class="ui form">
+                    <div class="field">
+                        <label>Post type</label>
+                        <select class="ui search dropdown" name="post_type" id="post_type"></select>
+                    </div>
+                    <div class="field">
+                        <label>Title</label>
+                        <input type="text" name="title" placeholder="Title">
+                    </div>
+
+                    <button class="ui fluid button" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <!--  Multi select input -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'posts/js/new_post.js' %}"></script>
+
+{% endblock %}

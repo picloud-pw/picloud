@@ -26,6 +26,8 @@ urlpatterns = [
     path('moderation/', index.moderation_page, name="moderation"),
     path('memes/', index.memes_page, name="memes"),
 
+    path('new/post', index.new_post_page, name="new_post"),
+
     path('profile/', index.profile_page, name="profile"),
 
 ]
