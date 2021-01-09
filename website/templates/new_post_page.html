@@ -13,11 +13,29 @@
 
 
 {% block content %}
+    <form class="ui form" method="post">
+        <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
 
-    <div class="ui padded grid" align="left">
-        <div class="four wide left floated column">
-            <div class="ui segment">
-                <form class="ui form">
+            <div class="four wide computer twelve wide mobile column">
+                <div class="ui segment">
+                    <div class="field">
+                        <label>Department</label>
+                        <div class="ui loading fluid search">
+                            <div class="ui fluid input">
+                                <input class="fluid prompt" name="department_name" type="text"
+                                       placeholder="Enter search query">
+                            </div>
+                            <input name="department_id" type="hidden">
+                            <div class="search results"></div>
+                        </div>
+                        <div id="department_hierarchy" style="margin-top: 10px"></div>
+                    </div>
+                    <div class="field">
+                        <label>Subject</label>
+                        <select class="ui search dropdown" name="subject" id="subject"></select>
+                    </div>
+                </div>
+                <div class="ui segment">
                     <div class="field">
                         <label>Post type</label>
                         <select class="ui search dropdown" name="post_type" id="post_type"></select>
@@ -26,13 +44,17 @@
                         <label>Title</label>
                         <input type="text" name="title" placeholder="Title">
                     </div>
-
-                    <button class="ui fluid button" type="submit">Submit</button>
-                </form>
+                </div>
+                <div class="ui segment">
+                    <div class="ui fluid button" onclick="submit_form()">Submit</div>
+                </div>
+            </div>
+            <div class="six wide computer twelve wide tablet column">
+                <div class="ui segment"></div>
+                <div class="ui segment"></div>
             </div>
         </div>
-    </div>
-
+    </form>
 {% endblock %}
 
 
