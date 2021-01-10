@@ -1,4 +1,4 @@
-let TEXT_AREA = document.getElementById('id_text');
+let TEXT_AREA = document.getElementById('textarea');
 
 function header(order){
     if (order < 1) order = 1;
@@ -14,7 +14,6 @@ function header(order){
 
     TEXT_AREA.focus();
     TEXT_AREA.selectionEnd = startPos + template.length;
-    updateMarkdownPreview();
 }
 
 function outline(type){
@@ -31,7 +30,6 @@ function outline(type){
 
     TEXT_AREA.focus();
     TEXT_AREA.selectionEnd = startPos + template.length;
-    updateMarkdownPreview();
 }
 
 function code_block(language){
@@ -50,12 +48,11 @@ function code_block(language){
 
     TEXT_AREA.focus();
     TEXT_AREA.selectionEnd = startPos + template.length + 2;
-    updateMarkdownPreview();
 
 }
 
 function list_item() {
-    let template = "\n * Запись";
+    let template = "\n * List item";
 
     let startPos = TEXT_AREA.selectionStart;
     let endPos = TEXT_AREA.selectionEnd;
@@ -65,14 +62,13 @@ function list_item() {
 
     TEXT_AREA.focus();
     TEXT_AREA.selectionEnd = startPos + template.length;
-    updateMarkdownPreview();
 }
 
 function link_template(type){
 
-    let prefix = "\n[Ссылка](";
+    let prefix = "\n[Link](";
     if (type === 'image')
-        prefix = "\n![Картинка](";
+        prefix = "\n![Image](";
 
     let link = "https://google.com) \n";
 
@@ -88,6 +84,5 @@ function link_template(type){
 
     TEXT_AREA.focus();
     TEXT_AREA.selectionEnd = startPos + prefix.length + link.length - 1;
-    updateMarkdownPreview();
 }
 

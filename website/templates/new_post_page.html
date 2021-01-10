@@ -16,6 +16,43 @@
     <form class="ui form" method="post">
         <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
 
+            <div class="six wide computer twelve wide tablet column">
+                <div class="ui segment">
+                    <div class="ui icon buttons" style="vertical-align: bottom">
+                        <div class="ui button" onclick="header(1)"><i class="heading icon"></i></div>
+                        <div class="ui button" onclick="header(3)"><i class="heading small icon"></i></div>
+                        <div class="ui button" onclick="header(6)"><i class="heading mini icon"></i></div>
+                    </div>
+                    <div class="ui icon buttons">
+                        <div class="ui button" onclick="outline('bold')"><i class="bold icon"></i></div>
+                        <div class="ui button" onclick="outline('italic')"><i class="italic icon"></i></div>
+                    </div>
+                    <div class="ui icon buttons">
+                        <div class="ui button" onclick="code_block()"><i class="code icon"></i></div>
+                        <div class="ui button" onclick="list_item()"><i class="list ol icon"></i></div>
+                    </div>
+                    <div class="ui icon buttons">
+                        <div class="ui button" onclick="link_template('link')"><i class="linkify icon"></i></div>
+                        <div class="ui button" onclick="link_template('image')"><i class="image outline icon"></i></div>
+                    </div>
+                    <a class="ui circular icon right floated blue basic button"
+                       href="https://github.com/sandino/Markdown-Cheatsheet/blob/master/README.md"
+                       target="_blank"
+                       title="Markdown syntax guide">
+                        <i class="info icon"></i>
+                    </a>
+                    <div class="ui basic icon right floated circular button"
+                        title="Change mode – 'edit' / 'preview'"
+                        onclick="change_display_mode(this)">
+                        <i id="display_mode_icon" class="eye icon"></i>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <textarea id="textarea" name="text" cols="40" rows="10"></textarea>
+                    <div id="render_area" style="display: none"></div>
+                </div>
+            </div>
+
             <div class="four wide computer twelve wide mobile column">
                 <div class="ui segment">
                     <div class="field">
@@ -49,10 +86,6 @@
                     <div class="ui fluid button" onclick="submit_form()">Submit</div>
                 </div>
             </div>
-            <div class="six wide computer twelve wide tablet column">
-                <div class="ui segment"></div>
-                <div class="ui segment"></div>
-            </div>
         </div>
     </form>
 {% endblock %}
@@ -60,12 +93,17 @@
 
 {% block js %}
 
+    <!-- Showdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
+            integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
+
     <!--  Multi select input -->
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js"></script>
 
     <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
     <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'posts/js/markdown_editor.js' %}"></script>
     <script type="text/javascript" src="{% static 'posts/js/new_post.js' %}"></script>
 
 {% endblock %}
