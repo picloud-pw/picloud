@@ -41,6 +41,10 @@ class Department(models.Model):
             node.update({'child': self.as_dict()})
             return hierarchy
 
+    def students(self):
+        from students.models import StudentInfo
+        return StudentInfo.objects.filter(department=self)
+
     def as_dict(self):
         return {
             "id": self.pk,
@@ -67,6 +71,16 @@ class Subject(models.Model):
     def displayed_title(self):
         return f"{self.name} ({self.semester} sem.)" if self.semester != 0 else self.name
 
+    def students(self):
+        students = list()
+        for d in self.departments.all():
+            students.extend(d.students())
+        return students
+
+    def posts(self):
+        from posts.models import Post
+        return Post.objects.filter(subject=self)
+
     def as_dict(self):
         return {
             "id": self.pk,
@@ -75,4 +89,6 @@ class Subject(models.Model):
             "short_name": self.short_name,
             "semester": None if not self.semester else self.semester,
             "is_approved": self.is_approved,
+            "students": len(self.students()),
+            "posts": self.posts().count(),
         }
