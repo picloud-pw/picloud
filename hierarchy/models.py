@@ -49,7 +49,7 @@ class Department(models.Model):
         return {
             "id": self.pk,
             "type": None if self.department_type is None else self.department_type.as_dict(),
-            "parent_id": None if self.parent_department is None else self.parent_department.pk,
+            "parent": None if self.parent_department is None else self.parent_department.as_dict(),
             "name": self.name,
             "short_name": self.short_name,
             "link": self.link,
