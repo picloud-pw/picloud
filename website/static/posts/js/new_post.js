@@ -1,21 +1,39 @@
+let ME = null;
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_page();
+    axios.get('/students/me')
+        .then(response => {
+            ME = response.data;
+            init_page();
+        })
 
 });
 
 function init_page() {
     load_post_types();
-    init_departments_search((result, response) => {
-        $("input[name='department_id']").val(result['department_id']);
-        display_department_hierarchy(
-            document.getElementById('department_hierarchy'),
-            result['department_id']
-        );
-        init_subjects_list(result['department_id']);
-    })
+    init_hierarchy_section();
 }
 
+function init_hierarchy_section() {
+    if (ME['department']) {
+        display_department_hierarchy(
+            document.getElementById('department_hierarchy'),
+            ME['department']['id'],
+        );
+        init_subjects_list(ME['department']['id']);
+    } else {
+        init_departments_search((result, response) => {
+            $("input[name='department_id']").val(result['department_id']);
+            display_department_hierarchy(
+                document.getElementById('department_hierarchy'),
+                result['department_id']
+            );
+            init_subjects_list(result['department_id']);
+        })
+    }
+
+}
 
 function load_post_types() {
     let select = document.getElementById('post_type');
@@ -62,9 +80,9 @@ function change_display_mode() {
     if (render_area.style.display === 'none') {
         let converter = new showdown.Converter();
         render_area.innerHTML = converter.makeHtml(textarea.value);
-        render_area.style.display = 'block' ;
+        render_area.style.display = 'block';
     } else {
-        render_area.style.display = 'none' ;
+        render_area.style.display = 'none';
     }
 }
 
