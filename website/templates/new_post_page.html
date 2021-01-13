@@ -17,39 +17,9 @@
         <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
 
             <div class="six wide computer twelve wide tablet column">
-                <div class="ui segment">
-                    <div class="ui icon buttons" style="vertical-align: bottom">
-                        <div class="ui button" onclick="header(1)"><i class="heading icon"></i></div>
-                        <div class="ui button" onclick="header(3)"><i class="heading small icon"></i></div>
-                        <div class="ui button" onclick="header(6)"><i class="heading mini icon"></i></div>
-                    </div>
-                    <div class="ui icon buttons">
-                        <div class="ui button" onclick="outline('bold')"><i class="bold icon"></i></div>
-                        <div class="ui button" onclick="outline('italic')"><i class="italic icon"></i></div>
-                    </div>
-                    <div class="ui icon buttons">
-                        <div class="ui button" onclick="code_block()"><i class="code icon"></i></div>
-                        <div class="ui button" onclick="list_item()"><i class="list ol icon"></i></div>
-                    </div>
-                    <div class="ui icon buttons">
-                        <div class="ui button" onclick="link_template('link')"><i class="linkify icon"></i></div>
-                        <div class="ui button" onclick="link_template('image')"><i class="image outline icon"></i></div>
-                    </div>
-                    <a class="ui circular icon right floated blue basic button"
-                       href="https://github.com/sandino/Markdown-Cheatsheet/blob/master/README.md"
-                       target="_blank"
-                       title="Markdown syntax guide">
-                        <i class="info icon"></i>
-                    </a>
-                    <div class="ui basic icon right floated circular button"
-                        title="Change mode – 'edit' / 'preview'"
-                        onclick="change_display_mode(this)">
-                        <i id="display_mode_icon" class="eye icon"></i>
-                    </div>
-                </div>
-                <div class="ui segment">
-                    <textarea id="textarea" name="text" cols="40" rows="10"></textarea>
-                    <div id="render_area" style="display: none"></div>
+                <div id="bodies_editor_container"></div>
+                <div style="margin-top: 20px">
+                    <div class="ui basic mini button" onclick="add_post_body()">add body</div>
                 </div>
             </div>
 
@@ -70,16 +40,6 @@
                     <div class="field">
                         <label>Subject</label>
                         <select class="ui search dropdown" name="subject" id="subject"></select>
-                    </div>
-                </div>
-                <div class="ui segment">
-                    <div class="field">
-                        <label>Post type</label>
-                        <select class="ui search dropdown" name="post_type" id="post_type"></select>
-                    </div>
-                    <div class="field">
-                        <label>Title</label>
-                        <input type="text" name="title" placeholder="Title">
                     </div>
                 </div>
                 <div class="ui segment">

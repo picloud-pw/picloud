@@ -1,70 +1,73 @@
-let TEXT_AREA = document.getElementById('textarea');
-
-function header(order){
+function header(post_id, order){
+    let textarea = document.getElementById(`${post_id}_textarea`);
     if (order < 1) order = 1;
     if (order > 6) order = 6;
 
     let template = "\n" + "#".repeat(order) + " ";
 
-    let startPos = TEXT_AREA.selectionStart;
-    let endPos = TEXT_AREA.selectionEnd;
-    TEXT_AREA.value = TEXT_AREA.value.substring(0, startPos)
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
+    textarea.value = textarea.value.substring(0, startPos)
             + template
-            + TEXT_AREA.value.substring(endPos, TEXT_AREA.value.length);
+            + textarea.value.substring(endPos, textarea.value.length);
 
-    TEXT_AREA.focus();
-    TEXT_AREA.selectionEnd = startPos + template.length;
+    textarea.focus();
+    textarea.selectionEnd = startPos + template.length;
 }
 
-function outline(type){
+function outline(post_id, type){
+    let textarea = document.getElementById(`${post_id}_textarea`);
 
     let template = "";
     if (type === "bold") template = "**";
     if (type === "italic") template = "*";
 
-    let startPos = TEXT_AREA.selectionStart;
-    let endPos = TEXT_AREA.selectionEnd;
-    TEXT_AREA.value = TEXT_AREA.value.substring(0, startPos)
-            + template + TEXT_AREA.value.substring(startPos, endPos) + template
-            + TEXT_AREA.value.substring(endPos, TEXT_AREA.value.length);
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
+    textarea.value = textarea.value.substring(0, startPos)
+            + template + textarea.value.substring(startPos, endPos) + template
+            + textarea.value.substring(endPos, textarea.value.length);
 
-    TEXT_AREA.focus();
-    TEXT_AREA.selectionEnd = startPos + template.length;
+    textarea.focus();
+    textarea.selectionEnd = startPos + template.length;
 }
 
-function code_block(language){
+function code_block(post_id, language){
+    let textarea = document.getElementById(`${post_id}_textarea`);
 
     let template = "```";
     if (language === undefined)
         language = "";
 
-    let startPos = TEXT_AREA.selectionStart;
-    let endPos = TEXT_AREA.selectionEnd;
-    TEXT_AREA.value = TEXT_AREA.value.substring(0, startPos)
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
+    textarea.value = textarea.value.substring(0, startPos)
             + "\n" + template + "\n" + language
-            + TEXT_AREA.value.substring(startPos, endPos)
+            + textarea.value.substring(startPos, endPos)
             + "\n" + template + "\n"
-            + TEXT_AREA.value.substring(endPos, TEXT_AREA.value.length);
+            + textarea.value.substring(endPos, textarea.value.length);
 
-    TEXT_AREA.focus();
-    TEXT_AREA.selectionEnd = startPos + template.length + 2;
+    textarea.focus();
+    textarea.selectionEnd = startPos + template.length + 2;
 
 }
 
-function list_item() {
+function list_item(post_id) {
+    let textarea = document.getElementById(`${post_id}_textarea`);
     let template = "\n * List item";
 
-    let startPos = TEXT_AREA.selectionStart;
-    let endPos = TEXT_AREA.selectionEnd;
-    TEXT_AREA.value = TEXT_AREA.value.substring(0, startPos)
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
+    textarea.value = textarea.value.substring(0, startPos)
             + template
-            + TEXT_AREA.value.substring(endPos, TEXT_AREA.value.length);
+            + textarea.value.substring(endPos, textarea.value.length);
 
-    TEXT_AREA.focus();
-    TEXT_AREA.selectionEnd = startPos + template.length;
+    textarea.focus();
+    textarea.selectionEnd = startPos + template.length;
 }
 
-function link_template(type){
+function link_template(post_id, type){
+    let textarea = document.getElementById(`${post_id}_textarea`);
 
     let prefix = "\n[Link](";
     if (type === 'image')
@@ -72,17 +75,17 @@ function link_template(type){
 
     let link = "https://google.com) \n";
 
-    let startPos = TEXT_AREA.selectionStart;
-    let endPos = TEXT_AREA.selectionEnd;
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
     if (startPos === endPos)
-        TEXT_AREA.value = TEXT_AREA.value.substring(0, startPos) + prefix + link
-                + TEXT_AREA.value.substring(endPos, TEXT_AREA.value.length);
+        textarea.value = textarea.value.substring(0, startPos) + prefix + link
+                + textarea.value.substring(endPos, textarea.value.length);
     else
-        TEXT_AREA.value = TEXT_AREA.value.substring(0, startPos)
-                + prefix + TEXT_AREA.value.substring(startPos, endPos) + ") \n"
-                + TEXT_AREA.value.substring(endPos, TEXT_AREA.value.length);
+        textarea.value = textarea.value.substring(0, startPos)
+                + prefix + textarea.value.substring(startPos, endPos) + ") \n"
+                + textarea.value.substring(endPos, textarea.value.length);
 
-    TEXT_AREA.focus();
-    TEXT_AREA.selectionEnd = startPos + prefix.length + link.length - 1;
+    textarea.focus();
+    textarea.selectionEnd = startPos + prefix.length + link.length - 1;
 }
 
