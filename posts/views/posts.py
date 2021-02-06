@@ -2,7 +2,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse, HttpResponse
 
 from decorators import auth_required
-from posts.models import Post
+from hierarchy.models import Subject
+from posts.models import Post, PostType
 from students.models import StudentInfo
 
 POSTS_PER_PAGE = 12
@@ -24,12 +25,17 @@ def search(request):
     author_id = request.GET.get('author_id')
     subject_id = request.GET.get('subject_id')
     page = request.GET.get('page', 1)
+    is_draft = request.GET.get('is_draft') not in ['False', None]
     is_approved = request.GET.get('is_approved') in ['True', None]
 
     posts = Post.objects.all()
 
-    if is_approved or (not is_approved and request.user.is_superuser):
-        posts = posts.filter(is_approved=is_approved)
+    if is_draft:
+        posts = posts.filter(is_draft=True, author_id=request.user.id)
+    else:
+        posts = posts.filter(is_draft=False)
+        if is_approved or (not is_approved and request.user.is_superuser):
+            posts = posts.filter(is_approved=is_approved)
 
     if author_id is not None:
         student_info = StudentInfo.objects.get(id=author_id)
@@ -61,78 +67,57 @@ def search(request):
 
 @auth_required
 def new(request):
-    form = PostForm(request.POST, request.FILES)
-    user_can_publish = can_user_publish_instantly(request.user)
-    parent_post_id = request.GET.get("parent_post_id")
-    if form.is_valid():
-        post = form.save(commit=False)
-        post.last_editor = request.user
-        post.author = request.user
-        post.created_date = timezone.now()
-        post.is_approved = user_can_publish
-        if parent_post_id is not None:
-            post.parent_post = Post.objects.get(pk=parent_post_id)
-        post.save()
-        request.session['last_post_subject'] = request.POST["subject"]
-        if user_can_publish:
-            update_carma(request.user)
-            return redirect('post_detail', pk=post.pk)
-        else:
-            msg = "Спасибо за ваш вклад! Мы уже уведомлены о вашем посте, он будет проверен в ближайшее время."
-            return post_detail(request, pk=post.pk, msg=msg)
-    return HttpResponse(status=201)
+    post_draft = Post.objects.create(
+        author=request.user,
+        is_draft=True,
+    )
+    return JsonResponse(post_draft.as_dict())
+
+
+@auth_required
+def update(request):
+    post_id = request.POST.get('id')
+    if post_id is None:
+        return HttpResponse(status=404)
+    post = Post.objects.get(id=post_id)
+    if post.author != request.user and not request.user.is_superuser:
+        return HttpResponse(status=403)
+
+    subject_id = request.POST.get('subject_id')
+    if subject_id is not None:
+        post.subject = Subject.objects.get(id=subject_id)
+    post_type_id = request.POST.get('post_type_id')
+    if post_type_id is not None:
+        post.type = PostType.objects.get(id=post_type_id)
+    title = request.POST.get('title')
+    if title is not None:
+        post.title = title
+    text = request.POST.get('text')
+    if text is not None:
+        post.text = text
+    is_draft = request.POST.get('is_draft')
+    if is_draft is not None:
+        post.title = is_draft == 'True'
+    post.last_editor = request.user
+    post.save()
+    return HttpResponse(status=200)
 
 
 def get(request):
     post_id = request.GET.get('id')
-    if post_id is not None:
-        return JsonResponse(
-            Post.objects.get(id=post_id).as_dict()
-        )
-    else:
+    if post_id is None:
         return HttpResponse(status=404)
-
-
-@auth_required
-def edit(request):
-    post = get_object_or_404(Post, pk=pk)
-    if (request.user.is_authenticated and request.user.is_staff) or request.user.pk == post.author.pk:
-        if request.method == "POST":
-            form = PostForm(request.POST, request.FILES, instance=post)
-            user_can_publish = can_user_publish_instantly(request.user)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.last_editor = request.user
-                post.published_date = timezone.now()
-                post.is_approved = user_can_publish
-                post.save()
-                if user_can_publish:
-                    update_carma(request.user)
-                    return redirect('post_detail', pk=post.pk)
-                else:
-                    msg = "Благодарим за правки! В ближайшее время мы проверим и опубликуем их."
-                    return post_detail(request, pk=post.pk, msg=msg)
-            else:
-                form = PostForm(instance=post)
-                user_info = get_object_or_404(UserInfo, user=request.user)
-                return render(request, 'cloud/post_edit.html', {
-                    'form': form,
-                    'post': post
-                })
-        else:
-            form = PostForm(instance=post)
-            user_info = get_object_or_404(UserInfo, user=request.user)
-            return render(request, 'cloud/post_edit.html', {
-                'form': form,
-                'post': post,
-            })
+    post = Post.objects.get(id=post_id)
+    if post.author == request.user or \
+            (not post.is_draft and post.is_approved):
+        return JsonResponse(post.as_dict())
     else:
-        return redirect("cloud")
+        return HttpResponse(status=403)
 
 
 @auth_required
 def delete(request):
-    post_id = request.GET.get('id')
+    post_id = request.POST.get('id')
     if post_id is None:
         return HttpResponse(status=404)
     post = Post.objects.get(id=post_id)

@@ -10,7 +10,7 @@ urlpatterns = [
     path('search', posts.search, ),
 
     path('get', posts.get, ),
-    path('edit', posts.edit, ),
+    path('update', posts.update, ),
     path('delete', posts.delete, ),
     path('approve', posts.approve, ),
 

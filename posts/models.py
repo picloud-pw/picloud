@@ -29,7 +29,7 @@ class PostType(models.Model):
 
 class Post(models.Model):
     subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.SET_NULL)
-    type = models.ForeignKey(PostType, on_delete=models.CASCADE)
+    type = models.ForeignKey(PostType, null=True, blank=True, on_delete=models.SET_NULL)
     author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     parent_post = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
     last_editor = models.ForeignKey(User, related_name='last_editor', null=True, on_delete=models.SET_NULL)
@@ -40,6 +40,7 @@ class Post(models.Model):
     link = models.URLField(max_length=512, null=True, blank=True)
     views = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
+    is_draft = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
 
     ALLOWED_HTML_TAGS = allowed_html_tags = bleach.ALLOWED_TAGS + [
@@ -50,6 +51,8 @@ class Post(models.Model):
         return self.title
 
     def html(self):
+        if self.text is None:
+            return ""
         dangerous_html = markdown.markdown(self.text, extensions=['markdown.extensions.fenced_code'])
         safe_html = bleach.clean(dangerous_html, tags=self.ALLOWED_HTML_TAGS)
         html_with_hyperlinks = bleach.linkify(safe_html)
@@ -146,7 +149,7 @@ class Post(models.Model):
             "created_date": self.created_date,
             "created_date_human": self.created_date_human(),
             "subject": self.subject.as_dict() if self.subject is not None else None,
-            "type": self.type.as_dict(),
+            "type": self.type.as_dict() if self.type is not None else None,
             "link": self.link,
             "image": {
                 "url": self.get_image_url(),
