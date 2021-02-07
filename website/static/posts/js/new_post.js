@@ -13,13 +13,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function init_page() {
 
-    init_hierarchy_section();
-    add_post_body();
+    load_drafts();
 
 }
 
-function init_hierarchy_section() {
-    if (ME['department']) {
+function init_hierarchy_section(department_id = null, subject_id = null) {
+    if (department_id) {
+        display_department_hierarchy(
+            document.getElementById('department_hierarchy'),
+            department_id,
+        );
+        init_subjects_list(department_id, subject_id);
+    } else if (ME['department']) {
         display_department_hierarchy(
             document.getElementById('department_hierarchy'),
             ME['department']['id'],
@@ -35,7 +40,6 @@ function init_hierarchy_section() {
             init_subjects_list(result['department_id']);
         })
     }
-
 }
 
 function load_post_types(container) {
@@ -55,7 +59,7 @@ function load_post_types(container) {
 }
 
 
-function init_subjects_list(department_id) {
+function init_subjects_list(department_id, subject_id) {
     let select = document.getElementById('subject');
     select.innerText = '';
     axios.get(`/hierarchy/subjects/search?department_id=${department_id}`)
@@ -63,7 +67,7 @@ function init_subjects_list(department_id) {
             let subjects = response.data['subjects'];
             for (let s of subjects) {
                 select.innerHTML += `
-                    <option value="${s['id']}">
+                    <option value="${s['id']}" ${s['id'] === subject_id ? 'selected' : ''}>
                         ${s['name']} (sem. ${s['semester'] ? s['semester'] : '---'})
                     </option>
                 `;
@@ -89,15 +93,42 @@ function change_display_mode(post_id) {
     }
 }
 
-function add_post_body() {
-    let post_id = random_ID();
+function load_drafts() {
+    axios.get('/posts/search?is_draft=True')
+        .then((response) => {
+            let drafts = response.data['posts'];
+            console.log(drafts);
+            if (!drafts.length) {
+                new_draft_post();
+                init_hierarchy_section();
+            } else {
+                let last_draft = drafts[0];
+                init_hierarchy_section(
+                    last_draft['subject'] ? last_draft['subject']['departments'][0]['id'] : null,
+                    last_draft['subject'] ? last_draft['subject']['id'] : null,
+                );
+                fill_post_body(last_draft);
+            }
+        })
+}
+
+function new_draft_post() {
+    let data = new FormData();
+    axios.post('/posts/new', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        .then((response) => {
+            fill_post_body(response.data);
+        })
+}
+
+function fill_post_body(post) {
+    let post_id = post['id'];
     let body_segment = document.createElement('div');
     body_segment.id = post_id;
     body_segment.className = 'ui segment';
     document.getElementById('bodies_editor_container').appendChild(body_segment);
     body_segment.innerHTML = `
         <div class="ui circular right floated icon mini button" style="margin: -25px"
-            onclick="remove_post_body('${post_id}')">
+            onclick="remove_post('${post_id}')">
             <i class="ui x icon"></i>
         </div>
         <div class="fields">
@@ -107,11 +138,11 @@ function add_post_body() {
             </div>
             <div class="ten wide field">
                 <label>Title</label>
-                <input type="text" id="${post_id}_title" placeholder="Title">
+                <input type="text" id="${post_id}_title" placeholder="Title" value="${post['title']}">
             </div>
         </div>
         <div id="${post_id}_toolbar"></div>
-        <textarea id="${post_id}_textarea"></textarea>
+        <textarea id="${post_id}_textarea">${post['text'] ? post['text']: ''}</textarea>
         <div id="${post_id}_render_area" style="display: none"></div>
     `;
 
@@ -125,17 +156,29 @@ function add_post_body() {
     });
 }
 
-function remove_post_body(post_id) {
-    delete POSTS[post_id];
-    document.getElementById(post_id).remove();
+function remove_post(post_id) {
+    let data = new FormData();
+    data.append("id", post_id);
+    axios.post('/posts/delete', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        .then((response) => {
+            delete POSTS[post_id];
+            document.getElementById(post_id).remove();
+        })
 }
 
 function save_post_changes(post_id) {
     POSTS[post_id] = {
+        'id': post_id,
         'type': $(`#${post_id}_type`).dropdown('get value'),
         'title': $(`#${post_id}_title`).val(),
         'text': $(`#${post_id}_textarea`).val(),
     }
+    let data = new FormData();
+    for (let field in POSTS[post_id]) {
+        data.append(field, POSTS[post_id][field]);
+    }
+    axios.post('/posts/update', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        .then((response) => {})
 }
 
 function display_toolbar(post_id, container) {
@@ -171,8 +214,4 @@ function display_toolbar(post_id, container) {
             </div>
         </div>
     `;
-}
-
-function submit_form() {
-
 }
