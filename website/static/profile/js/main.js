@@ -16,6 +16,16 @@ function init_personal_info() {
             let me = response.data;
             USER_INFO = me;
 
+            display_student_drafts(
+                document.getElementById('user_drafts'),
+                me['id']
+            );
+
+            display_students_posts(
+                document.getElementById('user_posts'),
+                me['id']
+            );
+
             let department_container = document.getElementById('user_department_container');
             department_container.innerHTML = `
                 <div class="ui dividing header">Department</div>

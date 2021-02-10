@@ -19,10 +19,13 @@
         <div class="four wide column">
             <div class="ui basic no-margin-padding segment" style="min-height: 80px"
                  id="personal_info_container"></div>
+            <div class="ui segment" style="min-height: 80px; margin-bottom: 40px"
+                 id="user_department_container"></div>
         </div>
         <div class="six wide column">
-            <div class="ui segment" style="min-height: 80px"
-                 id="user_department_container"></div>
+
+            <div id="user_drafts"></div>
+            <div id="user_posts" style="margin-top: 20px"></div>
         </div>
     </div>
 
@@ -33,6 +36,8 @@
 
     <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
     <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'students/js/student_posts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profile/js/student_drafts.js' %}"></script>
     <script type="text/javascript" src="{% static 'profile/js/main.js' %}"></script>
 
 {% endblock %}

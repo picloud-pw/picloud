@@ -41,12 +41,14 @@ function display_student_page(student_id) {
     let container = document.getElementById("students_container");
     container.innerHTML = `
         <div class="ui centered stackable grid">
-            <div class="ui four wide column" id="student_info"></div>
-            <div class="ui six wide column">
+            <div class="ui four wide column">
+                <div id="student_info"></div>
                 <div class="ui segment">
                     <div class="ui dividing header">Department</div>
                     <div id="student_department"></div>
                 </div>
+            </div>
+            <div class="ui six wide column">
                 <div id="students_posts"></div>
             </div>
         </div>
@@ -113,45 +115,6 @@ function display_student_department(department_id){
         `;
     }
 
-}
-
-function display_students_posts(container, student_id){
-    container.innerHTML = `
-        <div class="ui segment">
-            <div class="ui dividing header">Posts</div>
-            <div class="ui relaxed divided list" id="posts_container"></div>
-        </div>
-    `;
-    container = document.getElementById('posts_container');
-    container.parentElement.classList.add('loading');
-    axios.get(`/posts/search?author_id=${student_id}`)
-        .then((response) => {
-            let posts = response.data['posts'];
-            for (let post of posts){
-                container.innerHTML += `
-                    <div class="item">
-                        <i class="large sticky note outline middle aligned icon"></i>
-                        <div class="content">
-                          <a class="header" href="/posts/?id=${post['id']}" target="_blank">${post['title']}</a>
-                          <div class="description">${post['created_date_human']}</div>
-                        </div>
-                    </div>
-                `;
-            }
-            if (!posts.length) {
-                container.innerHTML = `
-                    <div class="ui basic placeholder segment">
-                      <div class="ui icon header">
-                        <i class="sticky note outline icon"></i>
-                        No posts are listed for this student.
-                      </div>
-                    </div>
-                `;
-            }
-
-        }).finally(() => {
-            container.parentElement.classList.remove('loading');
-        })
 }
 
 function init_students_list() {
