@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function init_page() {
 
+    POSTS = {};
     load_drafts();
 
 }
@@ -42,15 +43,16 @@ function init_hierarchy_section(department_id = null, subject_id = null) {
     }
 }
 
-function load_post_types(container) {
+function load_post_types(container, post_type_id = null) {
     let select = document.getElementById(container);
     select.innerText = '';
     axios.get('/posts/types/get')
         .then(response => {
-            let types = response.data['types'];
-            for (let type of types) {
+            for (let type of response.data['types']) {
                 select.innerHTML += `
-                    <option value="${type['title']}">${type['title']}</option>
+                    <option value="${type['id']}" ${type['id'] === post_type_id ? 'selected' : ''}>
+                        ${type['title']}
+                    </option>
                 `;
             }
             $(`#${container}`).dropdown();
@@ -72,7 +74,13 @@ function init_subjects_list(department_id, subject_id) {
                     </option>
                 `;
             }
-            $('#subject').dropdown();
+            $('#subject').dropdown({
+                onChange: ((subject_id) => {
+                    for (let post_id in POSTS) {
+                        save_post_changes(post_id);
+                    }
+                })
+            });
         })
 }
 
@@ -86,7 +94,10 @@ function change_display_mode(post_id) {
     let render_area = document.getElementById(`${post_id}_render_area`);
     if (render_area.style.display === 'none') {
         let converter = new showdown.Converter();
-        render_area.innerHTML = converter.makeHtml(textarea.value);
+        render_area.innerHTML = `
+            <div class="ui divider"></div>
+            ${converter.makeHtml(textarea.value)}
+        `;
         render_area.style.display = 'block';
     } else {
         render_area.style.display = 'none';
@@ -97,17 +108,32 @@ function load_drafts() {
     axios.get('/posts/search?is_draft=True')
         .then((response) => {
             let drafts = response.data['posts'];
-            console.log(drafts);
             if (!drafts.length) {
                 new_draft_post();
                 init_hierarchy_section();
             } else {
-                let last_draft = drafts[0];
-                init_hierarchy_section(
-                    last_draft['subject'] ? last_draft['subject']['departments'][0]['id'] : null,
-                    last_draft['subject'] ? last_draft['subject']['id'] : null,
-                );
-                fill_post_body(last_draft);
+                let values = [];
+                for (let i in drafts) {
+                    let draft = drafts[i];
+                    values.push({
+                        name: draft['title'] ? draft['title'] : '-- untitled draft --',
+                        value: draft['id'], selected: i === '0',
+                    })
+                }
+                $(`#drafts`).dropdown({
+                    values: values,
+                    onChange: (value) => {
+                        axios.get(`/posts/get?id=${value}`)
+                            .then(response => {
+                                let post = response.data;
+                                fill_post_body(post);
+                                init_hierarchy_section(
+                                    post['subject'] ? post['subject']['departments'][0]['id'] : null,
+                                    post['subject'] ? post['subject']['id'] : null,
+                                );
+                            })
+                    }
+                });
             }
         })
 }
@@ -117,6 +143,7 @@ function new_draft_post() {
     axios.post('/posts/new', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
         .then((response) => {
             fill_post_body(response.data);
+            load_drafts();
         })
 }
 
@@ -127,9 +154,9 @@ function fill_post_body(post) {
     body_segment.className = 'ui segment';
     document.getElementById('bodies_editor_container').appendChild(body_segment);
     body_segment.innerHTML = `
-        <div class="ui circular right floated icon mini button" style="margin: -25px"
+        <div class="ui circular right floated icon red mini button" style="margin: -25px"
             onclick="remove_post('${post_id}')">
-            <i class="ui x icon"></i>
+            <i class="ui trash icon"></i>
         </div>
         <div class="fields">
             <div class="six wide field">
@@ -142,11 +169,10 @@ function fill_post_body(post) {
             </div>
         </div>
         <div id="${post_id}_toolbar"></div>
-        <textarea id="${post_id}_textarea">${post['text'] ? post['text']: ''}</textarea>
+        <textarea id="${post_id}_textarea">${post['text'] ? post['text'] : ''}</textarea>
         <div id="${post_id}_render_area" style="display: none"></div>
     `;
-
-    load_post_types(`${post_id}_type`);
+    load_post_types(`${post_id}_type`, post['type'] ? post['type']['id'] : null);
     display_toolbar(post_id, `${post_id}_toolbar`);
 
     $(`#${post_id}`).find('input, select, textarea').each(function () {
@@ -154,6 +180,7 @@ function fill_post_body(post) {
             save_post_changes(post_id);
         });
     });
+    save_post_changes(post_id);
 }
 
 function remove_post(post_id) {
@@ -169,7 +196,8 @@ function remove_post(post_id) {
 function save_post_changes(post_id) {
     POSTS[post_id] = {
         'id': post_id,
-        'type': $(`#${post_id}_type`).dropdown('get value'),
+        'subject_id': $(`#subject`).dropdown('get value'),
+        'post_type_id': $(`#${post_id}_type`).dropdown('get value'),
         'title': $(`#${post_id}_title`).val(),
         'text': $(`#${post_id}_textarea`).val(),
     }
@@ -178,7 +206,26 @@ function save_post_changes(post_id) {
         data.append(field, POSTS[post_id][field]);
     }
     axios.post('/posts/update', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
-        .then((response) => {})
+        .then((response) => {
+            show_alert('success', `[POST-${post_id}] Changes have been saved!`);
+        })
+}
+
+function submit(btn) {
+    btn.classList.add('loading');
+    for (let post_id in POSTS) {
+        let data = new FormData();
+        data.append('id', post_id);
+        data.append('is_draft', 'False');
+        axios.post('/posts/update', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+            .then((response) => {
+                POSTS = {};
+                load_drafts();
+                show_alert('success', `[POST-${post_id}] Post has been submitted!`);
+            }).finally(() => {
+            btn.classList.remove('loading');
+        })
+    }
 }
 
 function display_toolbar(post_id, container) {
@@ -201,13 +248,13 @@ function display_toolbar(post_id, container) {
                 <div class="ui button" onclick="link_template('${post_id}', 'link')"><i class="linkify icon"></i></div>
                 <div class="ui button" onclick="link_template('${post_id}', 'image')"><i class="image outline icon"></i></div>
             </div>
-            <a class="ui circular icon right floated blue basic mini button"
+            <a class="ui icon right floated blue basic mini button"
                href="https://github.com/sandino/Markdown-Cheatsheet/blob/master/README.md"
                target="_blank"
                title="Markdown syntax guide">
                 <i class="info icon"></i>
             </a>
-            <div class="ui basic icon right floated circular mini button"
+            <div class="ui basic icon right floated mini button"
                  title="Change mode – 'edit' / 'preview'"
                  onclick="change_display_mode('${post_id}')">
                 <i id="${post_id}_display_mode_icon" class="eye icon"></i>

@@ -22,6 +22,7 @@ class PostType(models.Model):
 
     def as_dict(self):
         return {
+            'id': self.id,
             'title': self.title,
             'plural': self.plural,
         }

@@ -97,7 +97,7 @@ def update(request):
         post.text = text
     is_draft = request.POST.get('is_draft')
     if is_draft is not None:
-        post.title = is_draft == 'True'
+        post.is_draft = is_draft == 'True'
     post.last_editor = request.user
     post.save()
     return HttpResponse(status=200)
