@@ -20,7 +20,7 @@ function render_post(post) {
                 <hr/>
                 ${post['html'] ? `<div class="text">${post['html']}</div> <hr/>` : ''}
                 
-                ${post['image'] ? `
+                ${post['image']['url'] ? `
                     <img class="post-img" 
                          ratio="${post['image']['width']}x${post['image']['height']}"
                          src="${post['image']['url']}" 
@@ -31,19 +31,20 @@ function render_post(post) {
                     <a class="ui primary right labeled icon button btn-follow-link" href="${post['link']}" target="_blank">
                         Open link <i class="angle double right icon"></i>
                     </a>
+                    <hr/>
                 ` : ''}
 
-                ${post['file'] ? `
+                ${post['file']['url'] ? `
                     <a class="ui green right labeled icon button btn-download" href="${post['file']['url']}">
                         Download '<strong>${post['file']['extension']}</strong>' file <i class="download icon"></i>
                     </a>
+                    <hr/>
                 ` : ''}
                 
                 ${post['is_parent'] ? `
                     <br> <a class="ui button" href="">Child posts</a>
                 ` : ''}
                 
-                <hr/>
                 <footer>
                     <a class="post-author" title="Author" href="/students?id=${post['author']['id']}">
                         ${post['author']['user']['username']}
