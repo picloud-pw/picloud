@@ -58,5 +58,5 @@
     <circle id="circle" cx="185" cy="215" mask="url(#mask)" r="130"/>
     <text id="cloud" x="331" y="300" xml:space="preserve"><tspan>Cloud</tspan></text>
     <text id="beta" x="985" y="170" style="" xml:space="preserve"><tspan>β</tspan></text>
-    <text id="version" x="980" y="375" text-anchor="end"><tspan>v0.10.1</tspan></text>
+    <text id="version" x="980" y="375" text-anchor="end"><tspan>v2.7.77</tspan></text>
 </svg>
