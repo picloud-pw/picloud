@@ -75,11 +75,11 @@ function init_subjects_list(department_id, subject_id) {
                 `;
             }
             $('#subject').dropdown({
-                onChange: ((subject_id) => {
+                onChange: (subject_id) => {
                     for (let post_id in POSTS) {
                         save_post_changes(post_id);
                     }
-                })
+                }
             });
         })
 }
@@ -112,29 +112,32 @@ function load_drafts() {
                 new_draft_post();
                 init_hierarchy_section();
             } else {
-                let values = [];
-                for (let i in drafts) {
-                    let draft = drafts[i];
-                    values.push({
-                        name: draft['title'] ? draft['title'] : '-- untitled draft --',
-                        value: draft['id'], selected: i === '0',
-                    })
+                let select = document.getElementById('drafts');
+                select.innerText = "";
+                for (let draft of drafts) {
+                    select.innerHTML += `
+                        <option value="${draft['id']}" selected>
+                            ${draft['title'] ? draft['title'] : '-- untitled draft --'}
+                        </option>
+                    `;
                 }
                 $(`#drafts`).dropdown({
-                    values: values,
-                    onChange: (value) => {
-                        axios.get(`/posts/get?id=${value}`)
-                            .then(response => {
-                                let post = response.data;
-                                fill_post_body(post);
-                                init_hierarchy_section(
-                                    post['subject'] ? post['subject']['departments'][0]['id'] : null,
-                                    post['subject'] ? post['subject']['id'] : null,
-                                );
-                            })
-                    }
+                    onChange: (post_id) => { get_post(post_id) }
                 });
+                get_post($(`#drafts`).dropdown('get value'));
             }
+        })
+}
+
+function get_post(post_id) {
+    axios.get(`/posts/get?id=${post_id}`)
+        .then(response => {
+            let post = response.data;
+            fill_post_body(post);
+            init_hierarchy_section(
+                post['subject'] ? post['subject']['departments'][0]['id'] : null,
+                post['subject'] ? post['subject']['id'] : null,
+            );
         })
 }
 
@@ -149,6 +152,9 @@ function new_draft_post() {
 
 function fill_post_body(post) {
     let post_id = post['id'];
+    if (POSTS[post_id]) {
+        return;
+    }
     let body_segment = document.createElement('div');
     body_segment.id = post_id;
     body_segment.className = 'ui segment';
@@ -196,11 +202,18 @@ function remove_post(post_id) {
 function save_post_changes(post_id) {
     POSTS[post_id] = {
         'id': post_id,
-        'subject_id': $(`#subject`).dropdown('get value'),
-        'post_type_id': $(`#${post_id}_type`).dropdown('get value'),
         'title': $(`#${post_id}_title`).val(),
         'text': $(`#${post_id}_textarea`).val(),
     }
+    let subject_id = $(`#subject`).dropdown('get value');
+    if (subject_id) {
+        POSTS[post_id]['subject_id'] = subject_id;
+    }
+    let post_type_id = $(`#${post_id}_type`).dropdown('get value');
+    if (subject_id) {
+        POSTS[post_id]['post_type_id'] = post_type_id;
+    }
+
     let data = new FormData();
     for (let field in POSTS[post_id]) {
         data.append(field, POSTS[post_id][field]);
@@ -220,6 +233,7 @@ function submit(btn) {
         axios.post('/posts/update', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
                 POSTS = {};
+                document.getElementById('bodies_editor_container').innerHTML = "";
                 load_drafts();
                 show_alert('success', `[POST-${post_id}] Post has been submitted!`);
             }).finally(() => {
