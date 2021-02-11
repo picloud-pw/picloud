@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from cloud.forms import NewProgramForm
 from cloud.models import Program, Subject
 from cloud.views.message import message
-from cloud.views.posts import can_user_publish_instantly
+from posts.views.posts import can_user_publish_instantly
 
 
 def program_page(request, program_id):

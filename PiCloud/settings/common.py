@@ -58,6 +58,12 @@ INSTALLED_APPS = [
     'social_django',
 
     'cloud',
+    'website',
+    'hierarchy',
+    'posts',
+    'memes',
+    'students',
+    'search',
 ]
 
 ROOT_URLCONF = 'PiCloud.urls'
@@ -65,7 +71,7 @@ ROOT_URLCONF = 'PiCloud.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -179,7 +185,6 @@ EMAIL_PORT = get_config('EMAIL_PORT')
 
 VK_GLOBAL_TOKEN = get_config('VK_GLOBAL_TOKEN')
 VK_GROUP_TOKEN = get_config('VK_GROUP_TOKEN')
-VK_GROUP_LIST = get_config('VK_GROUP_LIST')
 
 GOOGLE_RECAPTCHA_SECRET_KEY = get_config('GOOGLE_RECAPTCHA_SECRET_KEY')
 

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 import os
@@ -125,7 +126,7 @@ class Program(models.Model):
 
 
 class Lecturer(models.Model):
-    department = models.ForeignKey('Department', on_delete=models.CASCADE, null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=64, null=False)
     surname = models.CharField(max_length=64, null=False)
     patronymic = models.CharField(max_length=64, null=True, blank=True)
@@ -140,8 +141,8 @@ class Lecturer(models.Model):
 
 
 class Subject(models.Model):
-    programs = models.ManyToManyField("Program")
-    lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, null=True, blank=True)
+    programs = models.ManyToManyField(Program)
+    lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=256, null=False)
     short_title = models.CharField(max_length=16, null=True, blank=True)
     semester = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -152,7 +153,7 @@ class Subject(models.Model):
 
     def displayed_title(self):
         if self.semester != 0:
-            return self.title + " (" + str(self.semester) + " сем.)"
+            return f"{self.title} ({self.semester} сем.)"
         else:
             return self.title
 
@@ -187,9 +188,9 @@ class UserInfo(models.Model):
     avatar = models.ImageField(upload_to='resources/user_avatars/',
                                default='resources/default/user_ava.png',
                                null=True, blank=True)
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
-    status = models.ForeignKey('UserStatus', on_delete=models.CASCADE)
-    program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(User, related_name="legacy_user", on_delete=models.CASCADE)
+    status = models.ForeignKey(UserStatus, related_name="legacy_status", on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name="legacy_program", on_delete=models.SET_NULL, null=True, blank=True)
     karma = models.SmallIntegerField(default=10, null=False)
     course = models.PositiveSmallIntegerField(null=True, blank=True)
 
@@ -199,7 +200,7 @@ class UserInfo(models.Model):
 
 class MemeSource(models.Model):
     link = models.URLField(null=False, blank=True)
-    author = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     university = models.ForeignKey('University', on_delete=models.SET_NULL, null=True, blank=True)
     department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
     chair = models.ForeignKey('Chair', on_delete=models.SET_NULL, null=True, blank=True)
@@ -222,9 +223,9 @@ class PostType(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey('auth.User', null=True, on_delete=models.SET_NULL)
-    parent_post = models.ForeignKey('Post', on_delete=models.SET_NULL, null=True, blank=True, default=None)
-    last_editor = models.ForeignKey('auth.User', related_name='last_editor', null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, related_name='post_author', null=True, on_delete=models.SET_NULL)
+    parent_post = models.ForeignKey('Post', related_name='legacy_parent_post', on_delete=models.SET_NULL, null=True, blank=True, default=None)
+    last_editor = models.ForeignKey(User, related_name='legacy_last_editor', null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=256, null=False)
     text = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -317,11 +318,6 @@ class Post(models.Model):
                user.is_staff() or \
                user.is_superuser()
 
-    def is_parent(self):
-        return self.post_set.count() > 0
-
-    def get_childs(self):
-        return self.post_set
 
     def file_extension(self):
         if self.file:
@@ -334,9 +330,13 @@ class Post(models.Model):
 
     def created_date_human(self):
         import datetime
-        import locale
         import pytz
-        locale.setlocale(locale.LC_TIME, "ru_RU.utf8")
+        import locale
+        try:
+            locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
+        except Exception as e:
+            # for mac os
+            locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
         timezone = pytz.timezone('Europe/Moscow')
         date = self.created_date.astimezone(timezone)
         today = datetime.date.today()
@@ -354,8 +354,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey('auth.User', null=False, on_delete=models.CASCADE)
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, null=False, blank=True)
+    author = models.ForeignKey(User, related_name='comment_author', null=False, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='comment_post', on_delete=models.CASCADE, null=False, blank=True)
     text = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 

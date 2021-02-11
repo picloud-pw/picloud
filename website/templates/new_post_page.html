@@ -1,0 +1,74 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    New Post
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+    <form class="ui form" method="post">
+        <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
+
+            <div class="six wide computer twelve wide tablet column">
+                <div class="ui left labeled fluid input">
+                    <div class="ui label">Drafts:</div>
+                    <select class="ui selection fluid dropdown" id="drafts"></select>
+                    <div class="ui icon button" onclick="new_draft_post()">
+                        <i class="io plus icon"></i>
+                    </div>
+                </div>
+                <div class="ui divider"></div>
+                <div id="bodies_editor_container"></div>
+            </div>
+
+            <div class="four wide computer twelve wide mobile column">
+                <div class="ui segment">
+                    <div class="field">
+                        <label>Department</label>
+                        <div class="ui loading fluid search">
+                            <div class="ui fluid input">
+                                <input class="fluid prompt" name="department_name" type="text"
+                                       placeholder="Enter search query">
+                            </div>
+                            <input name="department_id" type="hidden">
+                            <div class="search results"></div>
+                        </div>
+                        <div id="department_hierarchy" style="margin-top: 10px"></div>
+                    </div>
+                    <div class="field">
+                        <label>Subject</label>
+                        <select class="ui search dropdown" name="subject" id="subject"></select>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui fluid button" id="submit_btn" onclick="submit(this)">Submit</div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js %}
+
+    <!-- Showdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"
+            integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
+
+    <!--  Multi select input -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'posts/js/markdown_editor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'posts/js/new_post.js' %}"></script>
+
+{% endblock %}

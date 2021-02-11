@@ -1,0 +1,90 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% include 'tags/google_analytics.html' %}
+    {% include 'tags/google_adsence.html' %}
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Semantic UI -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" media="screen"
+          rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Font Awesome -- icon font pack -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+
+    <!-- Semantic UI alerts -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ui-alerts.css' %}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Alegreya+Sans:400,400i,700,700i|Alegreya:400,400i,500,500i,700,700i|Roboto+Slab:400,700|Roboto:400,400i,500,500i,700,700i&amp;subset=cyrillic">
+
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
+
+    {% block head %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+{% include 'main_navbar.html' %}
+
+<div class="content-block main">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+<!-- Jquery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<!--  axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!-- Data Table library -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<!-- Semantic UI -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+<!--  Cookies lib -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+
+<!-- Global methods -->
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ui-alerts.js' %}"></script>
+
+{% block js %}
+{% endblock %}
+
+{% include 'tags/yandex_metrika.html' %}
+
+</body>
+
+</html>

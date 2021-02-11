@@ -7,11 +7,10 @@ from django.utils import timezone
 
 from cloud.forms import AvatarChangeForm, UserInfoChangeForm, UserNameChangeForm
 from cloud.models import UserInfo, Post
-from cloud.views.authentication import sign_in
 from cloud.views.message import message
 from cloud.views.posts import post_list
 
-from cloud.views.karma import update_carma
+from website.views.auth import sign_in
 
 AUTHOR_AFTER_DELETION = 32
 
@@ -22,7 +21,7 @@ def user_page(request, user_id):
         fr_user_info = UserInfo.objects.get(user=fr_user)
         return render(request, 'user.html', locals())
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы посещать страницы других пользователей.")
+        return sign_in(request)
 
 
 def user_posts(request, user_id):
@@ -36,7 +35,7 @@ def user_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=fr_user_posts)
     else:
-        return sign_in(request, msg="Пожалуйста, авторизуйтесь, чтобы просматривать записи конкретных пользователей.")
+        return sign_in(request)
 
 
 def user_not_checked_posts(request, user_id):
@@ -50,7 +49,7 @@ def user_not_checked_posts(request, user_id):
             .reverse()
         return post_list(request, displayed_posts=not_validate_posts)
     else:
-        return message(request, msg="Вы можете просматривать только проверенные записи этого пользователя.")
+        return message(request)
 
 
 def settings_page(request, msg="", error=""):
@@ -70,7 +69,6 @@ def change_avatar(request):
                                 instance=UserInfo.objects.get(user=request.user))
         if form.is_valid():
             form.save()
-            update_carma(request.user)
             request.session['user_avatar_url'] = UserInfo.objects.get(user=request.user).avatar.url
             return settings_page(request, msg="Аватар успешно изменен.")
         else:
@@ -85,7 +83,6 @@ def change_user(request):
         user_info_form = UserInfoChangeForm(request.POST, instance=UserInfo.objects.get(user=request.user))
         if user_info_form.is_valid() and validate_course(request.POST['course']):
             user_info_form.save()
-            update_carma(request.user)
 
             program = UserInfo.objects.get(user=request.user).program
             if program is not None:
@@ -106,7 +103,6 @@ def change_user_name(request):
         user_form = UserNameChangeForm(request.POST, instance=User.objects.get(pk=request.user.pk))
         if user_form.is_valid() and validate_name(request.POST['first_name'], request.POST['last_name']):
             user_form.save()
-            update_carma(request.user)
         else:
             return settings_page(request, error="Ошибка при изменении данных. " +
                                                 "Убедитесь, что длина полей «Имя» и «Фамилия» не превышает 20 символов")

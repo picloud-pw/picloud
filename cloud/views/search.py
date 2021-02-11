@@ -1,14 +1,15 @@
 import operator
 from functools import reduce
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from cloud.models import Post, University, Department, Chair, Program, Subject
-from .posts import POSTS_PER_PAGE
+from cloud.models import Post, University, Department, Chair, Program, Subject, UserInfo
+from posts.views.posts import POSTS_PER_PAGE
 
 
 def text_search(request):
@@ -116,11 +117,13 @@ def search_and_render_posts(request):
 
     posts = Post.objects.filter(is_approved=True).filter(parent_post=None)
 
-    if subject_id is None and type_id is None:
-        if request.user.is_authenticated:
-            user_info = request.user.userinfo
+    if subject_id is None and type_id is None and request.user.is_authenticated:
+        try:
+            user_info = UserInfo.objects.get(user=request.user)
             if user_info.program is not None:
                 posts = posts.filter(subject__programs__exact=user_info.program.pk)
+        except ObjectDoesNotExist:
+            pass
 
     if subject_id is not None:
         posts = posts.filter(subject=subject_id)
