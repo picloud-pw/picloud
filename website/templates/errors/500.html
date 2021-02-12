@@ -1,0 +1,29 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    PiCloud | 500
+{% endblock %}
+
+
+{% block content %}
+    <div class="ui centered padded grid">
+        <div class="ui placeholder segment" style="margin: 10% 40px; padding: 50px">
+            <div class="ui icon header">
+                <i class="bug icon"> (500) </i>
+                Internal server error 😱
+            </div>
+            <div class="ui divider"></div>
+            <p>
+                Sorry, this is not your fault... we are already working on fixing the problem
+            </p>
+            <div class="ui divider"></div>
+            <p>
+                If you need help, you can find us in the group:
+            </p>
+            <a href="https://vk.com/picloudpw" class="ui vk button" style="width: 300px">
+                <i class="vk icon"></i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
