@@ -7,13 +7,23 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/comments.css' %}">
 {% endblock %}
 
 {% block content %}
 
     <div class="container-fluid no-margin-padding">
-        <div class="col-md-3 col-lg-3"></div>
-        <div class="col-md-6 col-lg-6">
+
+        {% if child_posts %}
+            <div class="col-md-1 col-lg-1"></div>
+
+            <div class="col-md-5 col-lg-5">
+        {% else %}
+            <div class="col-md-3 col-lg-3"></div>
+
+            <div class="col-md-6 col-lg-6">
+        {% endif %}
+
             <div class="post-panel">
                 {% if message %}
                     <div class="alert alert-info alert-dismissible show" role="alert">
@@ -27,10 +37,67 @@
                 {% include 'cloud/post.html' %}
             </div>
 
-            {% if child_posts %}
+            <div class="comments-panel">
+
+                <div class="ui comments huge fluid">
+                    <hr>
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <a class="avatar" href="{% url 'user_page' user_id=comment.author_id %}">
+                                <img style="border-radius: 100%" src="{{ comment.author_avatar }}">
+                            </a>
+                            <div class="content">
+                                <a class="author" href="{% url 'user_page' user_id=comment.author_id %}">
+                                    {{ comment.author_username }}
+                                </a>
+                                <div class="metadata">
+                                    <span class="date">{{ comment.created_date }}</span>
+                                </div>
+                                <div class="text">
+                                    {{ comment.text }}
+                                </div>
+                                <div class="actions">
+                                    {% if comment.author_id == user.pk or user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
+                                        <a href="{% url 'comment_delete' comment_pk=comment.pk %}">
+                                            <i class="delete icon"></i> delete
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+
+                {% if user.is_authenticated %}
+                    <form action="{% url 'new_comment' post_pk=post.pk %}" method="post">
+
+                        {% csrf_token %}
+
+                        <div class="ui icon input fluid">
+                            <input type="text" name="comment_text" placeholder="Ваш комментарий...">
+                            <i class="send icon"></i>
+                        </div>
+
+                    </form>
+                {% else %}
+                    <div class="full-width" style="text-align: center">
+                        <a href="{% url 'signin' %}">Авторизуйтесь</a> для того чтобы оставлять комментарии.
+                    </div>
+                {% endif %}
+
+                <hr>
+
+            </div>
+
+        </div>
+
+        {% if child_posts %}
+
+            <div class="col-md-5 col-lg-5">
                 <div class="panel panel-primary">
                     <div class="panel-heading" data-toggle="collapse" href="#child_posts">
-                        Дочерние посты
+                        Дочерние записи
                     </div>
                     <div id="child_posts" class="collapse in">
                         <div class="panel-body no-margin-padding">
@@ -44,10 +111,16 @@
                         </div>
                     </div>
                 </div>
-            {% endif %}
+            </div>
 
-        </div>
-        <div class="col-md-3 col-lg-3"></div>
+            <div class="col-md-1 col-lg-1"></div>
+
+        {% else %}
+
+            <div class="col-md-3 col-lg-3"></div>
+
+        {% endif %}
+
     </div>
 
 

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from cloud.forms import NewDepartmentForm
 from cloud.models import Department
 from cloud.views.message import message
-from cloud.views.posts import can_user_publish_instantly
+from posts.views.posts import can_user_publish_instantly
 
 
 def new_department(request):

@@ -15,3 +15,5 @@ admin.site.register(UserStatus)
 
 admin.site.register(PostType)
 admin.site.register(Post)
+
+admin.site.register(Comment)

@@ -1,0 +1,43 @@
+.meme {
+    background-color: white;
+    padding: 1rem;
+    overflow: hidden;
+    margin: 0 auto 1rem;
+    border-radius: 0.5rem;
+}
+
+.meme .meme-source {
+    text-align: right;
+    font-size: 14px;
+    color: hsl(0, 0%, 67%);
+    margin: 0.5rem auto;
+}
+
+.meme .meme-source a {
+    color: hsl(0, 0%, 67%);
+    text-decoration: none;
+}
+
+.meme .meme-source a:hover {
+    color: hsl(0, 0%, 33%);
+    text-decoration: none;
+    border-bottom: solid hsl(0, 0%, 33%) 1px;
+}
+
+.meme hr {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.meme img {
+    width: 100%;
+    margin: 1rem auto;
+}
+
+.meme .meme-text {
+    font-family: 'Alegreya', serif;
+    font-size: 17px;
+    text-align: left;
+    white-space: pre-line;
+    margin: 1rem auto;
+}

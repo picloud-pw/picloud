@@ -117,21 +117,6 @@ SUBJECT_CHOICES = (
 )
 
 
-class ContactForm(forms.Form):
-    contact_name = forms.CharField(label="Ваше имя", required=True)
-    contact_email = forms.EmailField(label="Ваш email", required=True)
-    subject = forms.ChoiceField(
-        label="Тема обращения",
-        required=True,
-        choices=SUBJECT_CHOICES,
-    )
-    content = forms.CharField(
-        label="Сообщение",
-        required=True,
-        widget=forms.Textarea(attrs={'style': 'width: 100%; height:150px; resize: none'})
-    )
-
-
 class NewUniversityForm(forms.ModelForm):
 
     class Meta:

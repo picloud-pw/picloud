@@ -1,0 +1,30 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Moderation
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'css/moderation.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui centered aligned grid">
+        <div class="eleven wide column">
+            <div class="ui basic loading segment" style="min-height: 70px" id="moderation_container"></div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'js/moderation.js' %}"></script>
+
+{% endblock %}

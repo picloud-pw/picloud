@@ -1,0 +1,53 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Cloud
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/modal_image.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/post_list.css' %}">
+    <link rel="stylesheet" href="{% static 'cloud/css/search.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded grid">
+        <div class="no-margin-padding column">
+            {% include 'search.html' %}
+            <div id="modal"></div>
+            <div class="ui basic segment" style="min-height: 100px; margin-top: 0;">
+                <div id="posts_container"></div>
+                <div class="ui basic button" id="load_more_btn" onclick="load_posts_list()">
+                    load more...
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <!--  Multi select input -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/search.min.js"
+            integrity="sha256-gkqnhj5TvM/vwvHKAb4zBC7uL6mndcAlK6CEv5iEUwg=" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'posts/js/post.js' %}"></script>
+    <script type="text/javascript" src="{% static 'cloud/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'cloud/js/main.js' %}"></script>
+
+{% endblock %}

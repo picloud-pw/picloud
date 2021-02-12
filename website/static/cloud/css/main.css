@@ -1,0 +1,60 @@
+.post-grid-gutter-size-reference {
+    width: 0;
+}
+
+.post-size-reference,
+.post,
+.meme {
+    width: 100%;
+}
+
+@media screen and (min-width: 800px) {
+    :root {
+        --columnsCount: 2;
+        --guttersCount: calc(var(--columnsCount) - 1);
+        --gutterWidth: 1rem;
+        --totalGuttersWidth: calc(var(--guttersCount) * var(--gutterWidth));
+        --totalColumnsWidth: calc(100% - var(--totalGuttersWidth));
+        --columnWidth: calc(var(--totalColumnsWidth) / var(--columnsCount));
+    }
+
+    .post-size-reference,
+    .post,
+    .meme {
+        width: var(--columnWidth);
+    }
+
+    .post-grid-gutter-size-reference {
+        width: var(--gutterWidth);
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    :root {
+        --columnsCount: 3;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    :root {
+        --columnsCount: 4;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    :root {
+        --columnsCount: 5;
+    }
+}
+
+@media screen and (min-width: 2400px) {
+    :root {
+        --columnsCount: 6;
+    }
+}
+
+@media screen and (min-width: 2800px) {
+    :root {
+        --columnsCount: 7;
+    }
+}

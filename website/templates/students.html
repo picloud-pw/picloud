@@ -1,0 +1,35 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Students
+{% endblock %}
+
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'students/css/main.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded grid">
+        <div class="no-margin-padding column">
+            {% include 'search.html' %}
+            <div id="students_container" style="padding-top: 20px"></div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'students/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'students/js/student_posts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'students/js/main.js' %}"></script>
+
+{% endblock %}
