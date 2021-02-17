@@ -3,6 +3,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+import website.views
+
+handler404 = website.views.errors.handler404
+handler500 = website.views.errors.handler500
+
+
 urlpatterns = [
 
     path('', include('social_django.urls', namespace='social')),
