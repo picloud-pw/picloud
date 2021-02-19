@@ -11,6 +11,7 @@ urlpatterns = [
 
     path('get', posts.get, ),
     path('update', posts.update, ),
+    path('submit', posts.submit, ),
     path('delete', posts.delete, ),
     path('approve', posts.approve, ),
 

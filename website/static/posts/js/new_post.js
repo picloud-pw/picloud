@@ -230,12 +230,18 @@ function submit(btn) {
         let data = new FormData();
         data.append('id', post_id);
         data.append('is_draft', 'False');
-        axios.post('/posts/update', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        axios.post('/posts/submit', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
-                POSTS = {};
-                document.getElementById('bodies_editor_container').innerHTML = "";
-                load_drafts();
-                show_alert('success', `[POST-${post_id}] Post has been submitted!`);
+                if (response.data['error']) {
+                    show_alert('warning', `[Warning] ${response.data['error']}`);
+                } else {
+                    show_alert('success', `[POST-${post_id}] Post has been submitted!`);
+                    POSTS = {};
+                    document.getElementById('bodies_editor_container').innerHTML = "";
+                    load_drafts();
+                }
+            }).catch((err) => {
+                  console.log(err);
             }).finally(() => {
             btn.classList.remove('loading');
         })

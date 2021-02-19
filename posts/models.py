@@ -49,7 +49,9 @@ class Post(models.Model):
     ]
 
     def __str__(self):
-        return self.title
+        return f"{'[DRAFT]' if self.is_draft else ''} " \
+               f"{'[MODER]' if not self.is_approved and not self.is_draft else ''} " \
+               f"{self.author.username} - {self.title}"
 
     def html(self):
         if self.text is None:
@@ -59,9 +61,14 @@ class Post(models.Model):
         html_with_hyperlinks = bleach.linkify(safe_html)
         return html_with_hyperlinks
 
-    def publish(self):
-        self.created_date = timezone.now()
-        self.save()
+    def is_valid(self):
+        if self.title is None or len(self.title) < 5:
+            raise ValueError("Title length shorten than 5 symbols.")
+        if self.subject is None:
+            raise ValueError("Subject is not set.")
+        if self.type is None:
+            raise ValueError("Post Type is not set.")
+        return True
 
     def get_image_url(self):
         if self.image and hasattr(self.image, 'url'):

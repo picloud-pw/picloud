@@ -95,9 +95,6 @@ def update(request):
     text = request.POST.get('text')
     if text is not None:
         post.text = text
-    is_draft = request.POST.get('is_draft')
-    if is_draft is not None:
-        post.is_draft = is_draft == 'True'
     post.last_editor = request.user
     post.save()
     return HttpResponse(status=200)
@@ -113,6 +110,33 @@ def get(request):
         return JsonResponse(post.as_dict())
     else:
         return HttpResponse(status=403)
+
+
+@auth_required
+def submit(request):
+    post_id = request.POST.get('id')
+    if post_id is None:
+        return HttpResponse(status=404)
+    post = Post.objects.get(id=post_id)
+
+    is_draft = request.POST.get('is_draft')
+    if is_draft is None:
+        return HttpResponse(status=400)
+
+    if not ((request.user.is_authenticated and request.user.is_staff)
+            or request.user.pk == post.author.pk):
+        return HttpResponse(status=403)
+
+    if is_draft == 'False':
+        try:
+            post.is_draft = False if post.is_valid() else True
+        except ValueError as e:
+            return JsonResponse({'error': str(e)})
+    else:
+        post.is_draft = True
+
+    post.save()
+    return HttpResponse(status=200)
 
 
 @auth_required
