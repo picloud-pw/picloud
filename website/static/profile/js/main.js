@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    $('.menu .item').tab();
     init_personal_info();
 
 });
@@ -16,14 +17,20 @@ function init_personal_info() {
             let me = response.data;
             USER_INFO = me;
 
+            display_students_posts(
+                document.getElementById('user_posts'),
+                me['id']
+            );
+
             display_student_drafts(
                 document.getElementById('user_drafts'),
                 me['id']
             );
 
-            display_students_posts(
-                document.getElementById('user_posts'),
-                me['id']
+            display_student_drafts(
+                document.getElementById('moderation_posts'),
+                me['id'],
+                true
             );
 
             let department_container = document.getElementById('user_department_container');

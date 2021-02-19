@@ -49,7 +49,10 @@ function display_student_page(student_id) {
                 </div>
             </div>
             <div class="ui six wide column">
-                <div id="students_posts"></div>
+                <div class="ui segment">
+                    <div class="ui dividing header">Posts</div>
+                    <div id="students_posts"></div>
+                </div>
             </div>
         </div>
     `;

@@ -1,22 +1,19 @@
-function display_student_drafts(container, student_id) {
+function display_student_drafts(container, student_id, moderation=false) {
+    let inner_id = moderation ? 'moderation' : 'drafts' + '_container';
     container.innerHTML = `
-        <div class="ui segment">
-            <div class="ui dividing header">Drafts</div>
-            <div class="ui relaxed divided list" id="drafts_container">
-                <div class="ui placeholder">
-                  <div class="paragraph">
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                  </div>
-                </div>
+        <div class="ui relaxed divided list" id="${inner_id}">
+            <div class="ui placeholder">
+              <div class="paragraph">
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+              </div>
             </div>
         </div>
     `;
-    container = document.getElementById('drafts_container');
-    axios.get(`/posts/search?author_id=${student_id}&is_draft=True`)
+    let filter = moderation ? 'is_draft=False&is_approved=False' : 'is_draft=True';
+    container = document.getElementById(inner_id);
+    axios.get(`/posts/search?author_id=${student_id}&${filter}`)
         .then((response) => {
             container.innerHTML = "";
             let posts = response.data['posts'];
@@ -38,7 +35,7 @@ function display_student_drafts(container, student_id) {
                     <div class="ui basic placeholder segment" style="min-height: 100px">
                       <div class="ui icon header">
                         <i class="pencil icon"></i>
-                        No drafts are listed for this student.
+                        ${moderation ? 'You have not sent posts for moderation yet.' : 'No drafts are listed for this student.'}
                       </div>
                     </div>
                 `;

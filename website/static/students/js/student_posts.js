@@ -1,17 +1,12 @@
 function display_students_posts(container, student_id) {
     container.innerHTML = `
-        <div class="ui segment">
-            <div class="ui dividing header">Posts</div>
-            <div class="ui relaxed divided list" id="posts_container">
-                <div class="ui placeholder">
-                  <div class="paragraph">
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                  </div>
-                </div>
+        <div class="ui relaxed divided list" id="posts_container">
+            <div class="ui placeholder">
+              <div class="paragraph">
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+              </div>
             </div>
         </div>
     `;

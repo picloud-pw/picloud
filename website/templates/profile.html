@@ -23,9 +23,16 @@
                  id="user_department_container"></div>
         </div>
         <div class="six wide column">
-
-            <div id="user_drafts"></div>
-            <div id="user_posts" style="margin-top: 20px"></div>
+            <div class="ui segment">
+                <div class="ui pointing secondary menu">
+                    <a class="active item" data-tab="posts_tab">Posts</a>
+                    <a class="item" data-tab="drafts_tab">Drafts</a>
+                    <a class="item" data-tab="moderation_tab">Moderation</a>
+                </div>
+                <div class="ui bottom attached active tab" data-tab="posts_tab" id="user_posts"></div>
+                <div class="ui bottom attached tab" data-tab="drafts_tab" id="user_drafts"></div>
+                <div class="ui bottom attached tab" data-tab="moderation_tab" id="moderation_posts"></div>
+            </div>
         </div>
     </div>
 
