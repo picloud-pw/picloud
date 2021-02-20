@@ -104,7 +104,6 @@ function init_child_departments_list(parent_department_id) {
         .then((response) => {
             let departments = response.data['departments'];
             for (let d of departments) {
-                console.log(d);
                 container.innerHTML += `
                     <div class="item" style="cursor: pointer" onclick="init_child_department_page('${d['id']}')">
                         <i class="large university middle aligned icon"></i>
@@ -143,18 +142,23 @@ function init_breadcrumbs(department_id) {
 
     function format_breadcrumbs(container, node) {
         container.innerHTML += `
-            <a class="section" title="${node['name']}"
+            <a class="step" title="${node['name']}"
                 onclick="init_child_department_page('${node['id']}')">
-                ${node['name'].length > 30 ? node['name'].substr(0, 30) + '...' : node['name']}
+                <i class="ui university icon"></i>
+                <div class="content">
+                    <div class="title">
+                        ${node['name'].length > 50 ? node['name'].substr(0, 50) + '...' : node['name']}
+                    </div>
+                    <div class="description"></div>
+                </div>
             </a>
-            ${node['child'] ? '<i class="right chevron icon divider"></i>' : ''}
         `;
         if (node['child']) {
             format_breadcrumbs(container, node['child']);
         }
     }
 
-    breadcrumbs_container.innerHTML = `<div class="ui huge breadcrumb" id="breadcrumbs"></div>`;
+    breadcrumbs_container.innerHTML = `<div class="ui fluid steps" id="breadcrumbs"></div>`;
     let container = document.getElementById('breadcrumbs');
     container.innerText = "";
 
