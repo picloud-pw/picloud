@@ -43,9 +43,8 @@ function init_root_departments_list() {
     breadcrumbs_container.style.display = 'none';
 
     departments_container.innerHTML = `
-        <div class="seven wide computer ten wide tablet sixteen wide mobile column ui segment"
-                     style="margin: 40px; padding: 20px">
-            <div class="ui divided relaxed items" id="universities"></div>
+        <div class="six wide computer ten wide tablet sixteen wide mobile column"
+                     style="margin: 40px; padding: 20px" id="universities">
         </div>
     `;
     let container = document.getElementById('universities');
@@ -54,12 +53,15 @@ function init_root_departments_list() {
             let departments = response.data['departments'];
             for (let d of departments) {
                 container.innerHTML += `
-                    <div class="item" style="cursor: pointer" onclick="init_child_department_page('${d['id']}')">
-                        <div class="ui tiny avatar image">
-                            <img src="${d['logo']}" alt="logo">
-                        </div>
-                        <div class="middle aligned content">
-                          <div class="header">${d['name']}</div>
+                    <div class="ui link items segment" style="cursor: pointer"
+                            onclick="init_child_department_page('${d['id']}')">
+                        <div class="item">
+                            <div class="ui tiny avatar image">
+                                <img src="${d['logo']}" alt="logo">
+                            </div>
+                            <div class="middle aligned content">
+                              <div class="header">${d['name']}</div>
+                            </div>
                         </div>
                     </div>
                `;
