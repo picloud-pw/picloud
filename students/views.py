@@ -78,6 +78,9 @@ def get(request):
 @auth_required
 def search(request):
     query = request.GET.get('q')
+    department_id = request.GET.get('department_id')
+    is_avatar_set = request.GET.get('avatar')
+    status_id = request.GET.get('status_id')
     page = request.GET.get('p', 1)
     page_size = request.GET.get('ps', 15)
 
@@ -85,6 +88,12 @@ def search(request):
 
     if query is not None:
         students = students.filter(user__username__icontains=query)
+
+    if department_id is not None:
+        students = students.filter(department_id=department_id)
+
+    if status_id is not None:
+        students = students.filter(status_id=status_id)
 
     paginator = Paginator(students, page_size)
     try:
