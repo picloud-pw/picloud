@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     init_departments_search(
         (result, response) => {
             init_child_department_page(result['department_id']);
-    });
+        });
 
     restore_state();
 
@@ -84,16 +84,10 @@ function init_child_department_page(parent_department_id) {
     init_breadcrumbs(parent_department_id);
     departments_container.innerHTML = `
         <div class="seven wide column">
-            <div class="ui segment">
-                <div class="ui dividing header">Sub-departments</div>
-                <div class="ui divided relaxed list" id="departments"></div>
-            </div>
+            <div class="ui segment" id="departments"></div>
         </div>
         <div class="seven wide column">
-            <div class="ui segment">
-                <div class="ui dividing header">Related subjects</div>
-                <div class="ui divided relaxed list" id="subjects"></div>
-            </div>
+            <div class="ui segment" id="subjects"></div>
         </div>
     `;
     init_child_departments_list(parent_department_id);
@@ -102,9 +96,18 @@ function init_child_department_page(parent_department_id) {
 
 function init_child_departments_list(parent_department_id) {
     let container = document.getElementById('departments');
+    container.innerHTML += `
+        <div class="ui dividing header">Sub-departments</div>
+        <div class="ui divided relaxed list" id="departments_list">
+            ${render_loader()}
+        </div>
+    `;
+    container = document.getElementById('departments_list');
     axios.get(`/hierarchy/departments/search?parent_department_id=${parent_department_id}`)
         .then((response) => {
             let departments = response.data['departments'];
+            container.innerHTML = departments.length ? '' :
+                render_placeholder('university', 'Looks like there is no sub-departments...');
             for (let d of departments) {
                 container.innerHTML += `
                     <div class="item" style="cursor: pointer" onclick="init_child_department_page('${d['id']}')">
@@ -124,15 +127,29 @@ function init_child_departments_list(parent_department_id) {
 
 function init_related_subjects_list(department_id) {
     let container = document.getElementById('subjects');
+    container.innerHTML = `
+        <div class="ui dividing header">Related subjects</div>
+        <div class="ui divided relaxed list" id="subjects_list">
+            ${render_loader()}
+        </div>
+    `;
+    container = document.getElementById('subjects_list');
     axios.get(`/hierarchy/subjects/search?department_id=${department_id}`)
         .then((response) => {
             let subjects = response.data['subjects'];
+            container.innerHTML = subjects.length ? '' :
+                render_placeholder('bookmark outline', 'Looks like there is no subject on this level...');
             for (let s of subjects) {
+                console.log(s);
                 container.innerHTML += `
                     <a class="item" style="cursor: pointer" href="/subjects?id=${s['id']}">
                         <i class="large bookmark outline middle aligned icon"></i>
                         <div class="middle aligned content">
                           <div class="header">${s['name']}</div>
+                          <div class="description">
+                            Semester – ${s['semester'] ? s['semester'] : '---'} •  
+                            <i class="sticky note outline icon"></i> ${s['posts']}
+                          </div>
                         </div>
                     </a>
                `;
@@ -144,7 +161,7 @@ function init_breadcrumbs(department_id) {
 
     function format_breadcrumbs(container, node) {
         container.innerHTML += `
-            <a class="step" title="${node['name']}"
+            <a class="step ${!node['child'] ? 'active' : ''}" title="${node['name']}"
                 onclick="init_child_department_page('${node['id']}')">
                 <i class="ui university icon"></i>
                 <div class="content">
