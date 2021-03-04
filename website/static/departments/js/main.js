@@ -32,12 +32,12 @@ function restore_state() {
     if (DEPARTMENT_ID) {
         init_child_department_page(DEPARTMENT_ID);
     } else {
-        init_root_departments_list();
+        init_universities_list();
     }
 
 }
 
-function init_root_departments_list() {
+function init_universities_list() {
     departments_container.classList.add('loading');
     departments_container.innerText = '';
     breadcrumbs_container.style.display = 'none';
@@ -84,77 +84,33 @@ function init_child_department_page(parent_department_id) {
     init_breadcrumbs(parent_department_id);
     departments_container.innerHTML = `
         <div class="seven wide column">
-            <div class="ui segment" id="departments"></div>
+            <div class="ui segment">
+                <div class="ui dividing header">Sub-departments</div>
+                <div id="departments"></div>
+            </div>
         </div>
         <div class="seven wide column">
-            <div class="ui segment" id="subjects"></div>
+            <div class="ui segment">
+                <div class="ui dividing header">Subjects</div>
+                <div id="subjects"></div>
+            </div>
+            <div class="ui segment">
+                <div class="ui dividing header">Students</div>
+                <div id="students"></div>
+            </div>
+            <div class="ui segment" id="posts">
+            
+            </div>
         </div>
     `;
-    init_child_departments_list(parent_department_id);
-    init_related_subjects_list(parent_department_id);
-}
-
-function init_child_departments_list(parent_department_id) {
-    let container = document.getElementById('departments');
-    container.innerHTML += `
-        <div class="ui dividing header">Sub-departments</div>
-        <div class="ui divided relaxed list" id="departments_list">
-            ${render_loader()}
-        </div>
-    `;
-    container = document.getElementById('departments_list');
-    axios.get(`/hierarchy/departments/search?parent_department_id=${parent_department_id}`)
-        .then((response) => {
-            let departments = response.data['departments'];
-            container.innerHTML = departments.length ? '' :
-                render_placeholder('university', 'Looks like there is no sub-departments...');
-            for (let d of departments) {
-                container.innerHTML += `
-                    <div class="item" style="cursor: pointer" onclick="init_child_department_page('${d['id']}')">
-                        <i class="large university middle aligned icon"></i>
-                        <div class="middle aligned content">
-                          <div class="header">${d['name']}</div>
-                          <div class="description">${d['type']['name']}</div>
-                        </div>
-                    </div>
-               `;
-            }
-        })
-        .finally(() => {
-            departments_container.classList.remove('loading');
-        })
-}
-
-function init_related_subjects_list(department_id) {
-    let container = document.getElementById('subjects');
-    container.innerHTML = `
-        <div class="ui dividing header">Related subjects</div>
-        <div class="ui divided relaxed list" id="subjects_list">
-            ${render_loader()}
-        </div>
-    `;
-    container = document.getElementById('subjects_list');
-    axios.get(`/hierarchy/subjects/search?department_id=${department_id}`)
-        .then((response) => {
-            let subjects = response.data['subjects'];
-            container.innerHTML = subjects.length ? '' :
-                render_placeholder('bookmark outline', 'Looks like there is no subject on this level...');
-            for (let s of subjects) {
-                console.log(s);
-                container.innerHTML += `
-                    <a class="item" style="cursor: pointer" href="/subjects?id=${s['id']}">
-                        <i class="large bookmark outline middle aligned icon"></i>
-                        <div class="middle aligned content">
-                          <div class="header">${s['name']}</div>
-                          <div class="description">
-                            Semester – ${s['semester'] ? s['semester'] : '---'} •  
-                            <i class="sticky note outline icon"></i> ${s['posts']}
-                          </div>
-                        </div>
-                    </a>
-               `;
-            }
-        })
+    child_departments_list(
+        document.getElementById('departments'),
+        parent_department_id
+    );
+    department_subjects_list(
+        document.getElementById('subjects'),
+        parent_department_id
+    );
 }
 
 function init_breadcrumbs(department_id) {
