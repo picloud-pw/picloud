@@ -2,6 +2,18 @@ function init_students_filters(container) {
     container.innerHTML = `
         <div class="ui form" id="filters_form">
           <div class="field">
+            <label>Department</label>
+            <div class="ui loading fluid search">
+                <div class="ui fluid input">
+                    <input class="fluid prompt" name="department_name" type="text"
+                           placeholder="Enter search query">
+                </div>
+                <input name="department_id" type="hidden">
+                <div class="search results"></div>
+            </div>
+            <div id="department_hierarchy" style="margin-top: 10px"></div>
+          </div>
+          <div class="field">
             <label>Student status</label>
             <select class="ui dropdown" id="student_status">
                 <option value="any" selected>Any</option>
@@ -29,6 +41,13 @@ function init_students_filters(container) {
                 `;
             }
             $('#student_status').dropdown()
+        })
+
+    init_departments_search((result, response) => {
+            display_department_hierarchy(
+                document.getElementById('department_hierarchy'),
+                result['department_id']
+            );
         })
 
 }
