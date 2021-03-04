@@ -91,12 +91,12 @@ function init_child_department_page(parent_department_id) {
         </div>
         <div class="seven wide column">
             <div class="ui segment">
-                <div class="ui dividing header">Subjects</div>
-                <div id="subjects"></div>
-            </div>
-            <div class="ui segment">
                 <div class="ui dividing header">Students</div>
                 <div id="students"></div>
+            </div>
+            <div class="ui segment">
+                <div class="ui dividing header">Subjects</div>
+                <div id="subjects"></div>
             </div>
         </div>
     `;
@@ -108,6 +108,13 @@ function init_child_department_page(parent_department_id) {
         document.getElementById('subjects'),
         parent_department_id
     );
+    init_students_list(
+        document.getElementById('students'),
+        {
+            'department_id': parent_department_id,
+            'ps': 3,
+        },
+    )
 }
 
 function init_breadcrumbs(department_id) {
