@@ -98,9 +98,6 @@ function init_child_department_page(parent_department_id) {
                 <div class="ui dividing header">Students</div>
                 <div id="students"></div>
             </div>
-            <div class="ui segment" id="posts">
-            
-            </div>
         </div>
     `;
     child_departments_list(
