@@ -2,13 +2,7 @@ function display_student_drafts(container, student_id, moderation=false) {
     let inner_id = moderation ? 'moderation' : 'drafts' + '_container';
     container.innerHTML = `
         <div class="ui relaxed divided list" id="${inner_id}">
-            <div class="ui placeholder">
-              <div class="paragraph">
-                <div class="line"></div><div class="line"></div>
-                <div class="line"></div><div class="line"></div>
-                <div class="line"></div><div class="line"></div>
-              </div>
-            </div>
+            ${render_loader()}
         </div>
     `;
     let filter = moderation ? 'is_draft=False&is_approved=False' : 'is_draft=True';
@@ -31,14 +25,11 @@ function display_student_drafts(container, student_id, moderation=false) {
                 `;
             }
             if (!posts.length) {
-                container.innerHTML = `
-                    <div class="ui basic placeholder segment" style="min-height: 100px">
-                      <div class="ui icon header">
-                        <i class="pencil icon"></i>
-                        ${moderation ? 'You have not sent posts for moderation yet.' : 'No drafts are listed for this student.'}
-                      </div>
-                    </div>
-                `;
+                container.innerHTML = render_placeholder(
+                    'pencil',
+                    moderation ? 'You have not sent posts for moderation yet.' :
+                        'No drafts are listed for this student.'
+                )
             }
 
         }).finally(() => {})

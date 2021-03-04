@@ -53,3 +53,38 @@ function isScrolledIntoView(elem) {
 
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
+
+function render_placeholder(icon, message) {
+    return `
+        <div class="ui basic placeholder segment" style="min-height: 100px">
+          <div class="ui icon header">
+            <i class="${icon} icon"></i>
+            ${message}
+          </div>
+        </div>
+    `;
+}
+
+function render_loader(type='paragraph') {
+    if (type === 'paragraph') {
+        return `
+            <div class="ui placeholder">
+              <div class="paragraph">
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+              </div>
+            </div>
+            </div>
+        `;
+    } else if (type === 'avatar') {
+        return `
+            <div class="ui placeholder">
+              <div class="image header">
+                <div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+              </div>
+            </div>
+        `;
+    }
+}

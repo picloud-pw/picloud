@@ -1,13 +1,7 @@
 function display_students_posts(container, student_id) {
     container.innerHTML = `
         <div class="ui relaxed divided list" id="posts_container">
-            <div class="ui placeholder">
-              <div class="paragraph">
-                <div class="line"></div><div class="line"></div>
-                <div class="line"></div><div class="line"></div>
-                <div class="line"></div><div class="line"></div>
-              </div>
-            </div>
+            ${render_loader()}
         </div>
     `;
     container = document.getElementById('posts_container');
@@ -27,14 +21,7 @@ function display_students_posts(container, student_id) {
                 `;
             }
             if (!posts.length) {
-                container.innerHTML = `
-                    <div class="ui basic placeholder segment" style="min-height: 100px">
-                      <div class="ui icon header">
-                        <i class="sticky note outline icon"></i>
-                        No posts are listed for this student.
-                      </div>
-                    </div>
-                `;
+                container.innerHTML = render_placeholder('sticky note outline', 'No posts are listed for this student.');
             }
 
         }).finally(() => {})
