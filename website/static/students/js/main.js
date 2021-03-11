@@ -51,8 +51,10 @@ function display_student_search_page() {
             </div>
         </div>
     `;
-    init_students_filters(document.getElementById('filters_container'));
-    init_students_list(document.getElementById('students_list'));
+    init_students_filters(
+        document.getElementById('filters_container'),
+        document.getElementById('students_list'),
+    );
 }
 
 function display_student_page(student_id) {

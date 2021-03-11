@@ -32,12 +32,14 @@ function load_students(container_id, load_btn_id, filters) {
         .then((response) => {
             let students = response.data['students'];
             if (students.length) {
+                // remove loader
                 if (STUDENTS_PAGE === 1) container.innerHTML = '';
             } else {
-                container.innerHTML = render_placeholder(
-                    'user',
-                    'Looks like there is not students for selected filters'
-                );
+                if (STUDENTS_PAGE === 1)
+                    container.innerHTML = render_placeholder(
+                        'user',
+                        'Looks like there is not students for selected filters'
+                    );
                 load_button.remove();
             }
             for (let student of students) {
