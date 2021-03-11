@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.http import JsonResponse
 
 from decorators import auth_required
@@ -95,13 +96,17 @@ def search(request):
     if status_id is not None:
         students = students.filter(status_id=status_id)
 
+    if is_avatar_set is not None:
+        def_ava = Q(avatar=StudentInfo.avatar.field.default)
+        students = students.filter(~def_ava if is_avatar_set else def_ava)
+
     paginator = Paginator(students, page_size)
     try:
         students_page = paginator.page(page)
     except PageNotAnInteger:
         students_page = paginator.page(1)
     except EmptyPage:
-        students_page = paginator.page(paginator.num_pages)
+        students_page = list()
 
     return JsonResponse({'students': [
         student.as_dict() for student in students_page
