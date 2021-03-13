@@ -1,3 +1,47 @@
+function format_post_links(links) {
+    if (!links.length)
+        return '';
+    let links_list = ``;
+    for (let link of links) {
+        links_list += `
+          <div class="item">
+            <i class="linkify icon"></i>
+            <div class="content">
+                <a href="${link}" target="_blank">${link}</a>
+            </div>
+          </div>
+        `;
+    }
+    return `<div class="ui list">${links_list}</div><hr/>`;
+}
+
+function format_post_images(images) {
+    let template = '';
+    for (let image of images) {
+        template += `
+            <a href="${image['url']}" target="_blank">
+                <img class="post-img" src="${image['url']}"  alt="${image['url']}"
+                    ratio="${image['width']}x${image['height']}"/>
+                <hr/>
+            </a>
+        `;
+    }
+    return template;
+}
+
+function format_post_files(files) {
+    let template = '';
+    for (let file of files) {
+        template += `
+            <a class="ui green right basic labeled icon mini fluid button" href="${file['url']}" target="_blank">
+                Download '<strong>${file['extension']}</strong>' file <i class="download icon"></i>
+            </a>
+            <hr/>
+        `
+    }
+    return template;
+}
+
 function render_post(post) {
     let element = document.createElement("article");
     element.classList.add("post");
@@ -20,26 +64,11 @@ function render_post(post) {
                 <hr/>
                 ${post['html'] ? `<div class="text">${post['html']}</div> <hr/>` : ''}
                 
-                ${post['image']['url'] ? `
-                    <img class="post-img" 
-                         ratio="${post['image']['width']}x${post['image']['height']}"
-                         src="${post['image']['url']}" 
-                         alt="${post['image']['url']}">
-                ` : ''}
+                ${format_post_images(post['attachments']['images'])}
                 
-                ${post['link'] ? `
-                    <a class="ui primary right labeled icon button btn-follow-link" href="${post['link']}" target="_blank">
-                        Open link <i class="angle double right icon"></i>
-                    </a>
-                    <hr/>
-                ` : ''}
+                ${format_post_links(post['attachments']['links'])}
 
-                ${post['file']['url'] ? `
-                    <a class="ui green right labeled icon button btn-download" href="${post['file']['url']}">
-                        Download '<strong>${post['file']['extension']}</strong>' file <i class="download icon"></i>
-                    </a>
-                    <hr/>
-                ` : ''}
+                ${format_post_files(post['attachments']['files'])}
                 
                 ${post['is_parent'] ? `
                     <br> <a class="ui button" href="">Child posts</a>

@@ -4,6 +4,7 @@ import bleach
 import markdown
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 from hierarchy.models import Subject
@@ -70,34 +71,6 @@ class Post(models.Model):
             raise ValueError("Post Type is not set.")
         return True
 
-    def get_image_url(self):
-        if self.image and hasattr(self.image, 'url'):
-            return self.image.url
-        else:
-            return ""
-
-    def get_image_width(self):
-        if not self.image:
-            return None
-        try:
-            return self.image.width
-        except IOError or FileNotFoundError:
-            return None
-
-    def get_image_height(self):
-        if not self.image:
-            return None
-        try:
-            return self.image.height
-        except IOError or FileNotFoundError:
-            return None
-
-    def get_file_url(self):
-        if self.file and hasattr(self.file, 'url'):
-            return self.file.url
-        else:
-            return ""
-
     def can_be_edited_by(self, user):
         return self.author == user or \
                user.userinfo.status.can_moderate or \
@@ -109,12 +82,6 @@ class Post(models.Model):
 
     def get_childs(self):
         return self.post_set
-
-    def file_extension(self):
-        if self.file:
-            return os.path.splitext(self.file.name)[1][1:].upper()
-        else:
-            return None
 
     def get_comment_count(self):
         return Comment.objects.filter(post=self).count()
@@ -143,6 +110,13 @@ class Post(models.Model):
             return date.strftime("%d %b %H:%M")
         return date.strftime("%d %b %Y %H:%M")
 
+    def get_attachments(self):
+        return {
+            'images': [i.as_dict()['image'] for i in Attachment.objects.filter(post=self).filter(~Q(image=''))],
+            'files': [i.as_dict()['file'] for i in Attachment.objects.filter(post=self).filter(~Q(file=''))],
+            'links': [i.as_dict()['link'] for i in Attachment.objects.filter(post=self, link__isnull=False)],
+        }
+
     def as_dict(self):
         student_info = StudentInfo.objects.get(user=self.author)
         return {
@@ -158,18 +132,9 @@ class Post(models.Model):
             "created_date_human": self.created_date_human(),
             "subject": self.subject.as_dict() if self.subject is not None else None,
             "type": self.type.as_dict() if self.type is not None else None,
-            "link": self.link,
-            "image": {
-                "url": self.get_image_url(),
-                "width": self.get_image_width(),
-                "height": self.get_image_height(),
-            },
-            "file": {
-                "url": self.get_file_url(),
-                "extension": self.file_extension(),
-            },
             "views": self.views,
             "comments": self.get_comment_count(),
+            "attachments": self.get_attachments(),
         }
 
 
