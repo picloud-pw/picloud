@@ -173,6 +173,70 @@ class Post(models.Model):
         }
 
 
+class Attachment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True, default=None)
+    image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True, default=None)
+    link = models.URLField(max_length=512, null=True, blank=True, default=None)
+
+    def get_image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        else:
+            return ""
+
+    def get_image_width(self):
+        if not self.image:
+            return None
+        try:
+            return self.image.width
+        except IOError or FileNotFoundError:
+            return None
+
+    def get_image_height(self):
+        if not self.image:
+            return None
+        try:
+            return self.image.height
+        except IOError or FileNotFoundError:
+            return None
+
+    def get_file_url(self):
+        if self.file and hasattr(self.file, 'url'):
+            return self.file.url
+        else:
+            return ""
+
+    def file_extension(self):
+        if self.file:
+            return os.path.splitext(self.file.name)[1][1:].upper()
+        else:
+            return None
+
+    def __str__(self):
+        return f"[{self.post.pk}] " \
+               f"{'image - ' + self.image.name if self.image else ''}" \
+               f"{'file - ' + self.file.name if self.file else ''}" \
+               f"{'link - ' + self.link if self.link else ''}"
+
+    def as_dict(self):
+        dictionary = dict()
+        if self.file is not None:
+            dictionary['file'] = {
+                "url": self.get_file_url(),
+                "extension": self.file_extension(),
+            }
+        if self.image is not None:
+            dictionary['image'] = {
+                "url": self.get_image_url(),
+                "width": self.get_image_width(),
+                "height": self.get_image_height(),
+            }
+        if self.link is not None:
+            dictionary['link'] = self.link
+        return dictionary
+
+
 class Comment(models.Model):
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=False, blank=True)
