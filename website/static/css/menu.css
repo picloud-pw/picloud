@@ -23,17 +23,17 @@ nav.sidebar, .main {
     padding: 7px;
 }
 
-#avatar {
+.avatar {
     padding: 5px;
     margin: auto;
 
-    width: 75px;
-    height: 75px;
+    width: 75px !important;
+    height: 75px !important;
 
     background-size: cover;
     background-position: top center;
 
-    border-radius: 50%;
+    border-radius: 50% !important;
 }
 
 .navbar-position {

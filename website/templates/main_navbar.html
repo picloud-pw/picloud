@@ -26,7 +26,7 @@
                 {% if user.is_authenticated %}
                     <li>
                         <a href="{% url 'profile' %}">
-                            <div id="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
+                            <div class="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
                             <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: normal;">{{ user.username }}</p>
                         </a>
                     </li>
