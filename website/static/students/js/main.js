@@ -34,23 +34,6 @@ function restore_state() {
 }
 
 function display_student_search_page() {
-    let container = document.getElementById("students_container");
-    container.innerHTML = `
-        <div class="ui centered stackable grid">
-            <div class="four wide column">
-                <div class="ui segment">
-                    <div class="ui dividing header">Filters</div>
-                    <div id="filters_container"></div>
-                </div>
-            </div>
-            <div class="six wide column">
-                <div class="ui segment">
-                    <div class="ui dividing header">Students</div>
-                    <div id="students_list"></div>
-                </div>
-            </div>
-        </div>
-    `;
     init_students_filters(
         document.getElementById('filters_container'),
         document.getElementById('students_list'),

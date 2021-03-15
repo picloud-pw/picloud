@@ -18,7 +18,25 @@
     <div class="ui padded grid">
         <div class="no-margin-padding column">
             {% include 'search.html' %}
-            <div id="students_container" style="padding-top: 20px"></div>
+            <div id="students_container" style="padding-top: 20px; margin: 10px">
+                <div class="ui centered stackable grid">
+                    <div class="four wide computer ten wide tablet sixteen wide mobile column">
+                        <div class="ui segment">
+                            <div class="ui dividing header">Filters</div>
+                            <div id="filters_container"></div>
+                        </div>
+                        <div class="ui segment">
+                            {% include 'ads/adsense/square.html' %}
+                        </div>
+                    </div>
+                    <div class="five wide computer ten wide tablet sixteen wide mobile column">
+                        <div class="ui segment">
+                            <div class="ui dividing header">Students</div>
+                            <div id="students_list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
