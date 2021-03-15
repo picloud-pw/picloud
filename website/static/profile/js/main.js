@@ -119,12 +119,13 @@ function init_personal_info() {
 
 function init_edit_form(field) {
     let container = document.getElementById('edit_form_modal_container');
+    let form_id = random_ID();
     container.innerHTML = `
-        <div class="ui tiny modal" id="edit_form_modal">
+        <div class="ui tiny modal" id="${form_id}_modal">
           <i class="close icon"></i>
           <div class="header">Edit personal information</div>
           <div class="content">
-            <form class="ui form" id="edit_form"></form>
+            <form class="ui form" id="${form_id}"></form>
           </div>
           <div class="actions">
             <div class="ui black deny button">Cancel</div>
@@ -133,7 +134,7 @@ function init_edit_form(field) {
         </div>
     `;
 
-    let fields_container = document.getElementById('edit_form');
+    let fields_container = document.getElementById(form_id);
 
     if (field === 'name') {
         fields_container.innerHTML = `
@@ -191,18 +192,18 @@ function init_edit_form(field) {
         `
     }
 
-    $('#edit_form_modal')
+    $(`#${form_id}_modal`)
         .modal({
             onApprove: (elem) => {
-                save_edit_form();
+                save_edit_form(form_id);
             },
         })
         .modal('show');
 }
 
-function save_edit_form() {
+function save_edit_form(form_id) {
     let formData = new FormData(
-        document.getElementById('edit_form')
+        document.getElementById(form_id)
     );
 
     axios.post(`/students/me/edit`, formData, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})

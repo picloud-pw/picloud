@@ -31,10 +31,15 @@ def me_edit(request):
                 'status': 'warning',
                 'message': 'This username is already taken',
             })
+        if 16 < len(username) or len(username) < 4:
+            return JsonResponse({
+                'status': 'warning',
+                'message': 'Length must be between 4 and 16 characters.',
+            })
         user_info.user.username = username
 
     if first_name is not None:
-        if 30 < first_name:
+        if 30 < len(first_name):
             return JsonResponse({
                 'status': 'warning',
                 'message': 'Length must be up to 30 characters.',
@@ -42,7 +47,7 @@ def me_edit(request):
         user_info.user.first_name = first_name
 
     if last_name is not None:
-        if 30 < last_name:
+        if 30 < len(last_name):
             return JsonResponse({
                 'status': 'warning',
                 'message': 'Length must be up to 30 characters.',
