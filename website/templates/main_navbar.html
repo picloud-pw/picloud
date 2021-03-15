@@ -25,9 +25,11 @@
 
                 {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'profile' %}">
+                        <a href="{% url 'profile' %}" title="{{ user.username }}">
                             <div class="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
-                            <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: normal;">{{ user.username }}</p>
+                            <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: normal;">
+                                {{ user.username | truncatechars:11 }}
+                            </p>
                         </a>
                     </li>
                 {% endif %}
