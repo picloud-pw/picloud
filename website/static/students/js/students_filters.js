@@ -1,5 +1,5 @@
 let STUDENTS_LIST_FILTERS = {
-    'ps': 5,
+    'ps': 8,
 };
 
 function init_students_filters(container, list_container) {
