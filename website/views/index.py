@@ -13,6 +13,10 @@ def robots(request):
     return render(request, 'robots.txt', content_type="text/plain")
 
 
+def ads(request):
+    return render(request, 'ads.txt', content_type="text/plain")
+
+
 def about(request):
     return render(request, 'index.html')
 
