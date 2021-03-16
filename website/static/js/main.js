@@ -65,7 +65,7 @@ function render_placeholder(icon, message) {
     `;
 }
 
-function render_loader(type='paragraph') {
+function render_loader(type = 'paragraph') {
     if (type === 'paragraph') {
         return `
             <div class="ui placeholder">
@@ -87,4 +87,20 @@ function render_loader(type='paragraph') {
             </div>
         `;
     }
+}
+
+function show_ads_placeholders() {
+    $(".ad").each(function () {
+        this.classList.remove('ad');
+        this.innerHTML = `
+            <img src="/static/img/sad-cat.png" alt="sad-cat :(" 
+            style="margin:10px; max-width: 100%; max-height: 100%"/>
+            <hr>
+            <div style="margin: 10px;">
+                Please <a href="https://globalnews.ca/pages/disable-ad-blocker" target="_blank">disable AdBlock</a> 
+                and <a href="">refresh</a> the page. <br>
+                We try not to annoy you with ads 😔
+            </div>
+        `;
+    })
 }
