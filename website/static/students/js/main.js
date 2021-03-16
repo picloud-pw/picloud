@@ -34,6 +34,9 @@ function restore_state() {
 }
 
 function display_student_search_page() {
+    if (window.CAN_RUN_ADS === undefined) {
+        show_ads_placeholders()
+    }
     init_students_filters(
         document.getElementById('filters_container'),
         document.getElementById('students_list'),
