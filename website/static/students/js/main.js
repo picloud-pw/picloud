@@ -42,7 +42,7 @@ function display_student_search_page() {
                     <div id="filters_container"></div>
                 </div>
                 <div class="ui segment">
-                    ${show_ad_block()}
+                    ${show_ad_block('vertical')}
                 </div>
             </div>
             <div class="five wide computer ten wide tablet sixteen wide mobile column">
