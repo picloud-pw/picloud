@@ -89,18 +89,49 @@ function render_loader(type = 'paragraph') {
     }
 }
 
-function show_ads_placeholders() {
-    $(".ad").each(function () {
-        this.classList.remove('ad');
-        this.innerHTML = `
+function show_ad_block(type='squared'){
+    if (window.CAN_RUN_ADS === undefined) {
+        return ads_placeholders()
+    }
+
+    let slot = 'medium rectangle';
+    let ad_id = '3230844943'
+
+    if (type === 'horizontal') {
+        ad_id = '6967388903';
+        slot = 'banner';
+    }
+    if (type === 'vertical') {
+        ad_id = '9597421672';
+        slot = 'vertical rectangle';
+    }
+    return `
+        <div class="ui ${slot} ad" style="margin: auto;">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8915976864571228"
+                 data-ad-slot="${ad_id}"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    `
+}
+
+function ads_placeholders() {
+     return `
+        <div class="ui medium rectangle" style="text-align: center">
             <img src="/static/img/sad-cat.png" alt="sad-cat :(" 
-            style="margin:10px; max-width: 100%; max-height: 100%"/>
+                style="margin:10px; max-width: 100%; max-height: 100%"/>
             <hr>
             <div style="margin: 10px;">
                 Please <a href="https://globalnews.ca/pages/disable-ad-blocker" target="_blank">disable AdBlock</a> 
                 and <a href="">refresh</a> the page. <br>
                 We try not to annoy you with ads 😔
             </div>
-        `;
-    })
+        </div>
+    `;
 }
