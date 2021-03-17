@@ -91,6 +91,9 @@ function init_child_department_page(parent_department_id) {
         </div>
         <div class="seven wide column">
             <div class="ui segment">
+                ${show_ad_block('horizontal')}
+            </div>
+            <div class="ui segment">
                 <div class="ui dividing header">Students</div>
                 <div id="students"></div>
             </div>
