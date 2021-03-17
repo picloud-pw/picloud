@@ -31,9 +31,11 @@ function load_posts_list() {
     let container = document.getElementById('posts_container');
     axios.get(`/posts/search?page=${PAGE}`)
         .then((response) => {
+            append_element( render_ad(), container );
             let posts = response.data['posts'];
             for (let post of posts) {
-                append_post(post, container);
+                let rendered_post = render_post(post);
+                append_element(rendered_post, container);
             }
         })
         .finally(() => {
@@ -54,11 +56,18 @@ function clear_posts_container(postsGrid) {
     postsGrid.appendChild(gutterSizer);
 }
 
-function append_post(post, postsContainer) {
-    let postElement = render_post(post);
-    postsContainer.appendChild(postElement);
-    MASONRY.appended(postElement);
-    imagesLoaded(postElement).on('progress', () => {
+function append_element(element, postsContainer) {
+    postsContainer.appendChild(element);
+    MASONRY.appended(element);
+    imagesLoaded(element).on('progress', () => {
         MASONRY.layout();
     });
+}
+
+function render_ad() {
+    let element = document.createElement("article");
+    element.classList.add("post");
+    element.style.padding = '20px';
+    element.innerHTML = show_ad_block();
+    return element;
 }

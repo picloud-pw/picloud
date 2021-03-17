@@ -34,6 +34,9 @@ function init_page() {
     container.innerHTML = `
         <div class="six wide column">
             <div class="ui segment" id="subject" style="min-height: 80px"></div>
+            <div class="ui segment">
+                ${show_ad_block('horizontal')}
+            </div>
             <div class="ui segment" id="hierarchy" style="min-height: 80px"></div>
         </div>
         <div class="six wide column">

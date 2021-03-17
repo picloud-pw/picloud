@@ -32,8 +32,16 @@ function restore_state() {
 function init_page(post_id) {
     let container = document.getElementById("posts_container");
     container.innerHTML = `
-        <div class="ui seven wide column basic segment" id="post"></div>
-        <div class="ui five wide column">
+        <div class="ui seven wide computer sixteen wide tablet column">
+            <div id="post"></div>
+            <div class="ui segment">
+                ${show_ad_block('horizontal')}
+            </div>
+        </div>
+        <div class="ui five wide computer sixteen wide tablet column">
+            <div class="ui segment">
+                ${show_ad_block()}
+            </div>
             <div class="ui segment" id="comments_list" style="margin-top: 10px; min-height: 80px"></div>
             <div class="ui segment" id="comments_form">
                 <div class="ui icon fluid input">
