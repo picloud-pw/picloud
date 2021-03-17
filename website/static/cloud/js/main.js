@@ -38,6 +38,7 @@ function load_posts_list() {
                 append_element(rendered_post, container);
             }
             push_ads();
+            MASONRY.layout();
         })
         .finally(() => {
             btn.classList.remove('loading');

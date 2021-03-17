@@ -54,6 +54,7 @@ function init_page(post_id) {
     display_post(document.getElementById('post'), post_id);
     display_comments(post_id);
     push_ads();
+    push_ads();
 
     document.getElementById("comment_text")
         .addEventListener("keyup", function(event) {
