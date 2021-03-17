@@ -58,6 +58,7 @@ function display_student_search_page() {
         document.getElementById('filters_container'),
         document.getElementById('students_list'),
     );
+    push_ads();
 }
 
 function display_student_page(student_id) {

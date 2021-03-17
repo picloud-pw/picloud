@@ -118,6 +118,7 @@ function init_child_department_page(parent_department_id) {
             'ps': 3,
         },
     )
+    push_ads();
 }
 
 function init_breadcrumbs(department_id) {

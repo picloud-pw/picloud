@@ -37,6 +37,7 @@ function load_posts_list() {
                 let rendered_post = render_post(post);
                 append_element(rendered_post, container);
             }
+            push_ads();
         })
         .finally(() => {
             btn.classList.remove('loading');

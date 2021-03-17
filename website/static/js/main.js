@@ -114,11 +114,12 @@ function show_ad_block(type='squared'){
                  data-ad-slot="${ad_id}"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
         </div>
     `
+}
+
+function push_ads() {
+    (adsbygoogle = window.adsbygoogle || []).push({});
 }
 
 function ads_placeholders() {

@@ -45,6 +45,7 @@ function init_page() {
     `;
     display_subject(document.getElementById('subject'));
     display_posts(document.getElementById('posts'));
+    push_ads();
 }
 
 function display_subject(container) {
