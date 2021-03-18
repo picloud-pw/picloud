@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
     imagesLoaded(grid).on('progress', () => {
         MASONRY.layout();
     });
+    let intervalId = setInterval(function() {
+        MASONRY.layout();
+    }, 3000);
 
     init_posts_search(
         (result, response) => {
@@ -38,7 +41,6 @@ function load_posts_list() {
                 append_element(rendered_post, container);
             }
             push_ads();
-            MASONRY.layout();
         })
         .finally(() => {
             btn.classList.remove('loading');
