@@ -4,6 +4,9 @@ from cloud import views
 
 urlpatterns = [
 
+    # legacy
+    path('post/<post_id>/', views.legacy.post_page_redirect),
+
     path('auth/delete-me/', views.user.delete_active_account, name='account_delete_active'),
 
     path('user/<user_id>', views.user.user_page, name='user_page'),

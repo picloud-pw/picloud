@@ -11,4 +11,5 @@ from . import (
     structure,
     universities,
     user,
+    legacy,
 )
