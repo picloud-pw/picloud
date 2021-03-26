@@ -87,7 +87,9 @@ function display_post(container, post_id) {
     axios.get(`/posts/search?id=${post_id}`)
         .then((response) => {
             let posts = response.data['posts'];
-            container.appendChild(render_post(posts[0]));
+            let post = posts[0];
+            document.title = post['title'];
+            container.appendChild(render_post(post));
         })
         .finally(() => {
             container.classList.remove('loading');

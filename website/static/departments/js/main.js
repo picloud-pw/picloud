@@ -38,6 +38,7 @@ function restore_state() {
 }
 
 function init_universities_list() {
+    document.title = 'PiCloud | Universities';
     departments_container.classList.add('loading');
     departments_container.innerText = '';
     breadcrumbs_container.style.display = 'none';
@@ -138,6 +139,8 @@ function init_breadcrumbs(department_id) {
         `;
         if (node['child']) {
             format_breadcrumbs(container, node['child']);
+        } else {
+            document.title = node['name'];
         }
     }
 

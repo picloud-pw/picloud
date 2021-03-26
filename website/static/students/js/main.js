@@ -99,6 +99,7 @@ function display_student_card(container, student_id) {
     axios.get(`/students/get?id=${student_id}`)
         .then((response) => {
             let user = response.data;
+            document.title = user['user']['username'];
             document.getElementById('student_info').innerHTML = `
                 <div class="ui fluid card">
                   <div class="image">

@@ -53,6 +53,7 @@ function display_subject(container) {
     axios.get(`/hierarchy/subjects/get?id=${SUBJECT_ID}`)
         .then((response) => {
             let subject = response.data['subject'];
+            document.title = subject['name'];
             container.innerHTML = `
                 <div class="ui items">
                   <div class="item">
