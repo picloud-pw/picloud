@@ -38,7 +38,7 @@ function restore_state() {
 }
 
 function init_universities_list() {
-    document.title = 'PiCloud | Universities';
+    document.title = 'Universities';
     departments_container.classList.add('loading');
     departments_container.innerText = '';
     breadcrumbs_container.style.display = 'none';
