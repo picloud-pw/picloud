@@ -7,7 +7,7 @@ import re
 
 from vk.exceptions import VkAPIError
 
-VK_API_VERSION = '5.74'
+VK_API_VERSION = '5.131'
 SCOPE = 4194304  # Email
 
 GLOBAL_TOKEN = getattr(settings, 'VK_GLOBAL_TOKEN', None)

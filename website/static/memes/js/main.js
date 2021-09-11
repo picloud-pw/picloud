@@ -73,7 +73,8 @@ function render_meme(mem) {
     if (mem['attachments']) {
         for (let attachment of mem['attachments']) {
             if (attachment['type'] === 'photo') {
-                attachments += `<img src="${attachment['photo']['photo_604']}" alt="Mem image">`;
+                // photo with best quality
+                attachments += `<img src="${attachment['photo']['sizes'][6]['url']}" alt="Mem image">`;
             }
         }
     }
