@@ -18,7 +18,7 @@ class Department(models.Model):
     department_type = models.ForeignKey(DepartmentType, null=True, blank=True, on_delete=models.SET_NULL)
     parent_department = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=256, null=False)
-    short_name = models.CharField(max_length=64, null=True, blank=True)
+    vk_id = models.CharField(max_length=64, null=True, blank=True)
     link = models.URLField(null=True, blank=True)
     logo = models.ImageField(
         upload_to="resources/logo/",
@@ -29,7 +29,7 @@ class Department(models.Model):
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"({self.short_name}) {self.name}"
+        return f"({self.vk_id}) {self.name}"
 
     def get_hierarchy(self):
         if self.parent_department is None:
@@ -51,7 +51,7 @@ class Department(models.Model):
             "type": None if self.department_type is None else self.department_type.as_dict(),
             "parent": None if self.parent_department is None else self.parent_department.as_dict(),
             "name": self.name,
-            "short_name": self.short_name,
+            "vk_id": self.vk_id,
             "link": self.link,
             "logo": self.logo.url,
             "is_approved": self.is_approved,

@@ -13,6 +13,7 @@ const departments_container = document.getElementById('departments_container');
 const breadcrumbs_container = document.getElementById('breadcrumbs_container');
 
 let DEPARTMENT_ID = null;
+let SELECTED_CITY = null;
 
 function save_state() {
     let state = {};
@@ -46,9 +47,40 @@ function init_universities_list() {
     departments_container.innerHTML = `
         <div class="six wide computer ten wide tablet sixteen wide mobile column"
                      style="margin: 40px; padding: 20px" id="universities">
+            <form class="ui form segment">
+                <div class="fields">
+                    <div class="four wide field">
+                        <label>Country</label>
+                        <div class="ui fluid disabled button">Russia</div>
+                    </div>
+                    <div class="twelve wide field">
+                        <label>City <i style="color: #d06969" title="Required field">*</i></label>
+                        <div class="ui search" id="cities_search">
+                            <div class="ui left icon fluid input" style="max-width: 600px">
+                                <i class="building outline icon"></i>
+                                <input class="prompt" type="text" placeholder="Enter city name">
+                            </div>
+                            <div class="search results"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>University <i style="color: #d06969" title="Required field">*</i></label>
+                    <div class="ui fluid search" id="university_search">
+                        <div class="ui left icon fluid input" style="max-width: 600px">
+                            <i class="university icon"></i>
+                            <input class="prompt" type="text" placeholder="Add new university by name">
+                        </div>
+                        <div class="search results"></div>
+                    </div>
+                </div>
+                <div id="new_university_preview"></div>
+            </form>
         </div>
     `;
     let container = document.getElementById('universities');
+
+    container.innerHTML += `<div class="ui divider"></div>`;
     axios.get(`/hierarchy/departments/search?parent_department_id=null`)
         .then((response) => {
             let departments = response.data['departments'];
@@ -71,6 +103,81 @@ function init_universities_list() {
         })
         .finally(() => {
             departments_container.classList.remove('loading');
+
+            $('#cities_search').search({
+                apiSettings: {
+                    url: "/hierarchy/cities/search?q={query}",
+                    onResponse: (response) => {
+                        let modified_response = [];
+                        for (let city of response['cities']) {
+                            modified_response.push({
+                                city_id: city['id'],
+                                title: city['title'],
+                                price: city['region'] ? `<div class="ui basic label">${city['region']}</div>` : '',
+                            })
+                        }
+                        return {results: modified_response}
+                    },
+                },
+                onSelect: (result, response) => {
+                    document.getElementById('new_university_preview').innerHTML = '';
+                    SELECTED_CITY = result;
+                },
+                maxResults: 10,
+                minCharacters: 2,
+            });
+            $('#university_search').search({
+                apiSettings: {
+                    url: `/hierarchy/universities/search?q={query}&city_id={city_id}`,
+                    beforeSend: function(settings) {
+                        settings.urlData['city_id'] = SELECTED_CITY ? SELECTED_CITY['city_id'] : null;
+                        return settings;
+                    },
+                    onResponse: (response) => {
+                        let modified_response = [];
+                        for (let university of response['universities']) {
+                            modified_response.push({
+                                university_id: university['id'],
+                                title: university['title'],
+                                price: `<div class="ui basic label">${university['id']}</div>`,
+                            })
+                        }
+                        return {results: modified_response}
+                    },
+                },
+                onSelect: display_university_preview,
+                maxResults: 10,
+                minCharacters: 2,
+            });
+        })
+}
+
+function display_university_preview(result, response) {
+    document.getElementById('new_university_preview').innerHTML = `
+        <h5 class="ui dividing header">Approve your choice</h5>
+        <span class="ui blue label">City: ${SELECTED_CITY['title']}</span>
+        <span class="ui teal label">University: ${result['title']}</span>
+        <span class="ui basic mini button" 
+            onclick="add_new_university('${result['university_id']}', '${result['title']}')">
+            Add University
+        </span>
+    `;
+}
+
+function add_new_university(university_id, university_name) {
+    let data = new FormData();
+    data.append("university_id", university_id);
+    data.append("full_university_name", university_name);
+    data.append("city_id", SELECTED_CITY ? SELECTED_CITY['city_id'] : null);
+    axios.post('/hierarchy/universities/add', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        .then((response) => {
+            show_alert('success', 'University successfully added!');
+        })
+        .catch(() => {
+            show_alert('warning', 'Something went wrong :( Perhaps this university is already in the database, try searching.');
+        })
+        .finally(() => {
+            init_universities_list();
         })
 }
 
