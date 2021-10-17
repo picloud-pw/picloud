@@ -90,7 +90,7 @@ function init_universities_list() {
                             onclick="init_child_department_page('${d['id']}')">
                         <div class="item">
                             <div class="ui tiny avatar image">
-                                <img src="${d['logo']}" alt="logo">
+                                <img src="${d['logo']}" alt="logo" style="max-height: 100% !important">
                             </div>
                             <div class="middle aligned content">
                               <div class="header">${d['name']}</div>
