@@ -24,7 +24,7 @@ def add_university(request):
     u_id = request.POST.get('university_id')
     u_city_id = request.POST.get('city_id')
 
-    exist_university = Department.objects.filter(vk_id=u_id)
+    exist_university = Department.objects.filter(vk_id=u_id, department_type__name='University')
     if exist_university.count():
         return JsonResponse(exist_university.first().as_dict())
 
@@ -40,8 +40,8 @@ def add_university(request):
     u_level, created = DepartmentType.objects.get_or_create(name='University')
     university_obj, created = Department.objects.get_or_create(
         vk_id=university['id'],
+        department_type=u_level,
         defaults={
-            'department_type': u_level,
             'name': university['title'],
             'vk_city_id': u_city_id,
             'is_approved': True,
@@ -70,8 +70,10 @@ def update_university_hierarchy(university: Department):
             department_type=f_level,
             parent_department=university,
             vk_id=faculty['id'],
-            name=faculty['title'],
-            is_approved=True,
+            defaults={
+                'name': faculty['title'],
+                'is_approved': True,
+            }
         )
         chairs = vk_api.database.getChairs(
             faculty_id=faculty['id'],
@@ -83,6 +85,8 @@ def update_university_hierarchy(university: Department):
                 department_type=c_level,
                 parent_department=faculty_in_db,
                 vk_id=chair['id'],
-                name=chair['title'],
-                is_approved=True,
+                defaults={
+                    'name': chair['title'],
+                    'is_approved': True,
+                }
             )
