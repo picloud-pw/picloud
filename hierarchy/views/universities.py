@@ -43,6 +43,7 @@ def add_university(request):
         defaults={
             'department_type': u_level,
             'name': university['title'],
+            'vk_city_id': u_city_id,
             'is_approved': True,
         }
     )

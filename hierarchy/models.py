@@ -19,6 +19,7 @@ class Department(models.Model):
     parent_department = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=256, null=False)
     vk_id = models.CharField(max_length=64, null=True, blank=True)
+    vk_city_id = models.CharField(max_length=16, null=True, blank=True)
     link = models.URLField(null=True, blank=True)
     logo = models.ImageField(
         upload_to="resources/logo/",

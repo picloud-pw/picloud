@@ -65,7 +65,7 @@ function init_universities_list() {
                     </div>
                 </div>
                 <div class="field">
-                    <label>University <i style="color: #d06969" title="Required field">*</i></label>
+                    <label>New University Title<i style="color: #d06969" title="Required field">*</i></label>
                     <div class="ui fluid search" id="university_search">
                         <div class="ui left icon fluid input" style="max-width: 600px">
                             <i class="university icon"></i>
@@ -158,7 +158,7 @@ function display_university_preview(result, response) {
         <span class="ui blue label">City: ${SELECTED_CITY['title']}</span>
         <span class="ui teal label">University: ${result['title']}</span>
         <span class="ui basic mini button" 
-            onclick="add_new_university('${result['university_id']}', '${result['title']}')">
+            onclick="this.classList.add('loading'); add_new_university('${result['university_id']}', '${result['title']}')">
             Add University
         </span>
     `;
