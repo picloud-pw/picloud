@@ -30,7 +30,9 @@ class Department(models.Model):
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"({self.vk_id}) {self.name}"
+        return f"({self.vk_id}) " \
+               f"{self.department_type.name if self.department_type is not None else '___'} - " \
+               f"{self.name}"
 
     def get_hierarchy(self):
         if self.parent_department is None:
