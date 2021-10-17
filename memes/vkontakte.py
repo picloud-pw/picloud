@@ -1,29 +1,17 @@
-from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-
 import vk
 import time
 import re
 
 from vk.exceptions import VkAPIError
 
-VK_API_VERSION = '5.131'
-SCOPE = 4194304  # Email
-
-GLOBAL_TOKEN = getattr(settings, 'VK_GLOBAL_TOKEN', None)
-GROUP_TOKEN = getattr(settings, 'VK_GROUP_TOKEN', None)
-if GLOBAL_TOKEN is None or GROUP_TOKEN is None:
-    raise ImproperlyConfigured('Cannot get VK access token from application settings')
-
-POSTS_COUNT = 10
-BOT_LOOP_TIMEOUT = 1
+from PiCloud.settings.common import VK_GLOBAL_TOKEN, VK_GROUP_TOKEN, VK_API_VERSION
 
 
 def fetch_memes_for_group(group_uri: str) -> list:
-    session = vk.Session(access_token=GLOBAL_TOKEN)
+    session = vk.Session(access_token=VK_GLOBAL_TOKEN)
     vk_api = vk.API(session)
     kwargs = {
-        'count': POSTS_COUNT,
+        'count': 10,
         'v': VK_API_VERSION
     }
     match = re.match('^club(\d)+$', group_uri)
@@ -58,7 +46,7 @@ def bot_logic(vk_api, user_id, msg):
 
 
 def vk_bot():
-    session = vk.Session(access_token=GROUP_TOKEN)
+    session = vk.Session(access_token=VK_GROUP_TOKEN)
     vk_api = vk.API(session)
 
     # TODO: Переделать на LongPoll
@@ -70,4 +58,4 @@ def vk_bot():
             last_msg = resp['items'][0]['id']
         for msg in resp['items']:
             bot_logic(vk_api=vk_api, user_id=msg['user_id'], msg=msg['body'])
-        time.sleep(BOT_LOOP_TIMEOUT)
+        time.sleep(1)
