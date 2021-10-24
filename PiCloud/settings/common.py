@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 
     'cloud',
     'website',
+    'chats',
     'hierarchy',
     'posts',
     'memes',
