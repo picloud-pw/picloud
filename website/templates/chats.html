@@ -1,0 +1,36 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Departments
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'chats/css/main.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui padded grid">
+        <div class="no-margin-padding column">
+
+            <div id="breadcrumbs_container" style="text-align: left; margin-bottom: 20px"></div>
+
+            <div id="modal"></div>
+
+            <div class="ui centered stackable grid" id="departments_container"></div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'chats/js/main.js' %}"></script>
+
+{% endblock %}

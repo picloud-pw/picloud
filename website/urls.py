@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('cloud/', index.cloud_page, name="cloud"),
     path('posts/', index.post_page, name="posts"),
+    path('chats/', index.chats_page, name="chats"),
     path('departments/', index.departments_page, name="departments"),
     path('subjects/', index.subject_page, name="subjects"),
     path('students/', index.students_page, name="students"),

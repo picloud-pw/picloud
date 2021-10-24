@@ -47,6 +47,11 @@ def moderation_page(request):
 
 
 @login_required(login_url='/signin/')
+def chats_page(request):
+    return render(request, 'chats.html')
+
+
+@login_required(login_url='/signin/')
 def new_post_page(request):
     return render(request, 'new_post_page.html')
 
