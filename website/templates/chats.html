@@ -14,16 +14,10 @@
 
 {% block content %}
 
-    <div class="ui padded grid">
-        <div class="no-margin-padding column">
-
-            <div id="breadcrumbs_container" style="text-align: left; margin-bottom: 20px"></div>
-
-            <div id="modal"></div>
-
-            <div class="ui centered stackable grid" id="departments_container"></div>
-
-        </div>
+    <div class="ui padded chats grid">
+        <div class="ui segment no-margin-padding four wide computer six wide tablet column" id="chat_list"></div>
+        <div class="ui segment no-margin-padding eight wide computer ten wide tablet column" id="chat_content"></div>
+        <div class="ui segment no-margin-padding four wide computer only column" id="chat_bar"></div>
     </div>
 
 {% endblock %}

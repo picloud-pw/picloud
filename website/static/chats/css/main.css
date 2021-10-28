@@ -1,0 +1,21 @@
+.content-block.main {
+    height: 100%
+}
+
+.chats.grid {
+    height: 100%
+}
+
+.top.segment {
+    height: 70px;
+}
+
+.bottom.segment {
+    height: 70px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-style: solid;
+    border-radius: 0;
+    border-width: 2px 0px;
+}
