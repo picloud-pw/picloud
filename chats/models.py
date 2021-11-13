@@ -10,11 +10,25 @@ class Chat(models.Model):
     name = models.CharField(max_length=32, unique=True)
     members = models.ManyToManyField(User, related_name='members')
 
+    def as_dict(self):
+        return {
+            'author': self.author.username if self.author is not None else None,
+            'created': self.created,
+            'title': self.title,
+            'name': self.name,
+            'members_count': self.members.all().count(),
+        }
+
 
 class UserChatSettings(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     muted = models.BooleanField(default=False)
+
+    def as_dict(self):
+        return {
+            'muted': self.muted,
+        }
 
 
 class Message(models.Model):
@@ -23,3 +37,11 @@ class Message(models.Model):
     text = models.TextField()
     created = models.DateTimeField(default=timezone.now)
     edited = models.DateTimeField(null=True, blank=True)
+
+    def as_dict(self):
+        return {
+            'author': self.author.username if self.author is not None else None,
+            'text': self.text,
+            'created': self.created,
+            'edited': self.edited if self.edited is not None else None,
+        }
