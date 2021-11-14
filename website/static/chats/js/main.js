@@ -59,6 +59,7 @@ function init_chat_content_segment() {
 function init_chat_bar_segment() {
     document.getElementById('chat_bar').innerHTML = `
         <div class="ui top segment"></div>
+        <div class="ui middle segment">${show_ad_block()}</div>
     `;
 }
 
