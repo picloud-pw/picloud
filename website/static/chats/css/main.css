@@ -65,3 +65,28 @@
     bottom: 0;
     margin-bottom: 20px;
 }
+
+#emojis_list {
+    font-size: 24px;
+    text-align: center
+}
+
+#chat_bar_content {
+    overflow-y: auto;
+}
+
+#emojis_list {
+    height: 100px;
+}
+
+#emojis_list > div {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    display: inline-block
+}
+
+#emojis_list > div:hover {
+    background-color: #DBC6EB;
+    border-radius: 5px;
+}

@@ -59,8 +59,24 @@ function init_chat_content_segment() {
 function init_chat_bar_segment() {
     document.getElementById('chat_bar').innerHTML = `
         <div class="ui top segment"></div>
-        <div class="ui middle segment">${show_ad_block()}</div>
+        <div class="ui middle segment" id="chat_bar_content"></div>
     `;
+    display_emojis_list(document.getElementById('chat_bar_content'));
+}
+
+function display_emojis_list(container) {
+    container.innerHTML = `
+        <div class="ui basic no-margin-padding segment" id="emojis_list"></div>
+    `;
+    let emojis_html = '';
+    for (let code of EMOJI_CODES) {
+        emojis_html += `
+            <div onclick="document.getElementById('text_message_input').value += '&#${code};'">
+                &#${code};
+            </div>
+        `;
+    }
+    document.getElementById('emojis_list').innerHTML = emojis_html;
 }
 
 function toggle_new_chat_form() {
