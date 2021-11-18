@@ -64,7 +64,10 @@ def message_list(request):
         if request.user not in chat.members.all():
             return HttpResponse(status=401, content=f'You have no access.')
         messages = Message.objects.filter(chat=chat).order_by('created')
-        return JsonResponse({'messages': [msg.as_dict() for msg in messages]})
+        return JsonResponse({
+            'chat': chat.as_dict(),
+            'messages': [msg.as_dict() for msg in messages],
+        })
     except ObjectDoesNotExist:
         return HttpResponse(status=404, content=f'Chat with name "{chat_name}" does not exist.')
 

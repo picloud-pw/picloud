@@ -98,8 +98,10 @@ function load_chat_lists() {
             for (let chat of chats) {
                 document.getElementById('chats_list_container').innerHTML += `
                     <div class="item" onclick="open_chat('${chat['name']}')">
+                        <img class="ui avatar image" src="${generate_avatar(chat['title'].charAt(0), string_to_color(chat['name']))}">
                         <div class="content">
                             <a class="header">${chat['title']}</a>
+                            <div class="description"></div>
                         </div>
                     </div>
                 `;
@@ -133,7 +135,7 @@ function create_new_chat() {
 
 function open_chat(chat_name) {
     document.getElementById('chat_header').innerHTML = `
-        <h3 class="ui header" style="margin-top: 6px">${chat_name}</h3>
+        <div id="chat_header_content"></div>
         <div class="ui basic icon circular extra-btn button">
             <i class="ui ellipsis horizontal icon"></i>
         </div>
@@ -167,7 +169,20 @@ function load_chat_messages(chat_name) {
     container.classList.add('loading');
     axios.get(`/chats/message/list?chat_name=${chat_name}`)
         .then((response) => {
+            let chat = response.data['chat'];
             let messages = response.data['messages'];
+            document.getElementById('chat_header_content').innerHTML = `
+                <div class="ui items">
+                  <div class="item">
+                    <div class="content">
+                      <div class="header">${chat['title'] ? chat['title'] : '---'}</div>
+                      <div class="meta"> 
+                        <span class="members">${chat['members_count']} member(s)</span> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            `;
             if (messages.length) {
                 container.innerHTML = `
                     <div class="ui comments" id="chat_messages_container"></div>
@@ -206,4 +221,36 @@ function sent_message(chat_name) {
         }).finally(() => {
             message_input.value = '';
         })
+}
+
+function generate_avatar(text, background_color, foreground_color='white') {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    canvas.width = 200;
+    canvas.height = 200;
+
+    context.fillStyle = background_color;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    context.font = "bold 100px Assistant";
+    context.fillStyle = foreground_color;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+    return canvas.toDataURL("image/png");
+}
+
+function string_to_color(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let colour = '#';
+    for (let i = 0; i < 3; i++) {
+        let value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
 }
