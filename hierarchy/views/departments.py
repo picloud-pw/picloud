@@ -1,4 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 from django.http import JsonResponse
 
 from hierarchy.models import Department, DepartmentType
@@ -54,12 +56,9 @@ def search_departments(request):
     if is_approved or (not is_approved and request.user.is_superuser):
         departments = departments.filter(is_approved=is_approved)
 
-    try:
-        departments = departments.extra(
-            select={'vk_id_int': 'CAST(vk_id AS INTEGER)'}
-        ).order_by('vk_id_int')
-    except Exception as e:
-        departments = departments.order_by('vk_id')
+    departments = departments.annotate(
+        vk_id_int=Cast('vk_id', IntegerField())
+    ).order_by('vk_id_int')
 
     return JsonResponse({
         'departments': [d.as_dict() for d in departments]

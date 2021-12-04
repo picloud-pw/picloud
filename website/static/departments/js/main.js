@@ -235,7 +235,6 @@ function init_breadcrumbs(department_id) {
         container.innerHTML += `
             <a class="step ${!node['child'] ? 'active' : ''}" title="${node['name']}"
                 onclick="init_child_department_page('${node['id']}')">
-                <i class="ui university icon"></i>
                 <div class="content">
                     <div class="title">
                         ${node['name'].length > 50 ? node['name'].substr(0, 50) + '...' : node['name']}
@@ -251,7 +250,7 @@ function init_breadcrumbs(department_id) {
         }
     }
 
-    breadcrumbs_container.innerHTML = `<div class="ui fluid steps" id="breadcrumbs"></div>`;
+    breadcrumbs_container.innerHTML = `<div class="ui fluid mini steps" id="breadcrumbs"></div>`;
     let container = document.getElementById('breadcrumbs');
     container.innerText = "";
 
