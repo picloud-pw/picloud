@@ -124,7 +124,7 @@ function init_edit_form(field) {
         <div class="ui tiny modal" id="${form_id}_modal">
           <i class="close icon"></i>
           <div class="header">Edit personal information</div>
-          <div class="content">
+          <div class="scrolling content">
             <form class="ui form" id="${form_id}"></form>
           </div>
           <div class="actions">

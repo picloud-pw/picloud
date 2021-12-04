@@ -31,16 +31,15 @@ function init_hierarchy_section(department_id = null, subject_id = null) {
             ME['department']['id'],
         );
         init_subjects_list(ME['department']['id']);
-    } else {
-        init_departments_search((result, response) => {
-            $("input[name='department_id']").val(result['department_id']);
-            display_department_hierarchy(
-                document.getElementById('department_hierarchy'),
-                result['department_id']
-            );
-            init_subjects_list(result['department_id']);
-        })
     }
+    init_departments_search((result, response) => {
+        $("input[name='department_id']").val(result['department_id']);
+        display_department_hierarchy(
+            document.getElementById('department_hierarchy'),
+            result['department_id']
+        );
+        init_subjects_list(result['department_id']);
+    })
 }
 
 function load_post_types(container, post_type_id = null) {

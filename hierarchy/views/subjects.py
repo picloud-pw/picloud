@@ -25,7 +25,7 @@ def search_subjects(request):
         subjects = subjects.filter(is_approved=is_approved)
 
     return JsonResponse({'subjects': [
-        s.as_dict() for s in subjects
+        s.as_dict() for s in subjects.order_by('semester')
     ]})
 
 

@@ -1,5 +1,5 @@
 function init_departments_search(on_select = null) {
-    $('#top_search').search({
+    $('.ui.search').search({
         apiSettings: {
             url: "/hierarchy/departments/search?q={query}",
             onResponse: (response) => {
