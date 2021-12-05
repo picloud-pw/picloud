@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
+from decorators import auth_required
 from hierarchy.models import Subject, Department
 
 
@@ -33,3 +34,27 @@ def get_subject(request):
     subject_id = request.GET.get('id')
     subject = Subject.objects.get(id=subject_id)
     return JsonResponse({'subject': subject.as_dict()})
+
+
+@auth_required
+def approve_subject(request):
+    subject_id = request.POST.get('id')
+    if subject_id is None:
+        return HttpResponse(status=404)
+    subject = Subject.objects.get(id=subject_id)
+    if request.user.is_authenticated and \
+            (request.user.is_staff or request.user.is_superuser):
+        subject.is_approved = True
+        subject.save()
+    return HttpResponse(status=200)
+
+
+@auth_required
+def delete_subject(request):
+    subject_id = request.POST.get('id')
+    if subject_id is None:
+        return HttpResponse(status=404)
+    subject = Subject.objects.get(id=subject_id)
+    if request.user.is_authenticated and request.user.is_superuser:
+        subject.delete()
+    return HttpResponse(status=200)

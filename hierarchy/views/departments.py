@@ -1,8 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
+from decorators import auth_required
 from hierarchy.models import Department, DepartmentType
 
 
@@ -63,3 +64,27 @@ def search_departments(request):
     return JsonResponse({
         'departments': [d.as_dict() for d in departments]
     })
+
+
+@auth_required
+def approve_department(request):
+    department_id = request.POST.get('id')
+    if department_id is None:
+        return HttpResponse(status=404)
+    department = Department.objects.get(id=department_id)
+    if request.user.is_authenticated and \
+            (request.user.is_staff or request.user.is_superuser):
+        department.is_approved = True
+        department.save()
+    return HttpResponse(status=200)
+
+
+@auth_required
+def delete_department(request):
+    department_id = request.POST.get('id')
+    if department_id is None:
+        return HttpResponse(status=404)
+    department = Department.objects.get(id=department_id)
+    if request.user.is_authenticated and request.user.is_superuser:
+        department.delete()
+    return HttpResponse(status=200)

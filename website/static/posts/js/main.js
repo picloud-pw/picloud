@@ -84,10 +84,9 @@ function delete_comment(comment_id) {
 
 function display_post(container, post_id) {
     container.classList.add('loading');
-    axios.get(`/posts/search?id=${post_id}`)
+    axios.get(`/posts/get?id=${post_id}`)
         .then((response) => {
-            let posts = response.data['posts'];
-            let post = posts[0];
+            let post = response.data;
             document.title = post['title'];
             container.appendChild(render_post(post));
         })

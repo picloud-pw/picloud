@@ -106,7 +106,10 @@ def get(request):
         return HttpResponse(status=404)
     post = Post.objects.get(id=post_id)
     if post.author == request.user or \
+            request.user.is_superuser or request.user.is_staff or \
             (not post.is_draft and post.is_approved):
+        post.views += 1
+        post.save()
         return JsonResponse(post.as_dict())
     else:
         return HttpResponse(status=403)
@@ -153,11 +156,12 @@ def delete(request):
 
 @auth_required
 def approve(request):
-    post_id = request.GET.get('id')
+    post_id = request.POST.get('id')
     if post_id is None:
         return HttpResponse(status=404)
     post = Post.objects.get(id=post_id)
     if request.user.is_authenticated and \
             (request.user.is_staff or request.user.is_superuser):
-        post.update(is_approved=True)
+        post.is_approved = True
+        post.save()
     return HttpResponse(status=200)
