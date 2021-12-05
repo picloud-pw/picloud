@@ -196,10 +196,7 @@ function init_child_department_page(parent_department_id) {
                 <div class="ui dividing header">Sub-departments</div>
                 <div id="departments"></div>
             </div>
-            <div class="ui segment">
-                <div class="ui dividing header">Subjects</div>
-                <div id="subjects"></div>
-            </div>
+            <div id="subjects"></div>
         </div>
         <div class="seven wide column">
             <div class="ui segment">
