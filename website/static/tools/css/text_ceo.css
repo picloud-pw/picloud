@@ -1,0 +1,8 @@
+.inline.fields label {
+    width: 70px !important;
+    text-align: left;
+}
+
+textarea {
+    padding: 20px;
+}

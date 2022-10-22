@@ -1,0 +1,70 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Text CEO
+{% endblock %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'tools/css/text_ceo.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="ui stackable grid" style="margin: 10px">
+        <div class="sixteen wide column">
+            <div class="ui segments">
+              <div class="ui segment" style="text-align: left">
+                  <span class="ui medium header">Text CEO</span>
+                  <div class="ui basic mini right floated icon red button"
+                       style="margin: 0 5px" onclick="do_command('clear')">
+                      <i class="ui trash icon"></i> Clear
+                  </div>
+                  <div class="ui basic mini right floated icon blue button"
+                       style="margin: 0 5px" onclick="paste()">
+                      <i class="ui paste icon"></i> Paste
+                  </div>
+                  <div class="ui basic mini right floated icon teal button"
+                       style="margin: 0 5px" onclick="do_command('copy')">
+                      <i class="ui copy icon"></i> Copy
+                  </div>
+
+              </div>
+              <div class="ui no-margin-padding segment">
+                  <textarea id="main_text_area" style="border: none"></textarea>
+              </div>
+            </div>
+
+        </div>
+        <div class="sixteen wide column" id="ceo_container"></div>
+        <div class="sixteen wide column">
+        <div class="ui segments">
+            <div class="ui segment" style="text-align: left">
+                <span class="ui medium header">Words cloud</span>
+                <span style="position: absolute; top: 17px; right: 20px">Weight</span>
+                <div class="ui right aligned mini input" style="position: absolute; top: 11px; right: 75px">
+                    <input type="number" value="10" min="0" max="100" id="weight_factor" onchange="analyze_text()">
+                </div>
+                <div class="ui checkbox" style="position: absolute; top: 8px; right: 170px">
+                  <input type="checkbox" id="shuffle" onchange="analyze_text()">
+                  <label>Shuffle image</label>
+                </div>
+            </div>
+            <div class="ui no-margin-padding segment" style="padding: 15px !important;">
+                <div id="words_cloud_container" style="min-height: 350px"></div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+    <script type="text/javascript" src="{% static 'tools/js/text_ceo.js' %}"></script>
+
+{% endblock %}
