@@ -41,6 +41,10 @@ def departments_page(request):
     return render(request, 'departments.html')
 
 
+def tools_page(request):
+    return render(request, 'tools.html')
+
+
 def tools_text_page(request):
     return render(request, 'tools_text.html')
 

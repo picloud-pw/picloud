@@ -27,6 +27,7 @@ urlpatterns = [
     path('students/', index.students_page, name="students"),
     path('moderation/', index.moderation_page, name="moderation"),
     path('memes/', index.memes_page, name="memes"),
+    path('tools/', index.tools_page, name="tools"),
     path('tools/text', index.tools_text_page, name="tools_text"),
 
     path('new/post', index.new_post_page, name="new_post"),
