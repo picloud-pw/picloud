@@ -68,7 +68,7 @@ function render_placeholder(icon, message) {
 function render_loader(type = 'paragraph') {
     if (type === 'paragraph') {
         return `
-            <div class="ui placeholder">
+            <div class="ui fluid placeholder">
               <div class="paragraph">
                 <div class="line"></div><div class="line"></div>
                 <div class="line"></div><div class="line"></div>
@@ -79,7 +79,7 @@ function render_loader(type = 'paragraph') {
         `;
     } else if (type === 'avatar') {
         return `
-            <div class="ui placeholder">
+            <div class="ui fluid placeholder">
               <div class="image header">
                 <div class="line"></div><div class="line"></div>
                 <div class="line"></div><div class="line"></div>

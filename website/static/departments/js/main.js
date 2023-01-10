@@ -192,38 +192,13 @@ function init_child_department_page(parent_department_id) {
     init_breadcrumbs(parent_department_id);
     departments_container.innerHTML = `
         <div class="seven wide column">
-            <div class="ui segment">
-                <div class="ui dividing header">Sub-departments</div>
-                <div id="departments"></div>
-            </div>
-            <div id="subjects"></div>
-        </div>
-        <div class="seven wide column">
-            <div class="ui segment">
-                ${show_ad_block('horizontal')}
-            </div>
-            <div class="ui segment">
-                <div class="ui dividing header">Students</div>
-                <div id="students"></div>
-            </div>
+            <div id="departments"></div>
         </div>
     `;
     child_departments_list(
         document.getElementById('departments'),
         parent_department_id
     );
-    department_subjects_list(
-        document.getElementById('subjects'),
-        parent_department_id
-    );
-    init_students_list(
-        document.getElementById('students'),
-        {
-            'department_id': parent_department_id,
-            'ps': 3,
-        },
-    )
-    push_ads();
 }
 
 function init_breadcrumbs(department_id) {
@@ -247,7 +222,7 @@ function init_breadcrumbs(department_id) {
         }
     }
 
-    breadcrumbs_container.innerHTML = `<div class="ui fluid mini steps" id="breadcrumbs"></div>`;
+    breadcrumbs_container.innerHTML = `<div class="ui fluid small steps" style="min-height: 70px" id="breadcrumbs"></div>`;
     let container = document.getElementById('breadcrumbs');
     container.innerText = "";
 
