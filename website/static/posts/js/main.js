@@ -19,12 +19,14 @@ function save_state() {
 function restore_state() {
     let params = new URLSearchParams(document.location.search);
 
-    POST_ID = params.get("id");
+    let pathname = new URL(window.location.href).pathname;
+    let path_parts = pathname.split('/');
 
-    if (POST_ID) {
+    if (path_parts.length === 4) {
+        POST_ID = path_parts[2]
         init_page(POST_ID);
     } else {
-
+        show_alert('warning', 'Somthing wrong with URL');
     }
 
 }

@@ -33,7 +33,12 @@ def cloud_page(request):
     return render(request, 'cloud.html')
 
 
-def post_page(request):
+def post_page_redirect(request):
+    post_id = request.GET.get('id')
+    return redirect("post_page", post_id=post_id, permanent=True)
+
+
+def post_page(request, post_id):
     return render(request, 'posts.html')
 
 

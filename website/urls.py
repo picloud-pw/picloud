@@ -20,7 +20,10 @@ urlpatterns = [
     path('after_login/', auth.after_login, name="after_login"),
 
     path('cloud/', index.cloud_page, name="cloud"),
-    path('posts/', index.post_page, name="posts"),
+
+    path('posts/', index.post_page_redirect, name="posts"),
+    path('posts/<int:post_id>/', index.post_page,  name="post_page"),
+
     path('chats/', index.chats_page, name="chats"),
     path('departments/', index.departments_page, name="departments"),
     path('subjects/', index.subject_page, name="subjects"),
