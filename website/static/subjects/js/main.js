@@ -142,7 +142,7 @@ function display_posts(container) {
                         <div class="item">
                             <i class="large sticky note outline middle aligned icon"></i>
                             <div class="content">
-                              <a href="/posts?id=${post['id']}">${post['title']}</a>
+                              <a href="/posts/${post['id']}/">${post['title']}</a>
                               <div class="description">
                                 ${post['author']['user']['username']} • ${post['created_date_human']}
                               </div>

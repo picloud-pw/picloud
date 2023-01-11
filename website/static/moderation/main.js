@@ -16,7 +16,7 @@ function init_moderation_table() {
         .then((response) => {
             let data = [];
             for (let post of response[0].data['posts']) {
-                data.push([ 'Post', `<a href="/posts?id=${post['id']}" target="_blank">${post['title']}</a>`, `
+                data.push([ 'Post', `<a href="/posts/${post['id']}/" target="_blank">${post['title']}</a>`, `
                     <div class="ui basic mini button" onclick="do_action(this, 'posts', 'approve', ${post['id']})">approve</div>
                     <div class="ui basic mini button" onclick="do_action(this, 'posts', 'delete', ${post['id']})">delete</div>
                 `,]);

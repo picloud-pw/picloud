@@ -3,7 +3,7 @@ function render_post_item(post) {
         <div class="item">
             <i class="large sticky note outline middle aligned icon"></i>
             <div class="content">
-              <a class="header" href="/posts/?id=${post['id']}" target="_blank">${post['title']}</a>
+              <a class="header" href="/posts/${post['id']}/" target="_blank">${post['title']}</a>
               <div class="description">${post['created_date_human']}</div>
             </div>
         </div>

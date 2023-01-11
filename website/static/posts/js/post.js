@@ -49,7 +49,7 @@ function render_post(post) {
         <div class="post-container" id="post-${post['id']}">
             <header>
                 <h3>
-                    <a href="/posts?id=${post['id']}" style="cursor: pointer;">${post['title']}</a>
+                    <a href="/posts/${post['id']}/" style="cursor: pointer;">${post['title']}</a>
                     ${post['parent_post'] ? '<i class="ui archive icon" title="There is parent post"></i>' : ''}
                 </h3>
                 <p class="subject">
