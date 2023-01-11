@@ -75,7 +75,7 @@ function render_post(post) {
             ` : ''}
             
             <footer>
-                <a class="post-author" title="Author" href="/students?id=${post['author']['id']}">
+                <a class="post-author" title="Author" href="/studs/${post['author']['id']}/">
                     ${post['author']['user']['username']}
                 </a>
                 <span class="post-created-date">

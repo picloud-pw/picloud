@@ -100,11 +100,11 @@ function display_comments(post_id) {
                 for (let comment of comments) {
                     document.getElementById('comments_container').innerHTML += `
                         <div class="comment">
-                            <a class="avatar" href="/students?id=${comment['author']['id']}">
+                            <a class="avatar" href="/studs/${comment['author']['id']}/">
                                 <img src="${comment['author']['avatar']}" alt="ava"> 
                             </a>
                             <div class="content">
-                              <a class="author" href="/students?id=${comment['author']['id']}">
+                              <a class="author" href="/studs/${comment['author']['id']}/">
                                 ${comment['author']['username']}
                               </a>
                               <div class="metadata">

@@ -92,7 +92,21 @@ def profile_page(request):
 
 
 @login_required(login_url='/signin/')
-def students_page(request):
+def redirect_students_page(request):
+    stud_id = request.GET.get('id')
+    if stud_id is not None:
+        return redirect("students_page", stud_id=stud_id, permanent=True)
+    else:
+        return redirect("root_students_page", permanent=True)
+
+
+@login_required(login_url='/signin/')
+def root_students_page(request):
+    return render(request, 'students.html')
+
+
+@login_required(login_url='/signin/')
+def students_page(request, stud_id):
     return render(request, 'students.html')
 
 

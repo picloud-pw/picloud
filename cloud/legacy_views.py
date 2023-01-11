@@ -66,19 +66,19 @@ def students_from_university(request, university_id):
 def user_page(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_info = StudentInfo.objects.get(user=user)
-    return redirect(f'/students/?id={user_info.id}')
+    return redirect(f'/studs/{user_info.id}/')
 
 
 def user_posts(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_info = StudentInfo.objects.get(user=user)
-    return redirect(f'/students/?id={user_info.id}')
+    return redirect(f'/studs/{user_info.id}/')
 
 
 def user_not_checked_posts(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_info = StudentInfo.objects.get(user=user)
-    return redirect(f'/students/?id={user_info.id}')
+    return redirect(f'/studs/{user_info.id}/')
 
 
 def settings_page(request):

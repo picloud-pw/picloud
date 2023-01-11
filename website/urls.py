@@ -33,7 +33,10 @@ urlpatterns = [
     path('subjects/', index.redirect_subject_page, name="subjects"),
     path('subs/<int:sub_id>/', index.subject_page, name="subjects_page"),
 
-    path('students/', index.students_page, name="students"),
+    path('students/', index.redirect_students_page, name="students"),
+    path('studs/', index.root_students_page, name="root_students_page"),
+    path('studs/<int:stud_id>/', index.students_page, name="students_page"),
+
     path('moderation/', index.moderation_page, name="moderation"),
     path('memes/', index.memes_page, name="memes"),
     path('tools/', index.tools_page, name="tools"),

@@ -1,31 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_students_search(
-        (result, response) => {
-            display_student_page(result['id']);
-        });
     restore_state();
 
 });
 
 let STUDENT_ID = null;
 
-function save_state() {
-    let state = {};
-    if (STUDENT_ID) {
-        state = {
-            "id": STUDENT_ID,
-        };
-    }
-    push_state(state);
-}
-
 function restore_state() {
-    let params = new URLSearchParams(document.location.search);
+    let pathname = new URL(window.location.href).pathname;
+    let path_parts = pathname.split('/');
 
-    STUDENT_ID = params.get("id");
-
-    if (STUDENT_ID) {
+    if (path_parts.length === 4) {
+        STUDENT_ID = path_parts[2];
         display_student_page(STUDENT_ID)
     } else {
         display_student_search_page();
@@ -63,7 +49,6 @@ function display_student_search_page() {
 
 function display_student_page(student_id) {
     STUDENT_ID = student_id;
-    save_state();
 
     let container = document.getElementById("students_container");
     container.innerHTML = `
