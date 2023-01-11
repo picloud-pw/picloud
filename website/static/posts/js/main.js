@@ -6,16 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let POST_ID = null;
 
-function save_state() {
-    let state = {};
-    if (POST_ID) {
-        state = {
-            "id": POST_ID,
-        };
-    }
-    push_state(state);
-}
-
 function restore_state() {
     let params = new URLSearchParams(document.location.search);
 

@@ -17,9 +17,9 @@ function child_departments_list(container, parent_department_id, max_display=7) 
                       </div>
                       <div class="ui secondary segment">
                         <div class="ui basic label">${d['type']['name']}</div>
-                        <div class="ui basic blue label" onclick="init_child_department_page('${d['id']}')" style="cursor: pointer">
+                        <a class="ui basic blue label" href="/deps/${d['id']}/" style="cursor: pointer">
                             Show sub-departments ...
-                        </div>
+                        </a>
                         <div class="ui right floated mini blue button" onclick="change_department('${d['id']}');">
                             Choose this department
                         </div>

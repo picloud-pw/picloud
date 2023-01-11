@@ -16,7 +16,7 @@ def post_page_redirect(request, post_id):
         text=old_post.text,
         created_date=old_post.created_date,
     )
-    return redirect(f'/posts?id={new_post.first().id}')
+    return redirect(f'/posts/{new_post.first().id}/', permanent=True)
 
 
 def program_page(request, program_id):
@@ -26,9 +26,9 @@ def program_page(request, program_id):
         name=program.title,
     )
     if len(new_program):
-        return redirect(f'/departments/?id={new_program.first().id}')
+        return redirect(f'/deps/{new_program.first().id}/', permanent=True)
     else:
-        return redirect('departments')
+        return redirect('/deps/', permanent=True)
 
 
 def subject_page(request, subject_id):
@@ -44,7 +44,7 @@ def subject_page(request, subject_id):
 
 
 def universities_list(request):
-    return redirect('departments')
+    return redirect('/deps/', permanent=True)
 
 
 def university_page(request, university_id):
@@ -54,9 +54,9 @@ def university_page(request, university_id):
         name=university.short_title,
     )
     if len(new_university):
-        return redirect(f'/departments/?id={new_university.first().id}')
+        return redirect(f'/deps/{new_university.first().id}/')
     else:
-        return redirect('departments')
+        return redirect('/deps/', permanent=True)
 
 
 def students_from_university(request, university_id):

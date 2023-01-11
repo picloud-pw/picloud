@@ -1,10 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    init_departments_search(
-        (result, response) => {
-            init_child_department_page(result['department_id']);
-        });
-
     restore_state();
 
 });
@@ -28,9 +23,11 @@ function save_state() {
 function restore_state() {
     let params = new URLSearchParams(document.location.search);
 
-    DEPARTMENT_ID = params.get("id");
+    let pathname = new URL(window.location.href).pathname;
+    let path_parts = pathname.split('/');
 
-    if (DEPARTMENT_ID) {
+    if (path_parts.length === 4) {
+        DEPARTMENT_ID = path_parts[2]
         init_child_department_page(DEPARTMENT_ID);
     } else {
         init_universities_list();
@@ -86,16 +83,15 @@ function init_universities_list() {
             let departments = response.data['departments'];
             for (let d of departments) {
                 container.innerHTML += `
-                    <div class="ui link items segment" style="cursor: pointer"
-                            onclick="init_child_department_page('${d['id']}')">
-                        <div class="item">
+                    <div class="ui link items segment" style="cursor: pointer">
+                        <a class="item" href="/deps/${d['id']}/">
                             <div class="ui tiny avatar image">
                                 <img src="${d['logo']}" alt="logo" style="max-height: 100% !important">
                             </div>
                             <div class="middle aligned content">
                               <div class="header">${d['name']}</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                `;
             }
@@ -183,7 +179,6 @@ function add_new_university(university_id, university_name) {
 
 function init_child_department_page(parent_department_id) {
     DEPARTMENT_ID = parent_department_id;
-    save_state();
 
     departments_container.innerText = '';
     departments_container.classList.add('loading');
@@ -205,8 +200,7 @@ function init_breadcrumbs(department_id) {
 
     function format_breadcrumbs(container, node) {
         container.innerHTML += `
-            <a class="step ${!node['child'] ? 'active' : ''}" title="${node['name']}"
-                onclick="init_child_department_page('${node['id']}')">
+            <a class="step ${!node['child'] ? 'active' : ''}" href="/deps/${node['id']}/" title="${node['name']}">
                 <div class="content">
                     <div class="title">
                         ${node['name'].length > 50 ? node['name'].substr(0, 50) + '...' : node['name']}

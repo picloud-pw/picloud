@@ -25,7 +25,11 @@ urlpatterns = [
     path('posts/<int:post_id>/', index.post_page,  name="post_page"),
 
     path('chats/', index.chats_page, name="chats"),
-    path('departments/', index.departments_page, name="departments"),
+
+    path('departments/', index.departments_page_redirect, name="departments"),
+    path('deps/', index.root_departments_page, name="root_departments_page"),
+    path('deps/<int:dep_id>/', index.departments_page, name="departments_page"),
+
     path('subjects/', index.subject_page, name="subjects"),
     path('students/', index.students_page, name="students"),
     path('moderation/', index.moderation_page, name="moderation"),

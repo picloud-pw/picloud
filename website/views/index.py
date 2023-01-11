@@ -42,7 +42,19 @@ def post_page(request, post_id):
     return render(request, 'posts.html')
 
 
-def departments_page(request):
+def departments_page_redirect(request):
+    dep_id = request.GET.get('id')
+    if dep_id is not None:
+        return redirect("departments_page", dep_id=dep_id, permanent=True)
+    else:
+        return redirect("root_departments_page", permanent=True)
+
+
+def root_departments_page(request):
+    return render(request, 'departments.html')
+
+
+def departments_page(request, dep_id):
     return render(request, 'departments.html')
 
 
