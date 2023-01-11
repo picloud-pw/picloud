@@ -25,10 +25,6 @@ def privacy_policy(request):
     return render(request, 'privacy_policy.html')
 
 
-def subject_page(request):
-    return render(request, 'subjects.html')
-
-
 def cloud_page(request):
     return render(request, 'cloud.html')
 
@@ -40,6 +36,15 @@ def post_page_redirect(request):
 
 def post_page(request, post_id):
     return render(request, 'posts.html')
+
+
+def redirect_subject_page(request):
+    sub_id = request.GET.get('id')
+    return redirect("subjects_page", sub_id=sub_id, permanent=True)
+
+
+def subject_page(request, sub_id):
+    return render(request, 'subjects.html')
 
 
 def departments_page_redirect(request):

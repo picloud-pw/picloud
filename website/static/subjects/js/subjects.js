@@ -6,7 +6,7 @@ function format_subjects(container, subjects) {
     container = document.getElementById(subjects_list_id);
     for (let subject of subjects) {
         container.innerHTML += `
-            <a class="item" style="cursor: pointer" href="/subjects?id=${subject['id']}">
+            <a class="item" style="cursor: pointer" href="/subs/${subject['id']}/">
                 <i class="large bookmark outline middle aligned icon"></i>
                 <div class="middle aligned content">
                   <div class="header">${subject['name']}</div>

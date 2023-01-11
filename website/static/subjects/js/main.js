@@ -6,25 +6,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let SUBJECT_ID = null;
 
-function save_state() {
-    let state = {};
-    if (SUBJECT_ID) {
-        state = {
-            "id": SUBJECT_ID,
-        };
-    }
-    push_state(state);
-}
-
 function restore_state() {
-    let params = new URLSearchParams(document.location.search);
+    let pathname = new URL(window.location.href).pathname;
+    let path_parts = pathname.split('/');
 
-    SUBJECT_ID = params.get("id");
-
-    if (SUBJECT_ID) {
+    if (path_parts.length === 4) {
+        SUBJECT_ID = path_parts[2];
         init_page(SUBJECT_ID);
     } else {
-
+        show_alert('warning', 'Somthing wrong with URL');
     }
 
 }

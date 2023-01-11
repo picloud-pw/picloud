@@ -38,7 +38,7 @@ def subject_page(request, subject_id):
         semester=subject.semester,
     )
     if len(new_subject):
-        return redirect(f'/subjects/?id={new_subject.first().id}')
+        return redirect(f'/subs/{new_subject.first().id}/')
     else:
         return redirect('cloud')
 

@@ -55,7 +55,7 @@ function render_post(post) {
                 <p class="subject">
                     <span class="type">${post['type']['title']}</span>
                     |
-                    <a class="subject" href="/subjects?id=${post['subject']['id']}" title="${post['subject']['name']}">
+                    <a class="subject" href="/subs/${post['subject']['id']}/" title="${post['subject']['name']}">
                         ${post['subject']['name']} 
                         <sup>${post['subject']['semester'] > 0 ? post['subject']['semester'] : ''}</sup>
                     </a>
