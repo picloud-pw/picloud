@@ -1,0 +1,35 @@
+version: '3'
+services:
+  picloud-postgres:
+    image: postgres
+    container_name: picloud-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=picloud
+      - POSTGRES_PASSWORD=picloud
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  picloud:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        container_version: ${IMAGE_VERSION:-latest}
+    container_name: picloud-app
+    volumes:
+      - .:/app
+    environment:
+      - APPLICATION_SECRETS=/app/picloud/secrets.json
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - POSTGRESQL_NAME=picloud
+      - POSTGRESQL_USER=picloud
+      - POSTGRESQL_PASSWORD=picloud
+      - POSTGRESQL_HOST=picloud-postgres
+      - POSTGRESQL_PORT=5432
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - picloud-postgres

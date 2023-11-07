@@ -6,7 +6,8 @@ lib/*
 /static
 /media
 /venv
-/PiCloud/settings/secrets.json
+/data
+/picloud/secrets.json
 
 ### Python ###
 __pycache__/

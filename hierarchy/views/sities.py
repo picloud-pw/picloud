@@ -1,7 +1,7 @@
 import vk
 from django.http import JsonResponse
 
-from PiCloud.settings.common import VK_API_VERSION, VK_GLOBAL_TOKEN
+from picloud.settings import VK_API_VERSION, VK_GLOBAL_TOKEN
 
 
 def search_cities(request):

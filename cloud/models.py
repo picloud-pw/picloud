@@ -331,12 +331,6 @@ class Post(models.Model):
     def created_date_human(self):
         import datetime
         import pytz
-        import locale
-        try:
-            locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
-        except Exception as e:
-            # for mac os
-            locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
         timezone = pytz.timezone('Europe/Moscow')
         date = self.created_date.astimezone(timezone)
         today = datetime.date.today()

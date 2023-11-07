@@ -2,7 +2,7 @@ import vk
 from django.http import JsonResponse, HttpResponse
 
 from hierarchy.models import DepartmentType, Department
-from PiCloud.settings.common import VK_GLOBAL_TOKEN, VK_API_VERSION
+from picloud.settings import VK_GLOBAL_TOKEN, VK_API_VERSION
 
 
 def search_universities(request):

@@ -1,11 +1,12 @@
 import json
 import os
 from json import JSONDecodeError
+from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRETS_FILE_VAR = 'APPLICATION_SECRETS'
 
@@ -44,7 +45,14 @@ SECRET_KEY = get_config('SECRET_KEY')
 DEBUG = get_config('DEBUG')
 
 DATABASES = {
-    'default': get_config('DEFAULT_DATABASE')
+    'default': {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRESQL_NAME"),
+        "USER": os.environ.get("POSTGRESQL_USER"),
+        "PASSWORD": os.environ.get("POSTGRESQL_PASSWORD"),
+        "HOST": os.environ.get("POSTGRESQL_HOST"),
+        "PORT": os.environ.get("POSTGRESQL_PORT"),
+    }
 }
 
 INSTALLED_APPS = [
@@ -67,7 +75,7 @@ INSTALLED_APPS = [
     'search',
 ]
 
-ROOT_URLCONF = 'PiCloud.urls'
+ROOT_URLCONF = 'picloud.urls'
 
 TEMPLATES = [
     {
@@ -176,7 +184,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-WSGI_APPLICATION = 'PiCloud.wsgi.application'
+WSGI_APPLICATION = 'picloud.wsgi.application'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = get_config('EMAIL_HOST')
@@ -192,3 +200,5 @@ GOOGLE_RECAPTCHA_SECRET_KEY = get_config('GOOGLE_RECAPTCHA_SECRET_KEY')
 
 # FIXME XXX HACK: Подвергает сайт риску XSS, хотя и позволяет аутентифицироваться через REST
 SESSION_COOKIE_HTTPONLY = False
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

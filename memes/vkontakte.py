@@ -4,7 +4,7 @@ import re
 
 from vk.exceptions import VkAPIError
 
-from PiCloud.settings.common import VK_GLOBAL_TOKEN, VK_GROUP_TOKEN, VK_API_VERSION
+from picloud.settings import VK_GLOBAL_TOKEN, VK_GROUP_TOKEN, VK_API_VERSION
 
 
 def fetch_memes_for_group(group_uri: str) -> list:
