@@ -1,4 +1,4 @@
-Django==4.2.7
+Django==4.2.10
 social-auth-app-django==5.3.0
 feedparser==6.0.2
 Pillow==8.1.0
