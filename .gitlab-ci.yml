@@ -1,18 +1,32 @@
-deploy:
-  image: alpine
-  stage: deploy
-  only:
-    - master
-  variables:
-    GIT_STRATEGY: none
+default:
+  image: docker:stable
+  services:
+    - docker:dind
   before_script:
-    - apk update && apk add openssh-client bash
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - apk add --update curl && rm -rf /var/cache/apk/*
+
+stages:
+  - build
+  - release
+
+variables:
+  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+build:
+  stage: build
   script:
-    - eval $(ssh-agent -s)
-    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+    - docker build --pull -t $CONTAINER_TEST_IMAGE .
+    - docker push $CONTAINER_TEST_IMAGE
 
-    - mkdir -p ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-
-    - ssh picloud@picloud.pw /home/picloud/update.sh
-    - exit
+release-image:
+  stage: release
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+    - curl --request POST $PORTAINER_UPDATE_URL
