@@ -4,12 +4,12 @@ LABEL authors="andrey.zavodov"
 ADD . /app/
 WORKDIR /app
 
-ENV APPLICATION_SECRETS=/app/picloud/secrets.json
+ENV APPLICATION_SECRETS=/app/data/secrets/secrets.json
+ENV STATIC_ROOT=/app/data/static
+ENV MEDIA_ROOT=/app/data/media
 ENV DJANGO_SETTINGS_MODULE=picloud.settings
-
-RUN apt-get -y update &&\
-    apt-get -y install git-core procps curl g++ tk &&\
-    apt-get clean
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 RUN pip install --upgrade pip &&\
     pip install -r requirements.txt --no-cache-dir

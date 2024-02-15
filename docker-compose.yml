@@ -20,15 +20,11 @@ services:
     volumes:
       - .:/app
     environment:
-      - APPLICATION_SECRETS=/app/picloud/secrets.json
-      - PYTHONDONTWRITEBYTECODE=1
-      - PYTHONUNBUFFERED=1
       - POSTGRESQL_NAME=picloud
       - POSTGRESQL_USER=picloud
       - POSTGRESQL_PASSWORD=picloud
       - POSTGRESQL_HOST=picloud-postgres
       - POSTGRESQL_PORT=5432
-    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     depends_on:
