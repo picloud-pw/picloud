@@ -14,11 +14,6 @@ ENV PYTHONUNBUFFERED=1
 RUN pip install --upgrade pip &&\
     pip install -r requirements.txt --no-cache-dir
 
-RUN groupadd -g 2000 user-group && useradd -m -u 2001 -g user-group picloud
-
-RUN chown -R picloud .
-USER 2001
-
 ENTRYPOINT ["./start.sh"]
 CMD [ \
     "gunicorn", \
