@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
             <ul class="nav navbar-nav">
 
-                {% if user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li>
                         <a href="{% url 'profile' %}" title="{{ user.username }}">
                             <div class="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
@@ -99,7 +99,7 @@
                     </li>
                 {% endif %}
 
-                {% if user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li style="background-color: #FFCCCC">
                         <a href="{% url 'signout' %}">
                             Sign out
