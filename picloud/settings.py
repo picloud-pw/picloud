@@ -40,6 +40,12 @@ def get_config(setting, config=json_config):
 
 ALLOWED_HOSTS = get_config('ALLOWED_HOSTS')
 
+SECURE_SSL_REDIRECT = get_config("SECURE_SSL_REDIRECT")
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+SECURE_REDIRECT_EXEMPT = [
+    r'^health$',
+]
+
 SECRET_KEY = get_config('SECRET_KEY')
 
 DEBUG = get_config('DEBUG')
@@ -127,6 +133,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = get_config("SOCIAL_AUTH_REDIRECT_IS_HTTPS")
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
