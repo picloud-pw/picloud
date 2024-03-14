@@ -39,6 +39,7 @@ def get_config(setting, config=json_config):
 # Application definition
 
 ALLOWED_HOSTS = get_config('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = get_config("CSRF_TRUSTED_ORIGINS")
 
 SECURE_SSL_REDIRECT = get_config("SECURE_SSL_REDIRECT")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
