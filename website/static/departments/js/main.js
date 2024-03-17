@@ -4,9 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-const departments_container = document.getElementById('departments_container');
-const breadcrumbs_container = document.getElementById('breadcrumbs_container');
-
 let DEPARTMENT_ID = null;
 let SELECTED_CITY = null;
 
@@ -30,55 +27,30 @@ function restore_state() {
         DEPARTMENT_ID = path_parts[2]
         init_child_department_page(DEPARTMENT_ID);
     } else {
-        init_universities_list();
+        init_universities_page();
     }
 
 }
 
-function init_universities_list() {
+function init_universities_page() {
     document.title = 'Universities';
-    departments_container.classList.add('loading');
-    departments_container.innerText = '';
-    breadcrumbs_container.style.display = 'none';
 
-    departments_container.innerHTML = `
-        <div class="six wide computer ten wide tablet sixteen wide mobile column"
-                     style="margin: 40px; padding: 20px" id="universities">
-            <form class="ui form segment">
-                <div class="fields">
-                    <div class="four wide field">
-                        <label>Country</label>
-                        <div class="ui fluid disabled button">Russia</div>
-                    </div>
-                    <div class="twelve wide field">
-                        <label>City <i style="color: #d06969" title="Required field">*</i></label>
-                        <div class="ui search" id="cities_search">
-                            <div class="ui left icon fluid input" style="max-width: 600px">
-                                <i class="building outline icon"></i>
-                                <input class="prompt" type="text" placeholder="Enter city name">
-                            </div>
-                            <div class="search results"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>New University Title<i style="color: #d06969" title="Required field">*</i></label>
-                    <div class="ui fluid search" id="university_search">
-                        <div class="ui left icon fluid input" style="max-width: 600px">
-                            <i class="university icon"></i>
-                            <input class="prompt" type="text" placeholder="Add new university by name">
-                        </div>
-                        <div class="search results"></div>
-                    </div>
-                </div>
-                <div id="new_university_preview"></div>
-            </form>
+    document.getElementById('hierarchy_root').innerHTML = `
+        <div class="ui centered padded grid">
+            <div class="six wide computer ten wide tablet sixteen wide mobile column">
+                <div id="new_university_form" style="margin-top: 20px"></div>
+                <h1 class="ui header" style="margin-top: 40px">Universities</h1>
+                <div id="universities_list"></div>
+            </div>
         </div>
     `;
-    let container = document.getElementById('universities');
+    init_new_university_form('new_university_form');
+    display_universities_list('universities_list');
+}
 
-    container.innerHTML += `<div class="ui divider"></div>`;
-    axios.get(`/hierarchy/departments/search?parent_department_id=null`)
+function display_universities_list(container_id) {
+    let container = document.getElementById(container_id);
+    return axios.get(`/hierarchy/departments/search?parent_department_id=null`)
         .then((response) => {
             let departments = response.data['departments'];
             for (let d of departments) {
@@ -95,57 +67,94 @@ function init_universities_list() {
                     </div>
                `;
             }
-
         })
-        .finally(() => {
-            departments_container.classList.remove('loading');
+}
 
-            $('#cities_search').search({
-                apiSettings: {
-                    url: "/hierarchy/cities/search?q={query}",
-                    onResponse: (response) => {
-                        let modified_response = [];
-                        for (let city of response['cities']) {
-                            modified_response.push({
-                                city_id: city['id'],
-                                title: city['title'],
-                                price: city['region'] ? `<div class="ui basic label">${city['region']}</div>` : '',
-                            })
-                        }
-                        return {results: modified_response}
-                    },
-                },
-                onSelect: (result, response) => {
-                    document.getElementById('new_university_preview').innerHTML = '';
-                    SELECTED_CITY = result;
-                },
-                maxResults: 10,
-                minCharacters: 2,
-            });
-            $('#university_search').search({
-                apiSettings: {
-                    url: `/hierarchy/universities/search?q={query}&city_id={city_id}`,
-                    beforeSend: function(settings) {
-                        settings.urlData['city_id'] = SELECTED_CITY ? SELECTED_CITY['city_id'] : null;
-                        return settings;
-                    },
-                    onResponse: (response) => {
-                        let modified_response = [];
-                        for (let university of response['universities']) {
-                            modified_response.push({
-                                university_id: university['id'],
-                                title: university['title'],
-                                price: `<div class="ui basic label">${university['id']}</div>`,
-                            })
-                        }
-                        return {results: modified_response}
-                    },
-                },
-                onSelect: display_university_preview,
-                maxResults: 10,
-                minCharacters: 2,
-            });
-        })
+function init_new_university_form(container_id) {
+    document.getElementById(container_id).innerHTML = `
+        <form class="ui form segment">
+            <div class="fields">
+                <div class="four wide field">
+                    <label>Country</label>
+                    <div class="ui fluid disabled button">Russia</div>
+                </div>
+                <div class="twelve wide field">
+                    <label>City <i style="color: #d06969" title="Required field">*</i></label>
+                    <div class="ui search" id="cities_search">
+                        <div class="ui left icon fluid input" style="max-width: 600px">
+                            <i class="building outline icon"></i>
+                            <input class="prompt" type="text" placeholder="Enter city name">
+                        </div>
+                        <div class="search results"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>New University Title<i style="color: #d06969" title="Required field">*</i></label>
+                <div class="ui fluid search" id="university_search">
+                    <div class="ui left icon fluid input" style="max-width: 600px">
+                        <i class="university icon"></i>
+                        <input class="prompt" type="text" placeholder="Add new university by name">
+                    </div>
+                    <div class="search results"></div>
+                </div>
+            </div>
+            <div id="new_university_preview"></div>
+        </form>
+    `;
+    init_cities_search_from_vk('cities_search');
+    init_universities_search_from_vk('university_search');
+}
+
+function init_cities_search_from_vk(input_id) {
+    $(`#${input_id}`).search({
+        apiSettings: {
+            url: "/hierarchy/cities/search?q={query}",
+            onResponse: (response) => {
+                let modified_response = [];
+                for (let city of response['cities']) {
+                    modified_response.push({
+                        city_id: city['id'],
+                        title: city['title'],
+                        price: city['region'] ? `<div class="ui basic label">${city['region']}</div>` : '',
+                    })
+                }
+                return {results: modified_response}
+            },
+        },
+        onSelect: (result, response) => {
+            document.getElementById('new_university_preview').innerHTML = '';
+            SELECTED_CITY = result;
+        },
+        maxResults: 10,
+        minCharacters: 2,
+    });
+}
+
+function init_universities_search_from_vk(input_id ) {
+    $(`#${input_id}`).search({
+        apiSettings: {
+            url: `/hierarchy/universities/search?q={query}&city_id={city_id}`,
+            beforeSend: function(settings) {
+                settings.urlData['city_id'] = SELECTED_CITY ? SELECTED_CITY['city_id'] : null;
+                return settings;
+            },
+            onResponse: (response) => {
+                let modified_response = [];
+                for (let university of response['universities']) {
+                    modified_response.push({
+                        university_id: university['id'],
+                        title: university['title'],
+                        price: `<div class="ui basic label">${university['id']}</div>`,
+                    })
+                }
+                return {results: modified_response}
+            },
+        },
+        onSelect: display_university_preview,
+        maxResults: 10,
+        minCharacters: 2,
+    });
 }
 
 function display_university_preview(result, response) {
@@ -173,27 +182,48 @@ function add_new_university(university_id, university_name) {
             show_alert('warning', 'Something went wrong :( Perhaps this university is already in the database, try searching.');
         })
         .finally(() => {
-            init_universities_list();
+            init_universities_page();
         })
 }
 
 function init_child_department_page(parent_department_id) {
     DEPARTMENT_ID = parent_department_id;
 
-    departments_container.innerText = '';
-    departments_container.classList.add('loading');
-    breadcrumbs_container.style.display = 'block';
-
-    init_breadcrumbs(parent_department_id);
-    departments_container.innerHTML = `
-        <div class="seven wide column">
-            <div id="departments"></div>
+    document.getElementById('hierarchy_root').innerHTML = `
+        <div class="ui padded grid">
+            <div class="no-margin-padding column">
+                <div id="breadcrumbs_container" style="text-align: left; margin-bottom: 20px; min-height: 70px"></div>
+    
+                <div class="ui centered stackable grid">
+                    <div class="fourteen wide column">
+                        <div id="search_container" style="margin: 30px 0"></div>
+                        <div id="departments_container"></div>
+                    </div>
+                </div>
+    
+            </div>
         </div>
     `;
-    child_departments_list(
-        document.getElementById('departments'),
-        parent_department_id
-    );
+
+    init_breadcrumbs(parent_department_id);
+    init_hierarchy_search(() => {
+        let hierarchy_search_query = document.getElementById('hierarchy_search_query').value;
+        display_departments_list(
+            document.getElementById('departments_container'),
+            parent_department_id, hierarchy_search_query
+        );
+    });
+}
+
+function init_hierarchy_search(on_change) {
+    document.getElementById('search_container').innerHTML = `
+        <div class="ui big input" style="min-width: 50%">
+            <input type="text" placeholder="Search..." id="hierarchy_search_query">
+        </div>
+    `;
+    document.getElementById('hierarchy_search_query')
+        .addEventListener('input', function () { on_change(); })
+    on_change();
 }
 
 function init_breadcrumbs(department_id) {
@@ -216,7 +246,9 @@ function init_breadcrumbs(department_id) {
         }
     }
 
-    breadcrumbs_container.innerHTML = `<div class="ui fluid small steps" style="min-height: 70px" id="breadcrumbs"></div>`;
+    document.getElementById('breadcrumbs_container').innerHTML = `
+        <div class="ui fluid small steps" style="min-height: 70px" id="breadcrumbs"></div>
+    `;
     let container = document.getElementById('breadcrumbs');
     container.innerText = "";
 
