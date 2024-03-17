@@ -8,9 +8,16 @@ from hierarchy.models import Department, DepartmentType
 
 
 def get_department_types(request):
-    return JsonResponse([
-        d.as_dict() for d in DepartmentType.objects.all()
-    ], safe=False)
+    parent_department_id = request.GET.get('parent_department_id')
+
+    types = DepartmentType.objects.all()
+
+    if parent_department_id is not None:
+        department = Department.objects.get(id=parent_department_id)
+        sub_deps = department.get_all_sub_departments()
+        types = DepartmentType.objects.filter(pk__in=sub_deps.values_list('department_type__id'))
+
+    return JsonResponse([d.as_dict() for d in types], safe=False)
 
 
 def get_department(request):
@@ -33,6 +40,20 @@ def search_departments(request):
 
     departments = Department.objects.all()
 
+    if parent_department_id is not None:
+        if parent_department_id != 'null':
+            try:
+                department = Department.objects.get(id=parent_department_id)
+            except ObjectDoesNotExist:
+                return JsonResponse({
+                    'error': f'Department with id={parent_department_id} does not exist'
+                })
+            # departments = departments.filter(parent_department=department)
+            departments = department.get_all_sub_departments()
+        else:
+            departments = departments.filter(parent_department=None)
+
+
     if query is not None:
         departments = departments.filter(name__icontains=query)
     if department_type_id is not None:
@@ -42,17 +63,6 @@ def search_departments(request):
         except ObjectDoesNotExist:
             return JsonResponse({
                 'error': f'DepartmentType with id={department_type_id} does not exist'
-            })
-    if parent_department_id is not None:
-        try:
-            if parent_department_id != 'null':
-                department = Department.objects.get(id=parent_department_id)
-            else:
-                department = None
-            departments = departments.filter(parent_department=department)
-        except ObjectDoesNotExist:
-            return JsonResponse({
-                'error': f'Department with id={parent_department_id} does not exist'
             })
     if is_approved or (not is_approved and request.user.is_superuser):
         departments = departments.filter(is_approved=is_approved)

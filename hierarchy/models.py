@@ -44,6 +44,24 @@ class Department(models.Model):
             node.update({'child': self.as_dict()})
             return hierarchy
 
+    def get_all_sub_departments(self, include_self=False):
+        table_name = Department.objects.model._meta.db_table
+        query = (
+            "WITH RECURSIVE children (id) AS ("
+            f"  SELECT {table_name}.id FROM {table_name} WHERE id = {self.pk}"
+            "  UNION ALL"
+            f"  SELECT {table_name}.id FROM children, {table_name}"
+            f"  WHERE {table_name}.parent_department_id = children.id"
+            ")"
+            f" SELECT {table_name}.id"
+            f" FROM {table_name}, children WHERE children.id = {table_name}.id"
+        )
+        if not include_self:
+            query += f" AND {table_name}.id != {self.pk}"
+        return Department.objects.filter(
+            pk__in=[dep.id for dep in Department.objects.raw(query)]
+        )
+
     def students(self):
         from students.models import StudentInfo
         return StudentInfo.objects.filter(department=self)

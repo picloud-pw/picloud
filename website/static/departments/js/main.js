@@ -206,24 +206,50 @@ function init_child_department_page(parent_department_id) {
     `;
 
     init_breadcrumbs(parent_department_id);
-    init_hierarchy_search(() => {
-        let hierarchy_search_query = document.getElementById('hierarchy_search_query').value;
-        display_departments_list(
-            document.getElementById('departments_container'),
-            parent_department_id, hierarchy_search_query
-        );
+    init_hierarchy_search(parent_department_id, (search_type, search_query) => {
+        let container = document.getElementById('departments_container');
+        container.innerHTML = `<div class="ui active centered inline loader"></div>`;
+        display_departments_list(container, parent_department_id, search_query, search_type);
     });
 }
 
-function init_hierarchy_search(on_change) {
+function get_department_types(parent_department_id) {
+    return axios.get(`/hierarchy/departments/types?parent_department_id=${parent_department_id}`);
+}
+
+function init_hierarchy_search(parent_department_id, on_change) {
     document.getElementById('search_container').innerHTML = `
-        <div class="ui big input" style="min-width: 50%">
+        <div class="ui left action big input" style="min-width: 50%">
+            <select class="ui compact dropdown" id="hierarchy_search_type" style="min-width: 30%"></select>
             <input type="text" placeholder="Search..." id="hierarchy_search_query">
         </div>
     `;
-    document.getElementById('hierarchy_search_query')
-        .addEventListener('input', function () { on_change(); })
-    on_change();
+
+    get_department_types(parent_department_id).then((response) => {
+        let types = response.data;
+        let search_type_container = document.getElementById('hierarchy_search_type');
+        for (let tp of types) {
+            search_type_container.innerHTML += `
+                <option value="${tp['id']}">${tp['name']}</option>
+            `;
+        }
+        if (!types.length) {
+            search_type_container.innerHTML += `
+                <option selected value="">-- no options --</option>
+            `;
+        }
+        let get_values = () => {
+            let search_type = $('#hierarchy_search_type').dropdown('get value');
+            let search_query = document.getElementById('hierarchy_search_query').value;
+            return [search_type, search_query];
+        }
+        $('#hierarchy_search_type').dropdown({
+            onChange: () => { on_change(...get_values()) },
+        })
+        document.getElementById('hierarchy_search_query')
+            .addEventListener('input', function () { on_change(...get_values()); })
+        on_change(...get_values());
+    })
 }
 
 function init_breadcrumbs(department_id) {

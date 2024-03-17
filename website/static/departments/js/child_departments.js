@@ -1,12 +1,17 @@
-function display_departments_list(container, parent_department_id, query) {
-    container.innerHTML = `
-        <div class="ui link doubling three stackable cards" id="sub_department_cards"></div>
-    `;
+function display_departments_list(container, parent_department_id, query=null, type_id=null) {
     let endpoint = `/hierarchy/departments/search` +
-        `?parent_department_id=${parent_department_id}` +
-        `&q=${query}`;
-    axios.get(endpoint)
+        `?parent_department_id=${parent_department_id}`;
+    if (query) {
+        endpoint += `&q=${query}`;
+    }
+    if (type_id) {
+        endpoint += `&department_type_id=${type_id}`;
+    }
+    return axios.get(endpoint)
         .then((response) => {
+            container.innerHTML = `
+                <div class="ui link doubling three stackable cards" id="sub_department_cards"></div>
+            `;
             let departments = response.data['departments'];
             if (!departments.length) {
                 container.innerHTML = render_placeholder(
@@ -14,12 +19,12 @@ function display_departments_list(container, parent_department_id, query) {
                     'Looks like there is no sub-departments...'
                 );
             }
-            for (let i in departments) {
-                let d = departments[i];
+            for (let d of departments) {
                 document.getElementById('sub_department_cards').innerHTML += `
                     <div class="ui fluid card" style="cursor: unset">
                         <a class="content" href="/deps/${d['id']}/">
-                          <div class="header">${d['name']}</div>
+                          <div class="mini header" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${d['name']}</div>
+                          <div class="description" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${d['parent'] ? d['parent']['name'] : ''}</div>
                         </a>
                         <div class="extra content">
                             <div class="ui basic label">${d['type']['name']}</div>
