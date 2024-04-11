@@ -1,0 +1,41 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %}
+    Settings
+{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'profile/css/main.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+    <div id="edit_form_modal_container"></div>
+
+    <div class="ui padded centered stackable grid" style="text-align: left; padding-top: 20px">
+        <div class="twelve wide computer sixteen wide tablet column">
+            <h1 class="ui header">Settings</h1>
+            <div class="ui fluid segment">
+                <div class="ui stackable centered grid" style="margin: 20px 0">
+                    <div class="four wide computer sixteen wide tablet column" id="user_avatar_container"></div>
+                    <div class="one wide computer sixteen wide tablet column" id="user_avatar_container"></div>
+                    <div class="six wide computer sixteen wide tablet column" id="personal_info_container"></div>
+                    <div class="eleven wide computer sixteen wide tablet column" id="user_department_container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profile/js/settings.js' %}"></script>
+
+{% endblock %}

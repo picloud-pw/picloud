@@ -72,7 +72,7 @@ function display_student_page(student_id) {
         document.getElementById('student_info'),
         student_id
     );
-    display_students_posts(
+    display_students_posts_as_list(
         document.getElementById('students_posts'),
         student_id
     );

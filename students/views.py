@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -19,13 +21,12 @@ def me(request):
 def me_edit(request):
     user_info = StudentInfo.objects.get(user=request.user)
 
-    avatar = request.POST.get('avatar')
     username = request.POST.get('username')
     first_name = request.POST.get('first_name')
     last_name = request.POST.get('last_name')
     department_id = request.POST.get('department_id')
 
-    if username is not None:
+    if username is not None and user_info.user.username != username:
         if User.objects.filter(username=username).count():
             return JsonResponse({
                 'status': 'warning',
@@ -35,6 +36,11 @@ def me_edit(request):
             return JsonResponse({
                 'status': 'warning',
                 'message': 'Length must be between 4 and 16 characters.',
+            })
+        if not re.match("^[A-Za-z0-9_]*$", username):
+            return JsonResponse({
+                'status': 'warning',
+                'message': 'Username can only contains letters, numbers and underscores.',
             })
         user_info.user.username = username
 
@@ -57,7 +63,7 @@ def me_edit(request):
     if department_id is not None:
         try:
             department = Department.objects.get(id=department_id)
-        except ObjectDoesNotExist:
+        except Exception as e:
             return JsonResponse({
                 'status': 'warning',
                 'message': 'Department_id is incorrect.',
@@ -69,14 +75,21 @@ def me_edit(request):
     return JsonResponse({
         'status': 'success',
         'message': 'Changes saved',
+        'user_info': user_info.as_dict(),
     })
 
 
 @auth_required
 def get(request):
     student_id = request.GET.get('id')
+    username = request.GET.get('username')
 
-    student = StudentInfo.objects.get(id=student_id)
+    if student_id is not None:
+        student = StudentInfo.objects.get(id=student_id)
+    elif username is not None:
+        student = StudentInfo.objects.get(user__username=username)
+    else:
+        raise ValueError('Please provide either student_id or username')
 
     return JsonResponse(student.as_dict())
 

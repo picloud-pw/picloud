@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
+from students.models import StudentInfo
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -87,8 +89,13 @@ def new_post_page(request):
 
 
 @login_required(login_url='/signin/')
-def profile_page(request):
+def profile_page(request, username):
     return render(request, 'profile.html')
+
+
+@login_required(login_url='/signin/')
+def settings_page(request):
+    return render(request, 'settings.html')
 
 
 @login_required(login_url='/signin/')
@@ -107,7 +114,8 @@ def root_students_page(request):
 
 @login_required(login_url='/signin/')
 def students_page(request, stud_id):
-    return render(request, 'students.html')
+    userinfo = StudentInfo.objects.filter(id=stud_id).first()
+    return redirect("profile", username=userinfo.user.username, permanent=True)
 
 
 @login_required(login_url='/signin/')

@@ -45,6 +45,5 @@ function change_department(department_id) {
     axios.post(`/students/me/edit`, form_data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
         .then((response) => {
             show_alert("success", "Your Department changed!");
-            console.log(response);
         })
 }

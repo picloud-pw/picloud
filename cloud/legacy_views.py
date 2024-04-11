@@ -81,10 +81,6 @@ def user_not_checked_posts(request, user_id):
     return redirect(f'/studs/{user_info.id}/')
 
 
-def settings_page(request):
-    return redirect('profile')
-
-
 def feed_page(request):
     return redirect('cloud')
 

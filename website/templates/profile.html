@@ -13,25 +13,21 @@
 
 
 {% block content %}
+    
     <div id="edit_form_modal_container"></div>
 
     <div class="ui padded centered stackable grid" style="text-align: left; padding-top: 20px">
-        <div class="five wide computer seven wide tablet column">
-            <div class="ui basic no-margin-padding segment" style="min-height: 80px"
-                 id="personal_info_container"></div>
-            <div class="ui segment" style="min-height: 80px; margin-bottom: 40px"
-                 id="user_department_container"></div>
-        </div>
-        <div class="six wide computer nine wide tablet column">
-            <div class="ui segment">
-                <div class="ui pointing secondary menu">
-                    <a class="active item" data-tab="posts_tab">Posts</a>
-                    <a class="item" data-tab="drafts_tab">Drafts</a>
-                    <a class="item" data-tab="moderation_tab">Moderation</a>
+        <div class="twelve wide computer sixteen wide tablet column">
+            <div class="ui padded stackable grid">
+                <div class="four wide column">
+                    <div class="ui fluid segment" style="overflow: hidden; text-align: center; height: 100%">
+                        <div id="user_avatar"></div>
+                    </div>
                 </div>
-                <div class="ui bottom attached active tab" data-tab="posts_tab" id="user_posts"></div>
-                <div class="ui bottom attached tab" data-tab="drafts_tab" id="user_drafts"></div>
-                <div class="ui bottom attached tab" data-tab="moderation_tab" id="moderation_posts"></div>
+                <div class="twelve wide column">
+                    <div class="ui fluid segment" id="user_stats" style="height: 100%"></div>
+                </div>
+                <div class="sixteen wide column" id="user_content"></div>
             </div>
         </div>
     </div>
@@ -41,10 +37,8 @@
 
 {% block js %}
 
-    <script type="text/javascript" src="{% static 'departments/js/search.js' %}"></script>
-    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
     <script type="text/javascript" src="{% static 'posts/js/posts_list.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/student_drafts.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profile/js/profile.js' %}"></script>
 
 {% endblock %}

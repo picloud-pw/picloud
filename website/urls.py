@@ -44,6 +44,7 @@ urlpatterns = [
 
     path('new/post', index.new_post_page, name="new_post"),
 
-    path('profile/', index.profile_page, name="profile"),
+    path('profile/<str:username>/', index.profile_page, name="profile"),
+    path('settings/', index.settings_page, name="settings"),
 
 ]

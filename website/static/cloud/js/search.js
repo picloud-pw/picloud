@@ -9,7 +9,7 @@ function init_posts_search(on_select = null) {
                     modified_response.push({
                         post_id: post['id'],
                         title: post['title'],
-                        price: post['author']['username'],
+                        price: post['author']['user']['username'],
                         description: `[${post['created_date_human']}] ${post['subject']['name']}`,
                     })
                 }

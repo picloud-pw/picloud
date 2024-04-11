@@ -25,7 +25,7 @@
 
                 {% if request.user.is_authenticated %}
                     <li>
-                        <a href="{% url 'profile' %}" title="{{ user.username }}">
+                        <a href="{% url 'profile' user.username %}" title="{{ user.username }}">
                             <div class="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
                             <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: normal;">
                                 {{ user.username | truncatechars:11 }}
@@ -33,6 +33,12 @@
                         </a>
                     </li>
                 {% endif %}
+            
+                <li>
+                    <a href="{% url 'settings' %}">
+                        Settings <i style="font-size: 16px;" class="pull-right hidden-xs showopacity fas cog icon"></i>
+                    </a>
+                </li>
 
                 <li>
                     <a href="{% url 'cloud' %}">

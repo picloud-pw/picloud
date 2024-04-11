@@ -8,7 +8,6 @@ urlpatterns = [
     path('user/<user_id>/posts', legacy_views.user_posts),
     path('user/<user_id>/not_checked_posts', legacy_views.user_not_checked_posts),
 
-    path('settings/', legacy_views.settings_page),
     path('auth/signin/', legacy_views.auth_signin),
     path('feed/', legacy_views.feed_page),
 
