@@ -1,0 +1,13 @@
+{
+  "start_url": "/",
+  "name": "PiCloud",
+  "short_name": "PiCloud",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/static/website/img/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
