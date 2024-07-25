@@ -29,7 +29,7 @@ function get_userinfo(username) {
 
 function display_posts(container, user_id) {
     container.innerHTML = `
-        <div class="ui secondary huge menu">
+        <div class="ui secondary huge menu" style="margin-bottom: 20px">
             <a class="active item" data-tab="posts_tab">Posts</a>
             <a class="item" data-tab="drafts_tab">Drafts</a>
             <a class="item" data-tab="moderation_tab">Moderation</a>
@@ -38,21 +38,23 @@ function display_posts(container, user_id) {
         <div class="ui bottom attached tab" data-tab="drafts_tab" id="user_drafts"></div>
         <div class="ui bottom attached tab" data-tab="moderation_tab" id="moderation_posts"></div>
     `;
-    get_student_posts(user_id, false, true).then((response) => {
-        let container = document.getElementById('user_posts');
-        container.classList.remove('loading');
-        display_students_posts_as_tiles(container, response.data['posts']);
-    })
+    new PostFeed({
+        'author_id': user_id,
+        'is_draft': false,
+        'is_approved': true,
+    }).display_posts_as_tiles(document.getElementById('user_posts'));
 
-    get_student_posts(user_id, true, false).then((response) => {
-        let container = document.getElementById('user_drafts');
-        display_students_posts_as_tiles(container, response.data['posts']);
-    })
+    new PostFeed({
+        'author_id': user_id,
+        'is_draft': true,
+        'is_approved': false,
+    }).display_posts_as_tiles(document.getElementById('user_drafts'));
 
-    get_student_posts(user_id, false, false).then((response) => {
-        let container = document.getElementById('moderation_posts');
-        display_students_posts_as_tiles(container, response.data['posts']);
-    })
+    new PostFeed({
+        'author_id': user_id,
+        'is_draft': false,
+        'is_approved': false,
+    }).display_posts_as_tiles(document.getElementById('moderation_posts'));
 
     $('.menu .item').tab();
 }
@@ -89,4 +91,58 @@ function display_user_card(container) {
             ${USER_INFO['user']['username']}
         </h1>
     `;
+}
+
+function display_student_card(container, student_id) {
+    container.classList.add('loading');
+    axios.get(`/students/get?id=${student_id}`)
+        .then((response) => {
+            let user = response.data;
+            document.title = user['user']['username'];
+            document.getElementById('student_info').innerHTML = `
+                <div class="ui fluid card">
+                  <div class="image">
+                    <img src="${user['avatar']}" alt="avatar">
+                  </div>
+                  <div class="content">
+                    <div class="header">${user['user']['username']}</div>
+                    <div class="meta">
+                      <span class="date">Last login at ${new Date(user['user']['last_login']).toPrettyString()}</span>
+                    </div>
+                  </div>
+                  <div class="content">
+                      <span title="Status">
+                          <i class="map marker icon"></i> ${user['status']['title']}
+                      </span>
+                      <span class="right floated" title="Karma"> 
+                          ${user['karma']} <i class="certificate icon"></i>
+                      </span>
+                  </div>
+                </div>
+            `;
+
+            display_student_department(user['department'] ? user['department']['id'] : null);
+        }).finally(() => {
+        container.classList.remove('loading');
+    })
+}
+
+function display_student_department(department_id) {
+    let container = document.getElementById('student_department');
+    if (department_id) {
+        display_department_hierarchy(
+            container,
+            department_id,
+        )
+    } else {
+        container.innerHTML = `
+            <div class="ui basic placeholder segment">
+                <div class="ui icon header">
+                    <i class="university icon"></i>
+                    Student hasn't chosen a department yet.
+                </div>
+            </div>
+        `;
+    }
+
 }
