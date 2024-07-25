@@ -6,8 +6,6 @@ from hierarchy.models import Subject
 from posts.models import Post, PostType
 from students.models import StudentInfo
 
-POSTS_PER_PAGE = 12
-
 
 def can_user_publish_instantly(user):
     if not user.is_authenticated:
@@ -25,6 +23,7 @@ def search(request):
     author_id = request.GET.get('author_id')
     subject_id = request.GET.get('subject_id')
     page = request.GET.get('page', 1)
+    page_size = request.GET.get('page_size', 12)
     is_draft = request.GET.get('is_draft') not in ['False', None]
     is_approved = request.GET.get('is_approved') in ['True', None]
 
@@ -52,17 +51,24 @@ def search(request):
 
     posts = posts.order_by('-created_date')
 
-    paginator = Paginator(posts, POSTS_PER_PAGE)
+    paginator = Paginator(posts, page_size)
     try:
         posts_page = paginator.page(page)
     except PageNotAnInteger:
-        posts_page = paginator.page(1)
+        page = 1
+        posts_page = paginator.page(page)
     except EmptyPage:
         posts_page = paginator.page(paginator.num_pages)
 
-    return JsonResponse({'posts': [
-        post.as_dict() for post in posts_page
-    ]})
+    return JsonResponse({
+        'posts': [
+            post.as_dict() for post in posts_page
+        ],
+        'total_posts': paginator.count,
+        'page': int(page),
+        'page_size': page_size,
+        'total_pages': paginator.num_pages,
+    })
 
 
 @auth_required

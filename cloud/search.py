@@ -1,15 +1,12 @@
 import operator
 from functools import reduce
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.urls import reverse
 
+from django.urls import reverse
 from cloud.models import Post, University, Department, Chair, Program, Subject, UserInfo
-from posts.views.posts import POSTS_PER_PAGE
+
 
 
 def text_search(request):
