@@ -1,14 +1,20 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse, HttpResponse
 
 from decorators import auth_required
 from hierarchy.models import Subject, Department
+from posts.models import Post
+from students.models import StudentInfo
 
 
 def search_subjects(request):
     query = request.GET.get('q')
     department_id = request.GET.get('department_id')
     is_approved = request.GET.get('is_approved') in ['True', None]
+    author_id = request.GET.get('author_id')
+    page = request.GET.get('page', 1)
+    page_size = request.GET.get('page_size', 24)
 
     subjects = Subject.objects.all()
 
@@ -22,12 +28,37 @@ def search_subjects(request):
             return JsonResponse({
                 'error': f'Department with id={department_id} does not exist'
             })
+    if author_id is not None:
+        student_info = StudentInfo.objects.get(id=author_id)
+        subject_ids = Post.objects.filter(
+            author_id=student_info.user.pk,
+            is_draft=False,
+            is_approved=True
+        ).values('subject__id')
+        subjects = subjects.filter(id__in=subject_ids)
     if is_approved or (not is_approved and request.user.is_superuser):
         subjects = subjects.filter(is_approved=is_approved)
 
-    return JsonResponse({'subjects': [
-        s.as_dict() for s in subjects.order_by('semester')
-    ]})
+    subjects = subjects.order_by('semester')
+
+    paginator = Paginator(subjects, page_size)
+    try:
+        subjects_page = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        subjects_page = paginator.page(page)
+    except EmptyPage:
+        subjects_page = paginator.page(paginator.num_pages)
+
+    return JsonResponse({
+        'subjects': [
+            subject.as_dict() for subject in subjects_page
+        ],
+        'total_subjects': paginator.count,
+        'page': int(page),
+        'page_size': page_size,
+        'total_pages': paginator.num_pages,
+    })
 
 
 def get_subject(request):

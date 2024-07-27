@@ -31,13 +31,20 @@ function display_posts(container, user_id) {
     container.innerHTML = `
         <div class="ui secondary huge menu" style="margin-bottom: 20px">
             <a class="active item" data-tab="posts_tab">Posts</a>
+            <a class="item" data-tab="subjects_tab">Subjects</a>
             <a class="item" data-tab="drafts_tab">Drafts</a>
             <a class="item" data-tab="moderation_tab">Moderation</a>
         </div>
         <div class="ui bottom attached active loading tab" data-tab="posts_tab" id="user_posts"></div>
+        <div class="ui bottom attached tab" data-tab="subjects_tab" id="user_subjects"></div>
         <div class="ui bottom attached tab" data-tab="drafts_tab" id="user_drafts"></div>
         <div class="ui bottom attached tab" data-tab="moderation_tab" id="moderation_posts"></div>
     `;
+
+    new SubjectFeed({
+        'author_id': user_id,
+    }).display_subjects_as_tiles(document.getElementById('user_subjects'));
+
     new PostFeed({
         'author_id': user_id,
         'is_draft': false,
