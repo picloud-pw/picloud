@@ -41,5 +41,12 @@
     <script type="text/javascript" src="{% static 'components/post_feed.js' %}"></script>
     <script type="text/javascript" src="{% static 'departments/js/hierarchy.js' %}"></script>
     <script type="text/javascript" src="{% static 'profile/js/profile.js' %}"></script>
+    
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            let page = new ProfilePage();
+        });
+    </script>
+    
 
 {% endblock %}

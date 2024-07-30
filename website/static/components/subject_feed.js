@@ -30,14 +30,15 @@ class SubjectFeed {
             <div class="ui basic button" style="margin: 20px 0" id="${el_id}_load_more_btn">Load more ...</div>
         `;
 
-        container.classList.add('loading');
-        this._tiles_next_page(el_id).finally(() => {
-            container.classList.remove('loading');
-        })
-
         $(`#${el_id}_load_more_btn`).click(() => {
             this._tiles_next_page(el_id);
         });
+
+        container.classList.add('loading');
+        return this._tiles_next_page(el_id).finally(() => {
+            container.classList.remove('loading');
+        })
+
     }
 
     _tiles_next_page(el_id) {
@@ -48,6 +49,7 @@ class SubjectFeed {
         let container = document.getElementById(el_id);
         return this.get_subjects().then((response) => {
             let resp = response.data;
+            this.total_subjects = resp['total_subjects'];
             for (let item of resp['subjects']) {
                 container.innerHTML += `
                     <div class="ui card">

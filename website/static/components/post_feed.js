@@ -31,14 +31,15 @@ class PostFeed {
             <div class="ui basic button" style="margin: 20px 0" id="${el_id}_load_more_btn">Load more ...</div>
         `;
 
-        container.classList.add('loading');
-        this._tiles_next_page(el_id).finally(() => {
-            container.classList.remove('loading');
-        })
-
         $(`#${el_id}_load_more_btn`).click(() => {
             this._tiles_next_page(el_id);
         });
+
+        container.classList.add('loading');
+        return this._tiles_next_page(el_id).finally(() => {
+            container.classList.remove('loading');
+        })
+
     }
 
     _tiles_next_page(el_id) {
@@ -49,6 +50,8 @@ class PostFeed {
         let container = document.getElementById(el_id);
         return this.get_student_posts().then((response) => {
             let resp = response.data;
+            this.total_posts = resp['total_posts'];
+
             for (let post of resp['posts']) {
                 container.innerHTML += `
                     <div class="ui card">
