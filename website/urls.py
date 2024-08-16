@@ -8,7 +8,6 @@ urlpatterns = [
     path('', index.index, name='index'),
 
     path('robots.txt', index.robots, name='robots'),
-    path('ads.txt', index.ads, name='ads'),
     path('about/', index.about, name='about'),
     path('legal/privacy-policy/', index.privacy_policy, name='privacy_policy'),
 

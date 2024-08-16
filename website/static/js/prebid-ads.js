@@ -1,1 +1,0 @@
-var CAN_RUN_ADS = true;

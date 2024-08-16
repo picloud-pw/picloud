@@ -34,13 +34,11 @@ function load_posts_list() {
     let container = document.getElementById('posts_container');
     axios.get(`/posts/search?page=${PAGE}`)
         .then((response) => {
-            append_element( render_ad(), container );
             let posts = response.data['posts'];
             for (let post of posts) {
                 let rendered_post = render_post(post);
                 append_element(rendered_post, container);
             }
-            push_ads();
         })
         .finally(() => {
             btn.classList.remove('loading');
@@ -66,12 +64,4 @@ function append_element(element, postsContainer) {
     imagesLoaded(element).on('progress', () => {
         MASONRY.layout();
     });
-}
-
-function render_ad() {
-    let element = document.createElement("article");
-    element.classList.add("post");
-    element.style.padding = '20px';
-    element.innerHTML = show_ad_block();
-    return element;
 }

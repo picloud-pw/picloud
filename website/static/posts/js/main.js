@@ -26,11 +26,6 @@ function init_page(post_id) {
     container.innerHTML = `
         <div class="ui seven wide computer sixteen wide tablet column">
             <div id="post"></div>
-            <div class="ui segment">
-                ${show_ad_block('horizontal')}
-            </div>
-        </div>
-        <div class="ui five wide computer sixteen wide tablet column">
             <div class="ui segment" id="comments_list" style="margin-top: 10px; min-height: 80px"></div>
             <div class="ui segment" id="comments_form">
                 <div class="ui icon fluid input">
@@ -42,7 +37,6 @@ function init_page(post_id) {
     `;
     display_post(document.getElementById('post'), post_id);
     display_comments(post_id);
-    push_ads();
 
     document.getElementById("comment_text")
         .addEventListener("keyup", function(event) {
