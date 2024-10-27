@@ -46,9 +46,9 @@
 }
 
 .extra-btn {
-    position: absolute;
-    right: 10px;
-    top: 16px
+    position: absolute !important;
+    right: 10px !important;
+    top: 16px !important;
 }
 
 #new_chat_form {

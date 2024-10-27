@@ -13,8 +13,8 @@ function restore_state() {
 function init_chat_lists_segment() {
     document.getElementById('chat_list').innerHTML = `
         <div class="ui top segment" id="chats_search" style="padding-top: 22px">
-            <div class="ui transparent left icon fluid large disabled input" style="padding-right: 45px">
-              <input type="text" disabled placeholder="Search...">
+            <div class="ui transparent left icon fluid large input" style="padding-right: 45px">
+              <input type="text" placeholder="Search..." oninput="filter_chats(this.value)">
               <i class="search icon"></i>
             </div>
             <div class="ui basic circular icon extra-btn button" id="new_chat_btn"
@@ -36,6 +36,16 @@ function init_chat_lists_segment() {
         </div>
     `;
     load_chat_lists();
+}
+
+function filter_chats(query) {
+    $('#chat_list .item .content a.header').each((i, el) => {
+        if ((el.innerText).toLowerCase().includes(String(query).toLowerCase())) {
+            $(el).parent().parent().removeClass('hidden');
+        } else {
+            $(el).parent().parent().addClass('hidden');
+        }
+    })
 }
 
 function init_chat_content_segment() {
@@ -97,8 +107,8 @@ function load_chat_lists() {
             let chats = response.data['chats'];
             for (let chat of chats) {
                 document.getElementById('chats_list_container').innerHTML += `
-                    <div class="item" onclick="open_chat('${chat['name']}')">
-                        <img class="ui avatar image" src="${generate_avatar(chat['title'].charAt(0), string_to_color(chat['name']))}">
+                    <div class="item" onclick="open_chat('${chat['name']}')" style="padding: 15px">
+                        <img class="ui avatar image" src="https://api.dicebear.com/9.x/identicon/svg?seed=${chat['name']}">
                         <div class="content">
                             <a class="header">${chat['title']}</a>
                             <div class="description"></div>
