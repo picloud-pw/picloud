@@ -94,12 +94,12 @@ function display_comments(post_id) {
                 for (let comment of comments) {
                     document.getElementById('comments_container').innerHTML += `
                         <div class="comment">
-                            <a class="avatar" href="/profile/${comment['author']['user']['username']}/">
+                            <a class="avatar" href="/profile/${comment['author']['username']}/">
                                 <img src="${comment['author']['avatar']}" alt="ava"> 
                             </a>
                             <div class="content">
                               <a class="author" href="/profile/${comment['author']['username']}/">
-                                ${comment['author']['user']['username']}
+                                ${comment['author']['username']}
                               </a>
                               <div class="metadata">
                                 <span class="date">${new Date(comment['created_date']).toPrettyString()}</span>
@@ -116,7 +116,7 @@ function display_comments(post_id) {
                 }
             } else {
                 container.innerHTML = `
-                    <div class="ui placeholder basic segment">
+                    <div class="ui basic segment" style="text-align: center">
                       <div class="ui icon header">
                         <i class="comments outline icon"></i>
                         No comments are listed for this post.

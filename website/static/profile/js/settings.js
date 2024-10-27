@@ -22,7 +22,7 @@ function get_userinfo() {
 function display_avatar() {
     document.getElementById('user_avatar_container').innerHTML = `
         <div class="ui basic no-margin-padding segment" style="text-align: center">
-            <img src="${USER_INFO['avatar']}" alt="avatar" style="padding: 30px; max-width: 100%">
+            <img src="${USER_INFO['avatar']}" alt="avatar" style="max-width: 100%; padding: 30px">
             <div class="ui basic fluid button" style="margin-bottom: 20px">
                 Update avatar
             </div>

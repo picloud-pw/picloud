@@ -86,9 +86,9 @@ function render_post(post) {
                         <i class="eye icon"></i>${post['views']}
                     </span>
                     ${post['comments'] ? `
-                        <a class="comments-counter" href="">
+                        <span class="comments-counter">
                             <i class="comment icon" title="Comments count"></i> ${post['comments']}
-                        </a>
+                        </span>
                     ` : ''}
                 </span>
             </footer>

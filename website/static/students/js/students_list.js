@@ -46,7 +46,8 @@ function load_students(container_id, load_btn_id, filters) {
                 container.innerHTML += `
                     <div class="item">
                         <div class="ui tiny image">
-                          <img class="avatar" src="${student['avatar']}" alt="${student['user']['username']} avatar">
+                          <img class="avatar" src="${student['avatar']}" alt="NotFound" 
+                            onerror="this.src='/media/resources/default/user_ava.png'">
                         </div>
                         <div class="middle aligned content">
                           <a class="header" href="/students/?id=${student['id']}">

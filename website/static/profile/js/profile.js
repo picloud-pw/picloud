@@ -110,8 +110,9 @@ class ProfilePage {
     display_user_card(container) {
         container.innerHTML = `
             <div class="ui image">
-                <img src="${this.student['avatar']}" alt="avatar" 
-                    style="padding-top: 30px; background-color: #fff">
+                <img class="avatar" src="${this.student['avatar']}" alt="avatar" 
+                    style="background-color: #fff; max-width: 200px"
+                    onerror="this.src='/media/resources/default/user_ava.png'">
             </div>
             <h1 class="ui header" style="overflow: hidden; text-overflow: ellipsis">
                 ${this.student['user']['username']}

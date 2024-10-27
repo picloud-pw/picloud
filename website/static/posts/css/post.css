@@ -113,4 +113,5 @@ article.post .btn-follow-link, article.post .btn-download {
 
 .comments-counter {
     text-decoration: none !important;
+    color: rgb(179, 179, 179);
 }

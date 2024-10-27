@@ -58,7 +58,8 @@ function display_universities_list(container_id) {
                     <div class="ui link items segment" style="cursor: pointer">
                         <a class="item" href="/deps/${d['id']}/">
                             <div class="ui tiny avatar image">
-                                <img src="${d['logo']}" alt="logo" style="max-height: 100% !important">
+                                <img src="${d['logo']}" alt="Not found" 
+                                    onerror="this.src='/media/resources/default/u_logo.png'">
                             </div>
                             <div class="middle aligned content">
                               <div class="header">${d['name']}</div>
