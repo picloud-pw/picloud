@@ -1,6 +1,23 @@
 export class Chats {
 
+    selected_chat = null;
+
     constructor(container) {
+        this.restore_state(container);
+    }
+
+    save_state() {
+        let state = {};
+        if (this.selected_chat) {
+            state['c'] = this.selected_chat;
+            push_state(state);
+        }
+    }
+
+    restore_state(container) {
+        let params = new URLSearchParams(document.location.search);
+        this.selected_chat = params.get('c');
+
         this.el_id = random_ID();
         container.innerHTML = `
             <div class="ui padded chats grid">
@@ -13,7 +30,12 @@ export class Chats {
         this.init_chat_lists_segment(document.getElementById(`${this.el_id}_list`));
         this.init_chat_content_segment(document.getElementById(`${this.el_id}_content`));
         this.init_chat_bar_segment(document.getElementById(`${this.el_id}_bar`));
+
+        if (this.selected_chat) {
+            this.open_chat(this.selected_chat);
+        }
     }
+
 
     init_chat_lists_segment(container) {
         let top_segment = document.createElement('div');
@@ -126,6 +148,47 @@ export class Chats {
         }).modal('show');
     }
 
+    toggle_chat_settings_form(chat_name) {
+        let modal_id = random_ID();
+        $.modal({
+            title: 'Chat Settings',
+            closeIcon: true,
+            class: 'tiny',
+            actions: [
+                {
+                    text: 'Share',
+                    class: 'disabled',
+                    click: () => { },
+                },
+                {
+                    text: 'Delete Chat',
+                    class: 'red basic left floated',
+                    click: () => { this.delete_chat_approve_popup(chat_name); }
+                }
+            ],
+        }).modal('show');
+    }
+
+    delete_chat_approve_popup(chat_name) {
+        $.modal({
+            title: 'Approve your choice',
+            closeIcon: true,
+            class: 'tiny',
+            content: ``,
+            actions: [
+                {
+                    text: 'Yes, I want to delete this chat.',
+                    class: 'fluid red',
+                    click: () => {
+                        this.selected_chat = null;
+                        this.save_state();
+                        this.delete_chat(chat_name);
+                    }
+                }
+            ],
+        }).modal('show');
+    }
+
     load_chat_lists() {
         let container = document.getElementById(`${this.el_id}_chats_list`);
         container.innerHTML = '';
@@ -142,7 +205,11 @@ export class Chats {
                     let chat_item = document.createElement('div');
                     chat_item.className = 'item';
                     chat_item.style.padding = '15px';
-                    chat_item.onclick = () => { this.open_chat(chat['name']); }
+                    chat_item.onclick = () => {
+                        this.selected_chat = chat['name'];
+                        this.save_state();
+                        this.open_chat(chat['name']);
+                    }
                     chat_item.innerHTML = `
                         <img class="ui avatar image" alt="NotFound" 
                             src="https://api.dicebear.com/9.x/identicon/svg?seed=${chat['name']}">
@@ -154,8 +221,8 @@ export class Chats {
                     chat_lists.appendChild(chat_item);
                 }
             }).finally(() => {
-            container.classList.remove('loading');
-        })
+                container.classList.remove('loading');
+            })
     }
 
     create_new_chat(title) {
@@ -181,10 +248,15 @@ export class Chats {
     open_chat(chat_name) {
         document.getElementById('chat_header').innerHTML = `
             <div id="chat_header_content"></div>
-            <div class="ui basic icon circular extra-btn button">
-                <i class="ui ellipsis horizontal icon"></i>
-            </div>
         `;
+
+        let chat_settings_btn = document.createElement('div');
+        chat_settings_btn.className = 'ui basic icon circular extra-btn button';
+        chat_settings_btn.onclick = () => { this.toggle_chat_settings_form(chat_name) }
+        chat_settings_btn.innerHTML = `<i class="ui ellipsis horizontal icon"></i>`;
+
+        document.getElementById('chat_header').appendChild(chat_settings_btn);
+
         document.getElementById('chat_messages').innerHTML = `
             <div class="ui basic placeholder segment" style="height: 100%">
               <div class="ui icon header">
@@ -275,6 +347,16 @@ export class Chats {
             })
     }
 
+    delete_chat(chat_name) {
+        let data = new FormData();
+        data.append("chat_name", chat_name);
+        axios.post('/chats/chat/delete', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+            .then((response) => {
+                this.load_chat_lists();
+            }).catch((error) => {
+        }).finally(() => {})
+    }
+
     sent_message(chat_name) {
         let message_input = document.getElementById('text_message_input');
         let data = new FormData();
@@ -284,9 +366,7 @@ export class Chats {
             .then((response) => {
                 this.load_chat_messages(chat_name);
             }).catch((error) => {
-        }).finally(() => {
-            message_input.value = '';
-        })
+        }).finally(() => { })
     }
 
 }
