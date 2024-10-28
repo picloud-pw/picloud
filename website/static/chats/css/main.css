@@ -68,12 +68,12 @@
 
 #chat_messages_container {
     position: absolute;
-    bottom: 0;
-    margin-bottom: 20px;
+    width: 100%;
+    padding: 20px;
 }
 
-#emojis_list {
-    font-size: 24px;
+.emojis_list {
+    font-size: 24px !important;
     text-align: center
 }
 
@@ -81,7 +81,7 @@
     overflow-y: auto;
 }
 
-#emojis_list {
+.emojis_list {
     height: 100px;
 }
 
@@ -89,14 +89,14 @@
     height: 100px;
 }
 
-#emojis_list > div {
+.emojis_list > div {
     margin: 5px;
     padding: 10px;
     cursor: pointer;
     display: inline-block
 }
 
-#emojis_list > div:hover {
+.emojis_list > div:hover {
     background-color: #DBC6EB;
     border-radius: 5px;
 }

@@ -14,11 +14,7 @@
 
 {% block content %}
 
-    <div class="ui padded chats grid">
-        <div class="ui segment no-margin-padding four wide computer six wide tablet left column" id="chat_list"></div>
-        <div class="ui segment no-margin-padding eight wide computer ten wide tablet center column" id="chat_content"></div>
-        <div class="ui segment no-margin-padding four wide computer only right column" id="chat_bar"></div>
-    </div>
+    <div id="chats" style="height: 100%"></div>
 
 {% endblock %}
 
@@ -26,6 +22,10 @@
 {% block js %}
 
     <script type="text/javascript" src="{% static 'chats/js/emojis.js' %}"></script>
-    <script type="text/javascript" src="{% static 'chats/js/main.js' %}"></script>
+    <script type="module">
+        import {Chats} from "../static/chats/js/main.js";
+        let container = document.getElementById('chats');
+        let app = new Chats(container);
+    </script>
 
 {% endblock %}
