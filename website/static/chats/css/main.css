@@ -33,6 +33,12 @@
     border-width: 2px 0;
 }
 
+@media all and (min-width:0px) and (max-width: 764px) {
+    .center.segment {
+        height: calc(100% - 50px);
+    }
+}
+
 .left .middle {
     height: calc(100% - 70px);
 }

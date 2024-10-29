@@ -21,8 +21,8 @@ export class Chats {
         this.el_id = random_ID();
         container.innerHTML = `
             <div class="ui padded chats grid">
-                <div class="ui segment no-margin-padding four wide computer six wide tablet left column" id="${this.el_id}_list"></div>
-                <div class="ui segment no-margin-padding eight wide computer ten wide tablet center column" id="${this.el_id}_content"></div>
+                <div class="ui segment no-margin-padding four wide computer only left column" id="${this.el_id}_list"></div>
+                <div class="ui segment no-margin-padding eight wide computer sixteen wide tablet center column" id="${this.el_id}_content"></div>
                 <div class="ui segment no-margin-padding four wide computer only right column" id="${this.el_id}_bar"></div>
             </div>
         `;
@@ -304,7 +304,7 @@ export class Chats {
                 let messages = response.data['messages'];
                 document.getElementById('chat_header_content').innerHTML = `
                     <div class="ui items">
-                      <div class="item">
+                      <div class="item" style="margin: 0">
                         <div class="content">
                           <div class="header">${chat['title'] ? chat['title'] : '---'}</div>
                           <div class="meta"> 
@@ -365,6 +365,7 @@ export class Chats {
         axios.post('/chats/message/add', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
                 this.load_chat_messages(chat_name);
+                message_input.value = '';
             }).catch((error) => {
         }).finally(() => { })
     }
