@@ -33,12 +33,6 @@
     border-width: 2px 0;
 }
 
-@media all and (min-width:0px) and (max-width: 764px) {
-    .center.segment {
-        height: calc(100% - 50px);
-    }
-}
-
 .left .middle {
     height: calc(100% - 70px);
 }
@@ -53,7 +47,7 @@
 
 .extra-btn {
     position: absolute !important;
-    right: 10px !important;
+    right: 14px !important;
     top: 16px !important;
 }
 
@@ -75,7 +69,20 @@
 #chat_messages_container {
     position: absolute;
     width: 100%;
-    padding: 20px;
+    max-width: 100%;
+    padding: 14px;
+}
+
+.back_chat.button {
+    margin-top: 5px !important;
+    margin-right: 10px !important;
+    box-shadow: none !important;
+}
+
+@media all and (min-width:992px){
+    .back_chat.button {
+        display: none !important;
+    }
 }
 
 .emojis_list {
@@ -93,6 +100,20 @@
 
 #chats_list_container {
     height: 100px;
+}
+
+.flyout > .content {
+    padding: 0 !important;
+}
+
+.flyout > .close.icon {
+    top: unset !important;
+    right: 2.25rem !important;
+    bottom: 1.5rem !important;
+}
+
+.pusher {
+    height: 100%;
 }
 
 .emojis_list > div {

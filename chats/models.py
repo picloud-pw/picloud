@@ -11,11 +11,13 @@ class Chat(models.Model):
     members = models.ManyToManyField(User, related_name='members')
 
     def as_dict(self):
+        messages = Message.objects.filter(chat=self).order_by('-created')
         return {
             'author': self.author.username if self.author is not None else None,
             'created': self.created,
             'title': self.title,
             'name': self.name,
+            'last_message': messages.first().as_dict() if len(messages) else None,
             'members_count': self.members.all().count(),
         }
 
@@ -40,7 +42,9 @@ class Message(models.Model):
 
     def as_dict(self):
         return {
-            'author': self.author.username if self.author is not None else None,
+            'author': {
+                'username': self.author.username,
+            } if self.author is not None else None,
             'text': self.text,
             'created': self.created,
             'edited': self.edited if self.edited is not None else None,

@@ -2,32 +2,20 @@ function random_ID() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-Date.prototype.toPrettyString = function () {
-    let dd = this.getDate();
-    let mm = this.getMonth() + 1;
-
-    let date = [
-        (dd > 9 ? '' : '0') + dd,
-        (mm > 9 ? '' : '0') + mm,
-        this.getFullYear(),
-    ].join('-');
-    let time = [
-        this.getHours(),
-        this.getMinutes(),
-    ].join(':');
-    return `${date}${time === '3:0' ? '' : ' ' + time}`;
-};
+Date.prototype.toHHMM = function () {
+    let hour = this.getHours();
+    let minute = this.getMinutes();
+    return [(hour > 9 ? '' : '0') + hour, (minute > 9 ? '' : '0') + minute].join(':');
+}
 
 Date.prototype.toYYYYMMDD = function () {
+    let day = this.getDate();
+    let month = this.getMonth() + 1;
+    return [(day > 9 ? '' : '0') + day, (month > 9 ? '' : '0') + month, this.getFullYear() ].join('-');
+};
 
-    let dd = this.getDate();
-    let mm = this.getMonth() + 1;
-
-    return [
-        this.getFullYear(),
-        (mm > 9 ? '' : '0') + mm,
-        (dd > 9 ? '' : '0') + dd,
-    ].join('-');
+Date.prototype.toPrettyString = function () {
+    return `${this.toYYYYMMDD()} ${this.toHHMM()}`;
 };
 
 function push_state(dict) {

@@ -10,8 +10,13 @@ nav.navbar {
 }
 
 .content-block {
-    text-align: center;
-    vertical-align: middle;
+    height: 100%;
+}
+
+@media all and (min-width:0px) and (max-width: 764px) {
+    .content-block {
+        height: calc(100% - 52px) !important;
+    }
 }
 
 .no-margin-padding {

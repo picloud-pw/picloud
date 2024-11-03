@@ -1,6 +1,10 @@
 export class Chats {
 
+    tablet_max_width = 991;
+    mobile_max_width = 764;
+
     selected_chat = null;
+    chats = {};
 
     constructor(container) {
         this.restore_state(container);
@@ -33,6 +37,8 @@ export class Chats {
 
         if (this.selected_chat) {
             this.open_chat(this.selected_chat);
+        } else if (window.innerWidth < this.tablet_max_width) {
+            this.toggle_chat_lists_sidebar();
         }
     }
 
@@ -49,30 +55,33 @@ export class Chats {
         chats_filter_input.type = 'text';
         chats_filter_input.placeholder = 'Search...';
         chats_filter_input.oninput = () => { this.filter_chats(chats_filter_input.value) };
+        chats_filter.innerHTML = `<i class="search icon"></i>`;
         chats_filter.appendChild(chats_filter_input);
-        chats_filter.innerHTML += `<i class="search icon"></i>`;
         top_segment.appendChild(chats_filter);
 
         let new_chat_btn = document.createElement('div');
         new_chat_btn.className = 'ui basic circular icon extra-btn button';
         new_chat_btn.onclick = () => { this.toggle_new_chat_form() }
         new_chat_btn.innerHTML = `<i class="ui plus icon"></i>`;
+        new_chat_btn.style.boxShadow = 'none';
         top_segment.appendChild(new_chat_btn);
 
         let middle_segment = document.createElement('div');
-        middle_segment.className = 'ui middle segment';
+        middle_segment.className = 'ui middle chat_list segment';
         middle_segment.style.padding = '0';
         middle_segment.id = `${this.el_id}_chats_list`;
 
         container.innerHTML = ``;
+        container.style.maxHeight = '100%';
         container.appendChild(top_segment);
         container.appendChild(middle_segment);
 
-        this.load_chat_lists();
+        this.display_chat_lists();
     }
 
     filter_chats(query) {
-        $('#chat_list .item .content a.header').each((i, el) => {
+        $('.chat_list .item .content .header').each((i, el) => {
+            console.log(el);
             if ((el.innerText).toLowerCase().includes(String(query).toLowerCase())) {
                 $(el).parent().parent().removeClass('hidden');
             } else {
@@ -149,7 +158,6 @@ export class Chats {
     }
 
     toggle_chat_settings_form(chat_name) {
-        let modal_id = random_ID();
         $.modal({
             title: 'Chat Settings',
             closeIcon: true,
@@ -189,7 +197,7 @@ export class Chats {
         }).modal('show');
     }
 
-    load_chat_lists() {
+    display_chat_lists() {
         let container = document.getElementById(`${this.el_id}_chats_list`);
         container.innerHTML = '';
 
@@ -198,31 +206,43 @@ export class Chats {
         container.appendChild(chat_lists);
 
         container.classList.add('loading');
-        axios.get('/chats/chat/list')
-            .then((response) => {
-                let chats = response.data['chats'];
-                for (let chat of chats) {
-                    let chat_item = document.createElement('div');
-                    chat_item.className = 'item';
-                    chat_item.style.padding = '15px';
-                    chat_item.onclick = () => {
-                        this.selected_chat = chat['name'];
-                        this.save_state();
-                        this.open_chat(chat['name']);
-                    }
-                    chat_item.innerHTML = `
-                        <img class="ui avatar image" alt="NotFound" 
-                            src="https://api.dicebear.com/9.x/identicon/svg?seed=${chat['name']}">
-                        <div class="content">
-                            <a class="header">${chat['title']}</a>
-                            <div class="description"></div>
-                        </div>
-                    `;
-                    chat_lists.appendChild(chat_item);
+
+        this.get_chats().then((response) => {
+            this.chats = {};
+            for (let chat of response.data['chats']) {
+                this.chats[chat['name']] = chat;
+                let chat_item = document.createElement('div');
+                chat_item.className = 'item';
+                chat_item.style.padding = '15px';
+                chat_item.style.whiteSpace = 'nowrap';
+                chat_item.onclick = () => {
+                    this.selected_chat = chat['name'];
+                    this.save_state();
+                    this.open_chat(chat['name']);
+                    $('.ui.flyout').flyout('hide');
                 }
-            }).finally(() => {
-                container.classList.remove('loading');
-            })
+                chat_item.innerHTML = `
+                    <img class="ui avatar image" alt="NotFound" 
+                        src="https://api.dicebear.com/9.x/identicon/svg?seed=${chat['name']}">
+                    <div class="content">
+                        <div class="header">${chat['title']}</div>
+                        ${chat['last_message'] ? `
+                            <div class="description" style="margin-top: 10px">
+                                <a>${chat['last_message']['author']['username']}</a>: 
+                                ${chat['last_message']['text']}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                chat_lists.appendChild(chat_item);
+            }
+        }).finally(() => {
+            container.classList.remove('loading');
+        })
+    }
+
+    get_chats() {
+        return axios.get('/chats/chat/list');
     }
 
     create_new_chat(title) {
@@ -230,7 +250,7 @@ export class Chats {
         data.append("title", title);
         axios.post('/chats/chat/add', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
-                this.load_chat_lists();
+                this.display_chat_lists();
             }).catch((error) => {
                 document.getElementById('new_chat_alerts').innerHTML = `
                     <div class="ui pink message" style="margin-bottom: 20px;">
@@ -252,6 +272,7 @@ export class Chats {
 
         let chat_settings_btn = document.createElement('div');
         chat_settings_btn.className = 'ui basic icon circular extra-btn button';
+        chat_settings_btn.style.boxShadow = 'none';
         chat_settings_btn.onclick = () => { this.toggle_chat_settings_form(chat_name) }
         chat_settings_btn.innerHTML = `<i class="ui ellipsis horizontal icon"></i>`;
 
@@ -298,22 +319,13 @@ export class Chats {
     load_chat_messages(chat_name) {
         let container = document.getElementById('chat_messages');
         container.classList.add('loading');
+
         axios.get(`/chats/message/list?chat_name=${chat_name}`)
             .then((response) => {
                 let chat = response.data['chat'];
                 let messages = response.data['messages'];
-                document.getElementById('chat_header_content').innerHTML = `
-                    <div class="ui items">
-                      <div class="item" style="margin: 0">
-                        <div class="content">
-                          <div class="header">${chat['title'] ? chat['title'] : '---'}</div>
-                          <div class="meta"> 
-                            <span class="members">${chat['members_count']} member(s)</span> 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                `;
+
+                this.display_chat_header(document.getElementById('chat_header_content'), chat);
                 if (!messages.length) {
                     return
                 }
@@ -326,7 +338,9 @@ export class Chats {
                     messages_template += `
                         <div class="comment">
                             <div class="content">
-                              <a class="author" href="/profile/${message['author']}/" target="_blank">${message['author']}</a>
+                              <a class="author" href="/profile/${message['author']['username']}/" target="_blank">
+                                ${message['author']['username']}
+                              </a>
                               <div class="metadata">
                                 <span class="date">${new Date(message['created']).toPrettyString()}</span>
                               </div>
@@ -338,13 +352,54 @@ export class Chats {
                         </div>
                     `;
                 }
-                let chat_container = document.getElementById('chat_messages_container');
 
-                chat_container.innerHTML = messages_template;
+                document.getElementById('chat_messages_container').innerHTML = messages_template;
                 container.scrollTop = container.scrollHeight;
             }).finally(() => {
                 container.classList.remove('loading');
             })
+    }
+
+    display_chat_header(container, chat) {
+        let header = document.createElement('h3');
+        header.className = 'ui header';
+
+
+        let back_button = document.createElement('span');
+        back_button.className = 'ui basic circular icon back_chat button';
+        back_button.innerHTML = `<i class="ui arrow left icon"></i>`;
+        back_button.onclick = () => {
+            this.toggle_chat_lists_sidebar();
+        }
+
+        let header_content = document.createElement('div');
+        header_content.className = 'content';
+        header_content.innerText = chat['title'] ? chat['title'] : '---';
+
+        let subheader = document.createElement('div');
+        subheader.className = 'sub header';
+        subheader.style.paddingTop = '4px';
+        subheader.innerText = chat['members_count'] + ' member' + (chat['members_count'].length > 1 ? 's' : '');
+
+        header_content.appendChild(subheader);
+        header.appendChild(back_button);
+        header.appendChild(header_content);
+
+        container.appendChild(header);
+    }
+
+    toggle_chat_lists_sidebar() {
+        let el_id = random_ID();
+        $.flyout({
+            context: '#chats',
+            autoShow: true,
+            class: '',
+            classContent: 'scrolling',
+            closeIcon: false,
+            content: `<div id="${el_id}"></div>`,
+            actions: [],
+        });
+        this.init_chat_lists_segment(document.getElementById(el_id));
     }
 
     delete_chat(chat_name) {
@@ -352,7 +407,7 @@ export class Chats {
         data.append("chat_name", chat_name);
         axios.post('/chats/chat/delete', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
-                this.load_chat_lists();
+                this.display_chat_lists();
             }).catch((error) => {
         }).finally(() => {})
     }
