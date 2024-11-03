@@ -11,7 +11,7 @@ Date.prototype.toHHMM = function () {
 Date.prototype.toYYYYMMDD = function () {
     let day = this.getDate();
     let month = this.getMonth() + 1;
-    return [(day > 9 ? '' : '0') + day, (month > 9 ? '' : '0') + month, this.getFullYear() ].join('-');
+    return [this.getFullYear(), (month > 9 ? '' : '0') + month, (day > 9 ? '' : '0') + day].join('-');
 };
 
 Date.prototype.toPrettyString = function () {

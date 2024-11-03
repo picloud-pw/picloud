@@ -323,38 +323,13 @@ export class Chats {
         axios.get(`/chats/message/list?chat_name=${chat_name}`)
             .then((response) => {
                 let chat = response.data['chat'];
-                let messages = response.data['messages'];
-
                 this.display_chat_header(document.getElementById('chat_header_content'), chat);
+
+                let messages = response.data['messages'];
                 if (!messages.length) {
                     return
                 }
-
-                container.innerHTML = `
-                    <div class="ui comments" id="chat_messages_container"></div>
-                `;
-                let messages_template = '';
-                for (let message of messages) {
-                    messages_template += `
-                        <div class="comment">
-                            <div class="content">
-                              <a class="author" href="/profile/${message['author']['username']}/" target="_blank">
-                                ${message['author']['username']}
-                              </a>
-                              <div class="metadata">
-                                <span class="date">${new Date(message['created']).toPrettyString()}</span>
-                              </div>
-                              <div class="text">${message['text']}</div>
-                              <div class="actions">
-                                ${message['edited'] ? '<span class="reply">(edited)</span>' : ''}
-                              </div>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                document.getElementById('chat_messages_container').innerHTML = messages_template;
-                container.scrollTop = container.scrollHeight;
+                this.display_chat_messages(container, messages);
             }).finally(() => {
                 container.classList.remove('loading');
             })
@@ -386,6 +361,50 @@ export class Chats {
         header.appendChild(header_content);
 
         container.appendChild(header);
+    }
+
+    display_chat_messages(container, messages) {
+        let grouped_by_days = {};
+        for (let message of messages) {
+            if (!grouped_by_days[new Date(message['created']).toYYYYMMDD()]) {
+                grouped_by_days[new Date(message['created']).toYYYYMMDD()] = [];
+            }
+            grouped_by_days[new Date(message['created']).toYYYYMMDD()].push(message);
+        }
+
+        container.innerHTML = '<div id="chat_messages_container"></div>';
+        container = document.getElementById('chat_messages_container');
+        for (let day of Object.keys(grouped_by_days)) {
+            let day_label = document.createElement('span');
+            day_label.className = 'ui basic label';
+            day_label.innerText = day;
+            container.appendChild(day_label);
+
+            let comments_group = document.createElement('div');
+            comments_group.className = 'ui comments';
+            comments_group.style.textAlign = 'left';
+            container.appendChild(comments_group);
+
+            for (let message of grouped_by_days[day]) {
+                comments_group.innerHTML += `
+                    <div class="comment">
+                        <div class="content">
+                          <a class="author" href="/profile/${message['author']['username']}/" target="_blank">
+                            ${message['author']['username']}
+                          </a>
+                          <div class="metadata">
+                            <span class="date">${new Date(message['created']).toHHMM()}</span>
+                          </div>
+                          <div class="text">${message['text']}</div>
+                          <div class="actions">
+                            ${message['edited'] ? '<span class="reply">(edited)</span>' : ''}
+                          </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        container.scrollTop = container.scrollHeight;
     }
 
     toggle_chat_lists_sidebar() {
