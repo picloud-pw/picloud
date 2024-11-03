@@ -32,13 +32,13 @@ export class Chats {
         `;
 
         this.init_chat_lists_segment(document.getElementById(`${this.el_id}_list`));
-        this.init_chat_content_segment(document.getElementById(`${this.el_id}_content`));
+        this.init_chat_content_segment();
         this.init_chat_bar_segment(document.getElementById(`${this.el_id}_bar`));
 
         if (this.selected_chat) {
             this.open_chat(this.selected_chat);
         } else if (window.innerWidth < this.tablet_max_width) {
-            this.toggle_chat_lists_sidebar();
+            this.open_chat_lists_sidebar();
         }
     }
 
@@ -90,7 +90,8 @@ export class Chats {
         })
     }
 
-    init_chat_content_segment(container) {
+    init_chat_content_segment() {
+        let container = document.getElementById(`${this.el_id}_content`)
         container.innerHTML = `
             <div class="ui top segment" id="chat_header"></div>
             <div class="ui middle no-margin-padding segment" id="chat_messages">
@@ -250,7 +251,12 @@ export class Chats {
         data.append("title", title);
         axios.post('/chats/chat/add', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
+                let chat = response.data['chat'];
+                this.selected_chat = chat.name;
+                this.save_state();
+                this.open_chat(chat['name']);
                 this.display_chat_lists();
+                $('.ui.flyout').flyout('hide');
             }).catch((error) => {
                 document.getElementById('new_chat_alerts').innerHTML = `
                     <div class="ui pink message" style="margin-bottom: 20px;">
@@ -344,7 +350,7 @@ export class Chats {
         back_button.className = 'ui basic circular icon back_chat button';
         back_button.innerHTML = `<i class="ui arrow left icon"></i>`;
         back_button.onclick = () => {
-            this.toggle_chat_lists_sidebar();
+            this.open_chat_lists_sidebar();
         }
 
         let header_content = document.createElement('div');
@@ -407,7 +413,7 @@ export class Chats {
         container.scrollTop = container.scrollHeight;
     }
 
-    toggle_chat_lists_sidebar() {
+    open_chat_lists_sidebar() {
         let el_id = random_ID();
         $.flyout({
             context: '#chats',
@@ -426,7 +432,11 @@ export class Chats {
         data.append("chat_name", chat_name);
         axios.post('/chats/chat/delete', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
             .then((response) => {
+                this.init_chat_content_segment();
                 this.display_chat_lists();
+                if (window.innerWidth < this.tablet_max_width) {
+                    this.open_chat_lists_sidebar();
+                }
             }).catch((error) => {
         }).finally(() => {})
     }

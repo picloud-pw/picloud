@@ -10,7 +10,7 @@ from decorators import auth_required
 
 @auth_required
 def chat_list(request):
-    chats = Chat.objects.filter(members__in=[request.user])
+    chats = Chat.objects.filter(members__in=[request.user]).order_by('-created')
     return JsonResponse({'chats': [
         chat.as_dict() for chat in chats
     ]})
@@ -35,7 +35,7 @@ def chat_add(request):
             name=chat_name,
         )
         new_chat.members.add(request.user)
-        return HttpResponse(status=200)
+        return JsonResponse({'chat': new_chat.as_dict()})
 
 
 @auth_required
