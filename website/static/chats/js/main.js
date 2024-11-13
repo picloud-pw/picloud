@@ -395,25 +395,28 @@ export class Chats {
             container.appendChild(comments_group);
 
             for (let message of grouped_by_days[day]) {
-                comments_group.innerHTML += `
-                    <div class="comment">
-                        <div class="content">
-                          <a class="author" href="/profile/${message['author']['username']}/" target="_blank">
-                            ${message['author']['username']}
-                          </a>
-                          <div class="metadata">
-                            <span class="date">${new Date(message['created']).toHHMM()}</span>
-                          </div>
-                          <div class="text">${message['text']}</div>
-                          <div class="actions">
-                            ${message['edited'] ? '<span class="reply">(edited)</span>' : ''}
-                          </div>
-                        </div>
-                    </div>
-                `;
+                comments_group.innerHTML += this.format_message(message);
             }
         }
         container.scrollTop = container.scrollHeight;
+    }
+
+    format_message(message) {
+        return `
+            <div class="comment" style="width: fit-content; max-width: 100%; padding: 15px; cursor: pointer;
+                background-color: #EEEEEE; border-radius: 25px 25px 25px 0;">
+                <div class="content">
+                  <a class="author" href="/profile/${message['author']['username']}/" target="_blank">
+                    ${message['author']['username']}
+                  </a>
+                  <div class="metadata">
+                    <span class="date">${new Date(message['created']).toHHMM()}</span>
+                    ${message['edited'] ? '<span class="edited">(edited)</span>' : ''}
+                  </div>
+                  <div class="text" style="margin-bottom: 0">${message['text']}</div>
+                </div>
+            </div>
+        `;
     }
 
     open_chat_lists_sidebar() {
