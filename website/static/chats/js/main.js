@@ -108,6 +108,7 @@ export class Chats {
         document.getElementById('create_new_chat_suggestion').onclick = () => {
             this.toggle_new_chat_form();
         }
+        document.getElementById('chat_header').appendChild(this.get_chat_lists_button());
     }
 
     init_chat_bar_segment(container) {
@@ -345,14 +346,6 @@ export class Chats {
         let header = document.createElement('h3');
         header.className = 'ui header';
 
-
-        let back_button = document.createElement('span');
-        back_button.className = 'ui basic circular icon back_chat button';
-        back_button.innerHTML = `<i class="ui arrow left icon"></i>`;
-        back_button.onclick = () => {
-            this.open_chat_lists_sidebar();
-        }
-
         let header_content = document.createElement('div');
         header_content.className = 'content';
         header_content.innerText = chat['title'] ? chat['title'] : '---';
@@ -363,10 +356,20 @@ export class Chats {
         subheader.innerText = chat['members_count'] + ' member' + (chat['members_count'].length > 1 ? 's' : '');
 
         header_content.appendChild(subheader);
-        header.appendChild(back_button);
+        header.appendChild(this.get_chat_lists_button());
         header.appendChild(header_content);
 
         container.appendChild(header);
+    }
+
+    get_chat_lists_button() {
+        let back_button = document.createElement('span');
+        back_button.className = 'ui basic circular icon back_chat button';
+        back_button.innerHTML = `<i class="ui arrow left icon"></i>`;
+        back_button.onclick = () => {
+            this.open_chat_lists_sidebar();
+        }
+        return back_button;
     }
 
     display_chat_messages(container, messages) {
