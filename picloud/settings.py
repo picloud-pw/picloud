@@ -8,28 +8,20 @@ from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRETS_FILE_VAR = 'APPLICATION_SECRETS'
 
-if SECRETS_FILE_VAR in os.environ:
-    with open(os.environ.get(SECRETS_FILE_VAR)) as f:
-        json_config = None
-        try:
-            json_config = json.loads(f.read())
-        except JSONDecodeError as e:
-            error_msg = "{} is an invalid JSON file: {} (error at line {}, col {})" \
-                .format(SECRETS_FILE_VAR, e.msg, e.lineno, e.colno)
-            raise ImproperlyConfigured(error_msg)
-else:
-    raise ImproperlyConfigured("{} environment variable is not set".format(SECRETS_FILE_VAR))
-
-
-def get_config(setting, config=json_config):
+def get_config(setting):
     try:
-        val = config[setting]
+        val = os.environ.get(setting)
         if val == 'True':
             val = True
         elif val == 'False':
             val = False
+        elif (val.startswith("[") and val.endswith("]") or
+              val.startswith("{") and val.startswith("}")):
+            try:
+                val = json.loads(val)
+            except JSONDecodeError:
+                pass
         return val
     except KeyError:
         error_msg = "Configuration variable {0} not found in settings map".format(setting)

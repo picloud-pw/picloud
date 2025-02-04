@@ -4,7 +4,6 @@ LABEL authors="andrey.zavodov"
 ADD . /app/
 WORKDIR /app
 
-ENV APPLICATION_SECRETS=/app/data/secrets/secrets.json
 ENV STATIC_ROOT=/app/data/static
 ENV MEDIA_ROOT=/app/data/media
 ENV DJANGO_SETTINGS_MODULE=picloud.settings

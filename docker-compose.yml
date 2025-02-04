@@ -1,13 +1,10 @@
-version: '3'
 services:
   picloud-postgres:
     image: postgres
     container_name: picloud-postgres
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=picloud
-      - POSTGRES_PASSWORD=picloud
+    env_file: ./data/db.env
     volumes:
       - ./data/db:/var/lib/postgresql/data
 
@@ -20,12 +17,11 @@ services:
     container_name: picloud-app
     volumes:
       - .:/app
-    environment:
-      - POSTGRESQL_NAME=picloud
-      - POSTGRESQL_USER=picloud
-      - POSTGRESQL_PASSWORD=picloud
-      - POSTGRESQL_HOST=picloud-postgres
-      - POSTGRESQL_PORT=5432
+    env_file:
+      - path: ./data/secrets.env
+        required: true
+      - path: ./data/db.env
+        required: true
     ports:
       - "8000:8000"
     depends_on:
