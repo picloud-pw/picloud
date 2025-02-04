@@ -1,0 +1,52 @@
+services:
+  picloud-postgres:
+    image: postgres:16
+    restart: always
+    container_name: picloud-postgres
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes:
+      - /home/zavodov/picloud/db:/var/lib/postgresql/data
+
+  picloud:
+    image: registry.gitlab.com/zavodov/picloud
+    container_name: picloud
+    restart: always
+    expose:
+      - 8000
+    env_file:
+      - stack.env
+    volumes:
+      - /home/zavodov/picloud/static:/app/data/static
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.picloud.rule=Host(`picloud.pw`)"
+      - "traefik.http.routers.picloud.tls=true"
+      - "traefik.http.routers.picloud.entrypoints=websecure"
+      - "traefik.http.routers.picloud.tls.certresolver=leresolver"
+
+  nginx:
+    image: nginx:1.15-alpine
+    restart: always
+    container_name: picloud-nginx
+    networks:
+      - traefik
+    volumes:
+      - /home/zavodov/picloud/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /home/zavodov/picloud/media:/app/data/media
+      - /home/zavodov/picloud/static:/app/data/static
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.picloud-nginx.entrypoints=websecure"
+      - "traefik.http.routers.picloud-nginx.rule=Host(`picloud.pw`) && (PathPrefix(`/media`) || PathPrefix(`/static`))"
+      - "traefik.http.routers.picloud-nginx.tls.certresolver=leresolver"
+
+networks:
+  traefik:
+    external:
+      name: traefik_proxy
