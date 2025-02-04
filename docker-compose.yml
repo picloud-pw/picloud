@@ -1,6 +1,6 @@
 services:
   picloud-postgres:
-    image: postgres
+    image: postgres:15.2
     container_name: picloud-postgres
     ports:
       - "5432:5432"
