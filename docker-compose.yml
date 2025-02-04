@@ -4,7 +4,7 @@ services:
     container_name: picloud-postgres
     ports:
       - "5432:5432"
-    env_file: ./data/db.env
+    env_file: ./data/env/secrets.env
     volumes:
       - ./data/db:/var/lib/postgresql/data
 
@@ -17,11 +17,7 @@ services:
     container_name: picloud-app
     volumes:
       - .:/app
-    env_file:
-      - path: ./data/secrets.env
-        required: true
-      - path: ./data/db.env
-        required: true
+    env_file: ./data/env/secrets.env
     ports:
       - "8000:8000"
     depends_on:
