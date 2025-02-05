@@ -16,8 +16,8 @@ def get_config(setting):
             val = True
         elif val == 'False':
             val = False
-        elif (val.startswith("[") and val.endswith("]") or
-              val.startswith("{") and val.startswith("}")):
+        elif ((val.startswith("[") and val.endswith("]")) or
+              (val.startswith("{") and val.endswith("}"))):
             try:
                 val = json.loads(val)
             except JSONDecodeError:
