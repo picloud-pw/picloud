@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django_editorjs_fields import EditorJsJSONField
 
 from hierarchy.models import Subject
 from students.models import StudentInfo
@@ -35,15 +36,16 @@ class Post(models.Model):
     author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     parent_post = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
     last_editor = models.ForeignKey(User, related_name='last_editor', null=True, on_delete=models.SET_NULL)
-    title = models.CharField(max_length=256, null=False)
-    text = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
-    link = models.URLField(max_length=512, null=True, blank=True)
     views = models.PositiveIntegerField(default=0)
-    file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
     is_draft = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
+    title = models.CharField(max_length=256, null=False)
+    ejs_body = EditorJsJSONField(null=True, blank=True)
+    text = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
+    link = models.URLField(max_length=512, null=True, blank=True)
+    file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
 
     ALLOWED_HTML_TAGS = allowed_html_tags = bleach.ALLOWED_TAGS + [
         u'h1', u'h2', u'h3', u'h4', u'p', u'a', u'li', u'ul', u'ol', u'pre', u'code', u'hr', u'br', u'strong',
@@ -121,6 +123,7 @@ class Post(models.Model):
             "author_id": self.author.pk,
             "title": self.title,
             "text": self.text,
+            "body": self.ejs_body,
             "html": self.html(),
             "created_date": self.created_date,
             "created_date_human": self.created_date_human(),

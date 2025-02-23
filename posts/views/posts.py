@@ -1,3 +1,5 @@
+import json
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse, HttpResponse
 
@@ -101,6 +103,10 @@ def update(request):
     text = request.POST.get('text')
     if text is not None:
         post.text = text
+    body = request.POST.get('body')
+    if body is not None:
+        parsed_body = json.loads(body)
+        post.ejs_body = parsed_body
     post.last_editor = request.user
     post.save()
     return HttpResponse(status=200)

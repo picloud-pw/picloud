@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
 
     'social_django',
+    'django_editorjs_fields',
 
     'cloud',
     'website',
