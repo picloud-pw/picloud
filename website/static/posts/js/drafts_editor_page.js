@@ -20,7 +20,6 @@ export class DraftsEditorPage {
                         <span style="margin-right: 10px" id="${el_id}_drafts_selector"></span>
                         <span class="ui button" id="${el_id}_new_draft_btn"> New draft </span>
                         <span class="ui right floated button" id="${el_id}_submit_btn">Publish draft</span>
-                        <span class="ui right floated button" id="${el_id}_save_draft">Save draft</span>
                         <span class="ui basic red button" id="${el_id}_remove_post_btn">Delete draft</span>
                     </div>
                     <div id="${el_id}_post_container"></div>
@@ -29,12 +28,13 @@ export class DraftsEditorPage {
         `;
         this.posts_container = document.getElementById(`${el_id}_post_container`);
         this.new_draft_btn = document.getElementById(`${el_id}_new_draft_btn`);
-        this.save_draft_btn = document.getElementById(`${el_id}_save_draft`);
         this.remove_post_btn = document.getElementById(`${el_id}_remove_post_btn`);
         this.submit_post_btn = document.getElementById(`${el_id}_submit_btn`);
 
-
-        this.post_editor = new PostEditor(this.posts_container, {});
+        this.post_editor = new PostEditor(this.posts_container, {
+            'autosave': true,
+            'on_title_change': () => { this.drafts_selector.display_drafts(this.post_editor.post['id']); }
+        });
         this.drafts_selector = new DraftsSelector(document.getElementById(`${el_id}_drafts_selector`),{
             'on_change': (post) => { this.post_editor.display_post(post); }
         });
@@ -42,11 +42,6 @@ export class DraftsEditorPage {
 
         this.new_draft_btn.onclick = () => {
             this.post_editor.new_draft_post().then(() => { this.display_drafts_and_post(); });
-        }
-        this.save_draft_btn.onclick = () => {
-            this.post_editor.save_changes().then(() => {
-                this.drafts_selector.display_drafts(this.post_editor.post['id']);
-            });
         }
         this.remove_post_btn.onclick = () => {
             this.post_editor.remove_post().then(() => { this.display_drafts_and_post(); });
@@ -71,13 +66,11 @@ export class DraftsEditorPage {
             let selected_draft = this.drafts_selector.get_selected_draft();
             if (selected_draft) {
                 this.remove_post_btn.classList.remove('hidden');
-                this.save_draft_btn.classList.remove('hidden');
                 this.submit_post_btn.classList.remove('hidden');
 
                 this.post_editor.display_post(selected_draft);
             } else {
                 this.remove_post_btn.classList.add('hidden');
-                this.save_draft_btn.classList.add('hidden');
                 this.submit_post_btn.classList.add('hidden');
 
                 this.display_placeholder();

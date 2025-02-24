@@ -53,6 +53,7 @@ export class PostBodyEditor {
     constructor(container, settings={}) {
         this.container = container;
         this.editor = this.init_editor(settings['data']);
+        this.on_change = settings['on_change'] ? settings['on_change'] : () => {};
     }
 
     init_editor(data) {
@@ -60,7 +61,7 @@ export class PostBodyEditor {
             holder: this.container.id,
             data: data,
             minHeight: 300,
-            onChange: (api, event) => {},
+            onChange: (api, event) => { this.on_change() },
             onReady: () => {
                 new Undo({editor});
                 new DragDrop(editor);

@@ -4,9 +4,13 @@ import {PostBodyEditor} from "./editorjs.js";
 export class PostEditor {
 
     post = null;
+    autosave = false;
 
     constructor(container, settings) {
         this.container = container;
+
+        this.autosave = settings['autosave'] ? settings['autosave'] : false;
+        this.on_title_change = settings['on_title_change'] ? settings['on_title_change'] : () => {};
         if (settings['post']) {
             this.display_post(settings['post']);
         } else if (settings['post_id']) {
@@ -50,12 +54,17 @@ export class PostEditor {
                 </div>
             </form>
         `;
+        document.getElementById(`${this.el_id}_title`).onchange = () => {
+            if (this.autosave) { this.save_changes(); }
+            this.on_title_change();
+        }
         this.display_post_types( this.post['type'] ? this.post['type']['id'] : null);
     }
 
     display_post_body() {
         this.body_editor = new PostBodyEditor(document.getElementById(`${this.el_id}_body`), {
             data: this.post['body'],
+            on_change: () => { if (this.autosave) { this.save_changes(); } },
         })
     }
 
@@ -69,7 +78,11 @@ export class PostEditor {
                     </option>
                 `;
             }
-            $(`#${this.el_id}_type`).dropdown();
+            $(`#${this.el_id}_type`).dropdown({
+                onChange: () => {
+                    if (this.autosave) { this.save_changes(); }
+                }
+            });
         })
     }
 
