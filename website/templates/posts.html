@@ -15,15 +15,16 @@
 
 
 {% block content %}
-
-    <div class="ui centered stackable padded grid" id="posts_container"></div>
-
+    <div id="posts_container"></div>
 {% endblock %}
 
 
 {% block js %}
 
-    <script type="text/javascript" src="{% static 'posts/js/post.js' %}"></script>
-    <script type="text/javascript" src="{% static 'posts/js/main.js' %}"></script>
+    <script type="module">
+        import {PostPage} from "../../static/posts/js/post_page.js";
+        let root_container = document.getElementById('posts_container');
+        let app = new PostPage(root_container);
+    </script>
 
 {% endblock %}
