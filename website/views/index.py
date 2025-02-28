@@ -36,6 +36,10 @@ def post_page(request, post_id):
     return render(request, 'posts.html')
 
 
+def post_edit_page(request, post_id):
+    return render(request, 'edit_post_page.html')
+
+
 def redirect_subject_page(request):
     sub_id = request.GET.get('id')
     return redirect("subjects_page", sub_id=sub_id, permanent=True)

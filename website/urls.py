@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('posts/', index.post_page_redirect, name="posts"),
     path('posts/<int:post_id>/', index.post_page,  name="post_page"),
+    path('posts/<int:post_id>/edit', index.post_edit_page,  name="post_edit_page"),
     path('drafts/', index.new_post_page, name="new_post"),
 
     path('chats/', index.chats_page, name="chats"),
