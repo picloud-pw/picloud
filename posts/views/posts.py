@@ -74,7 +74,7 @@ def search(request):
 
 
 @auth_required
-def new(request):
+def create(request):
     post_draft = Post.objects.create(
         author=request.user,
         is_draft=True,

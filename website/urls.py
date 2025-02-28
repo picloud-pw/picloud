@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('posts/', index.post_page_redirect, name="posts"),
     path('posts/<int:post_id>/', index.post_page,  name="post_page"),
+    path('drafts/', index.new_post_page, name="new_post"),
 
     path('chats/', index.chats_page, name="chats"),
 
@@ -40,8 +41,6 @@ urlpatterns = [
     path('memes/', index.memes_page, name="memes"),
     path('tools/', index.tools_page, name="tools"),
     path('tools/text', index.tools_text_page, name="tools_text"),
-
-    path('new/post', index.new_post_page, name="new_post"),
 
     path('profile/<str:username>/', index.profile_page, name="profile"),
     path('settings/', index.settings_page, name="settings"),

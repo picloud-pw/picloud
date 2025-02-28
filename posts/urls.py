@@ -6,7 +6,7 @@ app_name = 'posts'
 
 urlpatterns = [
 
-    path('new', posts.new, ),
+    path('create', posts.create, ),
     path('search', posts.search, ),
 
     path('get', posts.get, ),

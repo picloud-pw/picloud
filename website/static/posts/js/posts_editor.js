@@ -96,7 +96,7 @@ export class PostEditor {
 
     new_draft_post() {
         let data = new FormData();
-        return axios.post('/posts/new', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}});
+        return axios.post('/posts/create', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}});
     }
 
     async save_changes() {
