@@ -21,6 +21,7 @@ services:
       - stack.env
     volumes:
       - /home/zavodov/picloud/static:/app/data/static
+      - shared_volume:/app/jobs
     networks:
       - traefik
     labels:
@@ -29,6 +30,20 @@ services:
       - "traefik.http.routers.picloud.tls=true"
       - "traefik.http.routers.picloud.entrypoints=websecure"
       - "traefik.http.routers.picloud.tls.certresolver=leresolver"
+
+  cronjobs:
+    image: mcuadros/ofelia:latest
+    entrypoint: sh -c "apk add --update bash curl && /usr/bin/ofelia daemon --docker"
+    environment:
+      - DUMP_SCRIPT_FILENAME=$DUMP_SCRIPT_FILENAME
+      - DUMP_SCRIPT_YANDEX_DRIVE_TOKEN=$DUMP_SCRIPT_YANDEX_DRIVE_TOKEN
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/zavodov/picloud:/app/data
+      - shared_volume:/app/jobs
+    labels:
+      ofelia.job-local.dump-job.schedule: "0 0 5 * * 1" # 05:00:00 AM every monday
+      ofelia.job-local.dump-job.command: "bash /app/jobs/yandex_drive_dump.sh"
 
   nginx:
     image: nginx:1.15-alpine
