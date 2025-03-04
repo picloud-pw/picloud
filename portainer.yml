@@ -61,6 +61,9 @@ services:
       - "traefik.http.routers.picloud-nginx.rule=Host(`picloud.pw`) && (PathPrefix(`/media`) || PathPrefix(`/static`))"
       - "traefik.http.routers.picloud-nginx.tls.certresolver=leresolver"
 
+volumes:
+  shared_volume:
+
 networks:
   traefik:
     external:
