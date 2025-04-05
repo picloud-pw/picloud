@@ -123,11 +123,11 @@ def file_by_url(request):
 def link_tool(request):
 
     url = request.GET.get('url', '')
-    link_preview = get_link_preview(url, request)
+    link_preview = get_link_preview(url)
     return JsonResponse(link_preview)
 
 
-def get_link_preview(url, request=None):
+def get_link_preview(url):
 
     LOGGER.debug('Starting to get meta for: %s', url)
 
@@ -141,39 +141,75 @@ def get_link_preview(url, request=None):
         validate(url)
     except ValidationError as e:
         LOGGER.error(e)
+        return {'success': 0, 'message': str(e)}
+
+    microlink_preview = microlink_link_preview(url)
+    if microlink_preview['success'] == 1:
+        return microlink_preview
     else:
-        try:
-            LOGGER.debug('Let\'s try to get meta from: %s', url)
-            req = Request(
-                f'https://opengraph.io/api/1.1/site/{quote(url, safe="")}?' +
-                urlencode({'app_id': OPEN_GRAPH_API_KEY,})
-            )
-            res = urlopen(req)
-        except HTTPError as e:
-            LOGGER.error('The server couldn\'t fulfill the request.')
-            LOGGER.error('Error code: %s %s', e.code, e.msg)
-        except URLError as e:
-            LOGGER.error('We failed to reach a server. url: %s', url)
-            LOGGER.error('Reason: %s', e.reason)
-        else:
-            res_body = res.read()
-            res_json = json.loads(res_body.decode("utf-8"))
+        return opengraph_link_preview(url)
 
-            if res.status == 200:
-                data = res_json.get('hybridGraph')
 
-                if data:
-                    LOGGER.debug('Response meta: %s', data)
-                    meta = {}
-                    meta['title'] = data.get('title')
-                    meta['description'] = data.get('description')
-                    meta['image'] = data.get('image')
+def microlink_link_preview(url):
+    try:
+        full_url = 'https://api.microlink.io/?' + urlencode({'url': url})
+        user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
+        req = Request(full_url, headers={'User-Agent': user_agent})
+        res = urlopen(req)
+    except Exception as e:
+        LOGGER.error('The server couldn\'t fulfill the request.')
+        return {'success': 0, 'message': str(e)}
 
-                    return {
-                        'success': 1,
-                        'link': data.get('url', url),
-                        'meta': meta
-                    }
+    res_body = res.read()
+    res_json = json.loads(res_body.decode("utf-8"))
 
-    return {'success': 0}
+    if res.status == 200:
+        data = res_json.get('data')
 
+        if data:
+            LOGGER.debug('Response meta: %s', data)
+            meta = {}
+            meta['title'] = data.get('title')
+            meta['description'] = data.get('description')
+            meta['image'] = data.get('image')
+
+            return {
+                'success': 1,
+                'link': data.get('url', url),
+                'meta': meta
+            }
+    else:
+        return {'success': 0, 'message': "Response is not 200."}
+
+
+def opengraph_link_preview(url):
+    try:
+        req = Request(
+            f'https://opengraph.io/api/1.1/site/{quote(url, safe="")}?' +
+            urlencode({'app_id': OPEN_GRAPH_API_KEY, })
+        )
+        res = urlopen(req)
+    except Exception as e:
+        LOGGER.error('The server couldn\'t fulfill the request.')
+        return {'success': 0, 'message': str(e)}
+
+    res_body = res.read()
+    res_json = json.loads(res_body.decode("utf-8"))
+
+    if res.status == 200:
+        data = res_json.get('hybridGraph')
+
+        if data:
+            LOGGER.debug('Response meta: %s', data)
+            meta = {}
+            meta['title'] = data.get('title')
+            meta['description'] = data.get('description')
+            meta['image'] = data.get('image')
+
+            return {
+                'success': 1,
+                'link': data.get('url', url),
+                'meta': meta
+            }
+    else:
+        return {'success': 0, 'message': "Response is not 200."}
