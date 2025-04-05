@@ -1,47 +1,10 @@
+import {PostBodyParser} from "./editorjs.js";
+
+
 export class Post {
 
-    format_post_links(links) {
-        if (!links.length)
-            return '';
-        let links_list = ``;
-        for (let link of links) {
-            links_list += `
-          <div class="item">
-            <i class="linkify icon"></i>
-            <div class="content">
-                <a href="${link}" target="_blank">${link}</a>
-            </div>
-          </div>
-        `;
-        }
-        return `<div class="ui list">${links_list}</div><hr/>`;
-    }
-
-    format_post_images(images) {
-        let template = '';
-        for (let image of images) {
-            template += `
-            <a href="${image['url']}" target="_blank">
-                <img class="post-img" src="${image['url']}"  alt="${image['url']}"
-                    ratio="${image['width']}x${image['height']}"/>
-                <hr/>
-            </a>
-        `;
-        }
-        return template;
-    }
-
-    format_post_files(files) {
-        let template = '';
-        for (let file of files) {
-            template += `
-            <a class="ui green right basic labeled icon mini fluid button" href="${file['url']}" target="_blank">
-                Download '<strong>${file['extension']}</strong>' file <i class="download icon"></i>
-            </a>
-            <hr/>
-        `
-        }
-        return template;
+    constructor() {
+        this.ejs_parser = new PostBodyParser();
     }
 
     render_post(post) {
@@ -64,18 +27,18 @@ export class Post {
                     </p>
                 </header>
                 <hr/>
-                ${post['html'] ? `<div class="text">${post['html']}</div> <hr/>` : ''}
                 
-                ${this.format_post_images(post['attachments']['images'])}
+                ---HTML---
+                <hr/>
+                ${post['html']}
                 
-                ${this.format_post_links(post['attachments']['links'])}
-    
-                ${this.format_post_files(post['attachments']['files'])}
+                <hr/>
+
+                ---Editor JS---
+                <hr/>
+                ${this.ejs_parser.parse(post['ejs_body'])}
                 
-                ${post['is_parent'] ? `
-                    <br> <a class="ui button" href="">Child posts</a>
-                ` : ''}
-                
+                <hr/>
                 <footer>
                     <a class="post-author" title="Author" href="/profile/${post['author']['user']['username']}/">
                         ${post['author']['user']['username']}

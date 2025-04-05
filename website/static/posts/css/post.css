@@ -7,6 +7,7 @@ article.post {
 }
 
 article.post .post-container {
+    text-align: left;
     padding: 1.5rem;
     box-sizing: border-box;
 }

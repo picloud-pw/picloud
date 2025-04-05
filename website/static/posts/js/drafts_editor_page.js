@@ -12,6 +12,9 @@ export class DraftsEditorPage {
     }
 
     restore_state(container) {
+        let params = new URLSearchParams(document.location.search);
+        let draft_id = params.get("id");
+
         let el_id = random_ID();
         container.innerHTML = `
             <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
@@ -36,9 +39,12 @@ export class DraftsEditorPage {
             'on_title_change': () => { this.drafts_selector.display_drafts(this.post_editor.post['id']); }
         });
         this.drafts_selector = new DraftsSelector(document.getElementById(`${el_id}_drafts_selector`),{
-            'on_change': (post) => { this.post_editor.display_post(post); }
+            'on_change': (post) => {
+                this.post_editor.display_post(post);
+                this.save_state(post['id']);
+            }
         });
-        this.display_drafts_and_post();
+        this.display_drafts_and_post(draft_id);
 
         this.new_draft_btn.onclick = () => {
             this.post_editor.new_draft_post().then(() => { this.display_drafts_and_post(); });
@@ -51,6 +57,10 @@ export class DraftsEditorPage {
         }
     }
 
+    save_state(post_id) {
+        push_state({ 'id': post_id, });
+    }
+
     display_placeholder() {
         this.posts_container.innerHTML = `
             <div class="ui placeholder segment">
@@ -61,8 +71,8 @@ export class DraftsEditorPage {
         `;
     }
 
-    display_drafts_and_post() {
-        this.drafts_selector.display_drafts().then(() => {
+    display_drafts_and_post(draft_id=null) {
+        this.drafts_selector.display_drafts(draft_id).then(() => {
             let selected_draft = this.drafts_selector.get_selected_draft();
             if (selected_draft) {
                 this.remove_post_btn.classList.remove('hidden');

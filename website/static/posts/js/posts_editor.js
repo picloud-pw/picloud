@@ -63,7 +63,7 @@ export class PostEditor {
 
     display_post_body() {
         this.body_editor = new PostBodyEditor(document.getElementById(`${this.el_id}_body`), {
-            data: this.post['body'],
+            data: this.post['ejs_body'],
             on_change: () => { if (this.autosave) { this.save_changes(); } },
         })
     }
