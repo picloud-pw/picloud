@@ -141,7 +141,7 @@ export class PostBodyParser {
             return `
                 <div class="link-tool">
                     <a class="link-tool__content link-tool__content--rendered" target="_blank" rel="nofollow noindex noreferrer" href="${data.link}">
-                    ${image && image.url ? `<div class="link-tool__image" style="background-image: url(${image.url});"></div>` : ''}
+                    ${image ? `<div class="link-tool__image" style="background-image: url(${image});"></div>` : ''}
                     <div class="link-tool__title">${data.meta.title ? data.meta.title : ''}</div>
                     <p class="link-tool__description">${data.meta.description ? data.meta.description : ''}</p>
                     <span class="link-tool__anchor">${data.link ? new URL(data.link).host : ''}</span></a>

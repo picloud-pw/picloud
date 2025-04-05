@@ -8,12 +8,14 @@ from secrets import token_urlsafe
 from django.http import JsonResponse
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 
 from django.utils.module_loading import import_string
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.views.decorators.csrf import csrf_exempt
+
+from picloud.settings import get_config
 
 FILE_NAME = lambda **_: token_urlsafe(8)
 FILE_NAME_ORIGINAL = False
@@ -22,6 +24,8 @@ FILE_UPLOAD_PATH_DATE = "%Y/%m/%d/"
 FILE_MAX_SIZE = 1048576  # 1 Mb in bytes
 
 STORAGE = import_string('django.core.files.storage.DefaultStorage')()
+
+OPEN_GRAPH_API_KEY = get_config('OPEN_GRAPH_API_KEY')
 
 LOGGER = logging.getLogger('picloud_posts')
 
@@ -140,11 +144,10 @@ def get_link_preview(url, request=None):
     else:
         try:
             LOGGER.debug('Let\'s try to get meta from: %s', url)
-
-            full_url = 'https://api.microlink.io/?' + urlencode({'url': url})
-            user_agent = request.META.get('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)') \
-                if request is not None else 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
-            req = Request(full_url, headers={'User-Agent': user_agent})
+            req = Request(
+                f'https://opengraph.io/api/1.1/site/{quote(url, safe="")}?' +
+                urlencode({'app_id': OPEN_GRAPH_API_KEY,})
+            )
             res = urlopen(req)
         except HTTPError as e:
             LOGGER.error('The server couldn\'t fulfill the request.')
@@ -156,8 +159,8 @@ def get_link_preview(url, request=None):
             res_body = res.read()
             res_json = json.loads(res_body.decode("utf-8"))
 
-            if 'success' in res_json.get('status'):
-                data = res_json.get('data')
+            if res.status == 200:
+                data = res_json.get('hybridGraph')
 
                 if data:
                     LOGGER.debug('Response meta: %s', data)

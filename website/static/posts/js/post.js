@@ -28,14 +28,6 @@ export class Post {
                 </header>
                 <hr/>
                 
-                ---HTML---
-                <hr/>
-                ${post['html']}
-                
-                <hr/>
-
-                ---Editor JS---
-                <hr/>
                 ${this.ejs_parser.parse(post['ejs_body'])}
                 
                 <hr/>
