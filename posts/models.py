@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-from django_editorjs_fields import EditorJsJSONField
 
 from hierarchy.models import Subject
 from students.models import StudentInfo
@@ -41,7 +40,7 @@ class Post(models.Model):
     is_draft = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     title = models.CharField(max_length=256, null=False)
-    ejs_body = EditorJsJSONField(null=True, blank=True)
+    ejs_body = models.JSONField(null=True, blank=True)
     text = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True)
     link = models.URLField(max_length=512, null=True, blank=True)
@@ -106,40 +105,6 @@ class Post(models.Model):
             return date.strftime("%d %b %H:%M")
         return date.strftime("%d %b %Y %H:%M")
 
-    def get_attachments(self):
-        return {
-            'images': [i.as_dict()['image'] for i in Attachment.objects.filter(post=self).filter(~Q(image=''))],
-            'files': [i.as_dict()['file'] for i in Attachment.objects.filter(post=self).filter(~Q(file=''))],
-            'links': [i.as_dict()['link'] for i in Attachment.objects.filter(post=self, link__isnull=False)],
-        }
-
-    def as_dict(self):
-        student_info = StudentInfo.objects.get(user=self.author)
-        return {
-            "id": self.pk,
-            "parent_post": self.parent_post.id if self.parent_post is not None else None,
-            "is_parent": self.is_parent(),
-            "author": student_info.as_dict(),
-            "author_id": self.author.pk,
-            "title": self.title,
-            "text": self.text,
-            "body": self.ejs_body,
-            "html": self.html(),
-            "created_date": self.created_date,
-            "created_date_human": self.created_date_human(),
-            "subject": self.subject.as_dict() if self.subject is not None else None,
-            "type": self.type.as_dict() if self.type is not None else None,
-            "views": self.views,
-            "comments": self.get_comment_count(),
-            "attachments": self.get_attachments(),
-        }
-
-
-class Attachment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True, default=None)
-    image = models.ImageField(upload_to='resources/posts/%Y/%m/%d/', null=True, blank=True, default=None)
-    link = models.URLField(max_length=512, null=True, blank=True, default=None)
 
     def get_image_url(self):
         if self.image and hasattr(self.image, 'url'):
@@ -175,28 +140,36 @@ class Attachment(models.Model):
         else:
             return None
 
-    def __str__(self):
-        return f"[{self.post.pk}] " \
-               f"{'image - ' + self.image.name if self.image else ''}" \
-               f"{'file - ' + self.file.name if self.file else ''}" \
-               f"{'link - ' + self.link if self.link else ''}"
-
     def as_dict(self):
-        dictionary = dict()
-        if self.file is not None:
-            dictionary['file'] = {
+        student_info = StudentInfo.objects.get(user=self.author)
+        return {
+            "id": self.pk,
+            "parent_post": self.parent_post.id if self.parent_post is not None else None,
+            "is_parent": self.is_parent(),
+            "author": student_info.as_dict(),
+            "author_id": self.author.pk,
+            "title": self.title,
+            "text": self.text,
+            "ejs_body": self.ejs_body,
+            "html": self.html(),
+            "created_date": self.created_date,
+            "created_date_human": self.created_date_human(),
+            "subject": self.subject.as_dict() if self.subject is not None else None,
+            "type": self.type.as_dict() if self.type is not None else None,
+            "views": self.views,
+            "comments": self.get_comment_count(),
+
+            "file": {
                 "url": self.get_file_url(),
                 "extension": self.file_extension(),
-            }
-        if self.image is not None:
-            dictionary['image'] = {
+            } if self.file is not None else None,
+            "image": {
                 "url": self.get_image_url(),
                 "width": self.get_image_width(),
                 "height": self.get_image_height(),
-            }
-        if self.link is not None:
-            dictionary['link'] = self.link
-        return dictionary
+            } if self.image is not None else None,
+            "link": self.link if self.link is not None else None,
+        }
 
 
 class Comment(models.Model):
