@@ -21,4 +21,8 @@ urlpatterns = [
     path('comments/add', comments.add, ),
     path('comments/delete', comments.delete, ),
 
+    path('editorjs/file_upload/', editorjs.file_upload),
+    path('editorjs/file_by_url/', editorjs.file_by_url),
+    path('editorjs/link_tool/', editorjs.link_tool),
+
 ]

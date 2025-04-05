@@ -16,7 +16,6 @@ urlpatterns = [
     path('', include('website.urls')),
 
     path('admin/', admin.site.urls, name='admin'),
-    path('editorjs/', include('django_editorjs_fields.urls')),
     path('hierarchy/', include('hierarchy.urls', namespace='hierarchy')),
     path('memes/', include('memes.urls', namespace='memes')),
     path('posts/', include('posts.urls', namespace='posts')),
