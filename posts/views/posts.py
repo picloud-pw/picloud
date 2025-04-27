@@ -92,8 +92,11 @@ def update(request):
         return HttpResponse(status=403)
 
     subject_id = request.POST.get('subject_id')
-    if subject_id is not None:
-        post.subject = Subject.objects.get(id=subject_id)
+    if subject_id is not None and len(subject_id):
+        subj = Subject.objects.get(id=subject_id)
+        if not subj.is_approved and subj.author != request.user:
+            return HttpResponse(status=403, data={'error': 'Incorrect subject id.'})
+        post.subject = subj
     post_type_id = request.POST.get('post_type_id')
     if post_type_id is not None:
         post.type = PostType.objects.get(id=post_type_id)
@@ -146,7 +149,7 @@ def submit(request):
         try:
             post.is_draft = False if post.is_valid() else True
         except ValueError as e:
-            return JsonResponse({'error': str(e)})
+            return JsonResponse(status=400, data={'error': str(e)})
     else:
         post.is_draft = True
 

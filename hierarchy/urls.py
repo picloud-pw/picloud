@@ -18,6 +18,8 @@ urlpatterns = [
 
     path('subjects/search', views.subjects.search_subjects, ),
     path('subjects/get', views.subjects.get_subject, ),
+    path('subjects/list', views.subjects.get_subjects_list, ),
+    path('subjects/create', views.subjects.create_subject ),
     path('subjects/approve', views.subjects.approve_subject, ),
     path('subjects/delete', views.subjects.delete_subject, ),
 

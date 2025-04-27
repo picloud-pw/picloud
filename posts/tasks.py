@@ -1,5 +1,3 @@
-from time import sleep
-
 import mistune
 
 from posts.models import Post
@@ -8,7 +6,7 @@ from posts.views.editorjs import get_link_preview
 
 class PostMigrator:
 
-    def migrate_all_posts_body(self, _):
+    def migrate_all_posts_body(self):
         for post in Post.objects.all():
             print(post.id)
             tokens = self.get_tokens_tree(post.text)

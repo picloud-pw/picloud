@@ -1,6 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
+from django.utils import timezone
 
 from decorators import auth_required
 from hierarchy.models import Subject, Department
@@ -61,10 +63,30 @@ def search_subjects(request):
     })
 
 
+def get_subjects_list(request):
+    if not request.user.is_authenticated:
+        return HttpResponse('Unauthorized', status=401)
+    subjects = Subject.objects.filter(Q(author=request.user) | Q(is_approved=True))
+    return JsonResponse({'subjects': [{
+        'id': subject.id,
+        'author_id': subject.author.id if subject.author is not None else None,
+        'name': subject.name,
+    } for subject in subjects]})
+
+
 def get_subject(request):
     subject_id = request.GET.get('id')
     subject = Subject.objects.get(id=subject_id)
     return JsonResponse({'subject': subject.as_dict()})
+
+
+@auth_required
+def create_subject(request):
+    title = request.POST.get('title')
+    if title is None or len(title) < 3:
+        return JsonResponse(status=400, data={'error': 'Title is not set or length less than 3.'})
+    new_subject = Subject.objects.create(author=request.user, name=title, created_at=timezone.now())
+    return JsonResponse({'subject': new_subject.as_dict()})
 
 
 @auth_required
