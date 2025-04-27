@@ -21,6 +21,7 @@ services:
       - stack.env
     volumes:
       - /home/zavodov/picloud/static:/app/data/static
+      - /home/zavodov/picloud/media:/app/data/media
       - shared_volume:/app/jobs
     networks:
       - traefik
