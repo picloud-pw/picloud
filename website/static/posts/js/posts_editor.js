@@ -1,4 +1,5 @@
 import {PostBodyEditor} from "./editorjs.js";
+import {Subjects} from "./subjects.js";
 
 
 export class PostEditor {
@@ -8,14 +9,18 @@ export class PostEditor {
 
     constructor(container, settings) {
         this.container = container;
+        this.subjects_service = new Subjects();
 
         this.autosave = settings['autosave'] ? settings['autosave'] : false;
         this.on_title_change = settings['on_title_change'] ? settings['on_title_change'] : () => {};
-        if (settings['post']) {
-            this.display_post(settings['post']);
-        } else if (settings['post_id']) {
-            this.display_post_with_id(settings['post_id']);
-        }
+        axios.get('/students/me').then((response) => {
+            this.me = response.data;
+            if (settings['post']) {
+                this.display_post(settings['post']);
+            } else if (settings['post_id']) {
+                this.display_post_with_id(settings['post_id']);
+            }
+        })
     }
 
     get_post(post_id) {
@@ -42,23 +47,74 @@ export class PostEditor {
     display_post_settings() {
         document.getElementById(`${this.el_id}_settings`).innerHTML = `
             <form class="ui form">
+                <div class="fluid field" id="subject_selector_field"></div>
                 <div class="fields">
-                    <div class="six wide field">
-                        <label>Post type</label>
-                        <select class="ui search dropdown" id="${this.el_id}_type"></select>
-                    </div>
                     <div class="ten wide field">
                         <label>Title</label>
                         <input type="text" id="${this.el_id}_title" placeholder="Title" value="${this.post['title']}">
                     </div>
+                    <div class="six wide field">
+                        <label>Post type</label>
+                        <select class="ui search dropdown" id="${this.el_id}_type"></select>
+                    </div>
                 </div>
             </form>
         `;
+
+        this.init_subject_selector_field(
+            document.getElementById('subject_selector_field'),
+            this.post['subject'] ? this.post['subject']['id'] : null
+        );
         document.getElementById(`${this.el_id}_title`).onchange = () => {
             if (this.autosave) { this.save_changes(); }
             this.on_title_change();
         }
         this.display_post_types( this.post['type'] ? this.post['type']['id'] : null);
+    }
+
+    init_subject_selector_field(container, subject_id) {
+        container.innerHTML = `
+            <label>Subject</label>
+            <div class="ui action fluid input">
+                <div class="ui selection fluid search loading dropdown" id="${this.el_id}_subjects">
+                    <div class="text"></div> <i class="dropdown icon"></i>
+                </div>
+                <div class="ui icon button" id="${this.el_id}_new_subject_btn"> <i class="plus icon"></i> </div>    
+            </div>
+        `;
+        document.getElementById(`${this.el_id}_new_subject_btn`).onclick = () => {
+            this.subjects_service.display_new_subject_modal((response) => {
+                this.init_subject_selector_field(container);
+            });
+        }
+        this.subjects_service.get_subjects_list().then(response => {
+            let personal_subjects = [];
+            let public_subjects = [];
+            for (let subject of response.data['subjects']) {
+                let sub_dict = {
+                    name: subject['name'],
+                    class: 'vertical item',
+                    value: subject['id'],
+                    description: subject['departments'] && subject['departments'].length ?
+                        subject['departments'][0]['name'] : null,
+                    selected: subject['id'] === subject_id,
+                };
+                if (subject['author_id'] === this.me.user.id) {
+                    personal_subjects.push(sub_dict);
+                } else {
+                    public_subjects.push(sub_dict);
+                }
+            }
+            $(`#${this.el_id}_subjects`).dropdown({
+                placeholder: 'Subjects  selector...',
+                values: [{name: 'Your subjects', type: 'header', icon: 'book'}]
+                    .concat(personal_subjects)
+                    .concat([{name: 'Public available subjects', type: 'header', icon: 'book'}])
+                    .concat(public_subjects),
+                onChange: () => { this.save_changes(); }
+            });
+            document.getElementById(`${this.el_id}_subjects`).classList.remove('loading');
+        })
     }
 
     display_post_body() {
@@ -94,6 +150,10 @@ export class PostEditor {
         return $(`#${this.el_id}_title`).val();
     }
 
+    get_subject() {
+        return $(`#${this.el_id}_subjects`).dropdown('get value');
+    }
+
     new_draft_post() {
         let data = new FormData();
         return axios.post('/posts/create', data, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}});
@@ -103,6 +163,7 @@ export class PostEditor {
         let data = new FormData();
         data.append('id', this.post['id']);
         data.append('title', this.get_title());
+        data.append('subject_id', this.get_subject());
         data.append('post_type_id', this.get_post_type_id());
         data.append('body', JSON.stringify(await this.body_editor.save()));
 

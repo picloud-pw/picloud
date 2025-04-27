@@ -53,7 +53,9 @@ export class DraftsEditorPage {
             this.post_editor.remove_post().then(() => { this.display_drafts_and_post(); });
         }
         this.submit_post_btn.onclick = () => {
-            this.post_editor.publish_draft().then(() => { this.display_drafts_and_post(); });
+            this.post_editor.publish_draft()
+                .then((response) => { this.display_drafts_and_post(); })
+                .catch((error) => { show_alert('warning', error.response.data.error) });
         }
     }
 
