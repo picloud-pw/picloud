@@ -36,7 +36,6 @@ class PostMigrator:
     def parse_token(self, token, parent_token=None):
         block = dict()
         token_type = token['type']
-        print(token)
 
         # just skip
         if token_type == 'blank_line':
@@ -196,7 +195,7 @@ class PostMigrator:
         try:
             filename = post.file.url.split('/')[-1]
         except ValueError:
-            print(f"FILE NOT FOUND ERROR - {post.id}")
+            print(f"ERROR - FILE NOT FOUND - {post.id}")
             return None
         extension = filename.split('.')[-1]
         return {
@@ -214,6 +213,7 @@ class PostMigrator:
     def parse_link_to_block(self, post):
         preview = get_link_preview(post.link)
         if preview['success'] == 1:
+            print(f"LINK SUCCESSFULLY LOADED - {post.id}")
             return {
                 "data": {
                     "link": preview['link'],
@@ -222,7 +222,7 @@ class PostMigrator:
                 "type": "linkTool",
             }
         else:
-            print(f"LINK PREVIEW NOT LOADED ERROR - {post.id}")
+            print(f"ERROR - LINK PREVIEW NOT LOADED - {post.id}")
             return {
                 "data": {
                     "text": f'<a href="{post.link}">{post.link}</a>',
