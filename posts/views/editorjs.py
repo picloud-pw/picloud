@@ -21,7 +21,7 @@ FILE_NAME = lambda **_: token_urlsafe(8)
 FILE_NAME_ORIGINAL = False
 FILE_UPLOAD_PATH = "resources/posts/"
 FILE_UPLOAD_PATH_DATE = "%Y/%m/%d/"
-FILE_MAX_SIZE = 1048576  # 1 Mb in bytes
+FILE_MAX_SIZE = 10485760  # 10 Mb in bytes
 
 STORAGE = import_string('django.core.files.storage.DefaultStorage')()
 
