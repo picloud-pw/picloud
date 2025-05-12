@@ -1,119 +1,92 @@
 {% load static %}
 
-<nav class="navbar navbar-default navbar-position sidebar" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#bs-sidebar-navbar-collapse-1">
-                <span class="sr-only">Display/Hide navbar</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a id="menu-brand" class="navbar-brand" href="{% url 'index' %}">
-                <object aria-label="Главная страница PiCloud"
-                        id="picloud-logo"
-                        data="{% static 'img/logo.svg' %}"
-                        type="image/svg+xml">
-                    <img src="{% static 'img/piLogo.png' %}" alt="PiCloud">
-                </object>
+
+<div class="ui vertical link menu desktop navbar">
+
+    <a class="item" href="{% url 'cloud' %}">
+        <img class="desktop-logo" src="{% static 'img/piLogo.png' %}" alt="PiCloud"
+            style="height: 50px; margin: -10px 10px">
+        <img class="mobile-logo" src="{% static 'img/favicon.png' %}" alt="PiCloud"
+            style="height: 30px; margin: 0 -2px 0 136px;">
+    </a>
+
+    <a class="item" href="{% url 'cloud' %}">
+        <i class="cloud icon"></i> Cloud
+    </a>
+
+    <a class="item" href="{% url 'new_post' %}">
+        <i class="pencil icon"></i> Editor
+    </a>
+
+    <a class="item" href="{% url 'chats' %}">
+        <i class="comments icon"></i> Chats
+    </a>
+
+    <a class="item" href="{% url 'departments' %}">
+        <i class="university icon"></i> Universities
+    </a>
+
+    <a class="item" href="{% url 'students' %}">
+        <i class="users icon"></i> Students
+    </a>
+
+
+    <a class="item" href="{% url 'memes' %}">
+        <i class="smile icon"></i> Memes
+    </a>
+
+
+    {% if request.user.is_authenticated %}
+        <div class="bottom-menu">
+            {% if user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
+                <a class="item" href="{% url 'moderation' %}">
+                    <i class="gavel icon"></i> Moderation
+                </a>
+            {% endif %}
+            {% if user.is_superuser %}
+                <a class="item" href="/admin">
+                    <i class="chess queen icon"></i> Admin
+                </a>
+            {% endif %}
+            <a class="item" href="{% url 'settings' %}">
+                <i class="cog icon"></i> Settings
+            </a>
+            <a class="item" href="{% url 'profile' user.username %}">
+                <i class="user icon"></i> Profile
+            </a>
+            <a class="item" href="{% url 'signout' %}">
+                <i class="sign out alternate icon"></i> Sign out
             </a>
         </div>
+    {% else %}
+        <a class="bottom-menu item" href="{% url 'signin' %}">
+            <i class="sign in alternate icon"></i> Sign in
+        </a>
+    {% endif %}
 
-        <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-
-                {% if request.user.is_authenticated %}
-                    <li>
-                        <a href="{% url 'profile' user.username %}" title="{{ user.username }}">
-                            <div class="avatar" style="background-image: url({{ request.session.user_avatar_url }})"></div>
-                            <p style="margin: 0.5rem 0 0; font-size: 1.75rem; font-weight: normal;">
-                                {{ user.username | truncatechars:11 }}
-                            </p>
-                        </a>
-                    </li>
-            
-                    <li>
-                        <a href="{% url 'settings' %}">
-                            Settings <i style="font-size: 16px;" class="pull-right hidden-xs showopacity fas cog icon"></i>
-                        </a>
-                    </li>
-                {% endif %}
-
-                <li>
-                    <a href="{% url 'cloud' %}">
-                        Cloud <i style="font-size: 16px; color: #45668e;" class="pull-right hidden-xs showopacity fas fa-cloud"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'new_post' %}">
-                        Editor <i style="font-size: 16px;" class="pull-right hidden-xs showopacity fas pencil icon"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'chats' %}">
-                        Chats <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas comments icon"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'departments' %}">
-                        Universities <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-university"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'students' %}">
-                        Students <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-users"></i>
-                    </a>
-                </li>
+</div>
 
 
-                <li>
-                    <a href="{% url 'memes' %}">
-                        Memes
-                        <i style="font-size: 16px;"
-                           class="pull-right hidden-xs showopacity fas fa-laugh"></i>
-                    </a>
-                </li>
+<div class="ui labeled icon borderless fluid four item menu mobile navbar">
 
+    <a class="item" href="{% url 'cloud' %}">
+        <i class="cloud icon"></i> Cloud
+    </a>
+    <a class="item" href="{% url 'chats' %}">
+        <i class="comments icon"></i> Chats
+    </a>
+    <a class="item" href="{% url 'departments' %}">
+        <i class="university icon"></i> Universities
+    </a>
 
-                {% if user.userinfo.can_moderate or user.is_superuser or user.is_staff %}
-                    <li style="background-color: #F4FF81">
-                        <a href="{% url 'moderation' %}">
-                            Moderation
-                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-hammer"></i>
-                        </a>
-                    </li>
-                {% endif %}
+    {% if request.user.is_authenticated %}
+        <a class="item" href="{% url 'profile' user.username %}">
+            <i class="user icon"></i> Profile
+        </a>
+    {% else %}
+        <a class="item" href="{% url 'signin' %}">
+            <i class="sign in alternate icon"></i> Sign in
+        </a>
+    {% endif %}
 
-                {% if user.is_superuser %}
-                    <li style="background-color: #DBC6EB">
-                        <a href="/admin">
-                            Admin
-                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-crown"></i>
-                        </a>
-                    </li>
-                {% endif %}
-
-                {% if request.user.is_authenticated %}
-                    <li style="background-color: #FFCCCC">
-                        <a href="{% url 'signout' %}">
-                            Sign out
-                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-out-alt"></i>
-                        </a>
-                    </li>
-                {% else %}
-                    <li style="background-color: #CCFFFF">
-                        <a href="{% url 'signin' %}">
-                            Sign in
-                            <i style="font-size: 16px" class="pull-right hidden-xs showopacity fas fa-sign-in-alt"></i>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</nav>
+</div>

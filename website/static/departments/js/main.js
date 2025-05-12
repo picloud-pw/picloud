@@ -221,7 +221,7 @@ function get_department_types(parent_department_id) {
 function init_hierarchy_search(parent_department_id, on_change) {
     document.getElementById('search_container').innerHTML = `
         <div class="ui left action big input" style="min-width: 50%">
-            <select class="ui compact dropdown" id="hierarchy_search_type" style="min-width: 30%"></select>
+            <select class="ui compact big dropdown" id="hierarchy_search_type" style="min-width: 30%"></select>
             <input type="text" placeholder="Search..." id="hierarchy_search_query">
         </div>
     `;

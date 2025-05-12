@@ -1,6 +1,18 @@
 body {
     background-color: hsl(208, 100%, 93%);
-    font-family: 'Roboto Slab', serif;
+    font-family: 'Roboto Slab', serif !important;
+}
+
+.ui {
+    font-family: 'Roboto Slab', serif !important;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eee;
+    overflow: visible;
 }
 
 nav.navbar {

@@ -62,7 +62,7 @@ export class Chats {
         let new_chat_btn = document.createElement('div');
         new_chat_btn.className = 'ui basic circular icon extra-btn button';
         new_chat_btn.onclick = () => { this.toggle_new_chat_form() }
-        new_chat_btn.innerHTML = `<i class="ui plus icon"></i>`;
+        new_chat_btn.innerHTML = `<i class="plus icon"></i>`;
         new_chat_btn.style.boxShadow = 'none';
         top_segment.appendChild(new_chat_btn);
 
@@ -281,7 +281,7 @@ export class Chats {
         chat_settings_btn.className = 'ui basic icon circular extra-btn button';
         chat_settings_btn.style.boxShadow = 'none';
         chat_settings_btn.onclick = () => { this.toggle_chat_settings_form(chat_name) }
-        chat_settings_btn.innerHTML = `<i class="ui ellipsis horizontal icon"></i>`;
+        chat_settings_btn.innerHTML = `<i class="ellipsis horizontal icon"></i>`;
 
         document.getElementById('chat_header').appendChild(chat_settings_btn);
 
@@ -365,7 +365,7 @@ export class Chats {
     get_chat_lists_button() {
         let back_button = document.createElement('span');
         back_button.className = 'ui basic circular icon back_chat button';
-        back_button.innerHTML = `<i class="ui arrow left icon"></i>`;
+        back_button.innerHTML = `<i class="arrow left icon"></i>`;
         back_button.onclick = () => {
             this.open_chat_lists_sidebar();
         }
