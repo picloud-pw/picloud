@@ -10,7 +10,6 @@
     z-index: 999999;
     position: static;
     overflow: hidden;
-    overflow-behavior: none;
 }
 
 .ui.navbar .item {
