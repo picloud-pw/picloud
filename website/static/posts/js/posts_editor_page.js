@@ -22,7 +22,7 @@ export class PostsEditorPage {
     restore_state(container) {
         let el_id = random_ID();
         container.innerHTML = `
-            <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
+            <div class="ui centered stackable grid" style="padding: 20px 10px; text-align: left">
                 <div class="ten wide computer twelve wide tablet sixteen wide mobile column">
                     <div class="ui segment">
                         <span class="ui right floated button" id="${el_id}_save_btn">Save changes</span>

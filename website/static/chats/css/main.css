@@ -1,3 +1,7 @@
+body {
+    overscroll-behavior: none;
+}
+
 .content-block.main {
     height: 100%
 }
@@ -49,6 +53,10 @@
     position: absolute !important;
     right: 14px !important;
     top: 16px !important;
+}
+
+#chat_form {
+    border: none;
 }
 
 #new_chat_form {

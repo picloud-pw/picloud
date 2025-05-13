@@ -9,18 +9,11 @@
     <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
 {% endblock %}
 
-
-{% block content %}
-    <div id="drafts_editor_container"></div>
-{% endblock %}
-
-
 {% block js %}
 
     <script type="module">
         import {DraftsEditorPage} from "../static/posts/js/drafts_editor_page.js";
-        let root_container = document.getElementById('drafts_editor_container');
-        let app = new DraftsEditorPage(root_container);
+        let app = new DraftsEditorPage(document.getElementById('app'));
     </script>
 
 {% endblock %}

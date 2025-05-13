@@ -78,19 +78,6 @@
     transition: margin 200ms ease-out;
 }
 
-
-@supports (-webkit-touch-callout: none) {
-    /* CSS specific to iOS devices */
-    @media screen and (max-width: 600px) {
-        .ui.mobile.navbar {
-            height: 85px;
-        }
-    }
-    .ui.mobile.navbar {
-        padding-bottom: 20px;
-    }
-}
-
 /*  DESKTOP  */
 @media screen and (min-width: 600px) {
     #app {
@@ -146,12 +133,21 @@
         bottom: 75px;
         margin-left: 0;
     }
-
+    .ui.navbar {
+        font-size: 12px;
+    }
     .ui.desktop.navbar {
         display: none;
     }
 
     .ui.mobile.navbar {
         display: flex;
+    }
+}
+
+/* iOS devices */
+@supports (-webkit-touch-callout: none) {
+    .ui.mobile.navbar {
+        padding-bottom: 15px;
     }
 }

@@ -17,7 +17,7 @@ export class DraftsEditorPage {
 
         let el_id = random_ID();
         container.innerHTML = `
-            <div class="ui centered stackable grid" style="padding-top: 100px; text-align: left">
+            <div class="ui centered stackable grid" style="padding: 20px 10px; text-align: left">
                 <div class="ten wide computer twelve wide tablet sixteen wide mobile column">
                     <div class="ui segment">
                         <span style="margin-right: 10px" id="${el_id}_drafts_selector"></span>
