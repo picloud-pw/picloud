@@ -76,3 +76,33 @@ function render_loader(type = 'paragraph') {
         `;
     }
 }
+
+function show_alert(type, message, time = 2) {
+    let color_class = '';
+    let icon = '';
+    if (type === "success") {
+        color_class = 'teal';
+        icon = 'checkmark box';
+    }
+    if (type === "info") {
+        color_class = 'blue';
+        icon = 'info circle';
+    }
+    if (type === "warning") {
+        color_class = 'yellow';
+        icon = 'warning sign';
+    }
+    if (type === "error") {
+        color_class = 'error';
+        icon = 'remove circle';
+    }
+
+    $.toast({
+        title: type.charAt(0).toUpperCase() + type.slice(1),
+        message: String(message),
+        class: color_class,
+        showProgress: 'bottom',
+        showIcon: icon,
+        displayTime: Number(time) * 1000,
+    });
+}
