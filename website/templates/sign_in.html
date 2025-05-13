@@ -9,7 +9,7 @@
 
     <div class="ui centered padded grid">
         <div class="ui segment" style="width: 500px; padding: 40px; margin-top: 200px">
-            <img src="{% static 'img/piLogo.png' %}" alt="PiCloud" style="width: 300px">
+            <img src="{% static 'website/img/picloud-full.png' %}" alt="PiCloud" style="width: 300px">
             <hr>
             <a class="ui google fluid button" title="Sign in with Google" style="font-size: 20px;"
                href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next|urlencode }}">

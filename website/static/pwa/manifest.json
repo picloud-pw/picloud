@@ -5,8 +5,8 @@
   "display": "standalone",
   "icons": [
     {
-      "src": "/static/img/favicon.png",
-      "sizes": "512x512",
+      "src": "/static/website/img/picloud-square.png",
+      "sizes": "1024x1024",
       "type": "image/png"
     }
   ]

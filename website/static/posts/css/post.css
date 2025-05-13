@@ -44,7 +44,7 @@ article.post .post-container .text h4 {
 }
 
 article.post .post-container img.post-img {
-    background: url("/static/img/loading.svg") center no-repeat;
+    background: url("/static/website/img/loading.svg") center no-repeat;
 }
 
 article.post .post-container footer {

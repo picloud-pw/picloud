@@ -11,8 +11,8 @@ urlpatterns = [
     path('about/', index.about, name='about'),
     path('legal/privacy-policy/', index.privacy_policy, name='privacy_policy'),
 
-    path('favicon.ico/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
-    path('favicon.png/', RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
+    path('favicon.ico/', RedirectView.as_view(url='/static/website/img/favicon.png', permanent=True)),
+    path('favicon.png/', RedirectView.as_view(url='/static/website/img/favicon.png', permanent=True)),
 
     path('signin/', auth.sign_in, name="signin"),
     path('signout/', auth.sign_out, name="signout"),
