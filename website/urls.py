@@ -40,8 +40,6 @@ urlpatterns = [
 
     path('moderation/', index.moderation_page, name="moderation"),
     path('memes/', index.memes_page, name="memes"),
-    path('tools/', index.tools_page, name="tools"),
-    path('tools/text', index.tools_text_page, name="tools_text"),
 
     path('profile/<str:username>/', index.profile_page, name="profile"),
     path('settings/', index.settings_page, name="settings"),
