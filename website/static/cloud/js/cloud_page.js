@@ -6,11 +6,14 @@ import {Post} from "../../posts/js/post.js";
 
 export class CloudPage {
 
+    styles_path = '/static/cloud/css/main.css';
+
     masonry = null;
     page = 1;
 
     constructor(container, settings) {
         this.container = container;
+        load_styles(this.styles_path);
         this.restore_state();
     }
 

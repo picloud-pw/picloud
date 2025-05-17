@@ -5,28 +5,11 @@
     Cloud
 {% endblock %}
 
-{% block head %}
-
-    <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
-    <link rel="stylesheet" href="{% static 'cloud/css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'cloud/css/modal_image.css' %}">
-    <link rel="stylesheet" href="{% static 'cloud/css/post_list.css' %}">
-    <link rel="stylesheet" href="{% static 'cloud/css/search.css' %}">
-
-{% endblock %}
-
-
-{% block content %}
-    <div id="cloud_container"></div>
-{% endblock %}
-
-
 {% block js %}
 
     <script type="module">
         import {CloudPage} from "../static/cloud/js/cloud_page.js";
-        let root_container = document.getElementById('cloud_container');
-        let app = new CloudPage(root_container);
+        let app = new CloudPage(document.getElementById('app'));
     </script>
 
 {% endblock %}

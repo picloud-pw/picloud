@@ -18,6 +18,16 @@ Date.prototype.toPrettyString = function () {
     return `${this.toYYYYMMDD()} ${this.toHHMM()}`;
 };
 
+function load_styles(styles_path) {
+    let style = document.querySelectorAll(`[href="${styles_path}"]`);
+    if (style.length === 0) {
+        let style_el = document.createElement('link');
+        style_el.rel = 'stylesheet';
+        style_el.href = styles_path;
+        document.head.appendChild(style_el);
+    }
+}
+
 function push_state(dict) {
     let kvp = [];
 

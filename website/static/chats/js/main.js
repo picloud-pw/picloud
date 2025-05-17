@@ -54,8 +54,8 @@ export class Chats {
         let chats_filter_input = document.createElement('input');
         chats_filter_input.type = 'text';
         chats_filter_input.placeholder = 'Search...';
-        chats_filter_input.oninput = () => { this.filter_chats(chats_filter_input.value) };
         chats_filter.innerHTML = `<i class="search icon"></i>`;
+        chats_filter_input.oninput = () => { this.filter_chats(chats_filter_input.value) };
         chats_filter.appendChild(chats_filter_input);
         top_segment.appendChild(chats_filter);
 
@@ -81,11 +81,10 @@ export class Chats {
 
     filter_chats(query) {
         $('.chat_list .item .content .header').each((i, el) => {
-            console.log(el);
             if ((el.innerText).toLowerCase().includes(String(query).toLowerCase())) {
-                $(el).parent().parent().removeClass('hidden');
+                $(el).parent().parent().css('display', 'block');
             } else {
-                $(el).parent().parent().addClass('hidden');
+                $(el).parent().parent().css('display', 'none');
             }
         })
     }

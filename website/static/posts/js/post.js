@@ -3,7 +3,12 @@ import {PostBodyParser} from "./editorjs.js";
 
 export class Post {
 
-    constructor() {
+    styles_path = '/static/posts/css/post.css';
+
+    user = null;
+
+    constructor(settings = {}) {
+        load_styles(this.styles_path);
         this.ejs_parser = new PostBodyParser();
     }
 

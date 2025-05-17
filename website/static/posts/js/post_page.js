@@ -2,10 +2,13 @@ import {Post} from "./post.js";
 
 export class PostPage {
 
+    comments_styles_path = '/static/posts/css/comments.css'
+
     post_id = null;
 
     constructor(container, settings) {
         this.container = container;
+        load_styles(this.comments_styles_path);
         this.restore_state();
     }
 
