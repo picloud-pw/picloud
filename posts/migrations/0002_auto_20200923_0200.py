@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='post',
-            name='department',
-        ),
         migrations.AddField(
             model_name='post',
             name='subject',

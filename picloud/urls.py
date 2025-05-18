@@ -12,7 +12,6 @@ handler500 = website.views.errors.handler500
 urlpatterns = [
 
     path('', include('social_django.urls', namespace='social')),
-    path('', include('cloud.urls')),
     path('', include('website.urls')),
 
     path('admin/', admin.site.urls, name='admin'),

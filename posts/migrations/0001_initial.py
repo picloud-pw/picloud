@@ -12,7 +12,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('cloud', '0004_auto_20200426_0208'),
     ]
 
     operations = [
@@ -38,7 +37,6 @@ class Migration(migrations.Migration):
                 ('file', models.FileField(blank=True, null=True, upload_to='resources/posts/%Y/%m/%d/')),
                 ('is_approved', models.BooleanField(default=False)),
                 ('author', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('department', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='cloud.Department')),
                 ('last_editor', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='last_editor', to=settings.AUTH_USER_MODEL)),
                 ('parent_post', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, to='posts.Post')),
             ],

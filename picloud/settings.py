@@ -64,7 +64,6 @@ INSTALLED_APPS = [
 
     'social_django',
 
-    'cloud',
     'website',
     'chats',
     'hierarchy',
