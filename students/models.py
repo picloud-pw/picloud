@@ -39,6 +39,9 @@ class StudentInfo(models.Model):
             seed = self.user.username
         return f"https://api.dicebear.com/5.x/bottts-neutral/svg?seed={seed}"
 
+    def get_avatar_url(self):
+        return self.avatar_url if self.avatar_url is not None else self.get_default_avatar_url()
+
     def calculate_karma(self):
         from posts.models import Post, Comment
 
@@ -68,7 +71,7 @@ class StudentInfo(models.Model):
                 'last_login': self.user.last_login,
                 'date_joined': self.user.date_joined,
             },
-            'avatar': self.avatar_url if self.avatar_url is not None else self.get_default_avatar_url(),
+            'avatar': self.get_avatar_url(),
             'status': self.status.as_dict(),
             'karma': self.calculate_karma(),
             'course': self.course,
