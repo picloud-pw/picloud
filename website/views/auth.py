@@ -1,6 +1,6 @@
 from django.contrib import auth
-from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import render, redirect
@@ -19,9 +19,31 @@ def create_user_settings(sender, instance, created, **kwargs):
     )
 
 
-@receiver(user_logged_in)
-def user_info_to_session(sender, user, request, **kwargs):
-    request.session['user_avatar_url'] = StudentInfo.objects.get(user=user).avatar.url
+def update_avatar(backend, strategy, details, response, user=None, * args, ** kwargs):
+    try:
+        if user is None:
+            raise ValueError
+        user_info = StudentInfo.objects.get(user=user)
+    except (ObjectDoesNotExist, ValueError):
+        return
+
+    url = None
+    if backend.name == 'facebook':
+        url = f"https://graph.facebook.com/{response['id']}/picture?width=150&height=150"
+    # if backend.name == 'twitter':
+    #     url = response.get('profile_image_url', '').replace('_normal', '')
+    if backend.name == 'google-oauth2':
+        url = response['picture']
+    # if backend.name == 'instagram':
+    #     url = response['profile_pic_url']
+    if backend.name == 'vk-oauth2':
+        url = response['photo']
+    if backend.name == 'github':
+        url = response['avatar_url']
+    if url and user_info.avatar_url is None:
+        user_info.avatar_url = url
+        user_info.save()
+
 
 
 def sign_in(request):

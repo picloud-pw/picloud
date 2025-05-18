@@ -26,7 +26,7 @@ function init_students_filters(container, list_container) {
           <div class="ui divider"></div>
           <div class="inline field">
             <div class="ui slider checkbox">
-              <input type="checkbox" tabindex="0" class="hidden" id="custom_avatar" checked>
+              <input type="checkbox" tabindex="0" class="hidden" id="custom_avatar">
               <label>Custom avatar</label>
             </div>
           </div>

@@ -111,8 +111,7 @@ class ProfilePage {
         container.innerHTML = `
             <div class="ui image">
                 <img class="avatar" src="${this.student['avatar']}" alt="avatar" 
-                    style="background-color: #fff; max-width: 200px"
-                    onerror="this.src='/media/resources/default/user_ava.png'">
+                    style="background-color: #fff; width: 200px; border-radius: 500px; overflow: hidden">
             </div>
             <h1 class="ui header" style="overflow: hidden; text-overflow: ellipsis">
                 ${this.student['user']['username']}

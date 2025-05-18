@@ -8,6 +8,8 @@ urlpatterns = [
 
     path('me/', me,),
     path('me/edit', me_edit,),
+    path('me/avatar/delete', delete_avatar,),
+    path('me/avatar/set_default', avatar_set_default,),
 
     path('get', get,),
     path('search', search,),

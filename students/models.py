@@ -24,11 +24,7 @@ class StudentStatus(models.Model):
 
 
 class StudentInfo(models.Model):
-    avatar = models.ImageField(
-        upload_to='resources/user_avatars/',
-        default='resources/default/user_ava.png',
-        null=True, blank=True
-    )
+    avatar_url = models.URLField(null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.ForeignKey(StudentStatus, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, default=None)
@@ -37,6 +33,11 @@ class StudentInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_default_avatar_url(self, seed=None):
+        if seed is None:
+            seed = self.user.username
+        return f"https://api.dicebear.com/5.x/bottts-neutral/svg?seed={seed}"
 
     def calculate_karma(self):
         from posts.models import Post, Comment
@@ -47,7 +48,7 @@ class StudentInfo(models.Model):
             karma += 50
         if self.course is not None:
             karma += 30
-        if self.avatar != StudentInfo._meta.get_field('avatar').get_default():
+        if self.avatar_url is not None:
             karma += 50
 
         karma += 15 * Post.objects.filter(author=self.user).count()
@@ -67,7 +68,7 @@ class StudentInfo(models.Model):
                 'last_login': self.user.last_login,
                 'date_joined': self.user.date_joined,
             },
-            'avatar': self.avatar.url,
+            'avatar': self.avatar_url if self.avatar_url is not None else self.get_default_avatar_url(),
             'status': self.status.as_dict(),
             'karma': self.calculate_karma(),
             'course': self.course,

@@ -183,7 +183,7 @@ class Comment(models.Model):
 
     def get_author_avatar_url(self):
         user_info = StudentInfo.objects.get(user=self.author)
-        return user_info.avatar.url
+        return user_info.avatar_url
 
     def as_dict(self):
         return {

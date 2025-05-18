@@ -22,16 +22,45 @@ function get_userinfo() {
 function display_avatar() {
     document.getElementById('user_avatar_container').innerHTML = `
         <div class="ui basic no-margin-padding segment" style="text-align: center">
-            <img src="${USER_INFO['avatar']}" alt="avatar" style="max-width: 100%; padding: 30px">
-            <div class="ui basic fluid button" style="margin-bottom: 20px">
-                Update avatar
+            <img src="${USER_INFO['avatar']}" alt="avatar" style="width: 200px; margin: 20px; border-radius: 100px">
+            <div class="ui basic fluid button" id="set_default_avatar_btn" style="margin-bottom: 20px">
+                Set default avatar
             </div>
-            <div class="ui basic fluid button" style="margin-bottom: 20px">
-                Delete avatar
+            <div class="ui basic fluid button" id="delete_avatar_btn" style="margin-bottom: 20px">
+                Delete avatar <br> (will be set after next login)
             </div>
         </div>
     `;
+    document.getElementById('set_default_avatar_btn').onclick = () => {
+        set_default_avatar();
+    }
+    document.getElementById('delete_avatar_btn').onclick = () => {
+        delete_avatar();
+    }
+}
 
+function delete_avatar() {
+    axios.post('/students/me/avatar/delete', null, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        .then((response) => {
+            USER_INFO['avatar'] = response.data['avatar'];
+            display_avatar();
+            show_alert("success", "You avatar has been removed.");
+        })
+        .catch((error) => {
+            show_alert('warning', "Something went wrong. Please try again later or contact us about this error.")
+        })
+}
+
+function set_default_avatar() {
+    axios.post('/students/me/avatar/set_default', null, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}})
+        .then((response) => {
+            USER_INFO['avatar'] = response.data['avatar'];
+            display_avatar();
+            show_alert("success", "You avatar has been set.");
+        })
+        .catch((error) => {
+            show_alert('warning', "Something went wrong. Please try again later or contact us about this error.")
+        })
 }
 
 function display_personal_info() {

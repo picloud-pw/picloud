@@ -1,10 +1,11 @@
+import random
 import re
+import string
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from decorators import auth_required
 from hierarchy.models import Department
@@ -79,6 +80,23 @@ def me_edit(request):
     })
 
 
+@login_required
+def delete_avatar(request):
+    user_info = StudentInfo.objects.get(user=request.user)
+    user_info.avatar_url = None
+    user_info.save()
+    return JsonResponse({'avatar': user_info.get_default_avatar_url()})
+
+
+@login_required
+def avatar_set_default(request):
+    user_info = StudentInfo.objects.get(user=request.user)
+    random_seed = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    user_info.avatar_url = user_info.get_default_avatar_url(random_seed)
+    user_info.save()
+    return JsonResponse({'avatar': user_info.avatar_url})
+
+
 @auth_required
 def get(request):
     student_id = request.GET.get('id')
@@ -115,8 +133,7 @@ def search(request):
         students = students.filter(status_id=status_id)
 
     if is_avatar_set is not None:
-        def_ava = Q(avatar=StudentInfo.avatar.field.default)
-        students = students.filter(~def_ava if is_avatar_set else def_ava)
+        students = students.filter(avatar_url__isnull=(is_avatar_set != 'true'))
 
     paginator = Paginator(students, page_size)
     try:
