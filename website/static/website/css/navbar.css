@@ -31,7 +31,7 @@
     position: fixed;
     left: 0;
     width: 100%;
-    height: 75px;
+    height: calc(60px + env(safe-area-inset-bottom));
     display: flex;
     border-radius: 0;
     margin: 0 !important;
@@ -128,9 +128,9 @@
 /*  MOBILE  */
 @media screen and (max-width: 600px) {
     #app {
-        height: calc(100% - 75px);
+        height: calc(100% - 60px - env(safe-area-inset-bottom));
         width: 100%;
-        bottom: 75px;
+        bottom: calc(60px + env(safe-area-inset-bottom));
         margin-left: 0;
     }
     .ui.navbar {
@@ -142,12 +142,5 @@
 
     .ui.mobile.navbar {
         display: flex;
-    }
-}
-
-/* iOS devices */
-@supports (-webkit-touch-callout: none) {
-    .ui.mobile.navbar {
-        padding-bottom: 15px;
     }
 }
